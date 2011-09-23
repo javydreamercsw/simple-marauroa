@@ -129,7 +129,7 @@ public class TextClient extends Thread {
             }
         });
         createClientManager(name != null ? name : "Simple",
-                verison != null ? verison : "0.02.03");
+                verison != null ? verison : "0.02.04");
     }
 
     private void createClientManager(String name, String gversion) {

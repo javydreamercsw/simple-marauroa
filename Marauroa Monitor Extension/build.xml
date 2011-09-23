@@ -72,6 +72,6 @@
 
     -->
     <target name="-post-jar">
-        <copy file="${dist.jar}" tofile="../Simple Libs/${jar.name}"/>
+        <copy file="${dist.jar}" tofile="../../Simple Libs/${jar.name}"/>
     </target>
 </project>

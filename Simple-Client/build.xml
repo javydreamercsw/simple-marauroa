@@ -141,9 +141,4 @@
   			replace="&quot;${version}&quot;"
    			byline="true"/>
     </target>
-    <target name="-post-jar">
-        <copy file="${dist.jar}" tofile="${dist}/marauroa-simple-client-${version}.jar"/>
-        <delete file="../SimpleRCPCLient/marauroa-simple/release/modules/ext/marauroa-simple-client.jar"/>
-        <copy file="${dist.jar}" tofile="../SimpleRCPCLient/marauroa-simple/release/modules/ext/marauroa-simple-client.jar"/>
-    </target>
 </project>
