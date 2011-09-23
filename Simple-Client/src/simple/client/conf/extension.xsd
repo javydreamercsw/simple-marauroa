@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://games.xml/schema/extension"
+    xmlns:tns="http://games.xml/schema/extension"
+    elementFormDefault="qualified">
+    <xsd:complexType name="Extension">
+        <xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string"/>
+            <xsd:attribute name="class" type="xsd:string"/>
+            <xsd:element name="type" minOccurs="1" maxOccurs="1" type="tns:ExtensionType"></xsd:element>
+            <xsd:element name="dependencies" minOccurs="0" maxOccurs="unbounded" type="tns:Dependency"></xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="Dependency">
+        <xsd:sequence>
+            <xsd:element name="RPEvent" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="name" type="xsd:string"/>
+                    <xsd:attribute name="class" type="xsd:string"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="VisualComponent" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="name" type="xsd:string"/>
+                    <xsd:attribute name="class" type="xsd:string"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Class" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="name" type="xsd:string"/>
+                    <xsd:attribute name="class" type="xsd:string"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="Extension" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="type" type="tns:ExtensionType"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="name" type="xsd:string"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ExtensionType">
+        <xsd:choice>
+            <xsd:element name="server" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="client" type="xsd:string" minOccurs="0"/>
+        </xsd:choice>
+    </xsd:complexType>
+    <xsd:element name="extensions">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="extension" minOccurs="0" maxOccurs="unbounded" type="tns:Extension"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
