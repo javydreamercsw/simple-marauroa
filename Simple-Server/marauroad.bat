@@ -1,2 +1,2 @@
-set LOCAL_CLASSPATH=marauroa-simple-server-0.02.04.jar;lib\MarauroaMonitorExtension.jar;lib\h2.jar;lib\jsqlparser.jar;lib\log4j.jar;lib\marauroa.jar;lib\mysql-connector-java-5.1.13-bin.jar;
+set LOCAL_CLASSPATH=marauroa-simple-server-0.02.04.jar;lib\h2.jar;lib\jsqlparser.jar;lib\log4j.jar;lib\marauroa.jar;lib\mysql-connector-java-5.1.13-bin.jar;
 java -cp "%LOCAL_CLASSPATH%" marauroa.server.marauroad -c server.ini -l
