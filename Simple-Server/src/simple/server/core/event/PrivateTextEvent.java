@@ -1,12 +1,10 @@
 package simple.server.core.event;
 
-
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import simple.common.NotificationType;
-import static simple.server.core.action.WellKnownActionConstants.TARGET;
-import static simple.server.core.action.WellKnownActionConstants.TEXT;
+import static simple.server.core.action.WellKnownActionConstant.*;
 import simple.server.core.event.api.IPrivateChatEvent;
 
 /**
@@ -30,6 +28,7 @@ public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent
             rpclass.add(DefinitionClass.ATTRIBUTE, CHANNEL, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TARGET, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, FROM, Type.LONG_STRING);
             addCommonAttributes(rpclass);
         }
     }
@@ -42,7 +41,7 @@ public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent
         super(RPCLASS_NAME);
         registerIfNeeded();
     }
-
+    
     /**
      * Creates a new text event.
      *
@@ -55,19 +54,20 @@ public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent
         put(TEXT, text);
         registerIfNeeded();
     }
-    
+
     /**
      * Creates a new text event.
      *
      * @param type NotificationType
      * @param text Text
-     * @param target  
+     * @param target
      */
-    public PrivateTextEvent(NotificationType type, String text, String target) {
+    public PrivateTextEvent(NotificationType type, String text, String target, String from) {
         super(RPCLASS_NAME);
         put(TEXT_TYPE, type.name());
         put(TEXT, text);
         put(TARGET, target);
+        put(FROM, from);
         registerIfNeeded();
     }
 
