@@ -45,7 +45,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            logger.info("Action requested by: "+rpo+", action: "+action);
+            logger.debug("Action requested by: "+rpo+", action: "+action);
             int op = action.getInt(OPERATION);
             try {
                 switch (op) {
@@ -75,27 +75,27 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     }
 
     private void create(ClientObjectInterface player, RPAction action) {
-        logger.info("Request for zone creation from: "
+        logger.debug("Request for zone creation from: "
                 + player.getName() + ", zone: " + action.get(ROOM));
         SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
         //Make sure the zone doesn't exists!
         if (!world.hasRPZone(new ID(action.get(ROOM)))) {
             SimpleRPZone zone = new SimpleRPZone(action.get(ROOM));
             if (action.get(DESC) != null && !action.get(DESC).isEmpty()) {
-                logger.info("Setting description: " + action.get(DESC));
+                logger.debug("Setting description: " + action.get(DESC));
                 zone.setDescription(action.get(DESC));
             }
             if (action.get(PASSWORD) != null && !action.get(PASSWORD).isEmpty()) {
                 try {
-                    logger.info("Setting password: " + action.get(PASSWORD));
+                    logger.debug("Setting password: " + action.get(PASSWORD));
                     zone.setPassword(action.get(PASSWORD));
                 } catch (IOException ex) {
                     logger.error(ex);
                 }
             }
-            logger.info("Adding zone to the world...");
+            logger.debug("Adding zone to the world...");
             world.addRPZone(zone);
-            logger.info("Moving player to created zone...");
+            logger.debug("Moving player to created zone...");
             world.changeZone(action.get(ROOM), (RPObject) player);
         } else {
             player.sendPrivateText(NotificationType.PRIVMSG, "Sorry, that room already exists!");
