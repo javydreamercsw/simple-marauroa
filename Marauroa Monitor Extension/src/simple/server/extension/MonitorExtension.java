@@ -9,15 +9,7 @@ import java.util.logging.Level;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-import marauroa.common.game.Definition;
-import marauroa.common.game.IRPZone;
-import marauroa.common.game.Perception;
-import simple.server.core.action.ActionListener;
-import simple.server.core.action.CommandCenter;
-import simple.server.core.event.MonitorEvent;
-import marauroa.common.game.RPAction;
-import marauroa.common.game.RPClass;
-import marauroa.common.game.RPObject;
+import marauroa.common.game.*;
 import marauroa.server.db.DBTransaction;
 import marauroa.server.db.JDBCSQLHelper;
 import marauroa.server.db.TransactionPool;
@@ -26,9 +18,12 @@ import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.db.RPObjectDAO;
 import marauroa.server.game.rp.RPWorld;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionListener;
+import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.entity.clientobject.ClientObject;
+import simple.server.core.event.MonitorEvent;
 
 /**
  *
@@ -65,13 +60,13 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         try {
             if (option == LISTZONES) {
                 logger.debug("Sending zone list...");
-                String zones = SimpleSingletonRepository.get().get(SimpleRPWorld.class).listZones().toString();
+                String zones = SimpleSingletonRepository.get().get(SimpleRPWorld.class).listZones("#").toString();
                 logger.debug("Sending: '" + zones + "'");
                 monitor.sendText(zones);
             }
             if (option == LISTPLAYERS) {
                 monitor.sendText(
-                        SimpleSingletonRepository.get().get(SimpleRPWorld.class).getZone(action.get(MonitorEvent.STRING)).getPlayersInString());
+                        SimpleSingletonRepository.get().get(SimpleRPWorld.class).getZone(action.get(MonitorEvent.STRING)).getPlayersInString("#"));
             }
             if (option == LISTCONTENTS) {
 //                monitor.sendPrivateText(
@@ -172,7 +167,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
 
     @Override
     public void modifyClientObjectDefinition(RPClass client) {
-        client.addRPEvent(MonitorEvent.TYPE, Definition.VOLATILE);
+        client.addRPEvent(MonitorEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
 
     @Override
