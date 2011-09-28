@@ -1,19 +1,11 @@
-/*
- * $Rev: 308 $
- * $LastChangedDate: 2010-05-02 17:45:46 -0500 (Sun, 02 May 2010) $
- * $LastChangedBy: javydreamercsw $
- */
 package simple.client.entity;
-
-import simple.server.core.event.RPObjectChangeListener;
 
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
-
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
-import simple.client.sound.SoundSystem;
+import simple.server.core.event.RPObjectChangeListener;
 
 /**
  *
@@ -166,8 +158,6 @@ public class ClientEntity implements RPObjectChangeListener {
             action.put("baseitem", id);
         } else {
             StringBuilder target = new StringBuilder();
-            User user = User.get();
-
             target.append(Integer.toString(id));
             action.put("target", target.toString());
         }
@@ -582,7 +572,7 @@ public class ClientEntity implements RPObjectChangeListener {
      * @see #initialize(RPObject)
      */
     public void release() {
-        SoundSystem.stopSoundCycle(this);
+        
     }
 
     /**

@@ -1,26 +1,17 @@
-/*
- * $Rev: 313 $
- * $LastChangedDate: 2010-05-17 07:32:53 -0500 (Mon, 17 May 2010) $
- * $LastChangedBy: javydreamercsw $
- */
 package simple.client.entity;
 
-import simple.common.Grammar;
-import simple.common.ItemTools;
-import simple.common.NotificationType;
-import simple.common.Rand;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
-
 import simple.client.HeaderLessEventLine;
 import simple.client.SimpleUI;
-import simple.client.soundreview.SoundMaster;
+import simple.common.Grammar;
+import simple.common.ItemTools;
+import simple.common.NotificationType;
 
 /**
  * This class is a link between client graphical objects and server attributes
@@ -476,11 +467,6 @@ public abstract class ClientRPEntity extends ClientEntity {
     public void onDamaged(final ClientEntity attacker, final int damage) {
         combatIconTime = System.currentTimeMillis();
         resolution = Resolution.HIT;
-        try {
-
-            SoundMaster.play(attackSounds[Rand.rand(attackSounds.length)]);
-        } catch (NullPointerException e) {
-        }
     }
 
     /*
