@@ -1,6 +1,5 @@
 package simple.client.conf;
 
-import simple.client.extension.SimpleClientExtension;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +14,7 @@ import marauroa.common.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import simple.client.extension.SimpleClientExtension;
 
 /**
  *
