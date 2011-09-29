@@ -5,8 +5,8 @@
  */
 package simple.server.core.entity.slot;
 
-import simple.server.core.entity.Entity;
 import marauroa.common.game.RPSlot;
+import simple.server.core.entity.Entity;
 
 /**
  * Simple specific information about this slot

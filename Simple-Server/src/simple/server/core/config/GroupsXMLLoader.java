@@ -5,19 +5,19 @@
  */
 package simple.server.core.config;
 
+
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

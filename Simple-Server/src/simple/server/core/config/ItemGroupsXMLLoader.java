@@ -5,16 +5,16 @@
  */
 package simple.server.core.config;
 
-import simple.server.core.rule.defaultruleset.DefaultItem;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import simple.server.core.rule.defaultruleset.DefaultItem;
 
 /**
  * Load and configure items via an XML configuration file.

@@ -5,19 +5,18 @@
  */
 package simple.server.core.rule.defaultruleset;
 
-import simple.common.SimpleException;
-import simple.server.core.engine.ItemLogger;
-import java.util.List;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.RPObject;
+import marauroa.common.game.RPSlot;
+import simple.server.core.engine.ItemLogger;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.item.Item;
 import simple.server.core.entity.item.Stackable;
 import simple.server.core.entity.item.StackableItem;
 import simple.server.core.rule.ActionManager;
-import marauroa.common.game.RPObject;
-import marauroa.common.game.RPSlot;
 
 /**
  * 

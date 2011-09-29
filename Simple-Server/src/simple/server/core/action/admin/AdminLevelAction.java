@@ -5,12 +5,12 @@
  */
 package simple.server.core.action.admin;
 
-import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.action.CommandCenter;
-import simple.server.core.engine.SimpleSingletonRepository;
-import simple.common.game.ClientObjectInterface;
 import marauroa.common.game.RPAction;
-import static simple.server.core.action.WellKnownActionConstant.*;
+import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.CommandCenter;
+import static simple.server.core.action.WellKnownActionConstant.TARGET;
+import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.engine.SimpleSingletonRepository;
 
 public class AdminLevelAction extends AdministrationAction {
 

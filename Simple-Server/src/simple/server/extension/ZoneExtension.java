@@ -1,8 +1,10 @@
 package simple.server.extension;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.logging.Level;
+import javax.swing.AbstractAction;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.IRPZone.ID;
@@ -12,15 +14,17 @@ import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionListener;
 import simple.server.core.action.CommandCenter;
+import simple.server.core.action.DelayedAction;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
-import simple.server.core.event.TextEvent;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TurnNotifier;
 import simple.server.core.event.ZoneEvent;
 
 /**
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com> # load
- * SimpleServerExtension(s). RoomCRUD=simple.server.extension.ZoneExtension
+ * SimpleServerExtension(s). ZoneCRUD=simple.server.extension.ZoneExtension
  * server_extension=RoomCRUD
  */
 public class ZoneExtension extends SimpleServerExtension implements ActionListener {
@@ -33,7 +37,6 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     public static final String TYPE = "CRUDZone", ROOM = "room",
             DESC = "description", OPERATION = "operation", PASSWORD = "password",
             SEPARATOR = "separator";
-    public static final int CREATE = 1, UPDATE = 2, DELETE = 3, LISTZONES = 4, JOIN = 5;
 
     @Override
     public void init() {
@@ -45,23 +48,23 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            logger.debug("Action requested by: "+rpo+", action: "+action);
+            logger.debug("Action requested by: " + rpo + ", action: " + action);
             int op = action.getInt(OPERATION);
             try {
                 switch (op) {
-                    case CREATE:
+                    case ZoneEvent.ADD:
                         create(player, action);
                         break;
-                    case UPDATE:
+                    case ZoneEvent.UPDATE:
                         update(action);
                         break;
-                    case DELETE:
+                    case ZoneEvent.REMOVE:
                         remove(player, action);
                         break;
-                    case LISTZONES:
+                    case ZoneEvent.LISTZONES:
                         list(player, op, action);
                         break;
-                    case JOIN:
+                    case ZoneEvent.JOIN:
                         join(player, action);
                         break;
                     default:
@@ -74,10 +77,10 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
         }
     }
 
-    private void create(ClientObjectInterface player, RPAction action) {
+    private void create(final ClientObjectInterface player, final RPAction action) {
         logger.debug("Request for zone creation from: "
                 + player.getName() + ", zone: " + action.get(ROOM));
-        SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
+        final SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
         //Make sure the zone doesn't exists!
         if (!world.hasRPZone(new ID(action.get(ROOM)))) {
             SimpleRPZone zone = new SimpleRPZone(action.get(ROOM));
@@ -95,8 +98,15 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             }
             logger.debug("Adding zone to the world...");
             world.addRPZone(zone);
-            logger.debug("Moving player to created zone...");
-            world.changeZone(action.get(ROOM), (RPObject) player);
+            logger.info("Scheduling moving player to created zone...");
+            SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInTurns(2,
+                    new DelayedAction(new AbstractAction() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    world.changeZone(action.get(ROOM), (RPObject) player);
+                }
+            }));
         } else {
             player.sendPrivateText(NotificationType.PRIVMSG, "Sorry, that room already exists!");
         }
@@ -133,35 +143,48 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
 
     private void update(RPAction action) {
         SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
-        world.updateRPZoneDescription(action.get(ROOM), action.get(DESC));
-        world.applyPublicEvent(null,
-                new ZoneEvent((SimpleRPZone) world.getRPZone(action.get(ROOM)),
-                ZoneEvent.UPDATE));
+        if (world.getRPZone(action.get(ROOM)) != null) {
+            logger.debug("Updating description of zone: "
+                    + action.get(ROOM) + " to: " + action.get(DESC));
+            SimpleRPZone updated = world.updateRPZoneDescription(action.get(ROOM), action.get(DESC));
+            logger.debug("Updating description done!");
+            world.applyPublicEvent(null,
+                    new ZoneEvent(updated, ZoneEvent.UPDATE));
+        }
     }
 
     private void remove(ClientObjectInterface player, RPAction action) {
-        SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
-        SimpleRPZone zone = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
-        Collection<ClientObjectInterface> players = zone.getPlayers();
-        for (ClientObjectInterface clientObject : players) {
-            world.changeZone(SimpleRPWorld.getDefaultRoom(), (RPObject) clientObject);
-        }
-        if (zone != null) {
-            try {
-                world.removeRPZone(new ID(action.get(ROOM)));
-            } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(ZoneExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
+        if (!action.get(ROOM).equals(SimpleRPWorld.getDefaultRoom())) {
+            SimpleRPWorld world = (SimpleRPWorld) SimpleSingletonRepository.get().get(SimpleRPWorld.class);
+            SimpleRPZone zone = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
+            Collection<ClientObjectInterface> players = zone.getPlayers();
+            for (ClientObjectInterface clientObject : players) {
+                world.changeZone(SimpleRPWorld.getDefaultRoom(), (RPObject) clientObject);
             }
-        }
-        world.applyPublicEvent(null,
-                new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
-                ZoneEvent.REMOVE));
-        for (ClientObjectInterface p : zone.getPlayers()) {
-            p.notifyWorldAboutChanges();
-        }
-        if (player != null) {
-            ((RPObject) player).addEvent(new TextEvent("Command completed", "System"));
-            player.notifyWorldAboutChanges();
+            if (zone != null) {
+                try {
+                    world.removeRPZone(new ID(action.get(ROOM)));
+                } catch (Exception ex) {
+                    java.util.logging.Logger.getLogger(ZoneExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            world.applyPublicEvent(null,
+                    new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
+                    ZoneEvent.REMOVE));
+            for (ClientObjectInterface p : zone.getPlayers()) {
+                p.notifyWorldAboutChanges();
+            }
+            if (player != null) {
+                ((RPObject) player).addEvent(new PrivateTextEvent(
+                        NotificationType.INFORMATION, "Command completed"));
+                player.notifyWorldAboutChanges();
+            }
+        } else {
+            if (player != null) {
+                ((RPObject) player).addEvent(new PrivateTextEvent(
+                        NotificationType.INFORMATION, "Can't remove the default room!"));
+                player.notifyWorldAboutChanges();
+            }
         }
     }
 

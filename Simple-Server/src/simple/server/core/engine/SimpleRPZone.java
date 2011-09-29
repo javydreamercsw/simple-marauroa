@@ -94,6 +94,11 @@ public class SimpleRPZone extends MarauroaRPZone {
         }
     }
 
+    @Override
+    public RPObject remove(RPObject.ID id) {
+        return remove(objects.get(id));
+    }
+
     /**
      * Removes object from zone.
      *

@@ -1,7 +1,8 @@
 package simple.server.core.account;
 
-import java.sql.SQLException;
 
+
+import java.sql.SQLException;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.Result;
@@ -9,7 +10,6 @@ import marauroa.server.db.DBTransaction;
 import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
-
 import org.apache.log4j.Logger;
 import simple.server.core.engine.SimpleSingletonRepository;
 

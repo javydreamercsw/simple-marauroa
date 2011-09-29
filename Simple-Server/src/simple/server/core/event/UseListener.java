@@ -21,4 +21,3 @@ public interface UseListener {
      */
     boolean onUsed(RPEntity user);
 }
-

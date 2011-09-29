@@ -6,8 +6,8 @@
 package simple.server.core.event;
 
 import simple.common.NotificationType;
-import simple.server.core.engine.SimpleSingletonRepository;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * manages the tutorial based on events created all over the game.

@@ -1,5 +1,6 @@
 package simple.server.core.account;
 
+
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.Result;
@@ -7,7 +8,6 @@ import marauroa.server.db.DBTransaction;
 import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.CharacterDAO;
 import marauroa.server.game.db.DAORegister;
-
 import org.apache.log4j.Logger;
 import simple.server.core.engine.SimpleRPObjectFactory;
 import simple.server.core.engine.SimpleRPRuleProcessor;

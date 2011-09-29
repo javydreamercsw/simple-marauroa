@@ -5,10 +5,10 @@
  */
 package simple.server.core.rule;
 
+import java.util.Collection;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.item.Item;
 import simple.server.core.rule.defaultruleset.DefaultItem;
-import java.util.Collection;
 
 /**
  * Ruleset Interface for resolving Entities.

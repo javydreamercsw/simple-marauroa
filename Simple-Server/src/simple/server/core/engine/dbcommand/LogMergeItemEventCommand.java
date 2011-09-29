@@ -5,8 +5,8 @@
  */
 package simple.server.core.engine.dbcommand;
 
-import java.sql.SQLException;
 
+import java.sql.SQLException;
 import marauroa.common.game.RPObject;
 import marauroa.server.db.DBTransaction;
 import simple.common.game.ClientObjectInterface;

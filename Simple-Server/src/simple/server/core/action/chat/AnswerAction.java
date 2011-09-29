@@ -5,13 +5,11 @@
  */
 package simple.server.core.action.chat;
 
-import simple.server.core.action.ActionListener;
-import static simple.server.core.action.WellKnownActionConstant.TARGET;
-import static simple.server.core.action.WellKnownActionConstant.TEXT;
-import static simple.server.core.action.WellKnownActionConstant.TYPE;
-import simple.common.game.ClientObjectInterface;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionListener;
+import static simple.server.core.action.WellKnownActionConstant.*;
 
 /**
  * handles /tell-action (/msg-action). 

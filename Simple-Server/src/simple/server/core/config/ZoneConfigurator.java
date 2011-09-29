@@ -5,8 +5,8 @@
  */
 package simple.server.core.config;
 
-import simple.server.core.engine.SimpleRPZone;
 import java.util.Map;
+import simple.server.core.engine.SimpleRPZone;
 
 /**
  * Zone post-configuration.

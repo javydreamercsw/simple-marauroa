@@ -1,7 +1,7 @@
 package simple;
 
-import static org.junit.Assert.assertTrue;
 import java.io.File;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class IniFileExistsTest {

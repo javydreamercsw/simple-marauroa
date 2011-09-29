@@ -5,11 +5,11 @@
  */
 package simple.server.core.engine;
 
-import simple.common.filter.FilterCriteria;
-import simple.common.game.ClientObjectInterface;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import simple.common.filter.FilterCriteria;
+import simple.common.game.ClientObjectInterface;
 
 public class PlayerList {
 

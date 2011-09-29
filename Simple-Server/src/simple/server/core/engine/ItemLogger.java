@@ -5,9 +5,6 @@
  */
 package simple.server.core.engine;
 
-import simple.server.core.entity.Entity;
-import simple.server.core.entity.RPEntity;
-import simple.server.core.entity.item.Item;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import marauroa.server.db.command.DBCommandQueue;
@@ -16,7 +13,10 @@ import simple.server.core.engine.dbcommand.AbstractLogItemEventCommand;
 import simple.server.core.engine.dbcommand.LogMergeItemEventCommand;
 import simple.server.core.engine.dbcommand.LogSimpleItemEventCommand;
 import simple.server.core.engine.dbcommand.LogSplitItemEventCommand;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.PassiveEntity;
+import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.item.Item;
 
 /**
  * Item Logger.

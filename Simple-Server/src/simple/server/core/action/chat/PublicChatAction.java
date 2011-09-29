@@ -7,13 +7,13 @@ package simple.server.core.action.chat;
 
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
-import simple.server.core.action.ActionListener;
-import simple.server.core.engine.SimpleSingletonRepository;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionListener;
+import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.entity.clientobject.GagManager;
 import simple.server.core.event.TextEvent;
 

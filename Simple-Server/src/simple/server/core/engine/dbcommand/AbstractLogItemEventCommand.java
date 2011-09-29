@@ -5,13 +5,13 @@
  */
 package simple.server.core.engine.dbcommand;
 
-import java.sql.SQLException;
 
+
+import java.sql.SQLException;
 import marauroa.common.game.RPObject;
 import marauroa.server.db.DBTransaction;
 import marauroa.server.db.StringChecker;
 import marauroa.server.db.command.AbstractDBCommand;
-
 import org.apache.log4j.Logger;
 import simple.common.game.ClientObjectInterface;
 
