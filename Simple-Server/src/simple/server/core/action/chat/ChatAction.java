@@ -1,11 +1,11 @@
 package simple.server.core.action.chat;
 
+import marauroa.common.game.RPAction;
+import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleSingletonRepository;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.clientobject.GagManager;
 import simple.server.util.TimeUtil;
-import marauroa.common.game.RPAction;
 
 /**
  * Processes /chat, /tell (/msg) and /support.

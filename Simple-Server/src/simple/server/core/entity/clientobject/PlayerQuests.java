@@ -5,14 +5,14 @@
  */
 package simple.server.core.entity.clientobject;
 
-import simple.server.core.engine.SimpleSingletonRepository;
+
 import java.util.LinkedList;
 import java.util.List;
-
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * Accesses the player quest states.

@@ -5,17 +5,11 @@
  */
 package simple.server.core.event;
 
-import simple.server.core.engine.SimpleRPWorld;
-import simple.server.core.engine.SimpleSingletonRepository;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * Other classes can register here to be notified at some time in the future.

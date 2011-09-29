@@ -17,16 +17,14 @@ import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.RPWorld;
+import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.entity.clientobject.GagManager;
 import simple.server.core.entity.item.Item;
-import simple.server.core.event.MonitorEvent;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TextEvent;
-import simple.server.core.event.ZoneEvent;
+import simple.server.core.event.*;
 
 public class SimpleRPWorld extends RPWorld {
 
@@ -101,10 +99,9 @@ public class SimpleRPWorld extends RPWorld {
     /**
      * Gives the number of turns that will take place during a given number of
      * seconds.
-     * 
-     * @param seconds
-     *            The number of seconds.
-     * 
+     *
+     * @param seconds The number of seconds.
+     *
      * @return The number of turns.
      */
     public int getTurnsInSeconds(int seconds) {
@@ -225,8 +222,10 @@ public class SimpleRPWorld extends RPWorld {
 
     /**
      * Gets all zones in this world.
+     *
      * @param separator Character to separate the names in the list.
-     * @return zones in this world in a list separated with the separator character.
+     * @return zones in this world in a list separated with the separator
+     * character.
      */
     public StringBuilder listZones(String separator) {
         StringBuilder rooms = new StringBuilder();
@@ -280,11 +279,11 @@ public class SimpleRPWorld extends RPWorld {
 
     /**
      * Finds a zone by its id.
-     * 
-     * @param id
-     *            The zone's id
-     * 
-     * @return The matching zone, or <code>null</code> if not found.
+     *
+     * @param id The zone's id
+     *
+     * @return The matching zone, or
+     * <code>null</code> if not found.
      */
     public SimpleRPZone getZone(final String id) {
         return (SimpleRPZone) getRPZone(new IRPZone.ID(id));
@@ -373,7 +372,8 @@ public class SimpleRPWorld extends RPWorld {
                 return true;
             }
         }
-        logger.debug("Simple::SimpleRPWorld::addPlayer Zone " + object.get("zoneid") + "not found for Player " + object.get("name"));
+        logger.debug("addPlayer Zone " + object.get("zoneid") 
+                + "not found for Player " + object.get("name"));
         return false;
     }
 
@@ -381,11 +381,15 @@ public class SimpleRPWorld extends RPWorld {
     public void changeZone(String newzoneid, RPObject object) {
         logger.debug("World before changing zone:");
         showWorld();
-        if (object.get("type").equals("player")) {
+        if (object instanceof ClientObjectInterface) {
             SimpleRPZone zone = getZone(newzoneid);
             if (zone != null) {
                 //ChangeZone takes care of removing from current zone
                 super.changeZone(zone.getID(), object);
+                SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInTurns(5,
+                        new DelayedPlayerEventSender(new PrivateTextEvent(
+                        NotificationType.INFORMATION, "Changed to zone: " + newzoneid), 
+                        (ClientObjectInterface) object));
             } else {
                 ((ClientObjectInterface) object).sendPrivateText("Zone " + newzoneid + " doesn't exist!");
             }

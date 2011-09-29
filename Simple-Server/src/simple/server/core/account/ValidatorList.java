@@ -1,7 +1,7 @@
 package simple.server.core.account;
 
-import java.util.LinkedList;
 
+import java.util.LinkedList;
 import marauroa.common.game.Result;
 
 /**

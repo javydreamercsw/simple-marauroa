@@ -5,22 +5,22 @@
  */
 package simple.server.core.entity.item;
 
-import simple.common.Grammar;
-import simple.server.core.engine.SimpleRPWorld;
-import simple.server.core.entity.RPEntity;
-import simple.server.core.event.EquipListener;
-import simple.server.core.event.TurnListener;
+
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-
-import marauroa.common.game.RPObject;
-import marauroa.common.game.RPSlot;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
+import marauroa.common.game.RPSlot;
+import simple.common.Grammar;
+import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.entity.RPEntity;
+import simple.server.core.event.EquipListener;
+import simple.server.core.event.TurnListener;
 
 /**
  * This is an item.

@@ -5,9 +5,9 @@
  */
 package simple.server.core.event;
 
-import simple.common.game.ClientObjectInterface;
 import java.util.ArrayList;
 import java.util.List;
+import simple.common.game.ClientObjectInterface;
 
 /**
  * Other classes can register here to be notified when a player logs in.

@@ -5,14 +5,14 @@
  */
 package simple.server.util;
 
-import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.engine.SimpleSingletonRepository;
-import simple.server.core.entity.Entity;
-import simple.server.core.entity.clientobject.ClientObject;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.engine.SimpleSingletonRepository;
+import simple.server.core.entity.Entity;
+import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  * Utilities to handle entities in the server.

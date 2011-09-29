@@ -1,7 +1,7 @@
 package simple.server.extension;
 
-import marauroa.common.game.Perception;
 
+import marauroa.common.game.Perception;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.extension.MarauroaServerExtension;
 

@@ -6,10 +6,6 @@
 package simple.server.core.rule.defaultruleset;
 
 import java.io.File;
-import simple.server.core.config.ItemGroupsXMLLoader;
-import simple.server.core.entity.Entity;
-import simple.server.core.entity.item.Item;
-import simple.server.core.rule.EntityManager;
 import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,6 +13,10 @@ import java.util.List;
 import java.util.Map;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import simple.server.core.config.ItemGroupsXMLLoader;
+import simple.server.core.entity.Entity;
+import simple.server.core.entity.item.Item;
+import simple.server.core.rule.EntityManager;
 
 /**
  * entity manager for the default ruleset.

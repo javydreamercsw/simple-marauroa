@@ -5,13 +5,13 @@
  */
 package simple.server.core.rule.defaultruleset;
 
-import simple.server.core.entity.item.Item;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import simple.server.core.entity.item.Item;
 
 /**
  * All default items which can be reduced to stuff that increase the attack

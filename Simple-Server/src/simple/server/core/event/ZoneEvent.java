@@ -16,7 +16,7 @@ public class ZoneEvent extends SimpleRPEvent implements IZoneEvent {
     public static final String FIELD = "field", RPCLASS_NAME = "zone_event",
             ACTION = "action", DESC = "description";
     public static final int ADD = 1, UPDATE = 2, REMOVE = 3, LISTZONES = 4,
-            NEEDPASS = 5;
+            NEEDPASS = 5, JOIN = 6;
 
     /**
      * Creates the rpclass.

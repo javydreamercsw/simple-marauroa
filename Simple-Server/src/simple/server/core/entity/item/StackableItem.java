@@ -5,12 +5,12 @@
  */
 package simple.server.core.entity.item;
 
-import simple.server.core.engine.SimpleSingletonRepository;
 import java.util.Map;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPObject;
 import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.engine.SimpleSingletonRepository;
 
 public class StackableItem extends Item implements Stackable {
 
