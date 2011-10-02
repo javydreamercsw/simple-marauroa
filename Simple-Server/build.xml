@@ -141,4 +141,10 @@
         <delete dir="${dist}/lib"/>
         <delete dir="${store.dir}"/>
     </target>
+        
+    <target name="remove-svn-history">
+        <replaceregexp byline="false" match="(?s)\A/\*.*?\*/" replace="">
+            <fileset dir="src" includes="**/*.java"/>
+        </replaceregexp>
+    </target>
 </project>

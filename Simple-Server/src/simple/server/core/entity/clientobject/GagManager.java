@@ -1,8 +1,4 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
+
 package simple.server.core.entity.clientobject;
 
 import marauroa.common.Log4J;

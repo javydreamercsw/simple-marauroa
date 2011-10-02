@@ -1,8 +1,4 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
+
 package simple.server.core.event;
 
 import java.io.IOException;

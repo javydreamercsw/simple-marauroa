@@ -1,8 +1,4 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
+
 package simple.common; //Added 10May04 by Adam Turk for distribution as part
 
 //of the Tiled codebase

@@ -1,8 +1,4 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
+
 package simple.server.core.action.admin;
 
 import marauroa.common.game.RPAction;

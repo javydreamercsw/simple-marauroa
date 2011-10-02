@@ -74,4 +74,10 @@
     <target name="-post-jar">
         <copy file="${dist.jar}" tofile="../../Simple Libs/${jar.name}"/>
     </target>
+    
+    <target name="remove-svn-history">
+        <replaceregexp byline="false" match="(?s)\A/\*.*?\*/" replace="">
+            <fileset dir="src" includes="**/*.java"/>
+        </replaceregexp>
+    </target>
 </project>

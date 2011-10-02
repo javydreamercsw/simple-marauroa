@@ -134,11 +134,18 @@
             <fileset file="${marauroa_jar}"/>
         </signjar>
     </target>
+    
     <target name="-pre-init">
         <!-- We update the version number -->
         <replaceregexp file="src/simple/client/TextClient.java"
    			match="&quot;+[0-9].+[0-9]*&quot;"
   			replace="&quot;${version}&quot;"
    			byline="true"/>
+    </target>
+        
+    <target name="remove-svn-history">
+        <replaceregexp byline="false" match="(?s)\A/\*.*?\*/" replace="">
+            <fileset dir="src" includes="**/*.java"/>
+        </replaceregexp>
     </target>
 </project>
