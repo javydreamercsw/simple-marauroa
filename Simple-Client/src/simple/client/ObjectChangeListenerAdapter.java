@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package simple.client;
 
 import marauroa.common.game.RPObject;

@@ -1,8 +1,4 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
+
 package simple.common.filter;
 
 import java.lang.reflect.Constructor;

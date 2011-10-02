@@ -1,8 +1,4 @@
-/*
- * $Rev$
- * $LastChangedDate$
- * $LastChangedBy$
- */
+
 package simple.common;
 
 import java.util.List;

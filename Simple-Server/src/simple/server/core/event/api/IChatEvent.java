@@ -1,6 +1,4 @@
-/*
- * Just to wrap Chat related events
- */
+
 package simple.server.core.event.api;
 
 /**

@@ -1,8 +1,4 @@
-/*
- * $Rev: 328 $
- * $LastChangedDate: 2010-06-23 07:17:22 -0500 (Wed, 23 Jun 2010) $
- * $LastChangedBy: javydreamercsw $
- */
+
 package simple.server.core.event;
 
 import marauroa.common.game.RPObject;
