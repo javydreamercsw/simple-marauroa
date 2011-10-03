@@ -16,19 +16,21 @@ import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.CharacterDAO;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.db.RPObjectDAO;
+import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.RPWorld;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionListener;
 import simple.server.core.action.CommandCenter;
-import simple.server.core.engine.SimpleRPWorld;
-import simple.server.core.engine.SimpleSingletonRepository;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.entity.clientobject.ClientObject;
-import simple.server.core.event.MonitorEvent;
 
 /**
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
+@ServiceProvider(service=MarauroaServerExtension.class)
 public class MonitorExtension extends SimpleServerExtension implements ActionListener {
 
     public static final String _MONITOR = "monitor";
@@ -60,17 +62,17 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         try {
             if (option == LISTZONES) {
                 logger.debug("Sending zone list...");
-                String zones = SimpleSingletonRepository.get().get(SimpleRPWorld.class).listZones("#").toString();
+                String zones = Lookup.getDefault().lookup(IRPWorld.class).listZones("#").toString();
                 logger.debug("Sending: '" + zones + "'");
                 monitor.sendText(zones);
             }
             if (option == LISTPLAYERS) {
                 monitor.sendText(
-                        SimpleSingletonRepository.get().get(SimpleRPWorld.class).getZone(action.get(MonitorEvent.STRING)).getPlayersInString("#"));
+                        Lookup.getDefault().lookup(IRPWorld.class).getZone(action.get(MonitorEvent.STRING)).getPlayersInString("#"));
             }
             if (option == LISTCONTENTS) {
 //                monitor.sendPrivateText(
-//                        SimpleSingletonRepository.get().get(SimpleRPWorld.class)
+//                        Lookup.getDefault().lookup(IRPWorld.class)
 //                        .getZone(action.get(MonitorEvent.STRING)).getNonPlayers());
             }
             monitor.notifyWorldAboutChanges();
