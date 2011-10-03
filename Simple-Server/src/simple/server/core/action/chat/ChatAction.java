@@ -1,10 +1,11 @@
 package simple.server.core.action.chat;
 
 import marauroa.common.game.RPAction;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
-import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.entity.clientobject.GagManager;
+import simple.server.core.event.LoginListener;
 import simple.server.util.TimeUtil;
 
 /**
@@ -31,9 +32,8 @@ public class ChatAction {
 
     public void onAction(final ClientObjectInterface player, final RPAction action) {
         if (GagManager.isGagged(player)) {
-            long timeRemaining = SimpleSingletonRepository.get().get(GagManager.class).getTimeRemaining(player);
+            long timeRemaining = Lookup.getDefault().lookup(LoginListener.class).getTimeRemaining(player);
             player.sendPrivateText("You are gagged, it will expire in " + TimeUtil.approxTimeUntil((int) (timeRemaining / 1000L)));
-            return;
         }
     }
 }

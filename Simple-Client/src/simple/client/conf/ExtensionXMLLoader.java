@@ -15,7 +15,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import simple.client.extension.SimpleClientExtension;
-
+//TODO replace with Lookup
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
@@ -78,7 +78,6 @@ public class ExtensionXMLLoader extends DefaultHandler {
                         (clazz == null ? "" : "(" + clazz + ")"), e);
             }
         }
-        //TODO work with dependencies
     }
 
     @Override

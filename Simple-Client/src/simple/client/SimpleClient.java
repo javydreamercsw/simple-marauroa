@@ -20,7 +20,6 @@ import simple.client.conf.ExtensionXMLLoader;
 import simple.client.entity.UserContext;
 import simple.client.event.ChatListener;
 import simple.client.gui.GameObjects;
-import simple.server.core.event.MonitorEvent;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 
@@ -66,11 +65,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         world = new World();
         gameObjects = GameObjects.createInstance();
         userContext = new UserContext(this);
-        //Register default event listeners
-        //**************************
-        TextEvent.generateRPClass();
-        PrivateTextEvent.generateRPClass();
-        MonitorEvent.generateRPClass();
         //Register listeners for normal chat and private messages
         registerListeners();
         //**************************
@@ -299,11 +293,11 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
      */
     protected void processEvent(RPEvent event) {
         logger.log(Level.FINE, "Processing: {0}", event);
-        if (event.getName().equals(TextEvent.getRPClassName())) {
+        if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
             logger.log(Level.FINE, "<{0}> {1}", new Object[]{
                         event.get("from"),
                         event.get("text")});
-        } else if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
+        } else if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
             logger.log(Level.FINE, "<{0}> {1}", new Object[]{
                         event.get("from"),
                         event.get("text")});

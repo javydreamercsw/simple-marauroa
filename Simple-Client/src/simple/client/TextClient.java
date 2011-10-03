@@ -96,7 +96,7 @@ public class TextClient extends Thread {
                         try {
                             logger.log(Level.INFO, "Processing: {0}, {1}",
                                     new Object[]{event, event.getName()});
-                            if (event.getName().equals(TextEvent.getRPClassName())) {
+                            if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
                                 logger.log(Level.INFO, "<{0}>{1}",
                                         new Object[]{event.get("from"), event.get("text")});
                             } else {

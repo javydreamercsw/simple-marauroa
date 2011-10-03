@@ -3,6 +3,7 @@ package simple.server.core.event;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
 
 /**
@@ -13,30 +14,17 @@ import simple.common.game.ClientObjectInterface;
  * 
  * @author daniel
  */
-public final class LoginNotifier {
+@ServiceProvider(service = ILoginNotifier.class)
+public final class LoginNotifier implements ILoginNotifier {
 
     /** The Singleton instance. */
     private static LoginNotifier instance;
     /**
      * Holds a list of all registered listeners.
      */
-    private List<LoginListener> listeners;
+    private List<LoginListener> listeners= new ArrayList<LoginListener>();
 
-    // singleton
-    private LoginNotifier() {
-        listeners = new ArrayList<LoginListener>();
-    }
-
-    /**
-     * Return the LoginNotifier instance.
-     *
-     * @return LoginNotifier the Singleton instance
-     */
-    public static LoginNotifier get() {
-        if (instance == null) {
-            instance = new LoginNotifier();
-        }
-        return instance;
+    public LoginNotifier() {
     }
 
     /**
@@ -45,6 +33,7 @@ public final class LoginNotifier {
      * @param listener
      *            LoginListener to add
      */
+    @Override
     public void addListener(LoginListener listener) {
         listeners.add(listener);
     }
@@ -55,6 +44,7 @@ public final class LoginNotifier {
      * @param listener
      *            LoginListener to remove
      */
+    @Override
     public void removeListener(LoginListener listener) {
         listeners.remove(listener);
     }
@@ -65,6 +55,7 @@ public final class LoginNotifier {
      * @param player
      *            the player who logged in
      */
+    @Override
     public void onPlayerLoggedIn(ClientObjectInterface player) {
         for (LoginListener listener : listeners) {
             listener.onLoggedIn(player);

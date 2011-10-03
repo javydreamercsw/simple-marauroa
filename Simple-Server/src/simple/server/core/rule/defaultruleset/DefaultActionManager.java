@@ -1,12 +1,11 @@
-
 package simple.server.core.rule.defaultruleset;
-
 
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
+import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.engine.ItemLogger;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.item.Item;
@@ -15,35 +14,25 @@ import simple.server.core.entity.item.StackableItem;
 import simple.server.core.rule.ActionManager;
 
 /**
- * 
+ *
  * @author Matthias Totz
  */
+@ServiceProvider(service = ActionManager.class)
 public class DefaultActionManager implements ActionManager {
 
-    /** the singleton instance, lazy initialisation. */
-    private static DefaultActionManager manager;
-
-    /** no public constructor. */
-    private DefaultActionManager() {
-        // hide constructor, this is a Singleton
-    }
-
     /**
-     * @return the instance of this manager. Note: This method is synchonized.
+     * no public constructor.
      */
-    public static synchronized DefaultActionManager getInstance() {
-        if (manager == null) {
-            manager = new DefaultActionManager();
-        }
-        return manager;
+    public DefaultActionManager() {
     }
 
     /**
      * @param entity
-     * @param item 
+     * @param item
      * @return the slot name for the item or null if there is no matching slot
-     *         in the entity
+     * in the entity
      */
+    @Override
     public String getSlotNameToEquip(RPEntity entity, Item item) {
         // get all possible slots for this item
         List<String> slotNames = item.getPossibleSlots();
@@ -80,12 +69,15 @@ public class DefaultActionManager implements ActionManager {
         return null;
     }
 
-    /** Equips the item in the specified slot.
+    /**
+     * Equips the item in the specified slot.
+     *
      * @param entity
      * @param slotName
      * @param item
-     * @return 
+     * @return
      */
+    @Override
     public boolean onEquip(RPEntity entity, String slotName, Item item) {
         if (!entity.hasSlot(slotName)) {
             return false;

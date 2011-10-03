@@ -9,6 +9,8 @@ import marauroa.common.Logger;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.RPObjectFactory;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
 
 /**
@@ -16,10 +18,11 @@ import simple.common.game.ClientObjectInterface;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class SimpleRPObjectFactory extends RPObjectFactory {
+@ServiceProvider(service = IRPObjectFactory.class)
+public class SimpleRPObjectFactory extends RPObjectFactory implements IRPObjectFactory {
+//TODO: replace RMI with ServiceProviders
 
     private static Logger logger = Log4J.getLogger(SimpleRPObjectFactory.class);
-    protected static SimpleRPObjectFactory singleton;
 
     @Override
     public RPObject transform(RPObject object) {
@@ -32,7 +35,7 @@ public class SimpleRPObjectFactory extends RPObjectFactory {
         // fallback
         return super.transform(object);
     }
-
+    
     /**
      * Returns the factory instance (this method is called
      * by Marauroa using reflection).
@@ -40,13 +43,11 @@ public class SimpleRPObjectFactory extends RPObjectFactory {
      * @return RPObjectFactory
      */
     public static SimpleRPObjectFactory getFactory() {
-        if (singleton == null) {
-            singleton = new SimpleRPObjectFactory();
-        }
-        return singleton;
+        return (SimpleRPObjectFactory) Lookup.getDefault().lookup(IRPObjectFactory.class);
     }
 
-    public static void generateClientObjectRPClass() {
+    @Override
+    public void generateClientObjectRPClass() {
         try {
             Configuration conf = Configuration.getConfiguration();
             if (conf.get("client_object") != null && !conf.get("client_object").isEmpty()) {
@@ -72,7 +73,8 @@ public class SimpleRPObjectFactory extends RPObjectFactory {
         }
     }
 
-    public static void destroyClientObject(ClientObjectInterface object) {
+    @Override
+    public void destroyClientObject(ClientObjectInterface object) {
         try {
             Configuration conf = Configuration.getConfiguration();
             Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
@@ -96,7 +98,8 @@ public class SimpleRPObjectFactory extends RPObjectFactory {
         }
     }
 
-    public static ClientObjectInterface createClientObject(RPObject object) {
+    @Override
+    public ClientObjectInterface createClientObject(RPObject object) {
         try {
             Configuration conf = Configuration.getConfiguration();
             Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
@@ -127,7 +130,8 @@ public class SimpleRPObjectFactory extends RPObjectFactory {
         }
     }
 
-    public static ClientObjectInterface createDefaultClientObject(String name) {
+    @Override
+    public ClientObjectInterface createDefaultClientObject(String name) {
         try {
             Configuration conf = Configuration.getConfiguration();
             Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
@@ -158,7 +162,8 @@ public class SimpleRPObjectFactory extends RPObjectFactory {
         }
     }
 
-    public static ClientObjectInterface createDefaultClientObject(RPObject entity) {
+    @Override
+    public ClientObjectInterface createDefaultClientObject(RPObject entity) {
         try {
             Configuration conf = Configuration.getConfiguration();
             Class<?> clientObjectClass = Class.forName(conf.get("client_object"));

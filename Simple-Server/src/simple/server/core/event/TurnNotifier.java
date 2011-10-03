@@ -1,22 +1,22 @@
-
 package simple.server.core.event;
 
 import java.util.*;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPWorld;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * Other classes can register here to be notified at some time in the future.
- * 
+ *
  * @author hendrik, daniel
  */
-public final class TurnNotifier {
+@ServiceProvider(service = ITurnNotifier.class)
+public final class TurnNotifier implements ITurnNotifier {
 
     private static final Logger logger = Log4J.getLogger(TurnNotifier.class);
-    /** The Singleton instance. */
-    private static TurnNotifier instance;
     private int currentTurn = -1;
     /**
      * This Map maps each turn to the set of all events that will take place at
@@ -24,31 +24,21 @@ public final class TurnNotifier {
      * registered here.
      */
     private Map<Integer, Set<TurnListener>> register = new HashMap<Integer, Set<TurnListener>>();
-    /** Used for multi-threading synchronization. * */
+    /**
+     * Used for multi-threading synchronization. *
+     */
     private final Object sync = new Object();
 
-    private TurnNotifier() {
+    public TurnNotifier() {
         // singleton
     }
 
     /**
-     * Return the TurnNotifier instance.
-     * 
-     * @return TurnNotifier the Singleton instance
-     */
-    public static TurnNotifier get() {
-        if (instance == null) {
-            instance = new TurnNotifier();
-        }
-        return instance;
-    }
-
-    /**
      * This method is invoked by SimpleRPRuleProcessor.endTurn().
-     * 
-     * @param currentTurn
-     *            currentTurn
+     *
+     * @param currentTurn currentTurn
      */
+    @Override
     public void logic(int currentTurn) {
         // Note: It is OK to only synchronise the remove part
         // because notifyAtTurn will not allow registrations
@@ -78,46 +68,44 @@ public final class TurnNotifier {
 
     /**
      * Return the number of the next turn.
-     * 
+     *
      * @return number of the next turn
      */
+    @Override
     public int getNumberOfNextTurn() {
         return this.currentTurn + 1;
     }
 
     /**
      * Notifies the <i>turnListener</i> in <i>diff</i> turns.
-     * 
-     * @param diff
-     *            the number of turns to wait before notifying
-     * @param turnListener
-     *            the object to notify
+     *
+     * @param diff the number of turns to wait before notifying
+     * @param turnListener the object to notify
      */
+    @Override
     public void notifyInTurns(int diff, TurnListener turnListener) {
         notifyAtTurn(currentTurn + diff + 1, turnListener);
     }
 
     /**
      * Notifies the <i>turnListener</i> in <i>sec</i> seconds.
-     * 
-     * @param sec
-     *            the number of seconds to wait before notifying
-     * @param turnListener
-     *            the object to notify
+     *
+     * @param sec the number of seconds to wait before notifying
+     * @param turnListener the object to notify
      */
+    @Override
     public void notifyInSeconds(int sec, TurnListener turnListener) {
-        notifyInTurns(SimpleSingletonRepository.get().get(SimpleRPWorld.class).getTurnsInSeconds(sec),
+        notifyInTurns(Lookup.getDefault().lookup(IRPWorld.class).getTurnsInSeconds(sec),
                 turnListener);
     }
 
     /**
      * Notifies the <i>turnListener</i> at turn number <i>turn</i>.
-     * 
-     * @param turn
-     *            the number of the turn
-     * @param turnListener
-     *            the object to notify
+     *
+     * @param turn the number of the turn
+     * @param turnListener the object to notify
      */
+    @Override
     public void notifyAtTurn(int turn, TurnListener turnListener) {
         if (logger.isDebugEnabled()) {
             logger.debug("Notify at " + turn + " by " + turnListener.getClass().getName());
@@ -145,9 +133,10 @@ public final class TurnNotifier {
     /**
      * Forgets all registered notification entries for the given TurnListener
      * where the entry's message equals the given one.
-     * 
+     *
      * @param turnListener
      */
+    @Override
     public void dontNotify(TurnListener turnListener) {
         // all events that are equal to this one should be forgotten.
         // TurnEvent turnEvent = new TurnEvent(turnListener);
@@ -168,11 +157,12 @@ public final class TurnNotifier {
     /**
      * Finds out how many turns will pass until the given TurnListener will be
      * notified with the given message.
-     * 
+     *
      * @param turnListener
      * @return the number of remaining turns, or -1 if the given TurnListener
-     *         will not be notified with the given message.
+     * will not be notified with the given message.
      */
+    @Override
     public int getRemainingTurns(TurnListener turnListener) {
         // all events match that are equal to this.
         // TurnEvent turnEvent = new TurnEvent(turnListener);
@@ -198,11 +188,12 @@ public final class TurnNotifier {
     /**
      * Finds out how many seconds will pass until the given TurnListener will be
      * notified with the given message.
-     * 
+     *
      * @param turnListener
      * @return the number of remaining seconds, or -1 if the given TurnListener
-     *         will not be notified with the given message.
+     * will not be notified with the given message.
      */
+    @Override
     public int getRemainingSeconds(TurnListener turnListener) {
         return (getRemainingTurns(turnListener) * SimpleRPWorld.MILLISECONDS_PER_TURN) / 1000;
     }
@@ -210,18 +201,20 @@ public final class TurnNotifier {
     /**
      * Returns the list of events. Note this is only for debugging the
      * TurnNotifier
-     * 
+     *
      * @return eventList
      */
+    @Override
     public Map<Integer, Set<TurnListener>> getEventListForDebugging() {
         return register;
     }
 
     /**
      * Returns the current turn. Note this is only for debugging TurnNotifier
-     * 
+     *
      * @return current turn
      */
+    @Override
     public int getCurrentTurnForDebugging() {
         return currentTurn;
     }

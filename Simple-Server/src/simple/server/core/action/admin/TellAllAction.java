@@ -1,11 +1,11 @@
-
 package simple.server.core.action.admin;
 
 import marauroa.common.game.RPAction;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 public class TellAllAction extends AdministrationAction {
 
@@ -20,10 +20,10 @@ public class TellAllAction extends AdministrationAction {
     public void perform(ClientObjectInterface player, RPAction action) {
         if (action.has(_TEXT)) {
             String message = "Administrator SHOUTS: " + action.get(_TEXT);
-            SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).addGameEvent(player.getName(),
+            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(),
                     _TELLALL, action.get(_TEXT));
 
-            SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).tellAllPlayers(message);
+            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).tellAllPlayers(message);
         }
     }
 }

@@ -1,10 +1,10 @@
 package simple.server.core.action.chat;
 
-
-
 import java.util.StringTokenizer;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.common.Grammar;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionListener;
@@ -12,11 +12,10 @@ import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleSingletonRepository;
-import simple.server.core.entity.clientobject.GagManager;
+import simple.server.core.event.LoginListener;
 
 /**
- * handles /tell-action (/msg-action). 
+ * handles /tell-action (/msg-action).
  */
 public class TellAction implements ActionListener {
 
@@ -31,7 +30,7 @@ public class TellAction implements ActionListener {
         senderName = player.getName();
         receiverName = action.get(TARGET);
         sender = player;
-        receiver = SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(receiverName);
+        receiver = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(receiverName);
     }
 
     protected boolean validateAction(RPAction action) {
@@ -102,7 +101,7 @@ public class TellAction implements ActionListener {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            if (GagManager.checkIsGaggedAndInformPlayer(player)) {
+            if (Lookup.getDefault().lookup(LoginListener.class).checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
 
@@ -112,8 +111,10 @@ public class TellAction implements ActionListener {
 
             init(player, action);
 
-            /* If the receiver is not logged in or if it is a ghost 
-             * and you don't have the level to see ghosts... */
+            /*
+             * If the receiver is not logged in or if it is a ghost and you
+             * don't have the level to see ghosts...
+             */
             if (!checkOnline()) {
                 return;
             }
@@ -140,7 +141,7 @@ public class TellAction implements ActionListener {
             tellAboutAwayStatusIfNeccessary();
 
             receiver.setLastPrivateChatter(senderName);
-            SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).addGameEvent(player.getName(), "chat",
+            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(), "chat",
                     receiverName, Integer.toString(text.length()),
                     text.substring(0, Math.min(text.length(), 1000)));
         }

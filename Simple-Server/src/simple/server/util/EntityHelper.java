@@ -1,18 +1,18 @@
-
 package simple.server.util;
 
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  * Utilities to handle entities in the server.
- * 
+ *
  * @author Martin Fuchs
  */
 public class EntityHelper {
@@ -26,13 +26,11 @@ public class EntityHelper {
      * reference. Numeric parameters are treated as object IDs, alphanumeric
      * names are searched in the list of players and NPCs.
      *
-     * @param target
-     *			  representation of the target
-     * @param player
-     *			  to constraint for current zone and screen area
+     * @param target representation of the target
+     * @param player to constraint for current zone and screen area
      * @return the entity associated either with name or id or
-     *		   <code> null </code> if none was found or any of
-     *		   the input parameters was <code> null </code>.
+     * <code> null </code> if none was found or any of the input parameters was
+     * <code> null </code>.
      */
     public static Entity entityFromTargetName(String target, Entity player) {
         if (target == null || player == null) {
@@ -57,7 +55,7 @@ public class EntityHelper {
         }
         //Treat as a player
         if (entity == null) {
-            entity = (Entity) SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(target);
+            entity = (Entity) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(target);
 
             if (entity != null) {
                 entity = null;

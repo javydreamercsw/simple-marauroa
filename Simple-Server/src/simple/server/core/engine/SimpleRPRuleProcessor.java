@@ -17,6 +17,8 @@ import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.db.GameEventDAO;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.game.rp.RPServerManager;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.Debug;
 import simple.common.filter.FilterCriteria;
 import simple.common.game.ClientObjectInterface;
@@ -27,23 +29,24 @@ import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
-import simple.server.core.event.LoginNotifier;
-import simple.server.core.event.TurnNotifier;
+import simple.server.core.event.ILoginNotifier;
+import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.TutorialNotifier;
 
 /**
  *
- * @author Javier A. Ortiz  <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
+@ServiceProvider(service = IRPRuleProcessor.class)
 public class SimpleRPRuleProcessor implements IRPRuleProcessor {
 
     private Configuration config;
     private static String VERSION;
     private static String GAMENAME;
-    /** the logger instance. */
+    /**
+     * the logger instance.
+     */
     private static final Logger logger = Log4J.getLogger(SimpleRPRuleProcessor.class);
-    /** The Singleton instance. */
-    protected static SimpleRPRuleProcessor instance = null;
     protected static RPServerManager rpman;
     protected PlayerList onlinePlayers;
     /**
@@ -56,7 +59,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
         return onlinePlayers;
     }
 
-    protected SimpleRPRuleProcessor() {
+    public SimpleRPRuleProcessor() {
         try {
             config = Configuration.getConfiguration();
         } catch (IOException ex) {
@@ -64,10 +67,6 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
         }
         onlinePlayers = new PlayerList();
         entityToKill = new LinkedList<Pair<RPEntity, Entity>>();
-    }
-
-    public void init() {
-        instance = this;
         try {
             setVERSION(Configuration.getConfiguration().get("server_version"));
             setGAMENAME(Configuration.getConfiguration().get("server_name"));
@@ -106,11 +105,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     }
 
     public static SimpleRPRuleProcessor get() throws IOException {
-        if (instance == null) {
-            instance = new SimpleRPRuleProcessor();
-            instance.init();
-        }
-        return instance;
+        return (SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class);
     }
 
     public void addGameEvent(String source, String event, String... params) {
@@ -153,8 +148,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     /**
      * Checks whether the given RPEntity has been killed this turn.
      *
-     * @param entity
-     *            The entity to check.
+     * @param entity The entity to check.
      * @return true if the given entity has been killed this turn.
      */
     private boolean wasKilled(RPEntity entity) {
@@ -169,10 +163,9 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     /**
      * Finds an online player with a specific name.
      *
-     * @param name
-     *            The player's name
+     * @param name The player's name
      * @return The player, or null if no player with the given name is currently
-     *         online.
+     * online.
      */
     public ClientObjectInterface getPlayer(String name) {
         return onlinePlayers.getOnlinePlayer(name);
@@ -192,7 +185,9 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
         return rpman.getTurn();
     }
 
-    /** Notify it when a new turn happens . */
+    /**
+     * Notify it when a new turn happens .
+     */
     @Override
     public synchronized void beginTurn() {
         debugOutput();
@@ -216,7 +211,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
         if (Debug.SHOW_LIST_SIZES && (rpman.getTurn() % 1000 == 0)) {
             int objects = 0;
 
-            for (IRPZone zone : SimpleSingletonRepository.get().get(SimpleRPWorld.class)) {
+            for (IRPZone zone : Lookup.getDefault().lookup(IRPWorld.class)) {
                 objects += zone.size();
             }
 
@@ -232,12 +227,12 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     public synchronized void endTurn() {
         int currentTurn = getTurn();
         try {
-            for (IRPZone zoneI : SimpleSingletonRepository.get().get(SimpleRPWorld.class)) {
+            for (IRPZone zoneI : Lookup.getDefault().lookup(IRPWorld.class)) {
                 SimpleRPZone zone = (SimpleRPZone) zoneI;
                 zone.logic();
             }
             // Run registered object's logic method for this turn
-            SimpleSingletonRepository.get().get(TurnNotifier.class).logic(currentTurn);
+            Lookup.getDefault().lookup(ITurnNotifier.class).logic(currentTurn);
         } catch (Exception e) {
             logger.error("Error in endTurn", e);
         }
@@ -261,18 +256,21 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     public synchronized boolean onInit(RPObject object) {
         try {
             final PlayerEntry entry = PlayerEntryContainer.getContainer().get(object);
-            final ClientObjectInterface player = SimpleRPObjectFactory.createClientObject(object);
+            final ClientObjectInterface player =
+                    Lookup.getDefault().lookup(IRPObjectFactory.class).createClientObject(object);
             entry.object = (RPObject) player;
 
             addGameEvent(player.getName(), "login");
-            SimpleSingletonRepository.get().get(LoginNotifier.class).onPlayerLoggedIn(player);
+            for (ILoginNotifier ln : Lookup.getDefault().lookupAll(ILoginNotifier.class)) {
+                ln.onPlayerLoggedIn(player);
+            }
             TutorialNotifier.login(player);
 
             getOnlinePlayers().add(player);
             if (!player.isGhost()) {
                 notifyOnlineStatus(true, player.getName());
             }
-            SimpleSingletonRepository.get().get(SimpleRPWorld.class).add((RPObject) player);
+            Lookup.getDefault().lookup(IRPWorld.class).addPlayer((RPObject) player);
             return true;
         } catch (Exception e) {
             logger.error("There has been a severe problem loading player "
@@ -284,16 +282,17 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     @Override
     public synchronized boolean onExit(RPObject object) {
         try {
-            ClientObjectInterface player = SimpleRPObjectFactory.createClientObject(object);
+            ClientObjectInterface player =
+                    Lookup.getDefault().lookup(IRPObjectFactory.class).createClientObject(object);
             if (wasKilled((RPEntity) player)) {
                 logger.info("Logged out shortly before death: Killing it now :)");
             }
             if (!player.isGhost()) {
                 notifyOnlineStatus(false, player.getName());
             }
-            SimpleRPObjectFactory.destroyClientObject(player);
+            Lookup.getDefault().lookup(IRPObjectFactory.class).destroyClientObject(player);
             getOnlinePlayers().remove(player);
-            
+
             //Player is still somewhere else?
             Iterator it = SimpleRPWorld.get().iterator();
             while (it.hasNext()) {
@@ -337,8 +336,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     /**
      * Tell this message all players.
      *
-     * @param message
-     *            Message to tell all players
+     * @param message Message to tell all players
      */
     public void tellAllPlayers(final String message) {
         onlinePlayers.tellAllOnlinePlayers(message);
@@ -347,11 +345,10 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     /**
      * sends a message to all supporters.
      *
-     * @param message
-     *            Support message
+     * @param message Support message
      */
     public static void sendMessageToSupporters(final String message) {
-        SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getOnlinePlayers().forFilteredPlayersExecute(
+        ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forFilteredPlayersExecute(
                 new Task<ClientObjectInterface>() {
 
                     @Override
@@ -374,10 +371,8 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     /**
      * sends a message to all supporters.
      *
-     * @param source
-     *            a player or script name
-     * @param message
-     *            Support message
+     * @param source a player or script name
+     * @param message Support message
      */
     public static void sendMessageToSupporters(final String source, final String message) {
         final String text = source + " asks for support to ADMIN: " + message;
@@ -385,29 +380,27 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     }
 
     public static int getAmountOfOnlinePlayers() {
-        return SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).onlinePlayers.size();
+        return ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).onlinePlayers.size();
     }
 
     public static void notifyOnlineStatus(boolean isOnline, final String name) {
-        if (instance != null) {
-            if (isOnline) {
-                SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
+        if (isOnline) {
+            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
 
-                    @Override
-                    public void execute(ClientObjectInterface player) {
-                        player.notifyOnline(name);
-                    }
-                });
+                @Override
+                public void execute(ClientObjectInterface player) {
+                    player.notifyOnline(name);
+                }
+            });
 
-            } else {
-                SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
+        } else {
+            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
 
-                    @Override
-                    public void execute(ClientObjectInterface player) {
-                        player.notifyOffline(name);
-                    }
-                });
-            }
+                @Override
+                public void execute(ClientObjectInterface player) {
+                    player.notifyOffline(name);
+                }
+            });
         }
     }
 }

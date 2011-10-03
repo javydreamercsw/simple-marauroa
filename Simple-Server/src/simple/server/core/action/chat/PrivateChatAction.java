@@ -4,14 +4,14 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionListener;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
-import simple.server.core.engine.SimpleRPWorld;
-import simple.server.core.engine.SimpleSingletonRepository;
-import simple.server.core.entity.clientobject.GagManager;
+import simple.server.core.engine.IRPWorld;
+import simple.server.core.event.LoginListener;
 import simple.server.core.event.PrivateTextEvent;
 
 /**
@@ -29,7 +29,7 @@ public class PrivateChatAction implements ActionListener {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            if (GagManager.checkIsGaggedAndInformPlayer(player)) {
+            if (Lookup.getDefault().lookup(LoginListener.class).checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
             if (action.has(TEXT) && action.has(TARGET)) {
@@ -37,7 +37,7 @@ public class PrivateChatAction implements ActionListener {
                 String target = action.get(TARGET);
                 String from = rpo.get("name");
                 logger.info("Processing private text action: " + action);
-                SimpleSingletonRepository.get().get(SimpleRPWorld.class).applyPrivateEvent(target,
+                Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
                         new PrivateTextEvent(NotificationType.PRIVMSG, text, target, from));
             } else {
                 StringBuilder mess = new StringBuilder("Action is missing key components:\n");

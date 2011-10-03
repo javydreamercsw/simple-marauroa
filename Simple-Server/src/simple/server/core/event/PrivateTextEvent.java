@@ -3,15 +3,19 @@ package simple.server.core.event;
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import static simple.server.core.action.WellKnownActionConstant.*;
 import simple.server.core.event.api.IPrivateChatEvent;
+import simple.server.core.event.api.IRPEvent;
 
 /**
  * A text message.
  *
- * @author hendrik
+ * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com> 
+ * based on work from hendrik
  */
+@ServiceProvider(service = IRPEvent.class)
 public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent {
 
     public static final String RPCLASS_NAME = "private_text";
@@ -21,7 +25,8 @@ public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent
     /**
      * Creates the rpclass.
      */
-    public static void generateRPClass() {
+    @Override
+    public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass rpclass = new RPClass(RPCLASS_NAME);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT_TYPE, Type.STRING);
@@ -33,7 +38,8 @@ public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent
         }
     }
 
-    public static String getRPClassName() {
+    @Override
+    public String getRPClassName() {
         return RPCLASS_NAME;
     }
 

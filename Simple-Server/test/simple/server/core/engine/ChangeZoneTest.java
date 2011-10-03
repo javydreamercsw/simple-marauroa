@@ -2,8 +2,7 @@ package simple.server.core.engine;
 
 import marauroa.common.Log4J;
 import marauroa.common.game.IRPZone.ID;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import simple.server.core.entity.clientobject.ClientObject;
@@ -22,9 +21,9 @@ public class ChangeZoneTest {
 
         MockSimpleRPWorld.get();
 
-        MockSimpleRPRuleProcessor.get();
         // load item configurations to handle money and other items
         SimpleSingletonRepository.getEntityManager();
+        ClientObject.generateRPClass();
         player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
         MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone1"));
         MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone2"));
@@ -32,18 +31,18 @@ public class ChangeZoneTest {
 
     /**
      * Test of getGameName method, of class SimpleDatabase.
+     *
      * @throws Exception
      */
     @Test
     public void changeZone() {
         try {
             System.out.println("changeZone");
-            MockSimpleRPWorld.get().showWorld();
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone1")));
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone2")));
             assertFalse(MockSimpleRPWorld.get().hasRPZone(new ID("zone3")));
             player1.put("zoneid", "zone2");
-            MockSimpleRPWorld.get().addPlayer(player1);
+            MockSimpleRPWorld.get().add(player1);
             MockSimpleRPWorld.get().changeZone(new ID("zone1"), player1);
             assertTrue(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone1"))).has(player1.getID()));
             MockSimpleRPWorld.get().changeZone(new ID("zone2"), player1);
@@ -52,6 +51,7 @@ public class ChangeZoneTest {
             assertTrue(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone2"))).has(player1.getID()));
             assertFalse(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone2"))).isEmpty());
         } catch (Exception e) {
+            fail();
         }
     }
 }

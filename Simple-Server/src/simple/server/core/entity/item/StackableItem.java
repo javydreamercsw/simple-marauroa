@@ -1,11 +1,11 @@
-
 package simple.server.core.entity.item;
 
 import java.util.Map;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPObject;
-import simple.server.core.engine.SimpleRPWorld;
+import org.openide.util.Lookup;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleSingletonRepository;
 
 public class StackableItem extends Item implements Stackable {
@@ -22,9 +22,8 @@ public class StackableItem extends Item implements Stackable {
 
     /**
      * Copy constructor.
-     * 
-     * @param item
-     *            item to copy
+     *
+     * @param item item to copy
      */
     public StackableItem(StackableItem item) {
         super(item);
@@ -97,7 +96,7 @@ public class StackableItem extends Item implements Stackable {
                     while (base.isContained()) {
                         base = base.getContainer();
                     }
-                    SimpleSingletonRepository.get().get(SimpleRPWorld.class).modify(base);
+                    Lookup.getDefault().lookup(IRPWorld.class).modify(base);
                 } else {
                     try {
                         notifyWorldAboutChanges();
@@ -106,7 +105,9 @@ public class StackableItem extends Item implements Stackable {
                     }
                 }
             } else {
-                /* If quantity=0 then it means that item has to be removed */
+                /*
+                 * If quantity=0 then it means that item has to be removed
+                 */
                 super.removeFromWorld();
             }
 

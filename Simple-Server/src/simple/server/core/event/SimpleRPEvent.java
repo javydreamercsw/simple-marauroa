@@ -14,7 +14,7 @@ import simple.server.core.event.api.IRPEvent;
  * 
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public class SimpleRPEvent extends RPEvent implements IRPEvent {
+public abstract class SimpleRPEvent extends RPEvent implements IRPEvent {
 
     public static final String EVENT_ID = "event_id";
 

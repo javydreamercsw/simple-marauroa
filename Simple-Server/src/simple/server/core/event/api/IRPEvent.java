@@ -30,4 +30,15 @@ public interface IRPEvent extends IAttribute{
      * @return name of the event
      */
     public String getName();
+    
+    /**
+     * Get RPClass name
+     * @return RPClass name
+     */
+    public String getRPClassName();
+
+    /**
+     * Creates the RPclass.
+     */
+    public void generateRPClass();
 }
