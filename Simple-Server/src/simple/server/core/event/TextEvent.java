@@ -3,24 +3,28 @@ package simple.server.core.event;
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.server.core.event.api.IPublicChatEvent;
+import simple.server.core.event.api.IRPEvent;
 
 /**
  * A public text message.
  *
  * @author hendrik
  */
+@ServiceProvider(service = IRPEvent.class)
 public class TextEvent extends SimpleRPEvent implements IPublicChatEvent {
 
-    private static final String RPCLASS_NAME = "text";
+    public static final String RPCLASS_NAME = "text";
     private static final String TEXT = "text", FROM = "from";
     private static final String TEXT_TYPE = "texttype";
 
     /**
      * Creates the rpclass.
      */
-    public static void generateRPClass() {
+    @Override
+    public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass rpclass = new RPClass(RPCLASS_NAME);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
@@ -30,7 +34,8 @@ public class TextEvent extends SimpleRPEvent implements IPublicChatEvent {
         }
     }
 
-    public static String getRPClassName() {
+    @Override
+    public String getRPClassName() {
         return RPCLASS_NAME;
     }
 

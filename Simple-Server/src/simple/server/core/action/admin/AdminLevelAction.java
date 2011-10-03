@@ -1,12 +1,12 @@
-
 package simple.server.core.action.admin;
 
 import marauroa.common.game.RPAction;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 public class AdminLevelAction extends AdministrationAction {
 
@@ -24,7 +24,8 @@ public class AdminLevelAction extends AdministrationAction {
         if (action.has(_TARGET)) {
 
             String name = action.get(_TARGET);
-            ClientObjectInterface target = SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(name);
+            ClientObjectInterface target =
+                    ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(name);
             if (target == null || (target.isGhost() && !isAllowedtoSeeGhosts(player))) {
                 logger.debug("Player \"" + name + "\" not found");
                 player.sendPrivateText("Player \"" + name + "\" not found");
@@ -49,7 +50,7 @@ public class AdminLevelAction extends AdministrationAction {
                     response = "Sorry, but you need an adminlevel of " + REQUIRED_ADMIN_LEVEL_FOR_SUPER + " to change adminlevel.";
                 } else {
                     // OK, do the change
-                    SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).addGameEvent(player.getName(), _ADMINLEVEL, target.getName(), _ADMINLEVEL, action.get(_NEWLEVEL));
+                    Lookup.getDefault().lookup(SimpleRPRuleProcessor.class).addGameEvent(player.getName(), _ADMINLEVEL, target.getName(), _ADMINLEVEL, action.get(_NEWLEVEL));
                     target.setAdminLevel(newlevel);
                     target.update();
                     target.notifyWorldAboutChanges();

@@ -29,12 +29,12 @@ public class ChatListener implements RPEventListener {
             default:
 
         }
-        if (event.getName().equals(PrivateTextEvent.getRPClassName())) {
-            screen.addLine(from == null ? "" : from, text == null ? "" :
-                text, NotificationType.PRIVMSG);
-        } else if (event.getName().equals(TextEvent.getRPClassName())) {
-            screen.addLine(from == null ? "" : from, text == null ? "" :
-                text, NotificationType.NORMAL);
+        if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
+            screen.addLine(from == null ? "" : from, text == null ? ""
+                    : text, NotificationType.PRIVMSG);
+        } else if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
+            screen.addLine(from == null ? "" : from, text == null ? ""
+                    : text, NotificationType.NORMAL);
         }
     }
 }

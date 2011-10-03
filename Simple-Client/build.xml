@@ -146,6 +146,7 @@
     <target name="remove-svn-history">
         <replaceregexp byline="false" match="(?s)\A/\*.*?\*/" replace="">
             <fileset dir="src" includes="**/*.java"/>
+            <fileset dir="test" includes="**/*.java"/>
         </replaceregexp>
     </target>
 </project>

@@ -8,15 +8,7 @@ import simple.common.game.ClientObjectInterface;
  */
 public class MockSimpleRPRuleProcessor extends SimpleRPRuleProcessor {
 
-    protected MockSimpleRPRuleProcessor() {
-    }
-
-    public static MockSimpleRPRuleProcessor get() {
-        if (!(instance instanceof MockSimpleRPRuleProcessor)) {
-            instance = new MockSimpleRPRuleProcessor();
-        }
-
-        return (MockSimpleRPRuleProcessor) instance;
+    public MockSimpleRPRuleProcessor() {
     }
 
     @Override

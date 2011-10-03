@@ -7,10 +7,10 @@ import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.RPWorld;
+import org.openide.util.Lookup;
 import simple.common.Grammar;
-import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  *
@@ -231,7 +231,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         // Use onAdded()/onRemoved() to grab a copy
         // of the zone and save as a local variable.
         if (zone == null) {
-            zone = (SimpleRPZone) SimpleSingletonRepository.get().get(SimpleRPWorld.class).getRPZone(get("zoneid"));
+            zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(get("zoneid"));
         }
         return zone;
     }

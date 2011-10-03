@@ -1,55 +1,39 @@
-
 package simple.server.core.entity.clientobject;
 
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleSingletonRepository;
+import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.LoginListener;
 import simple.server.core.event.LoginNotifier;
 import simple.server.core.event.TurnListener;
-import simple.server.core.event.TurnNotifier;
 import simple.server.util.TimeUtil;
 
 /**
  * Manages gags.
  */
-public class GagManager implements LoginListener {
+public class GagManager implements LoginListener{
 
     private static final Logger logger = Log4J.getLogger(GagManager.class);
-    /** The Singleton instance. */
-    private static GagManager instance;
 
-    /**
-     * Return the GagManager object (Singleton Pattern).
-     * 
-     * @return GagManager
-     */
-    public static GagManager get() {
-        if (instance == null) {
-            instance = new GagManager();
-        }
-        return instance;
-    }
-
-    // singleton
-    private GagManager() {
-        SimpleSingletonRepository.get().get(LoginNotifier.class).addListener(GagManager.this);
+    public GagManager() {
+        Lookup.getDefault().lookup(LoginNotifier.class).addListener(GagManager.this);
     }
 
     /**
-     * @param criminalName
-     *            The name of the player who should be gagged
-     * @param policeman
-     *            The name of the admin who wants to gag the criminal
-     * @param minutes
-     *            The duration of the sentence
+     * @param criminalName The name of the player who should be gagged
+     * @param policeman The name of the admin who wants to gag the criminal
+     * @param minutes The duration of the sentence
      * @param reason why criminal was gagged
      */
+    @Override
     public void gag(final String criminalName, ClientObjectInterface policeman, int minutes,
             String reason) {
-        final ClientObjectInterface criminal = SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(criminalName);
+        final ClientObjectInterface criminal =
+                ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
 
         if (criminal == null) {
             String text = "ClientObjectInterface " + criminalName + " not found";
@@ -84,9 +68,8 @@ public class GagManager implements LoginListener {
 
     /**
      * Removes a gag.
-     * 
-     * @param inmate
-     *            player who should be released
+     *
+     * @param inmate player who should be released
      */
     public void release(ClientObjectInterface inmate) {
 
@@ -99,7 +82,7 @@ public class GagManager implements LoginListener {
 
     /**
      * Is player gagged?
-     * 
+     *
      * @param player player to check
      * @return true, if it is gagged, false otherwise.
      */
@@ -112,14 +95,15 @@ public class GagManager implements LoginListener {
 
     /**
      * Like isGagged(player) but informs the player in case it is gagged.
-     * 
+     *
      * @param player player to check
      * @return true, if it is gagged, false otherwise.
      */
-    public static boolean checkIsGaggedAndInformPlayer(ClientObjectInterface player) {
+    @Override
+    public boolean checkIsGaggedAndInformPlayer(ClientObjectInterface player) {
         boolean res = GagManager.isGagged(player);
         if (res) {
-            long timeRemaining = SimpleSingletonRepository.get().get(GagManager.class).getTimeRemaining(player);
+            long timeRemaining = getTimeRemaining(player);
             player.sendPrivateText("You are gagged, it will expire in " + TimeUtil.approxTimeUntil((int) (timeRemaining / 1000L)));
         }
 
@@ -128,11 +112,10 @@ public class GagManager implements LoginListener {
 
     /**
      * If the players' gag has expired, remove it.
-     * 
-     * @param player
-     *            player to check
+     *
+     * @param player player to check
      * @return true, if the gag expired and was removed or was already removed.
-     *         false, if the player still has time to serve.
+     * false, if the player still has time to serve.
      */
     private boolean tryExpire(ClientObjectInterface player) {
         if (!isGagged(player)) {
@@ -165,13 +148,14 @@ public class GagManager implements LoginListener {
 
         // Set a timer so that the inmate is automatically released after
         // serving his sentence. We're using the TurnNotifier; we use
-        SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInSeconds(
+        Lookup.getDefault().lookup(ITurnNotifier.class).notifyInSeconds(
                 (int) (getTimeRemaining(criminal) / 1000), new TurnListener() {
 
             @Override
             public void onTurnReached(int currentTurn) {
 
-                ClientObjectInterface criminal2 = SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(criminalName);
+                ClientObjectInterface criminal2 =
+                        ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
                 if (criminal2 == null) {
                     logger.debug("Gagged player " + criminalName + "has logged out.");
                     return;
@@ -185,11 +169,11 @@ public class GagManager implements LoginListener {
 
     /**
      * Gets time remaining in milliseconds.
-     * 
-     * @param criminal
-     *            player to check
+     *
+     * @param criminal player to check
      * @return time remaining in milliseconds
      */
+    @Override
     public long getTimeRemaining(ClientObjectInterface criminal) {
         if (!isGagged(criminal)) {
             return 0L;

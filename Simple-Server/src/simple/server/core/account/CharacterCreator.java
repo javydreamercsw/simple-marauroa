@@ -1,6 +1,5 @@
 package simple.server.core.account;
 
-
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.Result;
@@ -9,7 +8,8 @@ import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.CharacterDAO;
 import marauroa.server.game.db.DAORegister;
 import org.apache.log4j.Logger;
-import simple.server.core.engine.SimpleRPObjectFactory;
+import org.openide.util.Lookup;
+import simple.server.core.engine.IRPObjectFactory;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleSingletonRepository;
 
@@ -27,12 +27,9 @@ public class CharacterCreator {
     /**
      * create a CharacterCreator.
      *
-     * @param username
-     *            name of the user
-     * @param character
-     *            name of the new character
-     * @param template
-     *            template to base this character on
+     * @param username name of the user
+     * @param character name of the new character
+     * @param template template to base this character on
      */
     public CharacterCreator(final String username, final String character, final RPObject template) {
         this.username = username;
@@ -72,7 +69,8 @@ public class CharacterCreator {
                         character, template);
             }
 
-            RPObject object = (RPObject) SimpleRPObjectFactory.createDefaultClientObject(character);
+            RPObject object =
+                    (RPObject) Lookup.getDefault().lookup(IRPObjectFactory.class).createDefaultClientObject(character);
             // monitor new account names
             final String text = "Support: A new character has just been created called " + character + ".";
 

@@ -20,6 +20,7 @@ import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
 import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.MarauroaRPZone;
+import org.openide.util.Lookup;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.Entity;
@@ -29,7 +30,6 @@ import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TurnNotifier;
 import simple.server.core.tool.Tool;
-import simple.server.extension.SimpleServerExtension;
 
 public class SimpleRPZone extends MarauroaRPZone {
 
@@ -89,7 +89,7 @@ public class SimpleRPZone extends MarauroaRPZone {
          */
         Iterator i = getPlayers().iterator();
         while (i.hasNext()) {
-            SimpleSingletonRepository.get().get(SimpleRPWorld.class).changeZone(SimpleRPWorld.getDefaultRoom(),
+            Lookup.getDefault().lookup(IRPWorld.class).changeZone(SimpleRPWorld.getDefaultRoom(),
                     (ClientObject) i.next());
         }
     }
@@ -106,8 +106,9 @@ public class SimpleRPZone extends MarauroaRPZone {
      * @return the removed object
      */
     public RPObject remove(RPObject object) {
-        for (Entry<String, MarauroaServerExtension> entry : MarauroaServerExtension.getLoadedInstances().entrySet()) {
-            entry.getValue().onRPObjectRemoveFromZone(object);
+        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            MarauroaServerExtension extension = it.next();
+            extension.onRPObjectRemoveFromZone(object);
         }
 
         if (object instanceof ClientObjectInterface) {
@@ -139,18 +140,18 @@ public class SimpleRPZone extends MarauroaRPZone {
             }
             //Let everyone else know
             applyPublicEvent(new PrivateTextEvent(
-                    NotificationType.INFORMATION, player.getName() 
+                    NotificationType.INFORMATION, player.getName()
                     + " left " + getName()));
         } else if (object instanceof Entity) {
             ((Entity) object).onRemoved(this);
         }
-        SimpleRPWorld.get().deleteIfEmpty(getID().toString());
+        Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(getID().toString());
         return super.remove(object.getID());
     }
 
     /**
-     * Get the zone name. This is the same as <code>getID().getID()</code>,
-     * only cleaner to use.
+     * Get the zone name. This is the same as
+     * <code>getID().getID()</code>, only cleaner to use.
      *
      * @return The zone name.
      */
@@ -174,6 +175,7 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     /**
      * Gets all players in this zone.
+     *
      * @param separator Character to separate the names in the list.
      * @return A list of all players.
      */
@@ -217,9 +219,10 @@ public class SimpleRPZone extends MarauroaRPZone {
              */
             assignRPObjectID(object);
 
-            for (Entry<String, MarauroaServerExtension> entry : MarauroaServerExtension.getLoadedInstances().entrySet()) {
-                logger.debug("Processing extension: " + entry.getKey());
-                object = entry.getValue().onRPObjectAddToZone(object);
+            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+                MarauroaServerExtension extension = it.next();
+                logger.debug("Processing extension: " + extension.getClass().getSimpleName());
+                extension.onRPObjectAddToZone(object);
             }
 
             if (object instanceof ClientObjectInterface) {
@@ -261,7 +264,7 @@ public class SimpleRPZone extends MarauroaRPZone {
                 ((RPEntityInterface) object).onAdded(this);
             }
             //Request sync previous to any modification
-            SimpleSingletonRepository.get().get(SimpleRPWorld.class).requestSync(object);
+            Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
             if (player != null) {
                 //Notify the player that created it
                 player.sendPrivateText(NotificationType.RESPONSE, object + " successfully created!");
@@ -294,11 +297,10 @@ public class SimpleRPZone extends MarauroaRPZone {
             logger.debug(p.toString());
             visited = true;
             //Modify the perception
-            for (Entry<String, MarauroaServerExtension> entry : MarauroaServerExtension.getLoadedInstances().entrySet()) {
-                logger.debug("Processing extension: " + entry.getKey());
-                if (entry.getValue() instanceof SimpleServerExtension) {
-                    ((SimpleServerExtension) entry.getValue()).updateMonitor(player, p);
-                }
+            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+                MarauroaServerExtension extension = it.next();
+                logger.debug("Processing extension: " + extension.getClass().getSimpleName());
+                extension.updateMonitor(player, p);
             }
             logger.debug("Modification Done!");
             logger.debug("After:");
@@ -313,8 +315,7 @@ public class SimpleRPZone extends MarauroaRPZone {
      * server.ini file as "server_welcome". If the value is an http:// address,
      * the first line of that address is read and used as the message
      *
-     * @param player
-     *            ClientObjectInterface
+     * @param player ClientObjectInterface
      */
     protected static void welcome(ClientObjectInterface player) {
         String msg = "";
@@ -337,7 +338,7 @@ public class SimpleRPZone extends MarauroaRPZone {
             logger.error(null, e);
         }
         if (msg != null && !msg.isEmpty()) {
-            SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInTurns(2,
+            Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(2,
                     new DelayedPlayerEventSender(new PrivateTextEvent(
                     NotificationType.TUTORIAL, msg), player));
         }
@@ -345,6 +346,7 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     /**
      * Return whether the zone is completely empty.
+     *
      * @return
      */
     public boolean isEmpty() {
@@ -353,6 +355,7 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     /**
      * Return whether the zone contains one or more players.
+     *
      * @return
      */
     public boolean containsPlayer() {
@@ -378,7 +381,7 @@ public class SimpleRPZone extends MarauroaRPZone {
                 p.notifyWorldAboutChanges();
             } else {
                 logger.debug("With a delay of " + delay + " turns");
-                SimpleSingletonRepository.get().get(TurnNotifier.class).notifyInTurns(delay,
+                Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(delay,
                         new DelayedPlayerEventSender(event, p));
             }
         }

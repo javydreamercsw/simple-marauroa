@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.Entity;
 
@@ -47,7 +48,7 @@ public class MockSimpleRPZone extends SimpleRPZone {
         if (object instanceof Entity) {
             ((Entity) object).onAdded(this);
         }
-        SimpleSingletonRepository.get().get(SimpleRPWorld.class).requestSync(object);
+        Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
     }
 
     @Override

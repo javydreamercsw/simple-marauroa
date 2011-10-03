@@ -1,18 +1,18 @@
 package simple.server.core.action.admin;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionListener;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.entity.Entity;
 
 /**
@@ -102,7 +102,7 @@ public abstract class AdministrationAction implements ActionListener {
      * @return the Entity or null if it does not exist
      */
     protected final Entity getTarget(ClientObjectInterface player, RPAction action) {
-        
+
         String id = null;
         Entity target = null;
 
@@ -114,7 +114,7 @@ public abstract class AdministrationAction implements ActionListener {
             if (id.startsWith("#")) {
                 id = id.substring(1);
             } else {
-                target = (Entity) SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).getPlayer(id);
+                target = (Entity) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(id);
                 return target;
             }
         }

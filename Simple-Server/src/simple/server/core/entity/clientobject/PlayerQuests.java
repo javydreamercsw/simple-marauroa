@@ -1,14 +1,13 @@
-
 package simple.server.core.entity.clientobject;
-
 
 import java.util.LinkedList;
 import java.util.List;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
+import marauroa.server.game.rp.IRPRuleProcessor;
+import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * Accesses the player quest states.
@@ -26,9 +25,8 @@ class PlayerQuests implements java.io.Serializable {
 
     /**
      * Checks whether the player has completed the given quest or not.
-     * 
-     * @param name
-     *            The quest's name
+     *
+     * @param name The quest's name
      * @return true iff the quest has been completed by the player
      */
     public boolean isQuestCompleted(String name) {
@@ -45,9 +43,8 @@ class PlayerQuests implements java.io.Serializable {
      * Checks whether the player has made any progress in the given quest or
      * not. For many quests, this is true right after the quest has been
      * started.
-     * 
-     * @param name
-     *            The quest's name
+     *
+     * @param name The quest's name
      * @return true iff the player has made any progress in the quest
      */
     public boolean hasQuest(String name) {
@@ -56,9 +53,8 @@ class PlayerQuests implements java.io.Serializable {
 
     /**
      * Gets the player's current status in the given quest.
-     * 
-     * @param name
-     *            The quest's name
+     *
+     * @param name The quest's name
      * @return the player's status in the quest
      */
     public String getQuest(String name) {
@@ -71,24 +67,22 @@ class PlayerQuests implements java.io.Serializable {
      * list of items that need to be brought/NPCs that need to be met, or the
      * number of items that still need to be brought. Note that the string
      * "done" has a special meaning: see isQuestComplete().
-     * 
-     * @param name
-     *            The quest's name
-     * @param status
-     *            the player's status in the quest. Set it to null to completely
-     *            reset the player's status for the quest.
+     *
+     * @param name The quest's name
+     * @param status the player's status in the quest. Set it to null to
+     * completely reset the player's status for the quest.
      */
     public void setQuest(String name, String status) {
         String oldStatus = player.getKeyedSlot("!quests", name);
         player.setKeyedSlot("!quests", name, status);
         if ((status == null) || !status.equals(oldStatus)) {
-            SimpleSingletonRepository.get().get(SimpleRPRuleProcessor.class).addGameEvent(player.getName(), "quest",
+            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(), "quest",
                     name, status);
         }
     }
 
     public List<String> getQuests() {
-        RPSlot slot = ((RPObject)player).getSlot("!quests");
+        RPSlot slot = ((RPObject) player).getSlot("!quests");
         RPObject quests = slot.iterator().next();
 
         List<String> questsList = new LinkedList<String>();
@@ -106,11 +100,9 @@ class PlayerQuests implements java.io.Serializable {
 
     /**
      * Is the named quest in one of the listed states?
-     * 
-     * @param name
-     *            quest
-     * @param states
-     *            valid states
+     *
+     * @param name quest
+     * @param states valid states
      * @return true, if the quest is in one of theses states, false otherwise
      */
     public boolean isQuestInState(String name, String... states) {

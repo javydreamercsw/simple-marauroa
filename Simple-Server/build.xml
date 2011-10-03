@@ -27,7 +27,7 @@
             <path refid="build.classpath" />
             <flattenmapper />
         </pathconvert>
-        <echo file="marauroad.bat" append="false">set LOCAL_CLASSPATH=marauroa-simple-server-${version}.jar;lib\${mf.classpath};&#13;&#10;</echo>
+        <echo file="marauroad.bat" append="false">set LOCAL_CLASSPATH=marauroa-simple-server.jar;lib\${mf.classpath};&#13;&#10;</echo>
         <echo file="marauroad.bat" append="true">java -cp "%LOCAL_CLASSPATH%" marauroa.server.marauroad -c server.ini -l</echo>
         <copy file="marauroad.bat" todir="dist/"/>
     </target>

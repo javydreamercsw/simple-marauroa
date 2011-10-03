@@ -1,11 +1,12 @@
 package simple.server.core.engine;
 
+import java.util.Iterator;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
-import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TextEvent;
+import simple.server.core.event.api.IRPEvent;
 import utilities.RPClass.ItemTestHelper;
 
 /**
@@ -29,37 +30,17 @@ public class MockSimpleRPWorld extends SimpleRPWorld {
         }
 
         if (!RPClass.hasRPClass("client_object")) {
-            SimpleRPObjectFactory.generateClientObjectRPClass();
+            Lookup.getDefault().lookup(IRPObjectFactory.class).generateClientObjectRPClass();
         }
 
-        if (!RPClass.hasRPClass(PrivateTextEvent.getRPClassName())) {
-            PrivateTextEvent.generateRPClass();
-        }
-
-        if (!RPClass.hasRPClass(TextEvent.getRPClassName())) {
-            TextEvent.generateRPClass();
+        for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
+            IRPEvent event = it.next();
+            event.generateRPClass();
         }
         ItemTestHelper.generateRPClasses();
     }
 
-    public static SimpleRPWorld get() {
-        try {
-            if (!(instance instanceof MockSimpleRPWorld)) {
-                instance = new MockSimpleRPWorld();
-                ((MockSimpleRPWorld) instance).createRPClasses();
-            }
-            return instance;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     @Override
     protected void initialize() {
-    }
-
-    public static void reset() {
-        instance = null;
     }
 }
