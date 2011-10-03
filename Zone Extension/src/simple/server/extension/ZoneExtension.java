@@ -44,6 +44,20 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     }
 
     @Override
+    public RPObject onRPObjectAddToZone(RPObject object) {
+        if (object instanceof ClientObjectInterface) {
+            //Send the list to the user
+            ClientObjectInterface player = (ClientObjectInterface) object;
+            RPAction action = new RPAction();
+            action.put("type", ZoneExtension.TYPE);
+            action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
+            action.put(ZoneExtension.SEPARATOR, "#");
+            list(player, ZoneEvent.LISTZONES, action);
+        }
+        return object;
+    }
+
+    @Override
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;

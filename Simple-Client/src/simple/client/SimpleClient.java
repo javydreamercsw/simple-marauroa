@@ -1,23 +1,22 @@
 package simple.client;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
+import marauroa.client.extension.MarauroaClientExtension;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
-import org.xml.sax.SAXException;
-import simple.client.conf.ExtensionXMLLoader;
-import simple.client.entity.UserContext;
+import org.openide.util.Lookup;
+import simple.client.entity.IUserContext;
 import simple.client.event.ChatListener;
 import simple.client.gui.GameObjects;
 import simple.server.core.event.PrivateTextEvent;
@@ -37,13 +36,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected static SimpleClient client;
     private String[] available_characters;
     private RPObject player;
-    private static ExtensionXMLLoader extensionLoader;
-    private static String confPath;
-    private static boolean extLoaded = false;
     private String userName;
     public static String LOG4J_PROPERTIES = "log4j.properties";
     public ArrayList<String> whoplayers;
-    protected static UserContext userContext;
     protected GameObjects gameObjects;
     protected Enum state;
     protected ChatScreenInterface mainFrame;
@@ -64,7 +59,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         super(properties);
         world = new World();
         gameObjects = GameObjects.createInstance();
-        userContext = new UserContext(this);
         //Register listeners for normal chat and private messages
         registerListeners();
         //**************************
@@ -76,6 +70,11 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         dispatch.register(SimpleClient.this);
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
         //**************************
+        for (Iterator<? extends MarauroaClientExtension> it = Lookup.getDefault().lookupAll(MarauroaClientExtension.class).iterator(); it.hasNext();) {
+            MarauroaClientExtension extension = it.next();
+            logger.log(Level.INFO, "Loading extension: {0}",
+                    extension.getClass().getSimpleName());
+        }
     }
 
     /**
@@ -84,8 +83,10 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
      */
     protected void registerListeners() {
         ChatListener cl = new ChatListener();
-        userContext.registerRPEventListener(new TextEvent(), cl);
-        userContext.registerRPEventListener(new PrivateTextEvent(), cl);
+        if (getUserContext() != null ) {
+            getUserContext().registerRPEventListener(new TextEvent(), cl);
+            getUserContext().registerRPEventListener(new PrivateTextEvent(), cl);
+        }
     }
 
     /**
@@ -159,8 +160,8 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     /**
      * @return the userContext
      */
-    public static UserContext getUserContext() {
-        return userContext;
+    public static IUserContext getUserContext() {
+        return Lookup.getDefault().lookup(IUserContext.class);
     }
 
     /**
@@ -238,34 +239,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         logger.log(Level.FINE, "Previous logins");
         for (String FINE_string : previousLogins) {
             logger.log(Level.FINE, FINE_string);
-        }
-    }
-
-    /**
-     * @return the confPath
-     */
-    public static String getConfPath() {
-        return confPath;
-    }
-
-    /**
-     * @param cP the confPath to set
-     */
-    public static void setConfPath(String cP) {
-        if (!extLoaded) {
-            confPath = cP;
-            logger.log(Level.FINE, "Loading extensions from: {0}", confPath);
-            if (extensionLoader == null) {
-                extensionLoader = new ExtensionXMLLoader();
-                try {
-                    extensionLoader.load(new URI(getConfPath()));
-                    extLoaded = true;
-                } catch (SAXException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                } catch (URISyntaxException ex) {
-                    logger.log(Level.SEVERE, null, ex);
-                }
-            }
         }
     }
 
