@@ -6,8 +6,6 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
-import simple.client.RPObjectChangeListener;
-import simple.client.SimpleClient;
 import simple.client.event.listener.RPEventListener;
 import simple.client.event.listener.RPEventNotifier;
 import simple.client.gui.GameObjects;
@@ -20,7 +18,7 @@ import simple.client.gui.GameObjects;
  * Currently this is just a helper class for jWrestlingClient. Maybe it will be
  * directly used by other code later.
  */
-public class UserContext implements RPObjectChangeListener {
+public class UserContext implements IUserContext {
 
     /**
      * The logger.
@@ -50,17 +48,12 @@ public class UserContext implements RPObjectChangeListener {
      * The player character's name.
      */
     protected String name;
-    /**
-     * The player client.
-     */
-    protected SimpleClient client;
 
     /**
      * Constructor.
      * @param client Client using this user context
      */
-    public UserContext(SimpleClient client) {
-        this.client = client;
+    public UserContext() {
         adminlevel = 0;
         eventNotifier = RPEventNotifier.get();
         gameObjects = GameObjects.getInstance();
@@ -74,6 +67,7 @@ public class UserContext implements RPObjectChangeListener {
      * @param event     event to listen for
      * @param listener  listener
      */
+    @Override
     public void registerRPEventListener(RPEvent event, RPEventListener listener) {
         logger.debug("Adding event: " + event.getName()
                 + " to the listener list with listener: "
@@ -106,6 +100,7 @@ public class UserContext implements RPObjectChangeListener {
      *
      * @return The administrator level.
      */
+    @Override
     public int getAdminLevel() {
         return adminlevel;
     }
@@ -115,6 +110,7 @@ public class UserContext implements RPObjectChangeListener {
      *
      * @return The player character name.
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -124,6 +120,7 @@ public class UserContext implements RPObjectChangeListener {
      *
      * @return <code>true</code> is the user is an admin.
      */
+    @Override
     public boolean isAdmin() {
         return (getAdminLevel() != 0);
     }
