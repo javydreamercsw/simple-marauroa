@@ -1,22 +1,13 @@
 package simple.server.extension;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.*;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.CommandCenter;
 
 /**
  *
@@ -51,8 +42,7 @@ public class MonitorExtensionTest {
         System.out.println("init");
         MonitorExtension instance = new MonitorExtension();
         instance.init();
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
+        CommandCenter.register(null, instance);
     }
 
     /**
@@ -65,8 +55,6 @@ public class MonitorExtensionTest {
         RPAction action = null;
         MonitorExtension instance = new MonitorExtension();
         instance.onAction((RPObject) monitor, action);
-        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
     }
 
     @Test
