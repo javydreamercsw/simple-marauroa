@@ -37,4 +37,8 @@ public interface RPEntityInterface extends Constants {
     public SimpleRPZone getZone();
 
     public void onRemoved(SimpleRPZone zone);
+    /**
+     * Generate this RPClass
+     */
+    public void generateRPClass();
 }

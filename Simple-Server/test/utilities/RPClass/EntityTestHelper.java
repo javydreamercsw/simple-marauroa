@@ -8,7 +8,7 @@ public class EntityTestHelper {
     public static void generateRPClasses() {
 
         if (!RPClass.hasRPClass("entity")) {
-            Entity.generateRPClass();
+//            Entity.generateRPClass();
         }
     }
 }

@@ -23,7 +23,6 @@ public class ChangeZoneTest {
 
         // load item configurations to handle money and other items
         SimpleSingletonRepository.getEntityManager();
-        ClientObject.generateRPClass();
         player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
         MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone1"));
         MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone2"));
