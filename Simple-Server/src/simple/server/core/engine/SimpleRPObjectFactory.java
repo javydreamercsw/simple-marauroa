@@ -1,9 +1,5 @@
 package simple.server.core.engine;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPClass;
@@ -20,7 +16,6 @@ import simple.common.game.ClientObjectInterface;
  */
 @ServiceProvider(service = IRPObjectFactory.class)
 public class SimpleRPObjectFactory extends RPObjectFactory implements IRPObjectFactory {
-//TODO: replace RMI with ServiceProviders
 
     private static Logger logger = Log4J.getLogger(SimpleRPObjectFactory.class);
 
@@ -35,6 +30,9 @@ public class SimpleRPObjectFactory extends RPObjectFactory implements IRPObjectF
         // fallback
         return super.transform(object);
     }
+
+    public SimpleRPObjectFactory() {
+    }
     
     /**
      * Returns the factory instance (this method is called
@@ -47,150 +45,22 @@ public class SimpleRPObjectFactory extends RPObjectFactory implements IRPObjectF
     }
 
     @Override
-    public void generateClientObjectRPClass() {
-        try {
-            Configuration conf = Configuration.getConfiguration();
-            if (conf.get("client_object") != null && !conf.get("client_object").isEmpty()) {
-                logger.info("Using " + conf.get("client_object") + " as client object class.");
-                Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
-                java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("generateRPClass");
-                localSingleton.invoke(null);
-            }
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
     public void destroyClientObject(ClientObjectInterface object) {
-        try {
-            Configuration conf = Configuration.getConfiguration();
-            Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
-            Class[] types = new Class[]{clientObjectClass};
-            java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("destroy", types);
-            localSingleton.invoke(clientObjectClass, object);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-        }
+        Lookup.getDefault().lookup(ClientObjectInterface.class).destroy();
     }
 
     @Override
     public ClientObjectInterface createClientObject(RPObject object) {
-        try {
-            Configuration conf = Configuration.getConfiguration();
-            Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
-            Class[] types = new Class[]{RPObject.class};
-            java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("create", types);
-            return (ClientObjectInterface) localSingleton.invoke(clientObjectClass, object);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (IllegalArgumentException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (InvocationTargetException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (SecurityException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
+        return Lookup.getDefault().lookup(ClientObjectInterface.class).create(object);
     }
 
     @Override
     public ClientObjectInterface createDefaultClientObject(String name) {
-        try {
-            Configuration conf = Configuration.getConfiguration();
-            Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
-            Class[] types = new Class[]{String.class};
-            java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("createDefaultClientObject", types);
-            return (ClientObjectInterface) localSingleton.invoke(clientObjectClass, name);
-        } catch (IllegalAccessException ex) {
-            logger.error(ex);
-            return null;
-        } catch (IllegalArgumentException ex) {
-            logger.error(ex);
-            return null;
-        } catch (InvocationTargetException ex) {
-            logger.error(ex);
-            return null;
-        } catch (NoSuchMethodException ex) {
-            logger.error(ex);
-            return null;
-        } catch (SecurityException ex) {
-            logger.error(ex);
-            return null;
-        } catch (ClassNotFoundException ex) {
-            logger.error(ex);
-            return null;
-        } catch (IOException ex) {
-            logger.error(ex);
-            return null;
-        }
+        return Lookup.getDefault().lookup(ClientObjectInterface.class).createDefaultClientObject(name);
     }
 
     @Override
     public ClientObjectInterface createDefaultClientObject(RPObject entity) {
-        try {
-            Configuration conf = Configuration.getConfiguration();
-            Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
-            Class[] types = new Class[]{RPObject.class};
-            java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("createDefaultObject", types);
-            return (ClientObjectInterface) localSingleton.invoke(clientObjectClass, entity);
-        } catch (IllegalAccessException ex) {
-            logger.error(ex);
-            return null;
-        } catch (IllegalArgumentException ex) {
-            logger.error(ex);
-            return null;
-        } catch (InvocationTargetException ex) {
-            logger.error(ex);
-            return null;
-        } catch (NoSuchMethodException ex) {
-            logger.error(ex);
-            return null;
-        } catch (SecurityException ex) {
-            logger.error(ex);
-            return null;
-        } catch (ClassNotFoundException ex) {
-            logger.error(ex);
-            return null;
-        } catch (IOException ex) {
-            logger.error(ex);
-            return null;
-        }
+        return Lookup.getDefault().lookup(ClientObjectInterface.class).createDefaultClientObject(entity);
     }
 }

@@ -22,10 +22,8 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.entity.Entity;
-import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;
-import simple.server.core.entity.item.Item;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
@@ -106,42 +104,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         return seconds * 1000 / MILLISECONDS_PER_TURN;
     }
 
-    protected void createRPClasses() {
-        if (!RPClass.hasRPClass("entity")) {
-            Entity.generateRPClass();
-        }
-
-        if (!RPClass.hasRPClass("item")) {
-            // Entity sub-classes
-            Item.generateRPClass();
-        }
-        if (!RPClass.hasRPClass("rpentity")) {
-            // ActiveEntity sub-classes
-            RPEntity.generateRPClass();
-        }
-
-        // RPEntity sub-classes
-        Lookup.getDefault().lookup(IRPObjectFactory.class).generateClientObjectRPClass();
-
-        // NPC sub-classes
-
-        // Creature sub-classes
-
-        // PassiveEntityRespawnPoint sub-class
-
-        // zone storage
-
-        // rpevents
-        for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
-            IRPEvent event = it.next();
-            logger.info("Registering event: " + event.getClass());
-            event.generateRPClass();
-        }
-        //guilds
-
-        //Client events
-    }
-
     /**
      * World initialization
      */
@@ -152,18 +114,29 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 MarauroaServerExtension extension = it.next();
                 logger.info("Loading extension: " + extension.getClass());
                 extension.init();
+                extension.updateDatabase();
             }
             //Create classes after plugins are initialized to allow them to plugin into the class creation.
             logger.info("Creating RPClasses.");
-            createRPClasses();
+            for (RPEntityInterface entity : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
+                logger.info(entity.getClass().getSimpleName());
+                entity.generateRPClass();
+            }
+            logger.info("Done!");
+            for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
+                IRPEvent event = it.next();
+                logger.info("Registering event: " + event.getClass().getSimpleName());
+                event.generateRPClass();
+            }
+            logger.info("Done!");
             Iterator<RPClass> it = RPClass.iterator();
             if (logger.isDebugEnabled()) {
                 logger.debug("Defined RPClasses:");
                 while (it.hasNext()) {
                     logger.debug(it.next().getName());
                 }
+                logger.info("Done!");
             }
-            logger.info("Done!");
             //Make sure the system account exists. This will be the owner of NPC's
             if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
                     Configuration.getConfiguration().get("system_account_name"))) {
@@ -175,10 +148,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                         Configuration.getConfiguration().get("system_email"));
                 logger.info("Done!");
             } else {
+                logger.info("Updating system account...");
                 //Account exists, make sure the password is up to date
                 DAORegister.get().get(AccountDAO.class).changePassword(
                         Configuration.getConfiguration().get("system_account_name"),
                         Configuration.getConfiguration().get("system_password"));
+                logger.info("Done!");
             }
             super.onInit();
             addZone(getDefaultRoom(), "");

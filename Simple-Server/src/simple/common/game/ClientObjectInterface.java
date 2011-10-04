@@ -3,6 +3,8 @@ package simple.common.game;
 
 import java.util.List;
 import marauroa.common.game.IRPZone;
+import marauroa.common.game.RPEvent;
+import marauroa.common.game.RPObject;
 import marauroa.common.net.Serializable;
 import simple.common.NotificationType;
 import simple.server.core.engine.SimpleRPZone;
@@ -97,6 +99,10 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
      */
     String getQuest(String name);
 
+    /**
+     * List of quests
+     * @return List of quests
+     */
     List<String> getQuests();
 
     /**
@@ -286,10 +292,36 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
     public void sendPrivateText(NotificationType type, String message);
     
     public void sendText(String text);
+    
     /**
-     * Static methods create, createDefaultObject, generateRPClass and destroy must also be created in the
-     * ClientObject implementation or extends example ClientObject to use
-     * the already implemented ones.
+     * Add an RPEvent to the ClientObject
+     * @param event 
      */
+    public void addEvent(RPEvent event);
+    
+    /**
+     * Destroy the player. Usually liberating resources.
+     */
+     public void destroy();
+     /**
+      * Create a ClientObject from an RPObject
+      * @param object RPObject to create from
+      * @return Created object
+      */
+     public ClientObjectInterface create(RPObject object);
+     
+     /**
+      * Create default ClientObject
+      * @param name name of the object
+      * @return Created object
+      */
+     public ClientObjectInterface createDefaultClientObject(String name);
+     
+     /**
+      * Create default ClientObject
+      * @param object Object to create from
+      * @return Created object
+      */
+     public ClientObjectInterface createDefaultClientObject(RPObject object);
 }
 

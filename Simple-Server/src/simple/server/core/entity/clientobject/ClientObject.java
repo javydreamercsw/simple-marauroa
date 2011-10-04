@@ -17,6 +17,8 @@ import marauroa.common.io.UnicodeSupportingInputStreamReader;
 import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 import simple.common.FeatureList;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
@@ -28,6 +30,7 @@ import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Outfit;
 import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.item.Item;
 import simple.server.core.entity.item.StackableItem;
 import simple.server.core.entity.slot.PlayerSlot;
@@ -38,6 +41,9 @@ import simple.server.core.event.TextEvent;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
+@ServiceProviders({
+    @ServiceProvider(service = ClientObjectInterface.class),
+    @ServiceProvider(service = RPEntityInterface.class, position = 100)})
 public class ClientObject extends RPEntity implements ClientObjectInterface {
 
     /**
@@ -85,10 +91,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      * list of super admins read from admins.list.
      */
     private static List<String> adminNames;
-    /**
-     * only log the first exception while reading welcome URL.
-     */
-    private static boolean firstWelcomeException = true;
     private int adminLevel;
     private boolean disconnected;
     private PlayerQuests quests = new PlayerQuests(this);
@@ -527,7 +529,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         }
     }
 
-    public static ClientObject create(RPObject object) {
+    @Override
+    public ClientObjectInterface create(RPObject object) {
 
         ClientObject player = new ClientObject(object);
 
@@ -608,79 +611,86 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Generates the SimpleRPClass and specifies slots and attributes.
      */
-    public static void generateRPClass() {
-        if (RPClass.hasRPClass("client_object")) {
-            RPClass player = new RPClass("client_object");
-            player.isA("rpentity");
-            //This is the assigned key for encryption purposes on the client
-            player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
-            player.addRPEvent(TextEvent.RPCLASS_NAME, Definition.VOLATILE);
-            /*
-             * Add event player.addRPEvent("<Event RPClassName>",
-             * Definition.VOLATILE);
-             */
-            player.addRPEvent(PrivateTextEvent.RPCLASS_NAME, Definition.PRIVATE);
+    @Override
+    public void generateRPClass() {
+        RPClass player = new RPClass("client_object");
+        player.isA("rpentity");
+        //This is the assigned key for encryption purposes on the client
+        player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
+        player.addRPEvent(TextEvent.RPCLASS_NAME, Definition.VOLATILE);
+        /*
+         * Add event player.addRPEvent("<Event RPClassName>",
+         * Definition.VOLATILE);
+         */
+        player.addRPEvent(PrivateTextEvent.RPCLASS_NAME, Definition.PRIVATE);
 
-            player.addAttribute("outfit", Type.INT);
-            player.addAttribute("outfit_org", Type.INT);
+        player.addAttribute("outfit", Type.INT);
+        player.addAttribute("outfit_org", Type.INT);
 
-            player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
-            player.addAttribute("grumpy", Type.LONG_STRING, Definition.VOLATILE);
+        player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
+        player.addAttribute("grumpy", Type.LONG_STRING, Definition.VOLATILE);
 
-            // Use this for admin menus and usage.
-            player.addAttribute("admin", Type.FLAG);
-            player.addAttribute("adminlevel", Type.INT);
-            player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
-            //User with Monitor permissions
-            player.addAttribute("monitor", Type.FLAG);
+        // Use this for admin menus and usage.
+        player.addAttribute("admin", Type.FLAG);
+        player.addAttribute("adminlevel", Type.INT);
+        player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
+        //User with Monitor permissions
+        player.addAttribute("monitor", Type.FLAG);
 
-            player.addAttribute("ghostmode", Type.FLAG);
+        player.addAttribute("ghostmode", Type.FLAG);
 
-            player.addAttribute("release", Type.STRING, Definition.PRIVATE);
+        player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
-            player.addAttribute("age", Type.INT);
+        player.addAttribute("age", Type.INT);
 
-            // We use this for the buddy system
-            player.addRPSlot("!buddy", 1, Definition.PRIVATE);
-            player.addRPSlot("!ignore", 1, Definition.HIDDEN);
-            player.addAttribute("online", Type.LONG_STRING,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
-            player.addAttribute("offline", Type.LONG_STRING,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
+        // We use this for the buddy system
+        player.addRPSlot("!buddy", 1, Definition.PRIVATE);
+        player.addRPSlot("!ignore", 1, Definition.HIDDEN);
+        player.addAttribute("online", Type.LONG_STRING,
+                (byte) (Definition.PRIVATE | Definition.VOLATILE));
+        player.addAttribute("offline", Type.LONG_STRING,
+                (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
-            player.addRPSlot("!quests", 1, Definition.HIDDEN);
-            player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
+        //TODO: move to an extension
+        player.addRPSlot("!quests", 1, Definition.HIDDEN);
+        player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
 
-            player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);
-            player.addAttribute("sentence", Type.STRING, Definition.HIDDEN);
+        player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);
+        player.addAttribute("sentence", Type.STRING, Definition.HIDDEN);
 
-            player.addRPSlot("skills", 1, Definition.HIDDEN);
+        player.addRPSlot("skills", 1, Definition.HIDDEN);
 
-            // Non-removable while stored ones have values
-            player.addRPSlot("!skills", 1,
-                    (byte) (Definition.HIDDEN | Definition.VOLATILE));
+        // Non-removable while stored ones have values
+        player.addRPSlot("!skills", 1,
+                (byte) (Definition.HIDDEN | Definition.VOLATILE));
 
-            player.addRPSlot("!visited", 1, Definition.HIDDEN);
+        player.addRPSlot("!visited", 1, Definition.HIDDEN);
 
-            // The guild name
-            player.addAttribute("guild", Type.STRING);
+        //TODO: move to an extension
+        // The guild name
+        player.addAttribute("guild", Type.STRING);
 
-            // ClientObject features
-            player.addRPSlot("!features", 1, Definition.PRIVATE);
+        // ClientObject features
+        player.addRPSlot("!features", 1, Definition.PRIVATE);
 
-            // Last time this player attacked another player
-            player.addAttribute("last_pvp_action_time", Type.FLOAT,
-                    Definition.HIDDEN);
-            extendClass(player);
-        }
+        //TODO: move to an extension
+        // Last time this player attacked another player
+        player.addAttribute("last_pvp_action_time", Type.FLOAT,
+                Definition.HIDDEN);
+        extendClass(player);
     }
-    
-    protected static void extendClass(RPClass player){
+
+    protected static void extendClass(RPClass player) {
         for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
-                MarauroaServerExtension extension = it.next();
-                logger.debug("Processing extension to modify client definition: " + extension.getClass().getSimpleName());
-                extension.modifyClientObjectDefinition(player);
+            MarauroaServerExtension extension = it.next();
+            logger.debug("Processing extension to modify client definition: " + extension.getClass().getSimpleName());
+            extension.modifyClientObjectDefinition(player);
+        }
+        if (logger.isDebugEnabled()) {
+            for (Definition def : player.getDefinitions()) {
+                logger.info(def.getName() + ": " + def.getType());
             }
+        }
     }
 
     /**
@@ -923,17 +933,18 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         return slot.iterator().next();
     }
 
-    public static void destroy(ClientObject player) {
+    @Override
+    public void destroy() {
         /*
          * Normally a zoneid attribute shouldn't logically exist after an entity
          * is removed from a zone, but we need to keep it for players so that it
          * can be serialized.
          *
          */
-        if (player.getZone() != null) {
-            player.getZone().remove(player);
+        if (getZone() != null) {
+            getZone().remove(this);
         }
-        player.setDisconnected(true);
+        setDisconnected(true);
     }
 
     /**
@@ -949,6 +960,18 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         object.setID(RPObject.INVALID_ID);
         object.put("type", "client_object");
         object.put("name", characterName);
+        object.put("base_hp", 100);
+        object.put("hp", 100);
+        object.put("xp", 0);
+
+        object.update();
+        return object;
+    }
+
+    public static ClientObject createEmptyZeroLevelPlayer(RPObject template) {
+        ClientObject object = new ClientObject(template);
+        object.setID(RPObject.INVALID_ID);
+        object.put("type", "client_object");
         object.put("base_hp", 100);
         object.put("hp", 100);
         object.put("xp", 0);
@@ -1013,8 +1036,14 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         return "[" + getName() + ", " + get("id") + "]";
     }
 
-    public static ClientObjectInterface createDefaultClientObject(String name) {
+    @Override
+    public ClientObjectInterface createDefaultClientObject(String name) {
         return createEmptyZeroLevelPlayer(name);
+    }
+
+    @Override
+    public ClientObjectInterface createDefaultClientObject(RPObject object) {
+        return createEmptyZeroLevelPlayer(object);
     }
 
     @Override

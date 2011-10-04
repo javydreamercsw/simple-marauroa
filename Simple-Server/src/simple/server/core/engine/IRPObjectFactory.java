@@ -21,8 +21,5 @@ public interface IRPObjectFactory {
 
     void destroyClientObject(ClientObjectInterface object);
 
-    void generateClientObjectRPClass();
-
     RPObject transform(RPObject object);
-    
 }
