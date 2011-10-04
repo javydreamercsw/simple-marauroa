@@ -8,6 +8,7 @@ import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
@@ -16,6 +17,7 @@ import simple.server.core.engine.SimpleRPZone;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
+@ServiceProvider(service = RPEntityInterface.class, position = 1)
 public class Entity extends RPObject implements RPEntityInterface {
 
     private static final long serialVersionUID = 1L;
@@ -58,17 +60,10 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public Entity() {
-        put("x", 0);
-        put("y", 0);
-
-        x = 0;
-        y = 0;
-
-        setResistance(100);
-        setVisibility(100);
     }
 
-    public static void generateRPClass() {
+    @Override
+    public void generateRPClass() {
         RPClass entity = new RPClass(RPCLASS_NAME);
 
         // Some things may have a textual description
@@ -76,8 +71,7 @@ public class Entity extends RPObject implements RPEntityInterface {
 
         entity.addAttribute("type", Type.STRING);
         /**
-         * Resistance to other entities (0-100).
-         * 0=Phantom, 100=Obstacle.
+         * Resistance to other entities (0-100). 0=Phantom, 100=Obstacle.
          */
         entity.addAttribute("resistance", Type.BYTE, Definition.VOLATILE);
 
@@ -96,8 +90,8 @@ public class Entity extends RPObject implements RPEntityInterface {
         entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
         /*
-         * The visibility of the entity drawn on client (0-100).
-         * 0=Invisible, 100=Solid. Useful when mixed with effect.
+         * The visibility of the entity drawn on client (0-100). 0=Invisible,
+         * 100=Solid. Useful when mixed with effect.
          */
         entity.addAttribute("visibility", Type.INT, Definition.VOLATILE);
     }
@@ -301,7 +295,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      * 
      */
     public void notifyWorldAboutChanges() {
-        logger.debug("Object zone: "+get("zoneid"));
+        logger.debug("Object zone: " + get("zoneid"));
         RPWorld.get().modify(this);
     }
 
@@ -365,16 +359,22 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public void update() {
-        if (has("x")) {
-            x = getInt("x");
+        if (!has("x")) {
+            put("x", 0);
         }
+        x = getInt("x");
 
-        if (has("y")) {
-            y = getInt("y");
+        if (!has("y")) {
+            put("y", 0);
         }
+        y = getInt("y");
 
-        if (has("resistance")) {
-            resistance = getInt("resistance");
+        if (!has("resistance")) {
+            setResistance(100);
+        }
+        resistance = getInt("resistance");
+        if (!has("visibility")) {
+            setVisibility(100);
         }
     }
 

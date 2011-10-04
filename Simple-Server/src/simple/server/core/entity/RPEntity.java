@@ -1,4 +1,3 @@
-
 package simple.server.core.entity;
 
 import marauroa.common.Log4J;
@@ -9,12 +8,14 @@ import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.SyntaxException;
 import marauroa.server.game.Statistics;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class RPEntity extends Entity{
+@ServiceProvider(service = RPEntityInterface.class, position = 3)
+public class RPEntity extends Entity {
 
     private static final long serialVersionUID = 1L;
     /**
@@ -23,17 +24,16 @@ public class RPEntity extends Entity{
     protected static final String ATTR_TITLE = "title";
     protected static Statistics stats;
     private int level;
-    /** the logger instance. */
+    /**
+     * the logger instance.
+     */
     private static final Logger logger = Log4J.getLogger(RPEntity.class);
 
-    static{
-        RPCLASS_NAME = "rpentity";
-    }
-
-    public static void generateRPClass() {
+    @Override
+    public void generateRPClass() {
         try {
             stats = Statistics.getStatistics();
-            RPClass entity = new RPClass(RPCLASS_NAME);
+            RPClass entity = new RPClass("rpentity");
             entity.isA("entity");
             entity.addAttribute("name", Type.STRING);
             entity.addAttribute(ATTR_TITLE, Type.STRING);
@@ -70,8 +70,7 @@ public class RPEntity extends Entity{
         super(object);
     }
 
-    public RPEntity() {
-        super();
+    public RPEntity() {  
     }
 
     /**

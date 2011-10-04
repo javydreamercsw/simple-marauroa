@@ -27,7 +27,7 @@ public class ItemTestHelper {
         EntityTestHelper.generateRPClasses();
 
         if (!RPClass.hasRPClass("item")) {
-            Item.generateRPClass();
+//            Item.generateRPClass();
         }
     }
 }

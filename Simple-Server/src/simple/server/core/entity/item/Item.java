@@ -1,7 +1,4 @@
-
 package simple.server.core.entity.item;
-
-
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,24 +9,31 @@ import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.EquipListener;
 import simple.server.core.event.TurnListener;
+//TODO: probably an extension
 
 /**
  * This is an item.
  */
+@ServiceProvider(service = RPEntityInterface.class, position = 2)
 public class Item extends RPEntity implements TurnListener, EquipListener {
 
     private static final long serialVersionUID = 1L;
-    /** list of possible slots for this item */
+    /**
+     * list of possible slots for this item
+     */
     private List<String> possibleSlots;
     public static final int DEGRADATION_TIMEOUT = 10 * 60; // 10 minutes
     public static final String RPCLASS_NAME = "item";
 
-    public static void generateRPClass() {
+    @Override
+    public void generateRPClass() {
         RPClass entity = new RPClass(RPCLASS_NAME);
         entity.isA("entity");
 
@@ -107,7 +111,10 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      */
     public Item(String name, String clazz, String subclass,
             Map<String, String> attributes) {
-        this();
+        setRPClass(RPCLASS_NAME);
+        put("type", "item");
+        possibleSlots = new LinkedList<String>();
+        update();
 
         setEntityClass(clazz);
         setEntitySubClass(subclass);
@@ -125,11 +132,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     }
 
     /** no public 'default' item */
-    private Item() {
-        setRPClass(RPCLASS_NAME);
-        put("type", "item");
-        possibleSlots = new LinkedList<String>();
-        update();
+    public Item() {
     }
 
     /**
@@ -142,6 +145,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         super(item);
         setRPClass("item");
         possibleSlots = new ArrayList<String>(item.possibleSlots);
+        update();
     }
 
     /**
@@ -193,7 +197,9 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
             return getInt("rate");
         }
 
-        /* Default attack rate is 5. */
+        /*
+         * Default attack rate is 5.
+         */
         return 5;
     }
 
