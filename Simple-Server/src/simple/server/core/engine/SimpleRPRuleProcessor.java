@@ -282,8 +282,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     @Override
     public synchronized boolean onExit(RPObject object) {
         try {
-            ClientObjectInterface player =
-                    Lookup.getDefault().lookup(IRPObjectFactory.class).createClientObject(object);
+            ClientObjectInterface player = ((SimpleRPRuleProcessor)Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(object.get("name"));
             if (wasKilled((RPEntity) player)) {
                 logger.info("Logged out shortly before death: Killing it now :)");
             }
@@ -296,10 +295,12 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
             //Player is still somewhere else?
             Iterator it = SimpleRPWorld.get().iterator();
             while (it.hasNext()) {
-                if (((SimpleRPZone) it.next()).has(((RPObject) player).getID())) {
+                SimpleRPZone zone = (SimpleRPZone) it.next();
+                if (zone.has(((RPObject) player).getID()) 
+                        && !zone.getName().equals(player.getZone().getName())) {
                     logger.warn("Another instance of the player found in "
-                            + ((SimpleRPZone) it.next()).getName());
-                    ((SimpleRPZone) it.next()).remove(((RPObject) player).getID());
+                            + zone.getName());
+                    zone.remove(((RPObject) player).getID());
                 }
             }
             addGameEvent(player.getName(), "logout");
