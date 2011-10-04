@@ -4,23 +4,25 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.LoginListener;
-import simple.server.core.event.LoginNotifier;
 import simple.server.core.event.TurnListener;
 import simple.server.util.TimeUtil;
 
 /**
  * Manages gags.
  */
-public class GagManager implements LoginListener{
+@ServiceProvider(service = LoginListener.class)
+public class GagManager implements LoginListener {
 
     private static final Logger logger = Log4J.getLogger(GagManager.class);
 
     public GagManager() {
-        Lookup.getDefault().lookup(LoginNotifier.class).addListener(GagManager.this);
+        Lookup.getDefault().lookup(ILoginNotifier.class).addListener(GagManager.this);
     }
 
     /**
