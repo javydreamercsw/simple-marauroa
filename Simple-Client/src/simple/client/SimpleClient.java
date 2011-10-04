@@ -1,14 +1,12 @@
 package simple.client;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
-import marauroa.client.extension.MarauroaClientExtension;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPEvent;
@@ -70,11 +68,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         dispatch.register(SimpleClient.this);
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
         //**************************
-        for (Iterator<? extends MarauroaClientExtension> it = Lookup.getDefault().lookupAll(MarauroaClientExtension.class).iterator(); it.hasNext();) {
-            MarauroaClientExtension extension = it.next();
-            logger.log(Level.INFO, "Loading extension: {0}",
-                    extension.getClass().getSimpleName());
-        }
     }
 
     /**
