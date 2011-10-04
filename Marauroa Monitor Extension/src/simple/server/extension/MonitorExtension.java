@@ -30,34 +30,35 @@ import simple.server.core.entity.clientobject.ClientObject;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service=MarauroaServerExtension.class)
+@ServiceProvider(service = MarauroaServerExtension.class)
 public class MonitorExtension extends SimpleServerExtension implements ActionListener {
-
+    
     public static final String _MONITOR = "monitor";
     private static final Logger logger = Log4J.getLogger(MonitorExtension.class);
     public static final int LISTZONES = 1, LISTPLAYERS = 2, LISTCONTENTS = 3;
-
+    
     @Override
     public void init() {
         CommandCenter.register(_MONITOR, this);
+        DAORegister.get().register(MonitorDAO.class, new MonitorDAO());
     }
-
+    
     private void getZoneInfo(ClientObjectInterface monitor, RPAction action) {
         if (isMonitor(monitor)) {
             list(monitor, LISTPLAYERS, action);
         }
     }
-
+    
     private void getZones(ClientObjectInterface monitor, RPAction action) {
         if (isMonitor(monitor)) {
             list(monitor, LISTZONES, action);
         }
     }
-
+    
     private boolean isMonitor(ClientObjectInterface monitor) {
         return DAORegister.get().get(MonitorDAO.class).isMonitor(monitor.getName());
     }
-
+    
     private void list(ClientObjectInterface monitor, int option, RPAction action) {
         try {
             if (option == LISTZONES) {
@@ -81,14 +82,14 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             logger.error(null, ex);
         }
     }
-
+    
     @Override
     public RPObject onRPObjectAddToZone(RPObject object) {
         logger.debug("Processing adding object from " + getClass().getSimpleName());
         logger.debug(object);
         return object;
     }
-
+    
     @Override
     public RPObject onRPObjectRemoveFromZone(RPObject object) {
         logger.debug("Processing removal of object from " + getClass().getSimpleName());
@@ -99,7 +100,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         }
         return object;
     }
-
+    
     @Override
     public boolean updateMonitor(RPObject object, Perception perception) {
         try {
@@ -134,7 +135,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         }
         return true;
     }
-
+    
     public List<IRPZone> getZones() {
         ArrayList<IRPZone> zones = new ArrayList<IRPZone>();
         try {
@@ -166,12 +167,12 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         }
         return zones;
     }
-
+    
     @Override
     public void modifyClientObjectDefinition(RPClass client) {
         client.addRPEvent(MonitorEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
-
+    
     @Override
     public void afterWorldInit() {
         try {
@@ -192,7 +193,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             logger.error(ex);
         }
     }
-
+    
     private void register(ClientObjectInterface monitor) throws SQLException {
         DBTransaction transaction = TransactionPool.get().beginWork();
         try {
@@ -207,7 +208,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             TransactionPool.get().commit(transaction);
         }
     }
-
+    
     private void unregister(ClientObjectInterface monitor) throws SQLException {
         DBTransaction transaction = TransactionPool.get().beginWork();
         try {
@@ -222,7 +223,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             TransactionPool.get().commit(transaction);
         }
     }
-
+    
     private void setEnabled(ClientObjectInterface monitor, boolean enabled) {
         try {
             DAORegister.get().get(MonitorDAO.class).setEnabled(monitor, enabled);
@@ -230,10 +231,10 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @Override
     public void updateDatabase() {
-        DAORegister.get().register(MonitorDAO.class, new MonitorDAO());
+        logger.debug("Updating database for extension " + _MONITOR);
         final DBTransaction transaction = TransactionPool.get().beginWork();
         try {
             createTablesUnlessTheyAlreadyExist(transaction);
@@ -242,14 +243,15 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             logger.error(e, e);
             TransactionPool.get().rollback(transaction);
         }
+        logger.debug("Done!");
     }
-
+    
     private void createTablesUnlessTheyAlreadyExist(final DBTransaction transaction) {
         logger.debug("Creating Monitor extension Tables...");
         logger.debug("Creation successful? " + new JDBCSQLHelper(transaction).runDBScript("simple/server/extension/monitor_init.sql"));
         logger.debug("Done!");
     }
-
+    
     @Override
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
