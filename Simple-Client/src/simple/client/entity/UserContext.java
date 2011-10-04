@@ -6,6 +6,7 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import org.openide.util.lookup.ServiceProvider;
 import simple.client.event.listener.RPEventListener;
 import simple.client.event.listener.RPEventNotifier;
 import simple.client.gui.GameObjects;
@@ -18,6 +19,7 @@ import simple.client.gui.GameObjects;
  * Currently this is just a helper class for jWrestlingClient. Maybe it will be
  * directly used by other code later.
  */
+@ServiceProvider(service = IUserContext.class)
 public class UserContext implements IUserContext {
 
     /**
@@ -51,6 +53,7 @@ public class UserContext implements IUserContext {
 
     /**
      * Constructor.
+     *
      * @param client Client using this user context
      */
     public UserContext() {
@@ -64,8 +67,9 @@ public class UserContext implements IUserContext {
 
     /**
      * Register an RPEvent listener
-     * @param event     event to listen for
-     * @param listener  listener
+     *
+     * @param event event to listen for
+     * @param listener listener
      */
     @Override
     public void registerRPEventListener(RPEvent event, RPEventListener listener) {
@@ -78,8 +82,7 @@ public class UserContext implements IUserContext {
     /**
      * Fire administrative level change event to all registered listeners.
      *
-     * @param adminLevel
-     *            The new administrative level.
+     * @param adminLevel The new administrative level.
      */
     protected void fireAdminLevelChanged(int adminLevel) {
         // TODO: Impl
@@ -88,8 +91,7 @@ public class UserContext implements IUserContext {
     /**
      * Fire name change event to all registered listeners.
      *
-     * @param newName
-     *            The new player name.
+     * @param newName The new player name.
      */
     protected void fireNameChanged(String newName) {
         // TODO: Impl
@@ -118,7 +120,8 @@ public class UserContext implements IUserContext {
     /**
      * Determine if the user is an admin.
      *
-     * @return <code>true</code> is the user is an admin.
+     * @return
+     * <code>true</code> is the user is an admin.
      */
     @Override
     public boolean isAdmin() {
@@ -131,8 +134,7 @@ public class UserContext implements IUserContext {
     /**
      * An object was added.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      */
     @Override
     public void onAdded(final RPObject object) {
@@ -145,10 +147,8 @@ public class UserContext implements IUserContext {
     /**
      * The object added/changed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedAdded(final RPObject object, final RPObject changes) {
@@ -166,10 +166,8 @@ public class UserContext implements IUserContext {
     /**
      * An object removed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedRemoved(final RPObject object, final RPObject changes) {
@@ -187,8 +185,7 @@ public class UserContext implements IUserContext {
     /**
      * An object was removed.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      */
     @Override
     public void onRemoved(final RPObject object) {
@@ -202,12 +199,9 @@ public class UserContext implements IUserContext {
     /**
      * A slot object was added.
      *
-     * @param object
-     *            The container object.
-     * @param slotName
-     *            The slot name.
-     * @param sobject
-     *            The slot object.
+     * @param object The container object.
+     * @param slotName The slot name.
+     * @param sobject The slot object.
      */
     @Override
     public void onSlotAdded(final RPObject object, final String slotName,
@@ -231,14 +225,10 @@ public class UserContext implements IUserContext {
     /**
      * A slot object added/changed attribute(s).
      *
-     * @param object
-     *            The base container object.
-     * @param slotName
-     *            The container's slot name.
-     * @param sobject
-     *            The slot object.
-     * @param schanges
-     *            The slot object changes.
+     * @param object The base container object.
+     * @param slotName The container's slot name.
+     * @param sobject The slot object.
+     * @param schanges The slot object changes.
      */
     @Override
     public void onSlotChangedAdded(final RPObject object,
@@ -249,14 +239,10 @@ public class UserContext implements IUserContext {
     /**
      * A slot object removed attribute(s).
      *
-     * @param object
-     *            The base container object.
-     * @param slotName
-     *            The container's slot name.
-     * @param sobject
-     *            The slot object.
-     * @param schanges
-     *            The slot object changes.
+     * @param object The base container object.
+     * @param slotName The container's slot name.
+     * @param sobject The slot object.
+     * @param schanges The slot object changes.
      */
     @Override
     public void onSlotChangedRemoved(final RPObject object,
@@ -267,12 +253,9 @@ public class UserContext implements IUserContext {
     /**
      * A slot object was removed.
      *
-     * @param object
-     *            The container object.
-     * @param slotName
-     *            The slot name.
-     * @param sobject
-     *            The slot object.
+     * @param object The container object.
+     * @param slotName The slot name.
+     * @param sobject The slot object.
      */
     @Override
     public void onSlotRemoved(final RPObject object, final String slotName,
