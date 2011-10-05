@@ -113,7 +113,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
                 logger.info("Loading extension: " + extension.getClass());
-                extension.init();
                 extension.updateDatabase();
             }
             //Create classes after plugins are initialized to allow them to plugin into the class creation.

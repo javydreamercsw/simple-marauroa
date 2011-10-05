@@ -1,4 +1,3 @@
-
 package simple.server.core.engine;
 
 public interface Task<T> {
