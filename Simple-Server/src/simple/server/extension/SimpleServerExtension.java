@@ -17,11 +17,6 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     }
 
     @Override
-    public void init() {
-        //Do nothing by default
-    }
-
-    @Override
     public boolean perform(String name) {
         return true;
     }

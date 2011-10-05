@@ -1032,11 +1032,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     }
 
     @Override
-    public String toString() {
-        return "[" + getName() + ", " + get("id") + "]";
-    }
-
-    @Override
     public ClientObjectInterface createDefaultClientObject(String name) {
         return createEmptyZeroLevelPlayer(name);
     }
