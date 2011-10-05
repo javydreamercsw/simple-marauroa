@@ -6,17 +6,16 @@ import marauroa.common.game.RPClass;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import static simple.server.core.action.WellKnownActionConstant.*;
-import simple.server.core.event.api.IPrivateChatEvent;
 import simple.server.core.event.api.IRPEvent;
 
 /**
  * A text message.
  *
- * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com> 
- * based on work from hendrik
+ * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com> based on work
+ * from hendrik
  */
 @ServiceProvider(service = IRPEvent.class)
-public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent {
+public class PrivateTextEvent extends SimpleRPEvent {
 
     public static final String RPCLASS_NAME = "private_text";
     public static final String TEXT_TYPE = "texttype";
@@ -47,7 +46,7 @@ public class PrivateTextEvent extends SimpleRPEvent implements IPrivateChatEvent
         super(RPCLASS_NAME);
         registerIfNeeded();
     }
-    
+
     /**
      * Creates a new text event.
      *

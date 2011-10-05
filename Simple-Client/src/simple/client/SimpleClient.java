@@ -1,17 +1,14 @@
 package simple.client;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
-import marauroa.client.extension.MarauroaClientExtension;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.common.game.RPAction;
-import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
@@ -69,13 +66,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         dispatch.register(SimpleClient.this);
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
         //**************************
-        logger.fine("Registered extensions:");
-        //This is needed to initialize the extensions.
-        for (Iterator<? extends MarauroaClientExtension> it =
-                Lookup.getDefault().lookupAll(MarauroaClientExtension.class).iterator(); it.hasNext();) {
-            MarauroaClientExtension extension = it.next();
-            logger.fine(extension.getClass().getSimpleName());
-        }
     }
 
     /**
@@ -85,8 +75,8 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected void registerListeners() {
         ChatListener cl = new ChatListener();
         if (getUserContext() != null) {
-            getUserContext().registerRPEventListener(TextEvent.class, cl);
-            getUserContext().registerRPEventListener(PrivateTextEvent.class, cl);
+            getUserContext().registerRPEventListener(new TextEvent(), cl);
+            getUserContext().registerRPEventListener(new PrivateTextEvent(), cl);
         }
     }
 
@@ -268,28 +258,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         return userName;
     }
 
-    /**
-     * Process different RPEvents. This is the default implementation, clients
-     * are expected to override to fit their needs
-     *
-     * @param event Event to process
-     */
-    protected void processEvent(RPEvent event) {
-        logger.log(Level.FINE, "Processing: {0}", event);
-        if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
-            logger.log(Level.FINE, "<{0}> {1}", new Object[]{
-                        event.get("from"),
-                        event.get("text")});
-        } else if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
-            logger.log(Level.FINE, "<{0}> {1}", new Object[]{
-                        event.get("from"),
-                        event.get("text")});
-        } else {
-            logger.log(Level.WARNING, "Received the following event but didn\'t "
-                    + "know how to handle it: {0}", event);
-        }
-    }
-
     @Override
     public boolean onAdded(RPObject rpo) {
         logger.log(Level.FINE, "onAdded {0}", rpo.toString());
@@ -349,13 +317,5 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     @Override
     public void onException(Exception excptn, MessageS2CPerception mscp) {
         logger.log(Level.FINE, "onException {0}: {1}", new Object[]{excptn, mscp});
-    }
-
-    protected void processEvents(RPObject object) {
-        //Process Events
-        for (RPEvent event : object.events()) {
-            processEvent(event);
-        }
-        getUserContext().onRPEvent(object);
     }
 }

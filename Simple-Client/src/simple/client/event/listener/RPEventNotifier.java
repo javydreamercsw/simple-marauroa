@@ -53,7 +53,7 @@ public final class RPEventNotifier {
      * @param event the RPEvent that triggers the RPEventListener
      * @param eventListener the object to notify
      */
-    public void notifyAtEvent(Class<? extends RPEvent> event, RPEventListener eventListener) {
+    public void notifyAtEvent(RPEvent event, RPEventListener eventListener) {
         logger.info("Notify when " + event.getClass().getSimpleName()
                 + "(" + event.getName() + ")" + " is detected to " + eventListener);
 
@@ -80,14 +80,14 @@ public final class RPEventNotifier {
         for (RPEvent event : events) {
             Set<RPEventListener> set = register.get(event.getName());
 
-//            if (logger.isDebugEnabled()) {
-            StringBuilder os = new StringBuilder();
-            os.append("event: ").append(event.getName()).append(", ");
-            os.append("event contents: ").append(event).append(", ");
-            os.append("registered listeners: ").append(set == null ? 0 : set.size());
-            logger.info(os);
-            System.out.println(os.toString());
-//            }
+            if (logger.isDebugEnabled()) {
+                StringBuilder os = new StringBuilder();
+                os.append("event: ").append(event.getName()).append(", ");
+                os.append("event contents: ").append(event).append(", ");
+                os.append("registered listeners: ").append(set == null ? 0 : set.size());
+                logger.info(os);
+                System.out.println(os.toString());
+            }
 
             if (set != null) {
                 result.put(event, true);
