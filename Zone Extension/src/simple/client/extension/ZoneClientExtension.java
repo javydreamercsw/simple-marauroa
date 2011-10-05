@@ -16,16 +16,17 @@ import simple.server.extension.ZoneEvent;
 public class ZoneClientExtension implements MarauroaClientExtension, RPEventListener {
 
     public ZoneClientExtension() {
-        Lookup.getDefault().lookup(IUserContext.class).registerRPEventListener(new ZoneEvent(), ZoneClientExtension.this);
+        Lookup.getDefault().lookup(IUserContext.class).registerRPEventListener(ZoneEvent.class, ZoneClientExtension.this);
     }
 
     @Override
-    public void onRPEventReceived(RPEvent event) throws Exception {
+    public void onRPEventReceived(RPEvent event){
         System.out.println(ZoneClientExtension.class.getSimpleName() + ": Got event: " + event);
     }
 
     @Override
     public RPEvent processEvent(RPEvent event) {
+        System.out.println(ZoneClientExtension.class.getSimpleName() + ": processing event: " + event);
         if (event.getName().equals(ZoneEvent.RPCLASS_NAME)) {
             ZoneEvent zoneEvent = new ZoneEvent();
             zoneEvent.fill(event);

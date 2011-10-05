@@ -1,61 +1,32 @@
 package simple.client.gui;
 
 import java.awt.geom.Rectangle2D;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
-import simple.client.RPObjectChangeListener;
+import org.openide.util.lookup.ServiceProvider;
 import simple.client.entity.ClientEntity;
 import simple.client.entity.EntityFactory;
 
 /**
  * Stores the objects that exists on the World right now.
- * 
+ *
  */
-public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntity> {
+@ServiceProvider(service = IGameObjects.class)
+public class GameObjects implements IGameObjects {
 
-    /** the logger instance. */
+    /**
+     * the logger instance.
+     */
     private static final Logger logger = Log4J.getLogger(GameObjects.class);
     private final Map<FQID, ClientEntity> objects;
-    /**
-     * holds the reference to the singleton instance.
-     */
-    private static GameObjects instance;
-
-    /**
-     * @return singleton instance of GameOjects
-     */
-    public static GameObjects createInstance() {
-        if (instance == null) {
-            instance = new GameObjects();
-        }
-        return instance;
-    }
-
-    /**
-     * @return existing instance of GameObjects
-     */
-    public static GameObjects getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException(
-                    "GameObject has not been initialized");
-        }
-
-        return instance;
-    }
-
     /**
      * constructor.
      *
      */
-    private GameObjects() {
+    public GameObjects() {
         objects = new HashMap<FQID, ClientEntity>();
     }
 
@@ -69,6 +40,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
      * @param object
      * @return
      */
+    @Override
     public ClientEntity get(RPObject object) {
         return objects.get(FQID.create(object));
     }
@@ -122,11 +94,11 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     }
 
     /**
-     * Update objects based on the lapsus of time ellapsed since the last call.
+     * Update objects based on the lapsus of time elapsed since the last call.
      *
-     * @param delta
-     *            The time since last update (in ms).
+     * @param delta The time since last update (in ms).
      */
+    @Override
     public synchronized void update(int delta) {
         for (ClientEntity entity : objects.values()) {
             entity.update(delta);
@@ -136,8 +108,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * Create an add an ClientEntity. This does not add to the screen list.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      *
      * @return An entity.
      */
@@ -159,8 +130,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * An object was added.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      */
     @Override
     public void onAdded(final RPObject object) {
@@ -185,10 +155,8 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * The object added/changed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedAdded(final RPObject object, final RPObject changes) {
@@ -206,10 +174,8 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * An object removed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedRemoved(final RPObject object, final RPObject changes) {
@@ -227,8 +193,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * An object was removed.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      */
     @Override
     public void onRemoved(final RPObject object) {
@@ -250,12 +215,9 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * A slot object was added.
      *
-     * @param object
-     *            The container object.
-     * @param slotName
-     *            The slot name.
-     * @param sobject
-     *            The slot object.
+     * @param object The container object.
+     * @param slotName The slot name.
+     * @param sobject The slot object.
      */
     @Override
     public void onSlotAdded(final RPObject object, final String slotName,
@@ -265,14 +227,10 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * A slot object added/changed attribute(s).
      *
-     * @param object
-     *            The base container object.
-     * @param slotName
-     *            The container's slot name.
-     * @param sobject
-     *            The slot object.
-     * @param schanges
-     *            The slot object changes.
+     * @param object The base container object.
+     * @param slotName The container's slot name.
+     * @param sobject The slot object.
+     * @param schanges The slot object changes.
      */
     @Override
     public void onSlotChangedAdded(final RPObject object,
@@ -292,14 +250,10 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * A slot object removed attribute(s).
      *
-     * @param object
-     *            The base container object.
-     * @param slotName
-     *            The container's slot name.
-     * @param sobject
-     *            The slot object.
-     * @param schanges
-     *            The slot object changes.
+     * @param object The base container object.
+     * @param slotName The container's slot name.
+     * @param sobject The slot object.
+     * @param schanges The slot object changes.
      */
     @Override
     public void onSlotChangedRemoved(final RPObject object,
@@ -319,12 +273,9 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
     /**
      * A slot object was removed.
      *
-     * @param object
-     *            The container object.
-     * @param slotName
-     *            The slot name.
-     * @param sobject
-     *            The slot object.
+     * @param object The container object.
+     * @param slotName The slot name.
+     * @param sobject The slot object.
      */
     @Override
     public void onSlotRemoved(final RPObject object, final String slotName,
@@ -352,8 +303,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
         /**
          * Create a fully qualified ID.
          *
-         * @param id
-         *            And object ID.
+         * @param id And object ID.
          */
         public FQID(RPObject.ID id) {
             this(new Object[]{Integer.valueOf(id.getObjectID())});
@@ -362,8 +312,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
         /**
          * Create a fully qualified ID.
          *
-         * @param path
-         *            An identification path.
+         * @param path An identification path.
          */
         public FQID(Object[] path) {
             this.path = path;
@@ -375,8 +324,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
         /**
          * Create a FQID from an object tree.
          *
-         * @param object
-         *            An object.
+         * @param object An object.
          *
          * @return A FQID.
          */
@@ -415,8 +363,7 @@ public class GameObjects implements RPObjectChangeListener, Iterable<ClientEntit
         /**
          * Check if this equals another object.
          *
-         * @param obj
-         *            The object to compare to.
+         * @param obj The object to compare to.
          */
         @Override
         public boolean equals(final Object obj) {

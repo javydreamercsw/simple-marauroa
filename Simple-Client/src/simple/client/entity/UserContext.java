@@ -6,10 +6,11 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.event.listener.RPEventListener;
 import simple.client.event.listener.RPEventNotifier;
-import simple.client.gui.GameObjects;
+import simple.client.gui.IGameObjects;
 
 /**
  * The player user context. This class holds/manages the data for the user of
@@ -43,10 +44,6 @@ public class UserContext implements IUserContext {
      */
     protected int adminlevel;
     /**
-     * The game objects.
-     */
-    protected final GameObjects gameObjects;
-    /**
      * The player character's name.
      */
     protected String name;
@@ -59,7 +56,6 @@ public class UserContext implements IUserContext {
     public UserContext() {
         adminlevel = 0;
         eventNotifier = RPEventNotifier.get();
-        gameObjects = GameObjects.getInstance();
         name = null;
         buddies = new HashMap<String, Boolean>();
         features = new HashMap<String, String>();
@@ -73,7 +69,7 @@ public class UserContext implements IUserContext {
      */
     @Override
     public void registerRPEventListener(Class<? extends RPEvent> event, RPEventListener listener) {
-        logger.debug("Adding event: " + event.getName()
+        logger.info("Adding event: " + event.getName()
                 + " to the listener list with listener: "
                 + listener.getClass().getSimpleName());
         eventNotifier.notifyAtEvent(event, listener);
@@ -207,11 +203,11 @@ public class UserContext implements IUserContext {
     public void onSlotAdded(final RPObject object, final String slotName,
             final RPObject sobject) {
         if (sobject.getRPClass().subclassOf("entity")) {
-            synchronized (gameObjects) {
-                ClientEntity entity = gameObjects.get(sobject);
+            synchronized (Lookup.getDefault().lookup(IGameObjects.class)) {
+                ClientEntity entity = Lookup.getDefault().lookup(IGameObjects.class).get(sobject);
 
                 if (entity != null) {
-                    ClientEntity parent = gameObjects.get(object);
+                    ClientEntity parent = Lookup.getDefault().lookup(IGameObjects.class).get(object);
 
                     if (logger.isDebugEnabled()) {
                         logger.debug("Added: " + entity);
@@ -261,11 +257,11 @@ public class UserContext implements IUserContext {
     public void onSlotRemoved(final RPObject object, final String slotName,
             final RPObject sobject) {
         if (sobject.getRPClass().subclassOf("entity")) {
-            synchronized (gameObjects) {
-                ClientEntity entity = gameObjects.get(sobject);
+            synchronized (Lookup.getDefault().lookup(IGameObjects.class)) {
+                ClientEntity entity = Lookup.getDefault().lookup(IGameObjects.class).get(sobject);
 
                 if (entity != null) {
-                    ClientEntity parent = gameObjects.get(object);
+                    ClientEntity parent = Lookup.getDefault().lookup(IGameObjects.class).get(object);
 
                     if (logger.isDebugEnabled()) {
                         logger.debug("Removed: " + entity);
@@ -276,6 +272,11 @@ public class UserContext implements IUserContext {
         }
     }
 
+    /**
+     * Be aware that this gets rid of all events after its done!
+     * @param object Object to process events from
+     * @return Modified object
+     */
     @Override
     public RPObject onRPEvent(RPObject object) {
         HashMap<RPEvent, Boolean> result = eventNotifier.logic(object.events());

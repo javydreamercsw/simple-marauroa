@@ -4,13 +4,16 @@ import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPEvent;
+import org.openide.util.lookup.ServiceProvider;
+import simple.server.core.event.api.IRPEvent;
 
 /**
  * This is the Challenge event
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class ChallengeEvent extends RPEvent {
+@ServiceProvider(service = IRPEvent.class)
+public class ChallengeEvent extends RPEvent implements IRPEvent{
 
     public static final String RPCLASS_NAME = "challenge_event";
     public static final String CHALLENGER = "challenger", ACTION = "action", CHALLENGED = "challenged";
@@ -19,14 +22,16 @@ public class ChallengeEvent extends RPEvent {
     /**
      * Creates the rpclass.
      */
-    public static void generateRPClass() {
+    @Override
+    public void generateRPClass() {
         RPClass rpclass = new RPClass(RPCLASS_NAME);
         rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGER, Type.STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGED, Type.STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
     }
 
-    public static String getRPClassName() {
+    @Override
+    public String getRPClassName() {
         return RPCLASS_NAME;
     }
 

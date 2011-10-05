@@ -53,7 +53,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
             //Just wait a little bit...
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(2,
+            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                     new DelayedAction(new AbstractAction() {
 
                 @Override
@@ -213,19 +213,19 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
 
     private void list(ClientObjectInterface player, int option, RPAction a) {
         try {
-            logger.info("Request for zone list from: " + player.getName());
+            logger.debug("Request for zone list from: " + player.getName());
             String separator = "#";
             if (a.has(SEPARATOR)) {
                 if (a.get(SEPARATOR) != null && !a.get(SEPARATOR).isEmpty()) {
                     separator = a.get(SEPARATOR);
-                    logger.info("Separator requested: " + separator);
+                    logger.debug("Separator requested: " + separator);
                 }
             }
             String list = Lookup.getDefault().lookup(IRPWorld.class).listZones(separator).toString();
-            logger.info("Zone List: " + list);
+            logger.debug("Zone List: " + list);
             player.addEvent(new ZoneEvent(list, option));
             player.notifyWorldAboutChanges();
-            logger.info(player);
+            logger.debug(player);
         } catch (Exception ex) {
             logger.fatal(null, ex);
         }

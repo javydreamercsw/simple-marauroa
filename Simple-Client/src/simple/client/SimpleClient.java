@@ -1,12 +1,14 @@
 package simple.client;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
+import marauroa.client.extension.MarauroaClientExtension;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPEvent;
@@ -16,7 +18,7 @@ import marauroa.common.net.message.TransferContent;
 import org.openide.util.Lookup;
 import simple.client.entity.IUserContext;
 import simple.client.event.ChatListener;
-import simple.client.gui.GameObjects;
+import simple.client.gui.IGameObjects;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 
@@ -37,7 +39,6 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     private String userName;
     public static String LOG4J_PROPERTIES = "log4j.properties";
     public ArrayList<String> whoplayers;
-    protected GameObjects gameObjects;
     protected Enum state;
     protected ChatScreenInterface mainFrame;
     protected RPObjectChangeDispatcher rpobjDispatcher;
@@ -56,11 +57,11 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected SimpleClient(String properties) {
         super(properties);
         world = new World();
-        gameObjects = GameObjects.createInstance();
         //Register listeners for normal chat and private messages
         registerListeners();
         //**************************
-        rpobjDispatcher = new RPObjectChangeDispatcher(gameObjects,
+        rpobjDispatcher = new RPObjectChangeDispatcher(
+                getGameObjects(),
                 getUserContext());
         PerceptionToObject pto = new PerceptionToObject();
         pto.setObjectFactory(new ObjectFactory());
@@ -68,15 +69,22 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         dispatch.register(SimpleClient.this);
         handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
         //**************************
+        logger.fine("Registered extensions:");
+        //This is needed to initialize the extensions.
+        for (Iterator<? extends MarauroaClientExtension> it =
+                Lookup.getDefault().lookupAll(MarauroaClientExtension.class).iterator(); it.hasNext();) {
+            MarauroaClientExtension extension = it.next();
+            logger.fine(extension.getClass().getSimpleName());
+        }
     }
 
     /**
-     * Register RPEvent listeners. this is meant to be overwritten by the client.
-     * Defaults to listen to chat only.
+     * Register RPEvent listeners. this is meant to be overwritten by the
+     * client. Defaults to listen to chat only.
      */
     protected void registerListeners() {
         ChatListener cl = new ChatListener();
-        if (getUserContext() != null ) {
+        if (getUserContext() != null) {
             getUserContext().registerRPEventListener(TextEvent.class, cl);
             getUserContext().registerRPEventListener(PrivateTextEvent.class, cl);
         }
@@ -84,6 +92,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Get interface
+     *
      * @return
      */
     public ChatScreenInterface getInterface() {
@@ -92,6 +101,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Set Main Frame
+     *
      * @param frame
      */
     public void setMainframe(ChatScreenInterface frame) {
@@ -100,6 +110,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Set client state
+     *
      * @param newState
      */
     public void setState(Enum newState) {
@@ -108,6 +119,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Read client state
+     *
      * @return
      */
     public Enum getCurrentState() {
@@ -136,14 +148,16 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Get game objects
+     *
      * @return
      */
-    public GameObjects getGameObjects() {
-        return gameObjects;
+    public final IGameObjects getGameObjects() {
+        return Lookup.getDefault().lookup(IGameObjects.class);
     }
 
     /**
      * Refresh screen
+     *
      * @param delta
      */
     public void refresh(int delta) {
@@ -159,6 +173,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Generate string for who command
+     *
      * @param text
      */
     public void generateWhoPlayers(String text) {
@@ -237,6 +252,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Set Account username
+     *
      * @param username
      */
     public void setAccountUsername(String username) {
@@ -245,6 +261,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     /**
      * Get account username
+     *
      * @return
      */
     public String getAccountUsername() {
@@ -252,9 +269,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     }
 
     /**
-     * Process different RPEvents. This is the default implementation,
-     * clients are expected to override to fit their needs
-     * 
+     * Process different RPEvents. This is the default implementation, clients
+     * are expected to override to fit their needs
+     *
      * @param event Event to process
      */
     protected void processEvent(RPEvent event) {
@@ -333,14 +350,12 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     public void onException(Exception excptn, MessageS2CPerception mscp) {
         logger.log(Level.FINE, "onException {0}: {1}", new Object[]{excptn, mscp});
     }
-    
+
     protected void processEvents(RPObject object) {
-        getUserContext().onRPEvent(object);
         //Process Events
-        if (!object.events().isEmpty()) {
-            for (RPEvent event : object.events()) {
-                processEvent(event);
-            }
+        for (RPEvent event : object.events()) {
+            processEvent(event);
         }
+        getUserContext().onRPEvent(object);
     }
 }
