@@ -24,11 +24,12 @@ import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
 
 /**
+ * Create, Read, Update or Remove actions
+ *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class ZoneExtension extends SimpleServerExtension implements ActionListener {
-//Create, Read, Update or Remove action
 
     /**
      * the logger instance.
@@ -38,21 +39,30 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             DESC = "description", OPERATION = "operation", PASSWORD = "password",
             SEPARATOR = "separator";
 
-    @Override
-    public void init() {
-        CommandCenter.register(TYPE, this);
+    public ZoneExtension() {
+        CommandCenter.register(TYPE, ZoneExtension.this);
     }
 
     @Override
     public RPObject onRPObjectAddToZone(RPObject object) {
         if (object instanceof ClientObjectInterface) {
             //Send the list to the user
-            ClientObjectInterface player = (ClientObjectInterface) object;
-            RPAction action = new RPAction();
+            final ClientObjectInterface player = (ClientObjectInterface) object;
+            final RPAction action = new RPAction();
             action.put("type", ZoneExtension.TYPE);
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
-            list(player, ZoneEvent.LISTZONES, action);
+            //Just wait a little bit...
+            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(2,
+                    new DelayedAction(new AbstractAction() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    list(player, ZoneEvent.LISTZONES, action);
+                }
+            }));
+        } else {
+            logger.warn("Added a " + object.getClass());
         }
         return object;
     }
@@ -203,18 +213,19 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
 
     private void list(ClientObjectInterface player, int option, RPAction a) {
         try {
-            logger.debug("Request for zone list from: " + player.getName());
+            logger.info("Request for zone list from: " + player.getName());
             String separator = "#";
             if (a.has(SEPARATOR)) {
                 if (a.get(SEPARATOR) != null && !a.get(SEPARATOR).isEmpty()) {
                     separator = a.get(SEPARATOR);
-                    logger.debug("Separator requested: " + separator);
+                    logger.info("Separator requested: " + separator);
                 }
             }
             String list = Lookup.getDefault().lookup(IRPWorld.class).listZones(separator).toString();
-            logger.debug("Zone List: " + list);
-            ((RPObject) player).addEvent(new ZoneEvent(list, option));
+            logger.info("Zone List: " + list);
+            player.addEvent(new ZoneEvent(list, option));
             player.notifyWorldAboutChanges();
+            logger.info(player);
         } catch (Exception ex) {
             logger.fatal(null, ex);
         }
