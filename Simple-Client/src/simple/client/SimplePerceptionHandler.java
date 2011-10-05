@@ -6,6 +6,8 @@ import marauroa.client.net.IPerceptionListener;
 import marauroa.client.net.PerceptionHandler;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
+import org.openide.util.Lookup;
+import simple.client.entity.IUserContext;
 
 /**
  *
@@ -63,6 +65,11 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
         logger.log(Level.FINE, "onModifiedAdded: {0}:{1}", new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyAdded(object, changes, false);
         client.onModifiedAdded(object, changes);
+        //Process the events
+        if (changes != null) {
+            //Process Events
+            Lookup.getDefault().lookup(IUserContext.class).onRPEvent(changes);
+        }
         return false;
     }
 
@@ -80,7 +87,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
         //Process the events
         if (added != null) {
             //Process Events
-            client.processEvents(added);
+            Lookup.getDefault().lookup(IUserContext.class).onRPEvent(added);
         }
         return client.onMyRPObject(added, deleted);
     }

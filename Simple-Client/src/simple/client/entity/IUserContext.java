@@ -36,5 +36,5 @@ public interface IUserContext extends RPObjectChangeListener {
      * @param event     event to listen for
      * @param listener  listener
      */
-    void registerRPEventListener(Class<? extends RPEvent> event, RPEventListener listener);
+    void registerRPEventListener(RPEvent event, RPEventListener listener);
 }

@@ -5,7 +5,6 @@ import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
-import simple.server.core.event.api.IPublicChatEvent;
 import simple.server.core.event.api.IRPEvent;
 
 /**
@@ -14,7 +13,7 @@ import simple.server.core.event.api.IRPEvent;
  * @author hendrik
  */
 @ServiceProvider(service = IRPEvent.class)
-public class TextEvent extends SimpleRPEvent implements IPublicChatEvent {
+public class TextEvent extends SimpleRPEvent {
 
     public static final String RPCLASS_NAME = "text";
     private static final String TEXT = "text", FROM = "from";
@@ -60,7 +59,7 @@ public class TextEvent extends SimpleRPEvent implements IPublicChatEvent {
      *
      * @param type NotificationType
      * @param text Text
-     * @param from 
+     * @param from
      */
     public TextEvent(NotificationType type, String text, String from) {
         super(RPCLASS_NAME);

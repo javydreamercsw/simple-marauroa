@@ -8,14 +8,13 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.api.IRPEvent;
-import simple.server.core.event.api.IZoneEvent;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IRPEvent.class)
-public class ZoneEvent extends SimpleRPEvent implements IZoneEvent {
+public class ZoneEvent extends SimpleRPEvent{
 
     public static final String FIELD = "field", RPCLASS_NAME = "zone_event",
             ACTION = "action", DESC = "description";
