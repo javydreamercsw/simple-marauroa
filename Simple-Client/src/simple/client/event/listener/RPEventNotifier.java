@@ -53,7 +53,7 @@ public final class RPEventNotifier {
      * @param eventListener
      *            the object to notify
      */
-    public void notifyAtEvent(RPEvent event, RPEventListener eventListener) {
+    public void notifyAtEvent(Class<? extends RPEvent> event, RPEventListener eventListener) {
         logger.debug("Notify when " + event.getClass().getSimpleName()
                 + "(" + event.getName() + ")" + " is detected to " + eventListener);
 

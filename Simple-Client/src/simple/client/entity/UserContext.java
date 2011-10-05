@@ -72,7 +72,7 @@ public class UserContext implements IUserContext {
      * @param listener listener
      */
     @Override
-    public void registerRPEventListener(RPEvent event, RPEventListener listener) {
+    public void registerRPEventListener(Class<? extends RPEvent> event, RPEventListener listener) {
         logger.debug("Adding event: " + event.getName()
                 + " to the listener list with listener: "
                 + listener.getClass().getSimpleName());
