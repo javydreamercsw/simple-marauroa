@@ -9,7 +9,8 @@ import marauroa.common.Logger;
 import marauroa.common.game.RPEvent;
 
 /**
- * Other classes can register here to be notified when certain RPEvent is received.
+ * Other classes can register here to be notified when certain RPEvent is
+ * received.
  *
  * Based on TurnNotifier by hendrik, daniel
  *
@@ -18,15 +19,16 @@ import marauroa.common.game.RPEvent;
 public final class RPEventNotifier {
 
     private static final Logger logger = Log4J.getLogger(RPEventNotifier.class);
-    /** The Singleton instance. */
+    /**
+     * The Singleton instance.
+     */
     private static RPEventNotifier instance;
     /**
      * This HashMap maps each RPEvent to the set of all event listeners waiting
-     * for this RPEvent. RPEvents with no listener shouldn't be
-     * registered here.
+     * for this RPEvent. RPEvents with no listener shouldn't be registered here.
      */
     private HashMap<String, Set<RPEventListener>> register = new HashMap<String, Set<RPEventListener>>();
-    /**  
+    /**
      * Used for multi-threading synchronization.
      */
     private final Object sync = new Object();
@@ -48,13 +50,11 @@ public final class RPEventNotifier {
     /**
      * Notifies the <i>eventListener</i> when RPEvent <i>event</i> is received.
      *
-     * @param event
-     *            the RPEvent that triggers the RPEventListener
-     * @param eventListener
-     *            the object to notify
+     * @param event the RPEvent that triggers the RPEventListener
+     * @param eventListener the object to notify
      */
     public void notifyAtEvent(Class<? extends RPEvent> event, RPEventListener eventListener) {
-        logger.debug("Notify when " + event.getClass().getSimpleName()
+        logger.info("Notify when " + event.getClass().getSimpleName()
                 + "(" + event.getName() + ")" + " is detected to " + eventListener);
 
         synchronized (sync) {
@@ -72,8 +72,7 @@ public final class RPEventNotifier {
     /**
      * This method is invoked by SimpleClient.handler.listener.onMyRPObject().
      *
-     * @param events
-     *            list of RPEvents received
+     * @param events list of RPEvents received
      * @return Unprocessed RPEvents. Events without listeners registered.
      */
     public HashMap<RPEvent, Boolean> logic(List<RPEvent> events) {
@@ -81,14 +80,14 @@ public final class RPEventNotifier {
         for (RPEvent event : events) {
             Set<RPEventListener> set = register.get(event.getName());
 
-            if (logger.isDebugEnabled()) {
-                StringBuilder os = new StringBuilder();
-                os.append("event: ").append(event.getName()).append(", ");
-                os.append("event contents: ").append(event).append(", ");
-                os.append("registered listeners: ").append(set.size());
-                logger.info(os);
-                System.out.println(os.toString());
-            }
+//            if (logger.isDebugEnabled()) {
+            StringBuilder os = new StringBuilder();
+            os.append("event: ").append(event.getName()).append(", ");
+            os.append("event contents: ").append(event).append(", ");
+            os.append("registered listeners: ").append(set == null ? 0 : set.size());
+            logger.info(os);
+            System.out.println(os.toString());
+//            }
 
             if (set != null) {
                 result.put(event, true);

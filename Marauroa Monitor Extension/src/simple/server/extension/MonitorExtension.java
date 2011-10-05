@@ -36,13 +36,12 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
     public static final String _MONITOR = "monitor";
     private static final Logger logger = Log4J.getLogger(MonitorExtension.class);
     public static final int LISTZONES = 1, LISTPLAYERS = 2, LISTCONTENTS = 3;
-    
-    @Override
-    public void init() {
-        CommandCenter.register(_MONITOR, this);
+
+    public MonitorExtension() {
+        CommandCenter.register(_MONITOR, MonitorExtension.this);
         DAORegister.get().register(MonitorDAO.class, new MonitorDAO());
     }
-    
+   
     private void getZoneInfo(ClientObjectInterface monitor, RPAction action) {
         if (isMonitor(monitor)) {
             list(monitor, LISTPLAYERS, action);

@@ -36,13 +36,11 @@ public class ChallengeExtension extends SimpleServerExtension implements ActionL
     private static final String _CHALLENGER = ChallengeEvent.CHALLENGER;
     private static final String _CHALLENGED = ChallengeEvent.CHALLENGED;
 
-    @Override
-    public void init() {
-        CommandCenter.register(_CHALLENGE, this);
-        CommandCenter.register(_ACCEPT_CHALLENGE, this);
-        CommandCenter.register(_REJECT_CHALLENGE, this);
-        CommandCenter.register(_CANCEL_CHALLENGE, this);
-        ChallengeEvent.generateRPClass();
+    public ChallengeExtension() {
+        CommandCenter.register(_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(_ACCEPT_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(_REJECT_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(_CANCEL_CHALLENGE, ChallengeExtension.this);
     }
 
     @Override
@@ -50,8 +48,8 @@ public class ChallengeExtension extends SimpleServerExtension implements ActionL
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
             logger.debug("Action received: " + action);
-            ClientObjectInterface challenged = ((SimpleRPRuleProcessor)Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(_CHALLENGED));
-            ClientObjectInterface challenger = ((SimpleRPRuleProcessor)Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(_CHALLENGER));
+            ClientObjectInterface challenged = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(_CHALLENGED));
+            ClientObjectInterface challenger = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(_CHALLENGER));
             if (action.get("type").equals(_CHALLENGE)) {
                 logger.debug("Processing Challenge...");
                 //Check both players exist

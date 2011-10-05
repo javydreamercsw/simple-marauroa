@@ -77,6 +77,11 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
         logger.fine("onMyRPObject");
+        //Process the events
+        if (added != null) {
+            //Process Events
+            client.processEvents(added);
+        }
         return client.onMyRPObject(added, deleted);
     }
 
