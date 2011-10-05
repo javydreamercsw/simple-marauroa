@@ -77,8 +77,8 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected void registerListeners() {
         ChatListener cl = new ChatListener();
         if (getUserContext() != null ) {
-            getUserContext().registerRPEventListener(new TextEvent(), cl);
-            getUserContext().registerRPEventListener(new PrivateTextEvent(), cl);
+            getUserContext().registerRPEventListener(TextEvent.class, cl);
+            getUserContext().registerRPEventListener(PrivateTextEvent.class, cl);
         }
     }
 
@@ -332,5 +332,15 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     @Override
     public void onException(Exception excptn, MessageS2CPerception mscp) {
         logger.log(Level.FINE, "onException {0}: {1}", new Object[]{excptn, mscp});
+    }
+    
+    protected void processEvents(RPObject object) {
+        getUserContext().onRPEvent(object);
+        //Process Events
+        if (!object.events().isEmpty()) {
+            for (RPEvent event : object.events()) {
+                processEvent(event);
+            }
+        }
     }
 }
