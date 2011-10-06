@@ -1,5 +1,6 @@
 package simple.server.core.entity;
 
+import java.util.Iterator;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.Definition;
@@ -12,6 +13,7 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
+import simple.server.extension.MarauroaServerExtension;
 
 /**
  *
@@ -26,35 +28,11 @@ public class Entity extends RPObject implements RPEntityInterface {
      * The logger.
      */
     private static final Logger logger = Log4J.getLogger(Entity.class);
-    private int x;
-    private int y;
-    /**
-     * Amount of resistance this has with other entities (0-100).
-     */
-    private int resistance;
     private SimpleRPZone zone = null;
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public Entity(RPObject object) {
         super(object);
-        if (!has("x")) {
-            put("x", 0);
-        }
-        if (!has("y")) {
-            put("y", 0);
-        }
-        if (!has("width")) {
-            put("width", 1);
-        }
-        if (!has("height")) {
-            put("height", 1);
-        }
-        if (!has("resistance")) {
-            put("resistance", 100);
-        }
-        if (!has("visibility")) {
-            put("visibility", 100);
-        }
         update();
     }
 
@@ -68,32 +46,26 @@ public class Entity extends RPObject implements RPEntityInterface {
 
         // Some things may have a textual description
         entity.addAttribute("description", Type.LONG_STRING, Definition.HIDDEN);
-
+        //TODO: refactor to D20 system extension
         entity.addAttribute("type", Type.STRING);
-        /**
-         * Resistance to other entities (0-100). 0=Phantom, 100=Obstacle.
-         */
-        entity.addAttribute("resistance", Type.BYTE, Definition.VOLATILE);
-
-        entity.addAttribute("x", Type.SHORT);
-        entity.addAttribute("y", Type.SHORT);
-
-        /*
-         * The size of the entity (in world units).
-         */
-        entity.addAttribute("width", Type.SHORT, Definition.VOLATILE);
-        entity.addAttribute("height", Type.SHORT, Definition.VOLATILE);
-
+        entity.addAttribute("class", Type.STRING);
+        entity.addAttribute("subclass", Type.STRING);
+        entity.addAttribute("title", Type.STRING);
         /*
          * If this is set, the client will discard/ignore entity
          */
         entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-        /*
-         * The visibility of the entity drawn on client (0-100). 0=Invisible,
-         * 100=Solid. Useful when mixed with effect.
-         */
-        entity.addAttribute("visibility", Type.INT, Definition.VOLATILE);
+        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            MarauroaServerExtension extension = it.next();
+            logger.debug("Processing extension to modify root class definition: " + extension.getClass().getSimpleName());
+            extension.modifyRootRPClassDefinition(entity);
+        }
+        if (logger.isDebugEnabled()) {
+            for (Definition def : entity.getDefinitions()) {
+                logger.info(def.getName() + ": " + def.getType());
+            }
+        }
     }
 
     /**
@@ -198,24 +170,6 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     /**
-     * Get the entity X coordinate.
-     *
-     * @return The X coordinate.
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Get the entity Y coordinate.
-     *
-     * @return The Y coordinate.
-     */
-    public int getY() {
-        return y;
-    }
-
-    /**
      * Get the zone this entity is in.
      *
      * @return A zone, or <code>null</code> if not in one.
@@ -228,34 +182,6 @@ public class Entity extends RPObject implements RPEntityInterface {
             zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(get("zoneid"));
         }
         return zone;
-    }
-
-    /**
-     * Get the resistance this has on other entities (0-100).
-     *
-     * @return The amount of resistance, or 0 if in ghostmode.
-     */
-    public int getResistance() {
-        return (isGhost() ? 0 : resistance);
-    }
-
-    /**
-     * Get the resistance between this and another entity (0-100).
-     *
-     * @param entity
-     * @return The amount of combined resistance.
-     */
-    public int getResistance(final Entity entity) {
-        return ((getResistance() * entity.getResistance()) / 100);
-    }
-
-    /**
-     * Checks whether an entity is a ghost (non physically interactive).
-     *
-     * @return <code>true</code> if in ghost mode.
-     */
-    public boolean isGhost() {
-        return has("ghostmode");
     }
 
     /**
@@ -317,64 +243,11 @@ public class Entity extends RPObject implements RPEntityInterface {
         put("subclass", subclazz);
     }
 
-    /**
-     * Set the entity position.
-     *
-     * @param x
-     *            The x position (in world units).
-     * @param y
-     *            The y position (in world units).
-     */
-    public void setPosition(final int x, final int y) {
-        if (this.x != x) {
-            this.x = x;
-            put("x", x);
-        }
-
-        if (this.y != y) {
-            this.y = y;
-            put("y", y);
-        }
-    }
-
-    /**
-     * Set resistance this has with other entities.
-     *
-     * @param resistance
-     *            The amount of resistance (0-100).
-     */
-    public void setResistance(int resistance) {
-        this.resistance = resistance;
-        put("resistance", resistance);
-    }
-
-    /**
-     * Set the entity's visibility.
-     *
-     * @param visibility
-     *            The visibility (0-100).
-     */
-    public void setVisibility(final int visibility) {
-        put("visibility", visibility);
-    }
-
     public void update() {
-        if (!has("x")) {
-            put("x", 0);
-        }
-        x = getInt("x");
-
-        if (!has("y")) {
-            put("y", 0);
-        }
-        y = getInt("y");
-
-        if (!has("resistance")) {
-            setResistance(100);
-        }
-        resistance = getInt("resistance");
-        if (!has("visibility")) {
-            setVisibility(100);
+        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            MarauroaServerExtension extension = it.next();
+            logger.debug("Processing extension to update root class definition: " + extension.getClass().getSimpleName());
+            extension.rootRPClassUpdate(this);
         }
     }
 

@@ -1,4 +1,3 @@
-
 package simple.server.core.engine;
 
 import marauroa.common.game.RPObject;
@@ -33,66 +32,89 @@ public class ItemLogger {
         return Integer.toString(quantity);
     }
 
-    public void loadOnLogin(final ClientObjectInterface player, final RPSlot slot, final Item item) {
+    public void loadOnLogin(final ClientObjectInterface player,
+            final RPSlot slot, final Item item) {
         if (item.has(AbstractLogItemEventCommand.ATTR_ITEM_LOGID)) {
             return;
         }
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player, "create", item.get("name"), getQuantity(item), "olditem",
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player,
+                "create", item.get("name"), getQuantity(item), "olditem",
                 slot.getName()));
     }
 
-    public void destroyOnLogin(final ClientObjectInterface player, final RPSlot slot, final RPObject item) {
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player, "destroy", item.get("name"), getQuantity(item), "on login",
+    public void destroyOnLogin(final ClientObjectInterface player,
+            final RPSlot slot, final RPObject item) {
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player,
+                "destroy", item.get("name"), getQuantity(item), "on login",
                 slot.getName()));
     }
 
-    public static void destroy(final ClientObjectInterface entity, final RPSlot slot, final RPObject item) {
+    public static void destroy(final ClientObjectInterface entity,
+            final RPSlot slot, final RPObject item) {
         destroy(entity, slot, item, "quest");
     }
 
-    public static void destroy(final ClientObjectInterface entity, final RPSlot slot, final RPObject item, String reason) {
+    public static void destroy(final ClientObjectInterface entity,
+            final RPSlot slot, final RPObject item, String reason) {
         String slotName = "";
         if (slot != null) {
             slotName = slot.getName();
         }
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, entity, "destroy", item.get("name"), getQuantity(item), reason,
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, entity,
+                "destroy", item.get("name"), getQuantity(item), reason,
                 slotName));
     }
 
     public void dropQuest(final ClientObjectInterface player, final Item item) {
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player, "destroy", item.get("name"), getQuantity(item), "quest", null));
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player,
+                "destroy", item.get("name"), getQuantity(item), "quest", null));
     }
 
     public void timeout(final Item item) {
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, null, "destroy", item.get("name"), getQuantity(item), "timeout", item.getZone().getID().getID() + " " + item.getX() + " " + item.getY()));
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, null, 
+                "destroy", item.get("name"), getQuantity(item), "timeout", 
+                item.getZone().getID().getID() + " " + item.get("x") + " " 
+                + item.get("y")));
     }
 
-    public void displace(final ClientObjectInterface player, final PassiveEntity item, final SimpleRPZone zone, final int oldX, final int oldY, final int x, final int y) {
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player, "ground-to-ground", zone.getID().getID(), oldX + " " + oldY,
+    public void displace(final ClientObjectInterface player, 
+            final PassiveEntity item, final SimpleRPZone zone, final 
+                    int oldX, final int oldY, final int x, final int y) {
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player,
+                "ground-to-ground", zone.getID().getID(), oldX + " " + oldY,
                 zone.getID().getID(), x + " " + y));
     }
 
-    public void equipAction(final ClientObjectInterface player, final Entity entity, final String[] sourceInfo, final String[] destInfo) {
-        addLogItemEventCommand(new LogSimpleItemEventCommand(entity, player, sourceInfo[0] + "-to-" + destInfo[0], sourceInfo[1],
+    public void equipAction(final ClientObjectInterface player, 
+            final Entity entity, final String[] sourceInfo, final String[] destInfo) {
+        addLogItemEventCommand(new LogSimpleItemEventCommand(entity, player, 
+                sourceInfo[0] + "-to-" + destInfo[0], sourceInfo[1],
                 sourceInfo[2], destInfo[1], destInfo[2]));
     }
 
-    public static void merge(final RPEntity entity, final Item oldItem, final Item outlivingItem) {
+    public static void merge(final RPEntity entity, final Item oldItem, 
+            final Item outlivingItem) {
         if (!(entity instanceof ClientObjectInterface)) {
             return;
         }
         final ClientObjectInterface player = (ClientObjectInterface) entity;
 
-        addLogItemEventCommand(new LogMergeItemEventCommand(player, oldItem, outlivingItem));
+        addLogItemEventCommand(new LogMergeItemEventCommand(player, oldItem, 
+                outlivingItem));
     }
 
-    public static void splitOff(final ClientObjectInterface player, final Item item, final int quantity) {
+    public static void splitOff(final ClientObjectInterface player, 
+            final Item item, final int quantity) {
         final String oldQuantity = getQuantity(item);
-        final String outlivingQuantity = Integer.toString(Integer.parseInt(oldQuantity) - quantity);
-        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player, "split out", "-1", oldQuantity, outlivingQuantity, Integer.toString(quantity)));
+        final String outlivingQuantity = Integer.toString(
+                Integer.parseInt(oldQuantity) - quantity);
+        addLogItemEventCommand(new LogSimpleItemEventCommand(item, player, 
+                "split out", "-1", oldQuantity, outlivingQuantity, 
+                Integer.toString(quantity)));
     }
 
-    public void splitOff(final ClientObjectInterface player, final Item item, final Item newItem, final int quantity) {
+    public void splitOff(final ClientObjectInterface player, final Item item, 
+            final Item newItem, final int quantity) {
         if (!(player instanceof ClientObjectInterface)) {
             return;
         }

@@ -16,7 +16,6 @@ import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.CharacterDAO;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.db.RPObjectDAO;
-import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;

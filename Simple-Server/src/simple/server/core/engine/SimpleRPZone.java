@@ -18,7 +18,7 @@ import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
-import marauroa.server.game.extension.MarauroaServerExtension;
+import simple.server.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.MarauroaRPZone;
 import org.openide.util.Lookup;
 import simple.common.NotificationType;

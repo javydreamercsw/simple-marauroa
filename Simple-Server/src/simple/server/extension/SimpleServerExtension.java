@@ -1,10 +1,10 @@
 package simple.server.extension;
 
 import marauroa.common.game.*;
-import marauroa.server.game.extension.MarauroaServerExtension;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
+import simple.common.game.ClientObjectInterface;
 
 public abstract class SimpleServerExtension implements MarauroaServerExtension,
         Lookup.Provider {
@@ -17,15 +17,10 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     }
 
     @Override
-    public boolean perform(String name) {
-        return true;
-    }
-
-    @Override
     public void onAction(RPObject player, RPAction action) {
         //Do nothing by default
     }
-    
+
     @Override
     public void onAddRPZone(IRPZone zone) {
         //Do nothing by default
@@ -52,6 +47,11 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     }
 
     @Override
+    public void modifyRootRPClassDefinition(RPClass client) {
+        //Do nothing by default
+    }
+
+    @Override
     public void afterWorldInit() {
         //Do nothing by default
     }
@@ -60,7 +60,7 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     public void updateDatabase() {
         //Do nothing by default
     }
-    
+
     @Override
     public void onRemoveRPZone(IRPZone zone) {
         //Do nothing by default
@@ -69,5 +69,15 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     @Override
     public Lookup getLookup() {
         return lookup;
+    }
+
+    @Override
+    public void clientObjectUpdate(ClientObjectInterface client) {
+        //Do nothing by default
+    }
+
+    @Override
+    public void rootRPClassUpdate(RPObject entity) {
+        //Do nothing by default
     }
 }
