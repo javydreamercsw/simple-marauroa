@@ -9,7 +9,6 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.IRPZone.ID;
 import marauroa.common.game.*;
-import marauroa.server.game.extension.MarauroaServerExtension;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;

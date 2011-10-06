@@ -14,7 +14,6 @@ import marauroa.common.Logger;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.*;
 import marauroa.common.io.UnicodeSupportingInputStreamReader;
-import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -36,6 +35,7 @@ import simple.server.core.entity.item.StackableItem;
 import simple.server.core.entity.slot.PlayerSlot;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
+import simple.server.extension.MarauroaServerExtension;
 
 /**
  *
@@ -115,6 +115,17 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         addEmptySlots("!quests");
         update();
     }
+
+    @Override
+    public void update() {
+        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            MarauroaServerExtension extension = it.next();
+            logger.debug("Processing extension to update client object class definition: " + extension.getClass().getSimpleName());
+            extension.clientObjectUpdate(this);
+        }
+        super.update();
+    }
+    
 
     /**
      * Constructor for serialization purposes

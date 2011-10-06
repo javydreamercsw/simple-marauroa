@@ -16,6 +16,7 @@ import org.openide.util.Lookup;
 import simple.client.entity.IUserContext;
 import simple.client.event.ChatListener;
 import simple.client.gui.IGameObjects;
+import simple.common.game.ClientObjectInterface;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 
@@ -32,7 +33,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected SimplePerceptionHandler handler;
     protected static SimpleClient client;
     private String[] available_characters;
-    private RPObject player;
+    private ClientObjectInterface player;
     private String userName;
     public static String LOG4J_PROPERTIES = "log4j.properties";
     public ArrayList<String> whoplayers;
@@ -120,11 +121,11 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         return available_characters;
     }
 
-    public RPObject getPlayerRPC() {
+    public ClientObjectInterface getPlayerRPC() {
         return player;
     }
 
-    public void setPlayerRPC(RPObject object) {
+    public void setPlayerRPC(ClientObjectInterface object) {
         player = object;
     }
 

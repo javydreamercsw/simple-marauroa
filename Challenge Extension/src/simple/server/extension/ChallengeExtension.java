@@ -6,7 +6,6 @@ import marauroa.common.game.Definition;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
-import marauroa.server.game.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;

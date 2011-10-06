@@ -15,7 +15,7 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
-import marauroa.server.game.extension.MarauroaServerExtension;
+import simple.server.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
