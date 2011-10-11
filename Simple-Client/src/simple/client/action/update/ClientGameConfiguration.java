@@ -6,8 +6,9 @@ import java.util.Properties;
 
 /**
  * Read the configuration file for the client.
- * 
- * @author Javier A. Ortiz <javier.ortiz.78@gmail.com> based on code from hendrik
+ *
+ * @author Javier A. Ortiz <javier.ortiz.78@gmail.com> based on code from
+ * hendrik
  */
 public class ClientGameConfiguration {
 
@@ -46,9 +47,8 @@ public class ClientGameConfiguration {
      * gets a configuration value, in case it is undefined, the default of
      * game-default.properties is returned. If this is undefined, too, the
      * return value is null
-     * 
-     * @param key
-     *            key
+     *
+     * @param key key
      * @return configured value
      */
     public static String get(String key) {
@@ -61,5 +61,9 @@ public class ClientGameConfiguration {
      */
     public static void setRelativeTo(Class relTo) {
         relativeTo = relTo;
+    }
+
+    public static Class getRelativeTo() {
+        return relativeTo;
     }
 }
