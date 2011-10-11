@@ -37,6 +37,7 @@ public class RPEntity extends Entity {
             entity.isA("entity");
             entity.addAttribute("name", Type.STRING);
             entity.addAttribute(ATTR_TITLE, Type.STRING);
+            //TODO move most of this to extensions
             entity.addAttribute("level", Type.SHORT);
             entity.addAttribute("xp", Type.INT);
 
