@@ -1,5 +1,7 @@
 package simple.server.extension;
 
+import java.util.Date;
+import java.util.UUID;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import org.openide.util.lookup.ServiceProvider;
@@ -15,11 +17,47 @@ public class RPCard extends RPEntity {
 
     public final static String CARD_NAME = "card_name", CLASS = "class",
             CARD_ID = "card_id", CREATION_DATE = "creation_date",
-            TIMES_TRADED = "times_traded", TRADABLE = "tradable";
+            TIMES_TRADED = "times_traded", TRADABLE = "tradable", CLASS_NAME = "card";
+
+    public RPCard() {
+    }
+
+    public RPCard(String name, Class class0) {
+        setRPClass(CLASS_NAME);
+        put("type", CLASS_NAME);
+        put(CARD_NAME, name);
+        put(CLASS, class0.getCanonicalName());
+        update();
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        //Unique id
+        if (!has(CARD_ID)) {
+            put(CARD_ID, UUID.randomUUID().toString());
+        }
+        //Creation date
+        if (!has(CREATION_DATE)) {
+            put(CREATION_DATE, new Date(System.currentTimeMillis()).toString());
+        }
+        //Times traded
+        if (!has(TIMES_TRADED)) {
+            put(TIMES_TRADED, 0);
+        }
+        //Tradable by default
+        if (!has(TRADABLE)) {
+            put(TRADABLE, "true");
+        }
+    }
+
+    public int getTimesTraded() {
+        return getInt(TIMES_TRADED);
+    }
 
     @Override
     public void generateRPClass() {
-        RPClass entity = new RPClass(RPCLASS_NAME);
+        RPClass entity = new RPClass(CLASS_NAME);
         entity.isA("entity");
 
         /**
@@ -45,6 +83,14 @@ public class RPCard extends RPEntity {
         /**
          * Can be traded?
          */
-        entity.addAttribute(TRADABLE, Definition.Type.BYTE);
+        entity.addAttribute(TRADABLE, Definition.Type.STRING);
+    }
+
+    public void increaseTimesTraded() {
+        if (getBool(TRADABLE)) {
+            put(TIMES_TRADED, getTimesTraded() + 1);
+        }else{
+            throw new RuntimeException("Traded a non tradable card?");
+        }
     }
 }
