@@ -21,7 +21,7 @@ import simple.server.core.event.TurnListener;
 /**
  * This is an item.
  */
-@ServiceProvider(service = RPEntityInterface.class, position = 2)
+@ServiceProvider(service = RPEntityInterface.class, position = 3)
 public class Item extends RPEntity implements TurnListener, EquipListener {
 
     private static final long serialVersionUID = 1L;

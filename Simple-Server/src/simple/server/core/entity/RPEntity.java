@@ -14,7 +14,7 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = RPEntityInterface.class, position = 3)
+@ServiceProvider(service = RPEntityInterface.class, position = 2)
 public class RPEntity extends Entity {
 
     private static final long serialVersionUID = 1L;
