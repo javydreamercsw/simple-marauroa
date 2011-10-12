@@ -14,19 +14,25 @@ import simple.common.game.ClientObjectInterface;
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class CardGameExtension extends SimpleServerExtension {
 
-    public static final String DECK = "decks";
+    public static final String DECK = "decks", COLLECTION = "collection";
 
     @Override
     public void modifyClientObjectDefinition(RPClass player) {
         //Add decks to the player
         player.addRPSlot(DECK, -1, Definition.PRIVATE);
+        //Add page collection
+        //Add decks to the player
+        player.addRPSlot(COLLECTION, -1, Definition.PRIVATE);
     }
 
     @Override
     public void clientObjectUpdate(ClientObjectInterface client) {
         super.clientObjectUpdate(client);
-        if (!((RPObject) client).hasSlot(CardGameExtension.DECK)) {
-            ((RPObject) client).addSlot(CardGameExtension.DECK);
+        if (!((RPObject) client).hasSlot(DECK)) {
+            ((RPObject) client).addSlot(DECK);
+        }
+        if (!((RPObject) client).hasSlot(COLLECTION)) {
+            ((RPObject) client).addSlot(COLLECTION);
         }
     }
 }
