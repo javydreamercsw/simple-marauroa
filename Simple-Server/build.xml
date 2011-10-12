@@ -6,6 +6,8 @@
     <description>Builds, tests, and runs the project Marauroa-Simple-Server.</description>
     <import file="nbproject/build-impl.xml"/>
     <property file="build.ant.properties"/>
+    <property name="original.project.dir" value="../../marauroa"/>
+    <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
 
     <target name="-post-compile">
         <copy file="server.ini" todir="dist/"/>
@@ -106,13 +108,32 @@
             <fileset file="${marauroa_jar}"/>
         </signjar>
     </target>
+    
     <target name="-pre-init">
 	<!-- We update the version number -->
         <replaceregexp file="server.ini"
-			match="server_version?=?.*"
-			replace="server_version = ${version}"
-			byline="true"/>
+                       match="server_version?=?.*"
+                       replace="server_version = ${version}"
+                       byline="true"/>
     </target>
+    
+    <target name="-pre-compile">       
+        <antcall target="compile-custom-marauroa"/>
+    </target>
+    
+    <target name="compile-custom-marauroa" if="custom.marauroa.present">
+        <echo message="Cleaning ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+             target="clean" inheritall="false" inheritrefs="false"/>
+        <echo message="Done cleaning ${original.project.dir}"/>
+        <echo message="Building ${original.project.dir}"/>
+        <ant dir="${original.project.dir}" usenativebasedir="true"
+             target="jar" inheritall="false" inheritrefs="false"/>
+        <echo message="Done building ${original.project.dir}"/>
+        <copy todir="../../Simple Libs" 
+        file="${original.project.dir}/build-archive/marauroa.jar"/>
+    </target>
+    
     <target name="package-for-store" depends="jar">
         <property name="store.dir" value="store"/>
         <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
@@ -133,7 +154,7 @@
 
         <zip destfile="${store.jar}">
             <zipfileset src="${store.dir}/temp_final.jar"
-            excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
+                        excludes="META-INF/*.SF, META-INF/*.DSA, META-INF/*.RSA"/>
         </zip>
 
         <delete file="${store.dir}/temp_final.jar"/>
