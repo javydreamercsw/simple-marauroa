@@ -121,17 +121,24 @@
         <antcall target="compile-custom-marauroa"/>
     </target>
     
-    <target name="compile-custom-marauroa" if="custom.marauroa.present">
+    <target name="clean" depends="clean-custom-marauroa">
+        <antcall target="Marauroa-Simple-Server-impl.clean"/>
+    </target>
+    
+    <target name="clean-custom-marauroa" if="custom.marauroa.present">
         <echo message="Cleaning ${original.project.dir}"/>
         <ant dir="${original.project.dir}" usenativebasedir="true"
              target="clean" inheritall="false" inheritrefs="false"/>
         <echo message="Done cleaning ${original.project.dir}"/>
+    </target>
+    
+    <target name="compile-custom-marauroa" if="custom.marauroa.present">
         <echo message="Building ${original.project.dir}"/>
         <ant dir="${original.project.dir}" usenativebasedir="true"
              target="jar" inheritall="false" inheritrefs="false"/>
         <echo message="Done building ${original.project.dir}"/>
         <copy todir="../../Simple Libs" 
-        file="${original.project.dir}/build-archive/marauroa.jar"/>
+              file="${original.project.dir}/build-archive/marauroa.jar"/>
     </target>
     
     <target name="package-for-store" depends="jar">
