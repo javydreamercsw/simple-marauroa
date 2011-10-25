@@ -1,5 +1,7 @@
 package simple.server.core.engine;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +17,6 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
-import simple.server.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
@@ -28,6 +29,7 @@ import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.api.IRPEvent;
+import simple.server.extension.MarauroaServerExtension;
 
 @ServiceProvider(service = IRPWorld.class)
 public class SimpleRPWorld extends RPWorld implements IRPWorld {
@@ -160,7 +162,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 MarauroaServerExtension extension = it2.next();
                 extension.afterWorldInit();
             }
-        } catch (Exception e) {
+        } catch (IOException | SQLException e) {
             logger.error("Error initializing the server!", e);
         }
     }
@@ -242,7 +244,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public List<SimpleRPZone> getZones() {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
 
         Iterator zoneList = iterator();
         while (zoneList.hasNext()) {
@@ -285,7 +287,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event, int delay) {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
         if (zone != null) {
             availableZones.add(zone);
         } else {

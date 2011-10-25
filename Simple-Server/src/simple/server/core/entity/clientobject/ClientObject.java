@@ -105,7 +105,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         super(object);
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
-        awayReplies = new HashMap<String, Long>();
+        awayReplies = new HashMap<>();
 
         // Beginner's luck (unless overriden by update)
         karma = 10.0;
@@ -584,7 +584,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     protected static void readAdminsFromFile(ClientObject player) {
         if (adminNames == null) {
-            adminNames = new LinkedList<String>();
+            adminNames = new LinkedList<>();
 
             String adminFilename = "data/conf/admins.list";
 
@@ -595,18 +595,17 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
                 if (is == null) {
                     logger.info("data/conf/admins.list does not exist.");
                 } else {
-
-                    BufferedReader in = new BufferedReader(
-                            new UnicodeSupportingInputStreamReader(is));
-                    try {
-                        String line;
-                        while ((line = in.readLine()) != null) {
-                            adminNames.add(line);
+                    try (BufferedReader in = new BufferedReader(
+                                 new UnicodeSupportingInputStreamReader(is))) {
+                        try {
+                            String line;
+                            while ((line = in.readLine()) != null) {
+                                adminNames.add(line);
+                            }
+                        } catch (Exception e) {
+                            logger.error("Error loading admin names from: " + adminFilename, e);
                         }
-                    } catch (Exception e) {
-                        logger.error("Error loading admin names from: " + adminFilename, e);
                     }
-                    in.close();
                 }
             } catch (Exception e) {
                 logger.error(
@@ -739,7 +738,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         if (slot == null) {
             return;
         }
-        List<RPObject> objects = new LinkedList<RPObject>();
+        List<RPObject> objects = new LinkedList<>();
         for (RPObject objectInSlot : slot) {
             objects.add(objectInSlot);
         }
