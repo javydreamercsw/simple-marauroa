@@ -113,7 +113,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
             Map<String, String> attributes) {
         setRPClass(RPCLASS_NAME);
         put("type", "item");
-        possibleSlots = new LinkedList<String>();
+        possibleSlots = new LinkedList<>();
         update();
 
         setEntityClass(clazz);
@@ -144,7 +144,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     public Item(Item item) {
         super(item);
         setRPClass("item");
-        possibleSlots = new ArrayList<String>(item.possibleSlots);
+        possibleSlots = new ArrayList<>(item.possibleSlots);
         update();
     }
 

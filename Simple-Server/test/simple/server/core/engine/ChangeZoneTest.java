@@ -1,26 +1,23 @@
 package simple.server.core.engine;
 
-import marauroa.common.Log4J;
 import marauroa.common.game.IRPZone.ID;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import simple.SimpleServerTest;
 import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class ChangeZoneTest {
+public class ChangeZoneTest extends SimpleServerTest{
 
     private static ClientObject player1;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
-        Log4J.init();
-
-        MockSimpleRPWorld.get();
-
+        init();
         // load item configurations to handle money and other items
         SimpleSingletonRepository.getEntityManager();
         player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
