@@ -27,7 +27,6 @@ public class CardGameExtension extends SimpleServerExtension {
 
     @Override
     public void clientObjectUpdate(ClientObjectInterface client) {
-        super.clientObjectUpdate(client);
         if (!((RPObject) client).hasSlot(DECK)) {
             ((RPObject) client).addSlot(DECK);
         }

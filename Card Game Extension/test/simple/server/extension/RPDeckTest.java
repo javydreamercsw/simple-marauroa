@@ -55,17 +55,15 @@ public class RPDeckTest {
         //Generate dummy player
         test.generateRPClass();
         //Create cards
-        RPCard card = new RPCard("test_card", getClass());
+        RPCard card = new RPCard(getClass());
         assertTrue(card.has(RPCard.CARD_ID));
-        assertTrue(card.has(RPCard.CARD_NAME));
         assertTrue(card.has(RPCard.CLASS));
         assertTrue(card.has(RPCard.CREATION_DATE));
         assertTrue(card.has(RPCard.TIMES_TRADED));
         assertTrue(card.has(RPCard.TRADABLE));
 
-        RPCard card2 = new RPCard("test_card2", DummyObject.class);
+        RPCard card2 = new RPCard(DummyObject.class);
         assertTrue(card2.has(RPCard.CARD_ID));
-        assertTrue(card2.has(RPCard.CARD_NAME));
         assertTrue(card2.has(RPCard.CLASS));
         assertTrue(card2.has(RPCard.CREATION_DATE));
         assertTrue(card2.has(RPCard.TIMES_TRADED));
@@ -98,13 +96,13 @@ public class RPDeckTest {
         for (Iterator<RPObject> it = deck.getSlot(RPDeck.PAGES).iterator(); it.hasNext();) {
             RPObject obj = it.next();
             assertTrue(obj instanceof RPCard);
-            assertTrue(obj.get(RPCard.CARD_NAME).equals(card.get(RPCard.CARD_NAME)));
+            assertTrue(obj.get(RPCard.CLASS_NAME).equals(card.get(RPCard.CLASS_NAME)));
         }
         assertTrue(deck.getSlot(RPDeck.HAND).size() == handSize);
         for (Iterator<RPObject> it = deck.getSlot(RPDeck.HAND).iterator(); it.hasNext();) {
             RPObject obj = it.next();
             assertTrue(obj instanceof RPCard);
-            assertTrue(obj.get(RPCard.CARD_NAME).equals(card2.get(RPCard.CARD_NAME)));
+            assertTrue(obj.get(RPCard.CLASS_NAME).equals(card2.get(RPCard.CLASS_NAME)));
         }
         assertTrue(deck.getWins() == 0);
         assertTrue(deck.getLoses() == 0);

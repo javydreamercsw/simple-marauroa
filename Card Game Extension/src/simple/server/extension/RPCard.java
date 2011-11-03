@@ -15,18 +15,18 @@ import simple.server.core.entity.RPEntityInterface;
 @ServiceProvider(service = RPEntityInterface.class, position = 1001)
 public class RPCard extends RPEntity {
 
-    public final static String CARD_NAME = "card_name", CLASS = "class",
+    public final static String CLASS = "class",
             CARD_ID = "card_id", CREATION_DATE = "creation_date",
             TIMES_TRADED = "times_traded", TRADABLE = "tradable", CLASS_NAME = "card";
 
     public RPCard() {
     }
 
-    public RPCard(String name, Class class0) {
+    public RPCard(Class class0) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
-        put(CARD_NAME, name);
         put(CLASS, class0.getCanonicalName());
+        put("name", class0.getSimpleName());
         update();
     }
 
@@ -89,7 +89,7 @@ public class RPCard extends RPEntity {
     public void increaseTimesTraded() {
         if (getBool(TRADABLE)) {
             put(TIMES_TRADED, getTimesTraded() + 1);
-        }else{
+        } else {
             throw new RuntimeException("Traded a non tradable card?");
         }
     }
