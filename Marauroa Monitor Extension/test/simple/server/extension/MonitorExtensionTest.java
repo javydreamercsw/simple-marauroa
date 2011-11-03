@@ -41,7 +41,6 @@ public class MonitorExtensionTest {
     public void testInit() {
         System.out.println("init");
         MonitorExtension instance = new MonitorExtension();
-        instance.init();
         CommandCenter.register(null, instance);
     }
 

@@ -14,7 +14,7 @@ import simple.server.core.entity.RPEntityInterface;
 @ServiceProvider(service = RPEntityInterface.class, position = 1002)
 public class RPDeck extends RPEntity {
 
-    public static final String DECK_NAME = "deck_name", PAGES = "pages",
+    public static final String PAGES = "pages",
             HAND = "hand", WINS = "wins", LOSES = "loses", DRAWS = "draws",
             VERSION = "version", RECORD = "record", CLASS_NAME = "deck";
 
@@ -24,14 +24,18 @@ public class RPDeck extends RPEntity {
     public RPDeck(String name, List<RPCard> cards, List<RPCard> hand) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
-        put(DECK_NAME, name);
-        addSlot(PAGES);
-        for (RPCard card : cards) {
-            getSlot(PAGES).add(card);
+        put("name", name);
+        if (!hasSlot(PAGES)) {
+            addSlot(PAGES);
         }
-        addSlot(HAND);
+        for (RPCard card : cards) {
+            addToDeck(card);
+        }
+        if (!hasSlot(HAND)) {
+            addSlot(HAND);
+        }
         for (RPCard card : hand) {
-            getSlot(HAND).add(card);
+            addToHand(card);
         }
         update();
     }
@@ -126,8 +130,8 @@ public class RPDeck extends RPEntity {
     public void increaseVersion() {
         put(VERSION, getVersion() + 1);
     }
-    
-    public int getVersion(){
+
+    public int getVersion() {
         return getInt(VERSION);
     }
 
@@ -135,11 +139,7 @@ public class RPDeck extends RPEntity {
     public void generateRPClass() {
         RPClass entity = new RPClass(CLASS_NAME);
         entity.isA("entity");
-
-        /**
-         * Deck name
-         */
-        entity.addAttribute(DECK_NAME, Definition.Type.STRING);
+        
         /**
          * RPCards
          */
@@ -160,5 +160,13 @@ public class RPDeck extends RPEntity {
          * Deck record
          */
         entity.addAttribute(RECORD, Definition.Type.MAP);
+    }
+
+    public final void addToHand(RPCard card) {
+        getSlot(HAND).add(card);
+    }
+
+    public final void addToDeck(RPCard card) {
+        getSlot(PAGES).add(card);
     }
 }

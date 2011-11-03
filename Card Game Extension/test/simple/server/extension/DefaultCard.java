@@ -19,4 +19,9 @@ public class DefaultCard implements ICard {
     public Lookup getLookup() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public int compareTo(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

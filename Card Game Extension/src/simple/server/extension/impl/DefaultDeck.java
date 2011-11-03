@@ -36,7 +36,7 @@ public class DefaultDeck implements IDeck {
     @Override
     public ICard ditch(Class<? extends ICardType> type) {
         for (int i = 0; i < deck.size(); i++) {
-            if (type.isInstance(deck.get(i))) {
+            if (deck.get(i).getLookup().lookup(type) != null) {
                 ICard ditched = deck.remove(i);
                 used.add(ditched);
                 return ditched;
@@ -52,7 +52,7 @@ public class DefaultDeck implements IDeck {
             ArrayList<Integer> indices = new ArrayList<>();
             //Build a list of indices of this type
             for (int i = 0; i < deck.size(); i++) {
-                if (type.isInstance(deck.get(i))) {
+                if (deck.get(i).getLookup().lookup(type) != null) {
                     indices.add(i);
                 }
             }
@@ -74,7 +74,7 @@ public class DefaultDeck implements IDeck {
             for (int j = 0; j < amount; j++) {
                 for (final Iterator i = deck.iterator(); i.hasNext();) {
                     ICard next = (ICard) i.next();
-                    if (type.isInstance(next)) {
+                    if (next.getLookup().lookup(type) != null) {
                         ditched.add(next);
                         break;
                     }
@@ -142,11 +142,14 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public ICard draw(boolean random) {
+        ICard drawn = null;
         if (random) {
-            return deck.remove(rand.nextInt(deck.size()));
+            drawn = deck.remove(rand.nextInt(deck.size()));
         } else {
-            return deck.remove(0);
+            drawn = deck.remove(0);
         }
+        hand.add(drawn);
+        return drawn;
     }
 
     @Override

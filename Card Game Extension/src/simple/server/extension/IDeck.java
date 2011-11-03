@@ -18,6 +18,10 @@ public interface IDeck {
      * Used cards
      */
     List<ICard> used = new ArrayList<>();
+    /**
+     * Cards in hand
+     */
+    List<ICard> hand = new ArrayList<>();
 
     /**
      * Get decks contents
