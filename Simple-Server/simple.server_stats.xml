@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<statistics time="1313788956">
-  <uptime value="2.599"/>
-  <memory total="15872" used="4096"/>
+<statistics time="1321370522">
+  <uptime value="3.304"/>
+  <memory total="15872" used="7800"/>
 <attrib name="Players online" value="0" />
 <attrib name="Bytes recv" value="0" />
 <attrib name="Ips online" value="0" />
