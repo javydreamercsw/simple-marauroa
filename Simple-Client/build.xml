@@ -69,6 +69,12 @@
     -->
     <target name="-pre-compile">
         <echo>Deleting logs...</echo>
+        <available file="log/" property="log.present" type="dir"/>
+        <antcall target="delete.logs"/>
+        <mkdir dir="log" />
+    </target>
+    
+    <target name="delete.logs" if="log.present">
         <delete>
             <fileset dir="log/" includes="**/*.*"/>
         </delete>
