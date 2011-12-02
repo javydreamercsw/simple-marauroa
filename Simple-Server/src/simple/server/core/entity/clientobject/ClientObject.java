@@ -84,7 +84,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     protected FeatureList features;
     /**
-     * A list of away replys sent to players.
+     * A list of away replies sent to players.
      */
     protected HashMap<String, Long> awayReplies;
     /**
@@ -105,7 +105,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         super(object);
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
-        awayReplies = new HashMap<>();
+        awayReplies = new HashMap<String, Long>();
 
         // Beginner's luck (unless overriden by update)
         karma = 10.0;
@@ -125,7 +125,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         }
         super.update();
     }
-    
 
     /**
      * Constructor for serialization purposes
@@ -584,7 +583,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     protected static void readAdminsFromFile(ClientObject player) {
         if (adminNames == null) {
-            adminNames = new LinkedList<>();
+            adminNames = new LinkedList<String>();
 
             String adminFilename = "data/conf/admins.list";
 
@@ -595,16 +594,15 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
                 if (is == null) {
                     logger.info("data/conf/admins.list does not exist.");
                 } else {
-                    try (BufferedReader in = new BufferedReader(
-                                 new UnicodeSupportingInputStreamReader(is))) {
-                        try {
-                            String line;
-                            while ((line = in.readLine()) != null) {
-                                adminNames.add(line);
-                            }
-                        } catch (Exception e) {
-                            logger.error("Error loading admin names from: " + adminFilename, e);
+                    BufferedReader in = new BufferedReader(
+                            new UnicodeSupportingInputStreamReader(is));
+                    try {
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            adminNames.add(line);
                         }
+                    } catch (Exception e) {
+                        logger.error("Error loading admin names from: " + adminFilename, e);
                     }
                 }
             } catch (Exception e) {
@@ -738,7 +736,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         if (slot == null) {
             return;
         }
-        List<RPObject> objects = new LinkedList<>();
+        List<RPObject> objects = new LinkedList<RPObject>();
         for (RPObject objectInSlot : slot) {
             objects.add(objectInSlot);
         }

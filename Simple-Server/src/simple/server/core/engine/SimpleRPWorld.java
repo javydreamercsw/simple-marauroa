@@ -162,7 +162,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 MarauroaServerExtension extension = it2.next();
                 extension.afterWorldInit();
             }
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
+            logger.error("Error initializing the server!", e);
+        } catch (SQLException e) {
             logger.error("Error initializing the server!", e);
         }
     }
@@ -244,7 +246,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public List<SimpleRPZone> getZones() {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
 
         Iterator zoneList = iterator();
         while (zoneList.hasNext()) {
@@ -287,7 +289,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event, int delay) {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
         if (zone != null) {
             availableZones.add(zone);
         } else {
