@@ -1,5 +1,6 @@
 package simple.client;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.List;
@@ -34,12 +35,14 @@ public class TextClient extends Thread {
     private static final Logger logger = Logger.getLogger(TextClient.class.getSimpleName());
 
     public TextClient(String h, String u, String p, String c, String P,
-            boolean t, String name, String verison) throws SocketException {
+            boolean t, String name, String v) throws SocketException {
         host = h;
         username = u;
         password = p;
         character = c;
         port = P;
+        version = v;
+        gameName=name;
 
         world_objects = new HashMap<RPObject.ID, RPObject>();
 
@@ -128,8 +131,8 @@ public class TextClient extends Thread {
             public void onUnsynced() {
             }
         });
-        createClientManager(name != null ? name : "Simple",
-                verison != null ? verison : "0.02.04");
+        createClientManager(gameName != null ? gameName : "Simple",
+                version != null ? version : "0.02.04");
     }
 
     private void createClientManager(String name, String gversion) {
@@ -258,13 +261,16 @@ public class TextClient extends Thread {
     public void run() {
         try {
             clientManager.connect(host, Integer.parseInt(port));
-            System.out.println("Logging as: " + username + " with pass: " + password);
+            System.out.println("Logging as: " + username + " with pass: " + password + " version: '" + version + "'");
             clientManager.login(username, password);
-        } catch (Exception e) {
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            System.exit(1);
+        } catch (LoginFailedException e) {
             try {
                 System.out.println("Creating account and logging in to continue....");
                 clientManager.createAccount(username, password, host);
-                System.out.println("Logging as: " + username + " with pass: " + password);
+                System.out.println("Logging as: " + username + " with pass: " + password + " version: '" + version + "'");
                 clientManager.login(username, password);
             } catch (LoginFailedException ex) {
                 logger.log(Level.SEVERE, null, ex);
@@ -279,6 +285,15 @@ public class TextClient extends Thread {
                 logger.log(Level.SEVERE, null, ex);
                 System.exit(1);
             }
+        } catch (InvalidVersionException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            System.exit(1);
+        } catch (TimeoutException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            System.exit(1);
+        } catch (BannedAddressException ex) {
+            logger.log(Level.SEVERE, null, ex);
+            System.exit(1);
         }
 
         boolean cond = true;
@@ -353,7 +368,7 @@ public class TextClient extends Thread {
             System.out.println("Optional parameters");
             System.out.println("* -W\tShow world content? 0 or 1");
             System.out.println("* -n\tGame name (Default is 'Simple')");
-            System.out.println("* -v\tGame Version (Default is '0.02.03')");
+            System.out.println("* -v\tGame Version (Default is '0.02.04')");
             System.out.println("* -chat\tEnable/Disable chat? 0 or 1");
         } catch (Exception e) {
             e.printStackTrace();
