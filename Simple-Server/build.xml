@@ -121,9 +121,7 @@
         <antcall target="compile-custom-marauroa"/>
     </target>
     
-    <target name="clean" depends="clean-custom-marauroa">
-        <antcall target="Marauroa-Simple-Server-impl.clean"/>
-    </target>
+    <target name="clean" depends="clean-custom-marauroa, Marauroa-Simple-Server-impl.clean"/>
     
     <target name="clean-custom-marauroa" if="custom.marauroa.present">
         <echo message="Cleaning ${original.project.dir}"/>

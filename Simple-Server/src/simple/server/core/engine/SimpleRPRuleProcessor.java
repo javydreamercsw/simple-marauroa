@@ -122,7 +122,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
             /*
              * Print version information.
              */
-            logger.info("Running " + getGAMENAME() + " Server version " + getVERSION());
+            logger.info("Running " + getGAMENAME() + " Server version '" + getVERSION()+"'");
             SimpleRPRuleProcessor.rpman = rpman;
             SimpleRPAction.initialize(rpman);
         } catch (Exception e) {
