@@ -1,29 +1,22 @@
 package simple.server.extension;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.*;
 import marauroa.server.db.DBTransaction;
 import marauroa.server.db.JDBCSQLHelper;
 import marauroa.server.db.TransactionPool;
-import marauroa.server.game.db.CharacterDAO;
 import marauroa.server.game.db.DAORegister;
-import marauroa.server.game.db.RPObjectDAO;
-import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionListener;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.IRPWorld;
-import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  *
@@ -31,7 +24,7 @@ import simple.server.core.entity.clientobject.ClientObject;
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class MonitorExtension extends SimpleServerExtension implements ActionListener {
-    
+
     public static final String _MONITOR = "monitor";
     private static final Logger logger = Log4J.getLogger(MonitorExtension.class);
     public static final int LISTZONES = 1, LISTPLAYERS = 2, LISTCONTENTS = 3;
@@ -40,23 +33,23 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         CommandCenter.register(_MONITOR, MonitorExtension.this);
         DAORegister.get().register(MonitorDAO.class, new MonitorDAO());
     }
-   
+
     private void getZoneInfo(ClientObjectInterface monitor, RPAction action) {
         if (isMonitor(monitor)) {
             list(monitor, LISTPLAYERS, action);
         }
     }
-    
+
     private void getZones(ClientObjectInterface monitor, RPAction action) {
         if (isMonitor(monitor)) {
             list(monitor, LISTZONES, action);
         }
     }
-    
+
     private boolean isMonitor(ClientObjectInterface monitor) {
         return DAORegister.get().get(MonitorDAO.class).isMonitor(monitor.getName());
     }
-    
+
     private void list(ClientObjectInterface monitor, int option, RPAction action) {
         try {
             if (option == LISTZONES) {
@@ -80,14 +73,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             logger.error(null, ex);
         }
     }
-    
-    @Override
-    public RPObject onRPObjectAddToZone(RPObject object) {
-        logger.debug("Processing adding object from " + getClass().getSimpleName());
-        logger.debug(object);
-        return object;
-    }
-    
+
     @Override
     public RPObject onRPObjectRemoveFromZone(RPObject object) {
         logger.debug("Processing removal of object from " + getClass().getSimpleName());
@@ -98,7 +84,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         }
         return object;
     }
-    
+
     @Override
     public boolean updateMonitor(RPObject object, Perception perception) {
         try {
@@ -133,65 +119,42 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         }
         return true;
     }
-    
+
     public List<IRPZone> getZones() {
         ArrayList<IRPZone> zones = new ArrayList<IRPZone>();
-        try {
-            Configuration conf = Configuration.getConfiguration();
-            RPWorld world = null;
-            if (conf.get("world") != null && !conf.get("world").isEmpty()) {
-                Class<?> clientObjectClass = Class.forName(conf.get("world"));
-                java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("get");
-                world = (RPWorld) localSingleton.invoke(null);
-            }
-            for (IRPZone z : world) {
-                zones.add(z);
-            }
-            return zones;
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
+        Lookup.getDefault().lookup(IRPWorld.class);
+        for (IRPZone z : Lookup.getDefault().lookup(IRPWorld.class)) {
+            zones.add(z);
         }
         return zones;
     }
-    
+
     @Override
     public void modifyClientObjectDefinition(RPClass client) {
         client.addRPEvent(MonitorEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
-    
+
     @Override
     public void afterWorldInit() {
-        try {
-            if (!DAORegister.get().get(CharacterDAO.class).hasCharacter(_MONITOR)) {
-                logger.debug("Adding the monitor character: " + _MONITOR + " to the System account.");
-                //Create it
-                ClientObject monitor = new ClientObject(new RPObject());
-                //Save it.
-                DAORegister.get().get(RPObjectDAO.class).storeRPObject(monitor);
-                //Link with System account
-                DAORegister.get().get(CharacterDAO.class).addCharacter(
-                        Configuration.getConfiguration().get("system_account_name"),
-                        _MONITOR, monitor);
-            }
-        } catch (SQLException ex) {
-            logger.error(ex);
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
+//        try {
+//            if (!DAORegister.get().get(CharacterDAO.class).hasCharacter(_MONITOR)) {
+//                logger.debug("Adding the monitor character: " + _MONITOR + " to the System account.");
+//                //Create it
+//                ClientObject monitor = new ClientObject(new RPObject());
+//                //Save it.
+//                DAORegister.get().get(RPObjectDAO.class).storeRPObject(monitor);
+//                //Link with System account
+//                DAORegister.get().get(CharacterDAO.class).addCharacter(
+//                        Configuration.getConfiguration().get("system_account_name"),
+//                        _MONITOR, monitor);
+//            }
+//        } catch (SQLException ex) {
+//            logger.error(ex);
+//        } catch (IOException ex) {
+//            logger.error(ex);
+//        }
     }
-    
+
     private void register(ClientObjectInterface monitor) throws SQLException {
         DBTransaction transaction = TransactionPool.get().beginWork();
         try {
@@ -206,7 +169,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             TransactionPool.get().commit(transaction);
         }
     }
-    
+
     private void unregister(ClientObjectInterface monitor) throws SQLException {
         DBTransaction transaction = TransactionPool.get().beginWork();
         try {
@@ -221,7 +184,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             TransactionPool.get().commit(transaction);
         }
     }
-    
+
     private void setEnabled(ClientObjectInterface monitor, boolean enabled) {
         try {
             DAORegister.get().get(MonitorDAO.class).setEnabled(monitor, enabled);
@@ -229,7 +192,7 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             java.util.logging.Logger.getLogger(MonitorExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void updateDatabase() {
         logger.debug("Updating database for extension " + _MONITOR);
@@ -243,13 +206,13 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
         }
         logger.debug("Done!");
     }
-    
+
     private void createTablesUnlessTheyAlreadyExist(final DBTransaction transaction) {
         logger.debug("Creating Monitor extension Tables...");
         logger.debug("Creation successful? " + new JDBCSQLHelper(transaction).runDBScript("simple/server/extension/monitor_init.sql"));
         logger.debug("Done!");
     }
-    
+
     @Override
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
