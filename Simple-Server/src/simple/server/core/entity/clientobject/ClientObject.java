@@ -27,6 +27,7 @@ import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
+import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.Outfit;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
@@ -621,7 +622,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     @Override
     public void generateRPClass() {
-        RPClass player = new RPClass("client_object");
+        ExtensibleRPClass player = new ExtensibleRPClass("client_object");
         player.isA("rpentity");
         //This is the assigned key for encryption purposes on the client
         player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
