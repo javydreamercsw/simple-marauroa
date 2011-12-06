@@ -80,4 +80,16 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     public void rootRPClassUpdate(RPObject entity) {
         //Do nothing by default
     }
+    
+    @Override
+    public void onRPClassAddAttribute(RPClass rpclass, 
+            String name, Definition.Type type, byte flags) {
+        //Do nothing by default
+    }
+    
+    @Override
+    public void onRPClassAddAttribute(RPClass rpclass, 
+            String name, Definition.Type type) {
+        //Do nothing by default
+    }
 }

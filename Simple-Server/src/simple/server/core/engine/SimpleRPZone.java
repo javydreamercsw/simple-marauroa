@@ -18,7 +18,6 @@ import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
-import simple.server.extension.MarauroaServerExtension;
 import marauroa.server.game.rp.MarauroaRPZone;
 import org.openide.util.Lookup;
 import simple.common.NotificationType;
@@ -30,6 +29,7 @@ import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TurnNotifier;
 import simple.server.core.tool.Tool;
+import simple.server.extension.MarauroaServerExtension;
 
 public class SimpleRPZone extends MarauroaRPZone {
 

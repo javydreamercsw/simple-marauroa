@@ -104,4 +104,23 @@ public interface MarauroaServerExtension {
      * populated with valid initial values.
      */
     public void rootRPClassUpdate(RPObject entity);
+    
+    /**
+     * Do something when an attribute is added to a RPClass
+     * @param rpclass RPClass being modified
+     * @param name Name of attribute
+     * @param type Type of attribute
+     * @param flags Flags of attribute
+     */
+    public void onRPClassAddAttribute(RPClass rpclass, 
+            String name, Definition.Type type, byte flags);
+    
+    /**
+     * Do something when an attribute is added to a RPClass
+     * @param rpclass RPClass being modified
+     * @param name Name of attribute
+     * @param type Type of attribute
+     */
+    public void onRPClassAddAttribute(RPClass rpclass, 
+            String name, Definition.Type type);
 }

@@ -118,18 +118,20 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 extension.updateDatabase();
             }
             //Create classes after plugins are initialized to allow them to plugin into the class creation.
+            for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
+                IRPEvent event = it.next();
+                logger.info("Registering event: " + event.getClass().getSimpleName()
+                        + ": " + event.getRPClassName());
+                event.generateRPClass();
+            }
+            logger.info("Done!");
             logger.info("Creating RPClasses.");
             for (RPEntityInterface entity : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
                 logger.info(entity.getClass().getSimpleName());
                 entity.generateRPClass();
             }
             logger.info("Done!");
-            for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
-                IRPEvent event = it.next();
-                logger.info("Registering event: " + event.getClass().getSimpleName());
-                event.generateRPClass();
-            }
-            logger.info("Done!");
+
             Iterator<RPClass> it = RPClass.iterator();
             if (logger.isDebugEnabled()) {
                 logger.debug("Defined RPClasses:");
