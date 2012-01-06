@@ -23,24 +23,26 @@ public class ExtensibleRPClass extends RPClass {
     }
 
     @Override
-    public void addAttribute(String string, Type type, byte b) {
+    public void addAttribute(String name, Type type, byte b) {
         for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
             MarauroaServerExtension extension = it.next();
             Logger.getLogger(ExtensibleRPClass.class.getSimpleName()).log(Level.FINE,
                     "Processing extension to add attribute: {0}",
                     extension.getClass().getSimpleName());
-            extension.onRPClassAddAttribute(this, string, type, b);
+            extension.onRPClassAddAttribute(this, name, type, b);
         }
+        super.addAttribute(name, type, b);
     }
 
     @Override
-    public void addAttribute(String string, Type type) {
+    public void addAttribute(String name, Type type) {
         for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
             MarauroaServerExtension extension = it.next();
             Logger.getLogger(ExtensibleRPClass.class.getSimpleName()).log(Level.FINE,
                     "Processing extension to add attribute: {0}",
                     extension.getClass().getSimpleName());
-            extension.onRPClassAddAttribute(this, string, type);
+            extension.onRPClassAddAttribute(this, name, type);
         }
+        super.addAttribute(name, type);
     }
 }
