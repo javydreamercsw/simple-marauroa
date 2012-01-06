@@ -128,10 +128,22 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
      */
     boolean isAwayNotifyNeeded(String name);
 
+    /**
+     * Is the client disconnected?
+     * @return true if disconnected
+     */
     boolean isDisconnected();
 
+    /**
+     * Is a ghost?
+     * @return true if is ghost
+     */
     boolean isGhost();
 
+    /**
+     * Is invisible to creatures?
+     * @return true if invisible
+     */
     boolean isInvisibleToCreatures();
 
     /**
@@ -178,8 +190,18 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
      */
     void onAdded(IRPZone zone);
 
+    /**
+     * Called when this object is removed from a zone.
+     *
+     * @param zone
+     * The zone this was removed from.
+     */
     void onRemoved(IRPZone zone);
 
+    /**
+     * Remove a quest by name
+     * @param name quest to remove
+     */
     void removeQuest(String name);
 
     /**
@@ -278,19 +300,48 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
     @Override
     String toString();
 
+    /**
+     * Get name
+     * @return Name
+     */
     public String getName();
+    
+    /**
+     * Set name
+     * @param name name to set
+     */
+    public void setName(String name);
 
     @Override
     public SimpleRPZone getZone();
 
+    /**
+     * Get title
+     * @return title
+     */
     public String getTitle();
 
+    /**
+     * Spread changes to the world
+     */
     public void notifyWorldAboutChanges();
 
+    /**
+     * Update this object
+     */
     public void update();
 
+    /**
+     * Sent private text
+     * @param type Notification type
+     * @param message message's text
+     */
     public void sendPrivateText(NotificationType type, String message);
     
+    /**
+     * Send public text
+     * @param text message's text
+     */
     public void sendText(String text);
     
     /**

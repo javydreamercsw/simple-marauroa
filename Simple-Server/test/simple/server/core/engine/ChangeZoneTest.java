@@ -37,7 +37,7 @@ public class ChangeZoneTest extends SimpleServerTest{
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone1")));
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone2")));
             assertFalse(MockSimpleRPWorld.get().hasRPZone(new ID("zone3")));
-            player1.put("zoneid", "zone2");
+            MockSimpleRPWorld.get().getRPZone("zone2").add(player1);
             MockSimpleRPWorld.get().add(player1);
             MockSimpleRPWorld.get().changeZone(new ID("zone1"), player1);
             assertTrue(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone1"))).has(player1.getID()));
