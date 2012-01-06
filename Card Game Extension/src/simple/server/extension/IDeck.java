@@ -13,15 +13,15 @@ public interface IDeck {
     /**
      * Deck contents
      */
-    List<ICard> deck = new ArrayList<>();
+    List<ICard> deck = new ArrayList<ICard>();
     /**
      * Used cards
      */
-    List<ICard> used = new ArrayList<>();
+    List<ICard> used = new ArrayList<ICard>();
     /**
      * Cards in hand
      */
-    List<ICard> hand = new ArrayList<>();
+    List<ICard> hand = new ArrayList<ICard>();
 
     /**
      * Get decks contents

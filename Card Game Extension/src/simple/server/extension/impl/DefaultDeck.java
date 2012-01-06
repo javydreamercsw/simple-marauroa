@@ -47,9 +47,9 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public List<ICard> ditch(Class<? extends ICardType> type, boolean random, int amount) {
-        ArrayList<ICard> ditched = new ArrayList<>();
+        ArrayList<ICard> ditched = new ArrayList<ICard>();
         if (random) {
-            ArrayList<Integer> indices = new ArrayList<>();
+            ArrayList<Integer> indices = new ArrayList<Integer>();
             //Build a list of indices of this type
             for (int i = 0; i < deck.size(); i++) {
                 if (deck.get(i).getLookup().lookup(type) != null) {
@@ -97,7 +97,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public List<ICard> ditch(int amount, boolean random) {
-        ArrayList<ICard> ditched = new ArrayList<>();
+        ArrayList<ICard> ditched = new ArrayList<ICard>();
         for (int i = 0; i < amount; i++) {
             ditched.add(ditch(random));
         }
@@ -106,7 +106,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public List<ICard> ditch(int amount) {
-        ArrayList<ICard> ditched = new ArrayList<>();
+        ArrayList<ICard> ditched = new ArrayList<ICard>();
         for (int i = 0; i < amount; i++) {
             ditched.add(ditch());
         }
@@ -142,7 +142,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public ICard draw(boolean random) {
-        ICard drawn = null;
+        ICard drawn;
         if (random) {
             drawn = deck.remove(rand.nextInt(deck.size()));
         } else {
@@ -159,7 +159,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public List<ICard> draw(int amount, boolean random) {
-        ArrayList<ICard> drawn = new ArrayList<>();
+        ArrayList<ICard> drawn = new ArrayList<ICard>();
         for (int i = 0; i < amount; i++) {
             drawn.add(draw(random));
         }
@@ -168,7 +168,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public List<ICard> draw(int amount) {
-        ArrayList<ICard> drawn = new ArrayList<>();
+        ArrayList<ICard> drawn = new ArrayList<ICard>();
         for (int i = 0; i < amount; i++) {
             drawn.add(draw());
         }
