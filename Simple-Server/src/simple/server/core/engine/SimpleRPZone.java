@@ -89,7 +89,8 @@ public class SimpleRPZone extends MarauroaRPZone {
          */
         Iterator i = getPlayers().iterator();
         while (i.hasNext()) {
-            Lookup.getDefault().lookup(IRPWorld.class).changeZone(SimpleRPWorld.getDefaultRoom(),
+            Lookup.getDefault().lookup(IRPWorld.class).changeZone(
+                    Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom(),
                     (ClientObject) i.next());
         }
     }

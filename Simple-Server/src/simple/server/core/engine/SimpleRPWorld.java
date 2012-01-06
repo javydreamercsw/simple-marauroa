@@ -12,7 +12,6 @@ import marauroa.common.Logger;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.IRPZone.ID;
-import marauroa.common.game.RPClass;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
@@ -47,7 +46,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     /**
      * @return the DEFAULT_ROOM
      */
-    public static String getDefaultRoom() {
+    @Override
+    public String getDefaultRoom() {
         return DEFAULT_ROOM;
     }
 
@@ -114,10 +114,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         try {
             for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.info("Loading extension: " + extension.getClass());
+                logger.info("Loading extension: " + extension.getClass().getSimpleName());
                 extension.updateDatabase();
             }
-            //Create classes after plugins are initialized to allow them to plugin into the class creation.
             for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
                 IRPEvent event = it.next();
                 logger.info("Registering event: " + event.getClass().getSimpleName()
@@ -132,14 +131,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             }
             logger.info("Done!");
 
-            Iterator<RPClass> it = RPClass.iterator();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Defined RPClasses:");
-                while (it.hasNext()) {
-                    logger.debug(it.next().getName());
-                }
-                logger.info("Done!");
-            }
             //Make sure the system account exists. This will be the owner of NPC's
             if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
                     Configuration.getConfiguration().get("system_account_name"))) {

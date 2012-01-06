@@ -85,9 +85,8 @@ public class Entity extends RPObject implements RPEntityInterface {
      * returns the name or something that can be used to identify the entity for
      * the player
      *
-     * @param definite
-     *            true for "the" and false for "a/an" in case the entity has no
-     *            name
+     * @param definite true for "the" and false for "a/an" in case the entity
+     * has no name
      * @return name
      */
     public String getDescriptionName(boolean definite) {
@@ -138,7 +137,8 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Get the entity name.
      *
-     * @return The entity's name, or <code>null</code> if undefined.
+     * @return The entity's name, or
+     * <code>null</code> if undefined.
      */
     public String getName() {
         if (has("name")) {
@@ -149,9 +149,19 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     /**
+     * Set the entity's name
+     *
+     * @param name
+     */
+    public void setName(String name) {
+        put("name", name);
+    }
+
+    /**
      * Get the nicely formatted entity title/name.
      *
-     * @return The title, or <code>null</code> if unknown.
+     * @return The title, or
+     * <code>null</code> if unknown.
      */
     public String getTitle() {
         if (has("title")) {
@@ -172,7 +182,8 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Get the zone this entity is in.
      *
-     * @return A zone, or <code>null</code> if not in one.
+     * @return A zone, or
+     * <code>null</code> if not in one.
      */
     @Override
     public SimpleRPZone getZone() {
@@ -187,8 +198,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Called when this object is added to a zone.
      *
-     * @param zone
-     *            The zone this was added to.
+     * @param zone The zone this was added to.
      */
     @Override
     public void onAdded(SimpleRPZone zone) {
@@ -205,8 +215,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Called when this object is being removed from a zone.
      *
-     * @param zone
-     *            The zone this will be removed from.
+     * @param zone The zone this will be removed from.
      */
     @Override
     public void onRemoved(SimpleRPZone zone) {
@@ -218,7 +227,7 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     /**
      * Notifies the SimpleRPWorld that this entity's attributes have changed.
-     * 
+     *
      */
     public void notifyWorldAboutChanges() {
         logger.debug("Object zone: " + get("zoneid"));
@@ -228,7 +237,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Set the entity class.
      *
-     * @param	clazz		The class name.
+     * @param	clazz	The class name.
      */
     public void setEntityClass(final String clazz) {
         put("class", clazz);
