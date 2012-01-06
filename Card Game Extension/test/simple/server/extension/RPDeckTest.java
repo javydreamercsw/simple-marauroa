@@ -82,11 +82,11 @@ public class RPDeckTest {
         assertTrue(!card.get(RPCard.CARD_ID).equals(card2.get(RPCard.CARD_ID)));
         //Prepare test deck contents
         int deckSize = 50, handSize = 5;
-        List<RPCard> body = new ArrayList<>();
+        List<RPCard> body = new ArrayList<RPCard>();
         for (int i = 0; i < deckSize; i++) {
             body.add(card);
         }
-        List<RPCard> hand = new ArrayList<>();
+        List<RPCard> hand = new ArrayList<RPCard>();
         for (int i = 0; i < handSize; i++) {
             hand.add(card2);
         }

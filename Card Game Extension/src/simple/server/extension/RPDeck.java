@@ -61,21 +61,19 @@ public class RPDeck extends RPEntity {
     }
 
     private void increaseRecord(String type) {
-        switch (type) {
-            case LOSES:
-                put(RECORD, type,
-                        String.valueOf(getLoses() + 1));
-                break;
-            case WINS:
-                put(RECORD, type,
-                        String.valueOf(getWins() + 1));
-                break;
-            case DRAWS:
-                put(RECORD, type,
-                        String.valueOf(getDraws() + 1));
-                break;
-            default:
-                throw new RuntimeException("Tried to add an invalid record attribute: " + type);
+        if (type.equals(LOSES)) {
+            put(RECORD, type,
+                    String.valueOf(getLoses() + 1));
+        }
+        if (type.equals(WINS)) {
+            put(RECORD, type,
+                    String.valueOf(getWins() + 1));
+        }
+        if (type.equals(DRAWS)) {
+            put(RECORD, type,
+                    String.valueOf(getDraws() + 1));
+        } else {
+            throw new RuntimeException("Tried to add an invalid record attribute: " + type);
         }
     }
 
@@ -139,7 +137,7 @@ public class RPDeck extends RPEntity {
     public void generateRPClass() {
         RPClass entity = new RPClass(CLASS_NAME);
         entity.isA("entity");
-        
+
         /**
          * RPCards
          */

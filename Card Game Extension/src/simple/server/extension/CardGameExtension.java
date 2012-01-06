@@ -14,14 +14,13 @@ import simple.common.game.ClientObjectInterface;
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class CardGameExtension extends SimpleServerExtension {
 
-    public static final String DECK = "decks", COLLECTION = "collection";
+    public static final String DECK = "decks", COLLECTION = "page_collection";
 
     @Override
     public void modifyClientObjectDefinition(RPClass player) {
         //Add decks to the player
         player.addRPSlot(DECK, -1, Definition.PRIVATE);
         //Add page collection
-        //Add decks to the player
         player.addRPSlot(COLLECTION, -1, Definition.PRIVATE);
     }
 
