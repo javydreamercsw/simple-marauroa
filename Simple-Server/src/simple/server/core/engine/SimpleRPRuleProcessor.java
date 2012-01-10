@@ -122,7 +122,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
             /*
              * Print version information.
              */
-            logger.info("Running " + getGAMENAME() + " Server version '" + getVERSION()+"'");
+            logger.info("Running " + getGAMENAME() + " Server version '" + getVERSION() + "'");
             SimpleRPRuleProcessor.rpman = rpman;
             SimpleRPAction.initialize(rpman);
         } catch (Exception e) {
@@ -282,30 +282,32 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     @Override
     public synchronized boolean onExit(RPObject object) {
         try {
-            ClientObjectInterface player = ((SimpleRPRuleProcessor)Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(object.get("name"));
-            if (wasKilled((RPEntity) player)) {
-                logger.info("Logged out shortly before death: Killing it now :)");
-            }
-            if (!player.isGhost()) {
-                notifyOnlineStatus(false, player.getName());
-            }
-            Lookup.getDefault().lookup(IRPObjectFactory.class).destroyClientObject(player);
-            getOnlinePlayers().remove(player);
-
-            //Player is still somewhere else?
-            Iterator it = SimpleRPWorld.get().iterator();
-            while (it.hasNext()) {
-                SimpleRPZone zone = (SimpleRPZone) it.next();
-                if (zone.has(((RPObject) player).getID()) 
-                        && !zone.getName().equals(player.getZone().getName())) {
-                    logger.warn("Another instance of the player found in "
-                            + zone.getName());
-                    zone.remove(((RPObject) player).getID());
+            ClientObjectInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(object.get("name"));
+            if (player != null) {
+                if (wasKilled((RPEntity) player)) {
+                    logger.info("Logged out shortly before death: Killing it now :)");
                 }
-            }
-            addGameEvent(player.getName(), "logout");
+                if (!player.isGhost()) {
+                    notifyOnlineStatus(false, player.getName());
+                }
+                Lookup.getDefault().lookup(IRPObjectFactory.class).destroyClientObject(player);
+                getOnlinePlayers().remove(player);
 
-            logger.debug("removed player " + player);
+                //Player is still somewhere else?
+                Iterator it = SimpleRPWorld.get().iterator();
+                while (it.hasNext()) {
+                    SimpleRPZone zone = (SimpleRPZone) it.next();
+                    if (zone.has(((RPObject) player).getID())
+                            && !zone.getName().equals(player.getZone().getName())) {
+                        logger.warn("Another instance of the player found in "
+                                + zone.getName());
+                        zone.remove(((RPObject) player).getID());
+                    }
+                }
+                addGameEvent(player.getName(), "logout");
+
+                logger.debug("removed player " + player);
+            }
             return true;
         } catch (Exception e) {
             logger.error("Error in onExit.", e);
