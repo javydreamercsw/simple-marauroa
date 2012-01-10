@@ -3,3 +3,4 @@ syntax: glob
 **/dist/*
 **/private/*
 **/*.db
+*server_stats.xml
