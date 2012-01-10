@@ -114,19 +114,19 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         try {
             for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.info("Loading extension: " + extension.getClass().getSimpleName());
+                logger.debug("Loading extension: " + extension.getClass().getSimpleName());
                 extension.updateDatabase();
             }
             for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
                 IRPEvent event = it.next();
-                logger.info("Registering event: " + event.getClass().getSimpleName()
+                logger.debug("Registering event: " + event.getClass().getSimpleName()
                         + ": " + event.getRPClassName());
                 event.generateRPClass();
             }
             logger.info("Done!");
             logger.info("Creating RPClasses.");
             for (RPEntityInterface entity : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
-                logger.info(entity.getClass().getSimpleName());
+                logger.debug(entity.getClass().getSimpleName());
                 entity.generateRPClass();
             }
             logger.info("Done!");

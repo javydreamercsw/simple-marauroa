@@ -14,7 +14,6 @@ import marauroa.common.Logger;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.*;
 import marauroa.common.io.UnicodeSupportingInputStreamReader;
-import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
@@ -22,8 +21,7 @@ import simple.common.FeatureList;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
-import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
@@ -77,10 +75,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     private static final long serialVersionUID = -3451819589645530092L;
     private String lastPrivateChatterName;
     /**
-     * Karma (luck).
-     */
-    protected double karma;
-    /**
      * A list of enabled client features.
      */
     protected FeatureList features;
@@ -104,17 +98,13 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     public ClientObject(RPObject object) {
         super(object);
+        //Is empty here?
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
         awayReplies = new HashMap<String, Long>();
-
-        // Beginner's luck (unless overriden by update)
-        karma = 10.0;
-        addEmptySlots("!buddy");
+        update();
         addEmptySlots("!tutorial");
         addEmptySlots("!visited");
-        addEmptySlots("!quests");
-        update();
     }
 
     @Override
@@ -545,34 +535,41 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
 
         ClientObject player = new ClientObject(object);
 
-        if (player.has(ATTR_AWAY)) {
-            player.remove(ATTR_AWAY);
+        //TODO: Move this to an extension
+//        if (player.has(ATTR_AWAY)) {
+//            player.remove(ATTR_AWAY);
+//        }
+//        // remove grumpy on login to give postman a chance to deliver messages
+//        // (and in the hope that player is receptive now)
+//        if (player.has(ATTR_GRUMPY)) {
+//            player.remove(ATTR_GRUMPY);
+//        }
+//
+//        readAdminsFromFile(player);
+//        loadItemsIntoSlots(player);
+//
+//        if (player.getSlot("!buddy").size() > 0) {
+//            RPObject buddies = player.getSlot("!buddy").iterator().next();
+//            for (String buddyName : buddies) {
+//                if (buddyName.charAt(0) == '_') {
+//                    ClientObject buddy =
+//                            (ClientObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(
+//                            buddyName.substring(1));
+//                    if ((buddy != null) && !buddy.isGhost()) {
+//                        buddies.put(buddyName, 1);
+//                    } else {
+//                        buddies.put(buddyName, 0);
+//                    }
+//                }
+//            }
+//        }
+//        if(SimpleRPWorld.get().)
+        if (player.has("#db_id")) {
+            player.put("zoneid", player.getInt("#db_id") % 2 == 0
+                    ? Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom() : "High Security");
+        } else {
+            player.put("zoneid", Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom());
         }
-        // remove grumpy on login to give postman a chance to deliver messages
-        // (and in the hope that player is receptive now)
-        if (player.has(ATTR_GRUMPY)) {
-            player.remove(ATTR_GRUMPY);
-        }
-
-        readAdminsFromFile(player);
-        loadItemsIntoSlots(player);
-
-        if (player.getSlot("!buddy").size() > 0) {
-            RPObject buddies = player.getSlot("!buddy").iterator().next();
-            for (String buddyName : buddies) {
-                if (buddyName.charAt(0) == '_') {
-                    ClientObject buddy =
-                            (ClientObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(
-                            buddyName.substring(1));
-                    if ((buddy != null) && !buddy.isGhost()) {
-                        buddies.put(buddyName, 1);
-                    } else {
-                        buddies.put(buddyName, 0);
-                    }
-                }
-            }
-        }
-        player.put("zoneid", SimpleRPWorld.getDefaultRoom());
         logger.debug("Finally player is :" + player);
         return player;
     }
@@ -695,11 +692,11 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
             logger.debug("Processing extension to modify client definition: " + extension.getClass().getSimpleName());
             extension.modifyClientObjectDefinition(player);
         }
-        if (logger.isDebugEnabled()) {
-            for (Definition def : player.getDefinitions()) {
-                logger.info(def.getName() + ": " + def.getType());
-            }
+        logger.debug("ClientObject attributes:");
+        for (Definition def : player.getDefinitions()) {
+            logger.debug(def.getName() + ": " + def.getType());
         }
+        logger.debug("-------------------------------");
     }
 
     /**
@@ -1076,7 +1073,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 31 * hash + (int) (Double.doubleToLongBits(this.karma) ^ (Double.doubleToLongBits(this.karma) >>> 32));
         hash = 31 * hash + (this.features != null ? this.features.hashCode() : 0);
         hash = 31 * hash + this.adminLevel;
         hash = 31 * hash + (this.quests != null ? this.quests.hashCode() : 0);
