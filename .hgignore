@@ -4,3 +4,5 @@ syntax: glob
 **/private/*
 **/*.db
 *server_stats.xml
+D20 Extension/*
+*.orig
