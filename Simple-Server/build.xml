@@ -173,4 +173,22 @@
             <fileset dir="src" includes="**/*.java"/>
         </replaceregexp>
     </target>
+    
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+        <classpath>
+            <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+        </classpath>
+    </taskdef>
+
+    <target name="pmd">
+        <mkdir dir="../reports/pmd"/>
+        <delete file = "../reports/pmd/pmd.xml"/> 
+        <touch file = "../reports/pmd/pmd.xml" /> 
+        <pmd rulesetfiles="basic,design">
+            <formatter type="xml" toFile="../reports/pmd/pmd.xml"/>
+            <fileset dir="./src">
+                <include name="**/*.java"/>
+            </fileset>
+        </pmd>
+    </target>
 </project>
