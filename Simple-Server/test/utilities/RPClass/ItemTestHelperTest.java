@@ -1,10 +1,10 @@
 package utilities.RPClass;
 
 import static org.junit.Assert.assertEquals;
-import simple.SimpleServerTest;
+import simple.SimpleServerT;
 import simple.server.core.entity.item.Item;
 
-public class ItemTestHelperTest extends SimpleServerTest{
+public class ItemTestHelperTest extends SimpleServerT{
 
     @org.junit.Test
     public void testcreateItem() throws Exception {
