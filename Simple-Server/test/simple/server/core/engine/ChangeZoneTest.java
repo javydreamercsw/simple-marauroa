@@ -4,14 +4,14 @@ import marauroa.common.game.IRPZone.ID;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import simple.SimpleServerTest;
+import simple.SimpleServerT;
 import simple.server.core.entity.clientobject.ClientObject;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class ChangeZoneTest extends SimpleServerTest{
+public class ChangeZoneTest extends SimpleServerT{
 
     private static ClientObject player1;
 

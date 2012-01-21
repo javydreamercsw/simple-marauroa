@@ -9,7 +9,7 @@ import simple.server.core.entity.RPEntityInterface;
  *
  * @author Javier A. Ortiz Bultrón<javier.ortiz.78@gmail.com>
  */
-public abstract class SimpleServerTest {
+public abstract class SimpleServerT {
 
     public static void init() throws Exception {
         Log4J.init();
