@@ -8,6 +8,10 @@
     <property file="build.ant.properties"/>
     <property name="original.project.dir" value="../../marauroa"/>
     <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
+    <!--Check to see if Simple Libs is present to update my libraries-->
+    <condition property="simple.libs.exists">
+        <available file="../../Simple Libs" type="dir"/>
+    </condition>
 
     <target name="-post-compile">
         <copy file="server.ini" todir="dist/"/>
@@ -16,6 +20,13 @@
 
     <target name="-post-jar">
         <antcall target="update_bat"/>
+        <antcall target="update-simple-libs"/>
+    </target>
+    
+    <target name="update-simple-libs" if="simple.libs.exists">
+        <delete file="../../Simple Libs/marauroa.jar"/>
+        <copy todir="../../Simple Libs" 
+              file="${original.project.dir}/build-archive/marauroa.jar"/>
     </target>
 
     <target name="update_bat">
@@ -135,7 +146,7 @@
         <ant dir="${original.project.dir}" usenativebasedir="true"
              target="jar" inheritall="false" inheritrefs="false"/>
         <echo message="Done building ${original.project.dir}"/>
-        <copy todir="../../Simple Libs" 
+        <copy todir="../lib" 
               file="${original.project.dir}/build-archive/marauroa.jar"/>
     </target>
     
@@ -173,14 +184,13 @@
             <fileset dir="src" includes="**/*.java"/>
         </replaceregexp>
     </target>
-    
-    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
-        <classpath>
-            <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
-        </classpath>
-    </taskdef>
 
-    <target name="pmd">
+    <target name="pmd" if="simple.libs.exists">
+        <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+            <classpath>
+                <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+            </classpath>
+        </taskdef>
         <mkdir dir="../reports/pmd"/>
         <delete file = "../reports/pmd/pmd.xml"/> 
         <touch file = "../reports/pmd/pmd.xml" /> 
