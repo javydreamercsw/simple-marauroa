@@ -202,24 +202,29 @@
         </pmd>
     </target>
     
-    <property environment="env"/>
-    <taskdef classpath="cobertura.jar" resource="tasks.properties"/>
-    <target name="-pre-compile-test">
-      <delete dir="${build.instrumented.dir}" />
-      <delete dir="${build.report.cobertura.dir}" />
-      <mkdir dir="${build.instrumented.dir}" />
-      <mkdir dir="${build.report.cobertura.dir}" />
-      <cobertura-instrument todir="${build.instrumented.dir}">
-        <fileset dir="${build.classes.dir}">
-            <include name="**/*.class"/>
-        </fileset>
-      </cobertura-instrument>
+    <target name="-pre-compile-test" >
+        <path id="cobertura.classpath">
+            <fileset dir="../../Simple Libs/tools/Cobertura/">
+                <include name="cobertura.jar" />
+                <include name="lib/**/*.jar" />
+            </fileset>
+        </path>
+        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+        <delete dir="${build.instrumented.dir}" />
+        <delete dir="${build.report.cobertura.dir}" />
+        <mkdir dir="${build.instrumented.dir}" />
+        <mkdir dir="${build.report.cobertura.dir}" />
+        <cobertura-instrument todir="${build.instrumented.dir}">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </cobertura-instrument>
     </target>
     <target name="-post-test-run">
       <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
-      <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
       <!-- Used by the hudson plug-in -->
-      <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
-      <delete file="cobertura.ser" />
+        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+        <delete file="cobertura.ser" />
     </target>
 </project>
