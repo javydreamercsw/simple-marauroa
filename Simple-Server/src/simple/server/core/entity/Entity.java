@@ -121,9 +121,10 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     public void setDescription(String text) {
         if (text == null) {
-            text = "";
+            put("description", "");
+        } else {
+            put("description", text);
         }
-        put("description", text);
     }
 
     public String getDescription() {

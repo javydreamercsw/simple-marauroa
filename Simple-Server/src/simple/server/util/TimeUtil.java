@@ -153,10 +153,11 @@ public class TimeUtil {
      */
     public static void timeUntil(StringBuffer sbuf, int seconds, boolean forceSeconds) {
         boolean appended = false;
+        int tempSeconds=seconds;
         int count = seconds / SECONDS_IN_WEEK;
 
         if (count != 0) {
-            seconds -= (count * SECONDS_IN_WEEK);
+            tempSeconds -= (count * SECONDS_IN_WEEK);
 
             sbuf.append(count);
             sbuf.append(' ');
@@ -165,9 +166,9 @@ public class TimeUtil {
             appended = true;
         }
 
-        count = seconds / SECONDS_IN_DAY;
+        count = tempSeconds / SECONDS_IN_DAY;
         if (count != 0) {
-            seconds -= (count * SECONDS_IN_DAY);
+            tempSeconds -= (count * SECONDS_IN_DAY);
 
             if (appended) {
                 sbuf.append(", ");
@@ -179,9 +180,9 @@ public class TimeUtil {
             sbuf.append(' ');
             sbuf.append(Grammar.plnoun(count, "day"));
         }
-        count = seconds / SECONDS_IN_HOUR;
+        count = tempSeconds / SECONDS_IN_HOUR;
         if (count != 0) {
-            seconds -= (count * SECONDS_IN_HOUR);
+            tempSeconds -= (count * SECONDS_IN_HOUR);
 
             if (appended) {
                 sbuf.append(", ");
@@ -193,9 +194,9 @@ public class TimeUtil {
             sbuf.append(' ');
             sbuf.append(Grammar.plnoun(count, "hour"));
         }
-        count = seconds / SECONDS_IN_MINUTE;
+        count = tempSeconds / SECONDS_IN_MINUTE;
         if (count != 0) {
-            seconds -= (count * SECONDS_IN_MINUTE);
+            tempSeconds -= (count * SECONDS_IN_MINUTE);
 
             if (appended) {
                 sbuf.append(", ");
@@ -208,12 +209,12 @@ public class TimeUtil {
             sbuf.append(Grammar.plnoun(count, "minute"));
         }
 
-        if (!appended || (forceSeconds && (seconds != 0))) {
+        if (!appended || (forceSeconds && (tempSeconds != 0))) {
             if (appended) {
                 sbuf.append(", ");
             }
 
-            sbuf.append(seconds);
+            sbuf.append(tempSeconds);
             sbuf.append(' ');
             sbuf.append(Grammar.plnoun(count, "second"));
         }

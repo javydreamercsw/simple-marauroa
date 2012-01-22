@@ -1,4 +1,3 @@
-
 package simple.server.core.tool;
 
 import marauroa.common.Log4J;
@@ -32,29 +31,30 @@ public class Tool {
 
     public static String Decrypt(final String str, final String key) {
         /**
-         * To 'decrypt' the string, simply apply the same technique.
-         * Is safe to have this since the client never knows the private key.
+         * To 'decrypt' the string, simply apply the same technique. Is safe to
+         * have this since the client never knows the private key.
          */
         return Encrypt(str, key);
     }
 
     public static String removeUnderscores(String value) {
-        while (value.contains("_")) {
+        String result = value;
+        while (result.contains("_")) {
             LOGGER.debug("Changing value from " + value + "...");
             //This will be the index of the character to turn upper case
             int underscoreIndex = value.indexOf('_');
-            value = value.replaceFirst("_", "");
-            changeToUpperCase(value, underscoreIndex);
-            LOGGER.debug("to " + value);
+            result = value.replaceFirst("_", "");
+            changeToUpperCase(result, underscoreIndex);
+            LOGGER.debug("to " + result);
         }
-        return value;
+        return result;
     }
 
     public static String changeToUpperCase(String value, final int index) {
         LOGGER.debug("Changing value from " + value + "...");
-        value = value.substring(0, index) + value.substring(index, index + 1).toUpperCase()
-                    + value.substring(index + 1);
-        LOGGER.debug("to " + value);
-        return value;
+        String result = value.substring(0, index) + value.substring(index, index + 1).toUpperCase()
+                + value.substring(index + 1);
+        LOGGER.debug("to " + result);
+        return result;
     }
 }
