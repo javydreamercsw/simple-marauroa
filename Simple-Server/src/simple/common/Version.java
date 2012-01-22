@@ -6,7 +6,7 @@ package simple.common;
  * 
  * @author hendrik
  */
-public class Version {
+public final class Version {
 
     /** Version Number. */
     public static final String VERSION = "0.01";

@@ -8,7 +8,7 @@ import org.openide.util.Lookup;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleSingletonRepository;
 
-public class StackableItem extends Item implements Stackable {
+public final class StackableItem extends Item implements Stackable {
 
     private static final long serialVersionUID = 1L;
     private int quantity = 1;
@@ -49,10 +49,12 @@ public class StackableItem extends Item implements Stackable {
         if (amount < 0) {
             logger.error("Trying to set invalid quantity: " + amount,
                     new Throwable());
-            amount = 1;
+            put("quantity", 1);
+            quantity = 1;
+        } else {
+            quantity = amount;
+            put("quantity", amount);
         }
-        quantity = amount;
-        put("quantity", quantity);
     }
 
     public int sub(int amount) {
