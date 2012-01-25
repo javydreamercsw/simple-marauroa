@@ -102,4 +102,8 @@
 	<target name="pmd-all"  description="PMD all sub projects">
 		<iterate target="pmd"/>
 	</target>
+	
+	<target name="javadoc"  description="Javadoc all sub projects">
+		<iterate target="javadoc"/>
+	</target>
 </project>
