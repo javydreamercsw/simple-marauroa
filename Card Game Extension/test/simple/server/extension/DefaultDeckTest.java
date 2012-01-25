@@ -62,9 +62,9 @@ public class DefaultDeckTest {
         assertTrue(instance.getUsedPileSize() == ditchCount);
 
         System.out.println("ditch");
-        Class<? extends ICardType> type = DefaultType.class;
+        Class<? extends ICardType> type = DefaultType2.class;
         ICard ditchedCard = instance.ditch(type);
-        assertTrue(ditchedCard == null || ditchedCard instanceof DefaultType);
+        assertTrue(ditchedCard == null || ditchedCard instanceof DefaultType2);
         cardDitched();
         assertTrue(instance.getUsedPileSize() == ditchCount);
         assertTrue(instance.getSize() == deckSize);
@@ -102,7 +102,7 @@ public class DefaultDeckTest {
         System.out.println("draw");
         updateInterfaceIndex();
         toDitch = instance.getCards().get(interfaceIndex);
-        card = instance.draw(DefaultType.class);
+        card = instance.draw(DefaultType2.class);
         assertEquals(toDitch, card);
         updateInterfaceIndex();
         interfaceCounter--;
