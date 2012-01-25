@@ -64,12 +64,10 @@ public class RPDeck extends RPEntity {
         if (type.equals(LOSES)) {
             put(RECORD, type,
                     String.valueOf(getLoses() + 1));
-        }
-        if (type.equals(WINS)) {
+        } else if (type.equals(WINS)) {
             put(RECORD, type,
                     String.valueOf(getWins() + 1));
-        }
-        if (type.equals(DRAWS)) {
+        } else if (type.equals(DRAWS)) {
             put(RECORD, type,
                     String.valueOf(getDraws() + 1));
         } else {
