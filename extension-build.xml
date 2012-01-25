@@ -8,7 +8,7 @@
     <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
     <!--Check to see if Simple Libs is present to update my libraries-->
     <condition property="simple.libs.exists">
-        <available file="../Simple Libs" type="dir"/>
+        <available file="../../Simple Libs" type="dir"/>
     </condition>
 	
 	<target name="can-update-simple-libs">
@@ -36,11 +36,11 @@
                 <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
             </classpath>
         </taskdef>
-        <mkdir dir="../reports/pmd"/>
-        <delete file = "../reports/pmd/pmd.xml"/> 
-        <touch file = "../reports/pmd/pmd.xml" /> 
+        <mkdir dir="reports/pmd"/>
+        <delete file = "reports/pmd/pmd.xml"/> 
+        <touch file = "reports/pmd/pmd.xml" /> 
         <pmd rulesetfiles="basic,design">
-            <formatter type="xml" toFile="../reports/pmd/pmd.xml"/>
+            <formatter type="xml" toFile="reports/pmd/pmd.xml"/>
             <fileset dir="./src">
                 <include name="**/*.java"/>
             </fileset>
@@ -97,5 +97,9 @@
 
 	<target name="clean"  description="Clean all sub projects">
 		<iterate target="clean"/>
+	</target>
+	
+	<target name="pmd-all"  description="PMD all sub projects">
+		<iterate target="pmd"/>
 	</target>
 </project>

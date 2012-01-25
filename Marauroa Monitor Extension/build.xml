@@ -10,6 +10,7 @@
 <project name="Marauroa_Monitor_Extension" default="default" basedir=".">
     <description>Builds, tests, and runs the project Marauroa Monitor Extension.</description>
     <import file="nbproject/build-impl.xml"/>
+	<import file="../extension-build.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
