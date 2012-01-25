@@ -10,13 +10,13 @@ import org.openide.util.lookup.InstanceContent;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public class DefaultCard2 implements ICard, DefaultType {
+public class DefaultCard2 implements ICard, DefaultType2 {
 
     private InstanceContent dynamicContent = new InstanceContent();
     private Lookup myLookup = new AbstractLookup(dynamicContent);
 
     public DefaultCard2() {
-        dynamicContent.add(new DefaultType() {});
+        dynamicContent.add(new DefaultType2() {});
     }
     
     @Override

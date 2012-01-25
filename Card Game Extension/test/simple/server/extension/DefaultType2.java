@@ -4,6 +4,6 @@ package simple.server.extension;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface DefaultType extends ICardType{
+public interface DefaultType2 extends ICardType{
     
 }
