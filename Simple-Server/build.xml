@@ -22,8 +22,21 @@
         <antcall target="update_bat"/>
         <antcall target="update-simple-libs"/>
     </target>
+	
+	<target name="can-update-simple-libs">
+		<condition property="update-simple-libs">
+			<and>
+			<not>
+				<equals arg1="${simple.libs.exists}" arg2="$${simple.libs.exists}" />
+			</not>
+			<not>
+				<equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
+			</not>
+			</and>
+		</condition>
+	</target>
     
-    <target name="update-simple-libs" if="simple.libs.exists">
+    <target name="update-simple-libs" depends="can-update-simple-libs" if="update-simple-libs">
         <delete file="../../Simple Libs/marauroa.jar"/>
         <copy todir="../../Simple Libs" 
               file="${original.project.dir}/build-archive/marauroa.jar"/>
