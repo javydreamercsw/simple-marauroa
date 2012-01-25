@@ -6,6 +6,10 @@
     <description>Builds, tests, and runs the project Simple-Client.</description>
     <import file="nbproject/build-impl.xml"/>
     <property file="build.ant.properties"/>
+	<!--Check to see if Simple Libs is present to update my libraries-->
+    <condition property="simple.libs.exists">
+        <available file="../../Simple Libs" type="dir"/>
+    </condition>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -154,5 +158,49 @@
             <fileset dir="src" includes="**/*.java"/>
             <fileset dir="test" includes="**/*.java"/>
         </replaceregexp>
+    </target>
+	
+	<target name="pmd" if="simple.libs.exists">
+        <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+            <classpath>
+                <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+            </classpath>
+        </taskdef>
+        <mkdir dir="../reports/pmd"/>
+        <delete file = "../reports/pmd/pmd.xml"/> 
+        <touch file = "../reports/pmd/pmd.xml" /> 
+        <pmd rulesetfiles="basic,design">
+            <formatter type="xml" toFile="../reports/pmd/pmd.xml"/>
+            <fileset dir="./src">
+                <include name="**/*.java"/>
+            </fileset>
+        </pmd>
+    </target>
+    
+    <target name="-pre-compile-test" >
+        <path id="cobertura.classpath">
+            <fileset dir="../../Simple Libs/tools/Cobertura/">
+                <include name="cobertura.jar" />
+                <include name="lib/**/*.jar" />
+            </fileset>
+        </path>
+        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+        <delete dir="${build.instrumented.dir}" />
+        <delete dir="${build.report.cobertura.dir}" />
+        <mkdir dir="${build.instrumented.dir}" />
+        <mkdir dir="${build.report.cobertura.dir}" />
+        <cobertura-instrument todir="${build.instrumented.dir}">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </cobertura-instrument>
+    </target>
+	
+    <target name="-post-test-run">
+      <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
+        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+      <!-- Used by the hudson plug-in -->
+        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+        <delete file="cobertura.ser" />
     </target>
 </project>
