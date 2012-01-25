@@ -3,6 +3,8 @@ package simple.server.extension;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 
 /**
  *
@@ -10,6 +12,13 @@ import org.openide.util.Lookup;
  */
 public class DefaultCard2 implements ICard, DefaultType {
 
+    private InstanceContent dynamicContent = new InstanceContent();
+    private Lookup myLookup = new AbstractLookup(dynamicContent);
+
+    public DefaultCard2() {
+        dynamicContent.add(new DefaultType() {});
+    }
+    
     @Override
     public List<ImageIcon> getImages() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -17,7 +26,7 @@ public class DefaultCard2 implements ICard, DefaultType {
 
     @Override
     public Lookup getLookup() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return myLookup;
     }
 
     @Override

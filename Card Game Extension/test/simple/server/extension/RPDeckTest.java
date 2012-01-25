@@ -84,11 +84,11 @@ public class RPDeckTest {
         int deckSize = 50, handSize = 5;
         List<RPCard> body = new ArrayList<RPCard>();
         for (int i = 0; i < deckSize; i++) {
-            body.add(card);
+            body.add(new RPCard(DummyObject.class));
         }
         List<RPCard> hand = new ArrayList<RPCard>();
         for (int i = 0; i < handSize; i++) {
-            hand.add(card2);
+            hand.add(new RPCard(getClass()));
         }
         //Create a deck
         RPDeck deck = new RPDeck("test deck", body, hand);
@@ -96,13 +96,13 @@ public class RPDeckTest {
         for (Iterator<RPObject> it = deck.getSlot(RPDeck.PAGES).iterator(); it.hasNext();) {
             RPObject obj = it.next();
             assertTrue(obj instanceof RPCard);
-            assertTrue(obj.get(RPCard.CLASS_NAME).equals(card.get(RPCard.CLASS_NAME)));
+            assertTrue(obj.get("type").equals(card.get("type")));
         }
         assertTrue(deck.getSlot(RPDeck.HAND).size() == handSize);
         for (Iterator<RPObject> it = deck.getSlot(RPDeck.HAND).iterator(); it.hasNext();) {
             RPObject obj = it.next();
             assertTrue(obj instanceof RPCard);
-            assertTrue(obj.get(RPCard.CLASS_NAME).equals(card2.get(RPCard.CLASS_NAME)));
+            assertTrue(obj.get("type").equals(card2.get("type")));
         }
         assertTrue(deck.getWins() == 0);
         assertTrue(deck.getLoses() == 0);
