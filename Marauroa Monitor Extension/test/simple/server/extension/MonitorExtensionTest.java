@@ -3,11 +3,8 @@ package simple.server.extension;
 import java.io.*;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.junit.*;
-import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.CommandCenter;
 
 /**
  *
@@ -32,28 +29,6 @@ public class MonitorExtensionTest {
 
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of init method, of class MonitorExtension.
-     */
-    @Test
-    public void testInit() {
-        System.out.println("init");
-        MonitorExtension instance = new MonitorExtension();
-        CommandCenter.register(null, instance);
-    }
-
-    /**
-     * Test of onAction method, of class MonitorExtension.
-     */
-    @Test
-    public void testOnAction() {
-        System.out.println("onAction");
-        ClientObjectInterface monitor = null;
-        RPAction action = null;
-        MonitorExtension instance = new MonitorExtension();
-        instance.onAction((RPObject) monitor, action);
     }
 
     @Test
