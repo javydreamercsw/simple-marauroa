@@ -63,7 +63,8 @@ public class DefaultDeckTest {
 
         System.out.println("ditch");
         Class<? extends ICardType> type = DefaultType.class;
-        assertTrue(instance.ditch(type) instanceof DefaultType);
+        ICard ditchedCard = instance.ditch(type);
+        assertTrue(ditchedCard == null || ditchedCard instanceof DefaultType);
         cardDitched();
         assertTrue(instance.getUsedPileSize() == ditchCount);
         assertTrue(instance.getSize() == deckSize);
