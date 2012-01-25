@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<project name="Marauroa-Simple-Extensions" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Marauroa-Simple-Extensions.</description>
+    <property name="original.project.dir" value="../../marauroa"/>
+    <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
+    <!--Check to see if Simple Libs is present to update my libraries-->
+    <condition property="simple.libs.exists">
+        <available file="../Simple Libs" type="dir"/>
+    </condition>
+	
+	<target name="can-update-simple-libs">
+		<condition property="update-simple-libs">
+			<and>
+			<not>
+				<equals arg1="${simple.libs.exists}" arg2="$${simple.libs.exists}" />
+			</not>
+			<not>
+				<equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
+			</not>
+			</and>
+		</condition>
+	</target>
+    
+    <target name="update-simple-libs" depends="can-update-simple-libs" if="update-simple-libs">
+        <delete file="../../Simple Libs/marauroa.jar"/>
+        <copy todir="../../Simple Libs" 
+              file="${original.project.dir}/build-archive/marauroa.jar"/>
+    </target>
+
+    <target name="pmd" if="simple.libs.exists">
+        <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+            <classpath>
+                <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+            </classpath>
+        </taskdef>
+        <mkdir dir="../reports/pmd"/>
+        <delete file = "../reports/pmd/pmd.xml"/> 
+        <touch file = "../reports/pmd/pmd.xml" /> 
+        <pmd rulesetfiles="basic,design">
+            <formatter type="xml" toFile="../reports/pmd/pmd.xml"/>
+            <fileset dir="./src">
+                <include name="**/*.java"/>
+            </fileset>
+        </pmd>
+    </target>
+    
+    <target name="-pre-compile-test" >
+        <path id="cobertura.classpath">
+            <fileset dir="../../Simple Libs/tools/Cobertura/">
+                <include name="cobertura.jar" />
+                <include name="lib/**/*.jar" />
+            </fileset>
+        </path>
+        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+        <delete dir="${build.instrumented.dir}" />
+        <delete dir="${build.report.cobertura.dir}" />
+        <mkdir dir="${build.instrumented.dir}" />
+        <mkdir dir="${build.report.cobertura.dir}" />
+        <cobertura-instrument todir="${build.instrumented.dir}">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </cobertura-instrument>
+    </target>
+    <target name="-post-test-run">
+      <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
+        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+      <!-- Used by the hudson plug-in -->
+        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+        <delete file="cobertura.ser" />
+    </target>
+	
+	<!-- iterate finds all build files, excluding this one
+     and invokes the named target 
+-->
+	<macrodef name="iterate">
+		<attribute name="target"/>
+		<sequential>
+			<subant target="@{target}">
+				<fileset dir="." 
+						 includes="**/*Extension/build.xml"
+						 excludes="build.xml"/>
+			</subant>
+		</sequential>
+	</macrodef>
+
+	<target name="build"  description="Build all sub projects">
+		<iterate target="jar"/>
+	</target>
+
+	<target name="test"  description="Test all sub projects">
+		<iterate target="test"/>
+	</target>
+
+	<target name="clean"  description="Clean all sub projects">
+		<iterate target="clean"/>
+	</target>
+</project>
