@@ -7,3 +7,4 @@ syntax: glob
 D20 Extension/*
 *.orig
 **/pmd.xml
+Simple-Client/log/*
