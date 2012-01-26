@@ -184,7 +184,7 @@ public class DefaultDeckTest {
     private void updateInterfaceIndex() {
         //Get next index
         for (int i = 0; i < instance.getSize(); i++) {
-            if (instance.getCards().get(i) instanceof DefaultType) {
+            if (instance.getCards().get(i) instanceof DefaultType2) {
                 interfaceIndex = i;
                 break;
             }
