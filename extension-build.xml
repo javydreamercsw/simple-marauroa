@@ -11,18 +11,18 @@
         <available file="../../Simple Libs" type="dir"/>
     </condition>
 	
-	<target name="can-update-simple-libs">
-		<condition property="update-simple-libs">
-			<and>
-			<not>
-				<equals arg1="${simple.libs.exists}" arg2="$${simple.libs.exists}" />
-			</not>
-			<not>
-				<equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
-			</not>
-			</and>
-		</condition>
-	</target>
+    <target name="can-update-simple-libs">
+        <condition property="update-simple-libs">
+            <and>
+                <not>
+                    <equals arg1="${simple.libs.exists}" arg2="$${simple.libs.exists}" />
+                </not>
+                <not>
+                    <equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
+                </not>
+            </and>
+        </condition>
+    </target>
     
     <target name="update-simple-libs" depends="can-update-simple-libs" if="update-simple-libs">
         <delete file="../../Simple Libs/marauroa.jar"/>
@@ -73,37 +73,35 @@
         <delete file="cobertura.ser" />
     </target>
 	
-	<!-- iterate finds all build files, excluding this one
-     and invokes the named target 
--->
-	<macrodef name="iterate">
-		<attribute name="target"/>
-		<sequential>
-			<subant target="@{target}">
-				<fileset dir="." 
-						 includes="**/*Extension/build.xml"
-						 excludes="build.xml"/>
-			</subant>
-		</sequential>
-	</macrodef>
+    <!-- iterate finds all build files, excluding this one and invokes the named target -->
+    <macrodef name="iterate">
+        <attribute name="target"/>
+        <sequential>
+            <subant target="@{target}">
+                <fileset dir="." 
+                         includes="**/*Extension/build.xml"
+                         excludes="build.xml"/>
+            </subant>
+        </sequential>
+    </macrodef>
 
-	<target name="build"  description="Build all sub projects">
-		<iterate target="jar"/>
-	</target>
+    <target name="build"  description="Build all sub projects">
+        <iterate target="jar"/>
+    </target>
 
-	<target name="test"  description="Test all sub projects">
-		<iterate target="test"/>
-	</target>
+    <target name="test"  description="Test all sub projects">
+        <iterate target="test"/>
+    </target>
 
-	<target name="clean"  description="Clean all sub projects">
-		<iterate target="clean"/>
-	</target>
+    <target name="clean"  description="Clean all sub projects">
+        <iterate target="clean"/>
+    </target>
 	
-	<target name="pmd-all"  description="PMD all sub projects">
-		<iterate target="pmd"/>
-	</target>
+    <target name="pmd-all"  description="PMD all sub projects">
+        <iterate target="pmd"/>
+    </target>
 	
-	<target name="javadoc"  description="Javadoc all sub projects">
-		<iterate target="javadoc"/>
-	</target>
+    <target name="javadoc"  description="Javadoc all sub projects">
+        <iterate target="javadoc"/>
+    </target>
 </project>
