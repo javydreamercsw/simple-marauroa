@@ -10,7 +10,7 @@
 <project name="Challenge_Extension" default="default" basedir=".">
     <description>Builds, tests, and runs the project Challenge Extension.</description>
     <import file="nbproject/build-impl.xml"/>
-	<import file="../extension-build.xml"/>
+    <import file="../extension-build.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -72,4 +72,30 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-pre-compile-test" >
+        <path id="cobertura.classpath">
+            <fileset dir="../../Simple Libs/tools/Cobertura/">
+                <include name="cobertura.jar" />
+                <include name="lib/**/*.jar" />
+            </fileset>
+        </path>
+        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+        <delete dir="${build.instrumented.dir}" />
+        <delete dir="${build.report.cobertura.dir}" />
+        <mkdir dir="${build.instrumented.dir}" />
+        <mkdir dir="${build.report.cobertura.dir}" />
+        <cobertura-instrument todir="${build.instrumented.dir}">
+            <fileset dir="${build.classes.dir}">
+                <include name="**/*.class"/>
+            </fileset>
+        </cobertura-instrument>
+    </target>
+    
+    <target name="-post-test-run">
+      <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
+        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+      <!-- Used by the hudson plug-in -->
+        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
+        <delete file="cobertura.ser" />
+    </target>
 </project>
