@@ -5,6 +5,9 @@
 <project name="Marauroa-Simple-Extensions" default="default" basedir=".">
     <description>Builds, tests, and runs the project Marauroa-Simple-Extensions.</description>
     <property name="original.project.dir" value="../../marauroa"/>
+    <property name="build.instrumented.dir" value="build/instrumented"/>
+    <property name="build.report.dir" value="build/report"/>
+    <property name="build.report.cobertura.dir" value="build/cobertura"/>
     <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
     <!--Check to see if Simple Libs is present to update my libraries-->
     <condition property="simple.libs.exists">
@@ -45,32 +48,6 @@
                 <include name="**/*.java"/>
             </fileset>
         </pmd>
-    </target>
-    
-    <target name="-pre-compile-test" >
-        <path id="cobertura.classpath">
-            <fileset dir="../../Simple Libs/tools/Cobertura/">
-                <include name="cobertura.jar" />
-                <include name="lib/**/*.jar" />
-            </fileset>
-        </path>
-        <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
-        <delete dir="${build.instrumented.dir}" />
-        <delete dir="${build.report.cobertura.dir}" />
-        <mkdir dir="${build.instrumented.dir}" />
-        <mkdir dir="${build.report.cobertura.dir}" />
-        <cobertura-instrument todir="${build.instrumented.dir}">
-            <fileset dir="${build.classes.dir}">
-                <include name="**/*.class"/>
-            </fileset>
-        </cobertura-instrument>
-    </target>
-    <target name="-post-test-run">
-      <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
-        <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
-      <!-- Used by the hudson plug-in -->
-        <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
-        <delete file="cobertura.ser" />
     </target>
 	
     <!-- iterate finds all build files, excluding this one and invokes the named target -->
