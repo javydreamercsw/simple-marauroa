@@ -285,7 +285,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
 
         boolean found = false;
         RPSlot slot = getSlot("!buddy");
-        if (slot.size() > 0) {
+        if (slot != null && slot.size() > 0) {
             RPObject buddies = slot.iterator().next();
             for (String name : buddies) {
                 if (playerOnline.equals(name)) {
@@ -316,7 +316,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
 
         boolean found = false;
         RPSlot slot = getSlot("!buddy");
-        if (slot.size() > 0) {
+        if (slot != null && slot.size() > 0) {
             RPObject buddies = slot.iterator().next();
             for (String name : buddies) {
                 if (playerOffline.equals(name)) {
@@ -563,13 +563,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
 //                }
 //            }
 //        }
-//        if(SimpleRPWorld.get().)
-        if (player.has("#db_id")) {
-            player.put("zoneid", player.getInt("#db_id") % 2 == 0
-                    ? Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom() : "High Security");
-        } else {
-            player.put("zoneid", Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom());
-        }
+//        player.put("zoneid", Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().toString());
         logger.debug("Finally player is :" + player);
         return player;
     }
@@ -658,7 +652,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
                 (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
         //TODO: move to an extension
-        player.addRPSlot("!quests", 1, Definition.HIDDEN);
+//        player.addRPSlot("!quests", 1, Definition.HIDDEN);
         player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
 
         player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);

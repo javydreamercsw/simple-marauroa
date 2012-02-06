@@ -198,10 +198,10 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @return true if exists
      */
     public boolean hasRPZone(IRPZone.ID zoneid);
-    
+
     /**
-     * Get the world's default zone.
-     * @return Default zone
+     * Get the default zone
+     * @return Default Zone
      */
-    public String getDefaultRoom();
+    public IRPZone getDefaultZone();
 }

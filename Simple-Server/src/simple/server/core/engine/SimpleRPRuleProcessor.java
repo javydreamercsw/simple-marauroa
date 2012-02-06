@@ -9,21 +9,22 @@ import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.Pair;
-import marauroa.common.game.*;
+import marauroa.common.game.IRPZone;
+import marauroa.common.game.RPAction;
+import marauroa.common.game.RPObject;
 import marauroa.server.game.Statistics;
 import marauroa.server.game.container.PlayerEntry;
 import marauroa.server.game.container.PlayerEntryContainer;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.db.GameEventDAO;
 import marauroa.server.game.rp.IRPRuleProcessor;
+import marauroa.server.game.rp.RPRuleProcessorImpl;
 import marauroa.server.game.rp.RPServerManager;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Debug;
 import simple.common.filter.FilterCriteria;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.account.AccountCreator;
-import simple.server.core.account.CharacterCreator;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.rp.SimpleRPAction;
@@ -38,7 +39,7 @@ import simple.server.core.event.TutorialNotifier;
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IRPRuleProcessor.class)
-public class SimpleRPRuleProcessor implements IRPRuleProcessor {
+public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRuleProcessor {
 
     private Configuration config;
     private static String VERSION;
@@ -104,7 +105,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
         GAMENAME = aGAMENAME;
     }
 
-    public static SimpleRPRuleProcessor get() throws IOException {
+    public static SimpleRPRuleProcessor get() {
         return (SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class);
     }
 
@@ -135,10 +136,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     public boolean checkGameVersion(String game, String version) {
         logger.debug("Comparing " + game + " (client) with " + getGAMENAME() + " (server)");
         logger.debug("Comparing " + version + " (client) with " + getVERSION() + " (server)");
-        if (game.equals(getGAMENAME()) && version.equals(getVERSION())) {
-            return true;
-        }
-        return false;
+        return game.equals(getGAMENAME()) && version.equals(getVERSION());
     }
 
     public void killRPEntity(RPEntity entity, Entity killer) {
@@ -228,8 +226,10 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
         int currentTurn = getTurn();
         try {
             for (IRPZone zoneI : Lookup.getDefault().lookup(IRPWorld.class)) {
-                SimpleRPZone zone = (SimpleRPZone) zoneI;
-                zone.logic();
+                if (zoneI instanceof SimpleRPZone) {
+                    SimpleRPZone zone = (SimpleRPZone) zoneI;
+                    zone.logic();
+                }
             }
             // Run registered object's logic method for this turn
             Lookup.getDefault().lookup(ITurnNotifier.class).logic(currentTurn);
@@ -254,6 +254,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
 
     @Override
     public synchronized boolean onInit(RPObject object) {
+        super.onInit(object);
         try {
             final PlayerEntry entry = PlayerEntryContainer.getContainer().get(object);
             final ClientObjectInterface player =
@@ -281,6 +282,7 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
 
     @Override
     public synchronized boolean onExit(RPObject object) {
+        super.onExit(object);
         try {
             ClientObjectInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(object.get("name"));
             if (player != null) {
@@ -318,18 +320,6 @@ public class SimpleRPRuleProcessor implements IRPRuleProcessor {
     @Override
     public synchronized void onTimeout(RPObject object) {
         onExit(object);
-    }
-
-    @Override
-    public AccountResult createAccount(String username, String password, String email) {
-        AccountCreator creator = new AccountCreator(username, password, email);
-        return creator.create();
-    }
-
-    @Override
-    public CharacterResult createCharacter(String username, String character, RPObject template) {
-        CharacterCreator creator = new CharacterCreator(username, character, (RPObject) template);
-        return creator.create();
     }
 
     public RPServerManager getRPManager() {
