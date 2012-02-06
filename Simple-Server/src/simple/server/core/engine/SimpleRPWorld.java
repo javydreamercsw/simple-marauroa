@@ -37,26 +37,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      * the logger instance.
      */
     private static final Logger logger = Log4J.getLogger(SimpleRPWorld.class);
-    private static String DEFAULT_ROOM = "Default Room";
     /**
      * A common place for milliseconds per turn.
      */
     public static final int MILLISECONDS_PER_TURN = 300;
-
-    /**
-     * @return the DEFAULT_ROOM
-     */
-    @Override
-    public String getDefaultRoom() {
-        return DEFAULT_ROOM;
-    }
-
-    /**
-     * @param aDEFAULT_ROOM the DEFAULT_ROOM to set
-     */
-    public static void setDefaultRoom(String aDEFAULT_ROOM) {
-        DEFAULT_ROOM = aDEFAULT_ROOM;
-    }
 
     @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
     public SimpleRPWorld() {
@@ -64,16 +48,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         initialize();
     }
 
-    @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
-    protected SimpleRPWorld(String defaultRoom) {
-        super();
-        setDefaultRoom(defaultRoom);
-    }
-
-    @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
-    protected SimpleRPWorld(String defaultRoom, String jail) {
-        super();
-        setDefaultRoom(defaultRoom);
+    @Override
+    public void setDefaultZone(IRPZone defaultZone) {
+        super.setDefaultZone(defaultZone);
+        if (!hasRPZone(defaultZone.getID())) {
+            addRPZone(defaultZone);
+        }
     }
 
     public static SimpleRPWorld get() {
@@ -149,8 +129,20 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                         Configuration.getConfiguration().get("system_password"));
                 logger.info("Done!");
             }
+            //Empty right now but just in case
             super.onInit();
-            addZone(getDefaultRoom(), "");
+            boolean needDefault = true;
+            //If none defined a lobby zone is created by default.
+            for (IDefaultZoneProvider provider : Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)) {
+                for (Iterator<IRPZone> it = provider.getDefaultZones().iterator(); it.hasNext();) {
+                    IRPZone zone = it.next();
+                    if (needDefault) {
+                        setDefaultZone(zone);
+                        needDefault = false;
+                    }
+                    addRPZone(zone);
+                }
+            }
             for (Iterator<? extends MarauroaServerExtension> it2 = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it2.hasNext();) {
                 MarauroaServerExtension extension = it2.next();
                 extension.afterWorldInit();
@@ -187,10 +179,17 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void addRPZone(IRPZone zone) {
-        super.addRPZone(zone);
+        //Make sure all zones are SimpleRPZone instances
+        SimpleRPZone simpleZone;
+        if (!(zone instanceof SimpleRPZone)) {
+            simpleZone = new SimpleRPZone(zone.getID().getID());
+        }else{
+            simpleZone=(SimpleRPZone) zone;
+        }
+        super.addRPZone(simpleZone);
         for (Iterator<? extends MarauroaServerExtension> it2 = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it2.hasNext();) {
             MarauroaServerExtension extension = it2.next();
-            extension.onAddRPZone(zone);
+            extension.onAddRPZone(simpleZone);
         }
     }
 
@@ -318,9 +317,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean addPlayer(RPObject object) {
-        for (IRPZone RPzone : this) {
-            SimpleRPZone zone = (SimpleRPZone) RPzone;
-            if (zone.getName().equals(object.get("zoneid"))) {
+        for (IRPZone zone : this) {
+            if (zone.getID().toString().equals(object.get("zoneid"))) {
                 add(object);
                 object.put("type", "player");
                 logger.debug("Object added");

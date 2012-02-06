@@ -15,6 +15,7 @@ import simple.server.core.engine.SimpleRPRuleProcessor;
  * @author hendrik
  */
 class PlayerQuests implements java.io.Serializable {
+//TODO: move to extension
 
     private static final long serialVersionUID = 241191072527856202L;
     private ClientObjectInterface player;
@@ -27,7 +28,7 @@ class PlayerQuests implements java.io.Serializable {
      * Checks whether the player has completed the given quest or not.
      *
      * @param name The quest's name
-     * @return true iff the quest has been completed by the player
+     * @return true if the quest has been completed by the player
      */
     public boolean isQuestCompleted(String name) {
         String info = player.getKeyedSlot("!quests", name);

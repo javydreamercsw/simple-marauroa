@@ -176,12 +176,14 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     }
 
     private void remove(ClientObjectInterface player, RPAction action) {
-        if (!action.get(ROOM).equals(Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom())) {
+        if (!action.get(ROOM).equals(Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID())) {
             SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
             SimpleRPZone zone = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
             Collection<ClientObjectInterface> players = zone.getPlayers();
             for (ClientObjectInterface clientObject : players) {
-                world.changeZone(Lookup.getDefault().lookup(IRPWorld.class).getDefaultRoom(), (RPObject) clientObject);
+                world.changeZone(Lookup.getDefault().lookup(
+                        IRPWorld.class).getDefaultZone().getID().getID(), 
+                        (RPObject) clientObject);
             }
             if (zone != null) {
                 try {
