@@ -1,9 +1,26 @@
 package simple.server.extension;
 
+import gmgen.pluginmgr.PluginManager;
+import java.io.File;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
+import pcgen.core.prereq.PrerequisiteTestFactory;
+import pcgen.gui.converter.TokenConverter;
+import pcgen.io.ExportHandler;
+import pcgen.persistence.CampaignFileLoader;
+import pcgen.persistence.GameModeFileLoader;
+import pcgen.persistence.PersistenceLayerException;
+import pcgen.persistence.lst.TokenStore;
+import pcgen.persistence.lst.output.prereq.PrerequisiteWriterFactory;
+import pcgen.persistence.lst.prereq.PreParserFactory;
+import pcgen.rules.persistence.TokenLibrary;
+import pcgen.system.PCGenTask;
+import pcgen.system.PCGenTaskExecutor;
+import pcgen.system.PluginClassLoader;
+import pcgen.util.Logging;
+import pcgen.util.PJEP;
 
 /**
  *
@@ -20,6 +37,43 @@ public class D20Extension extends SimpleServerExtension {
             FEATS = "Feats", ABILITIES = "Abilities", SPELLS = "Spells",
             DEITIES = "Desties", DOMAIN = "Domain",
             KNOWN_SPELLS = "Known Spells", PREP_SPELLS = "Prepared Spells";
+    private static String pluginsDir = System.getProperty("user.dir") + "/plugins";
+
+    public D20Extension() {
+        System.out.println(System.getProperty("user.dir"));
+        PCGenTaskExecutor executor = new PCGenTaskExecutor();
+        executor.addPCGenTask(createLoadPluginTask());
+        executor.addPCGenTask(new GameModeFileLoader());
+        executor.addPCGenTask(new CampaignFileLoader());
+        executor.execute();
+    }
+
+    public static void main(String[] args) {
+        D20Extension test = new D20Extension();
+    }
+
+    private static PCGenTask createLoadPluginTask() {
+        File pluginDir = new File(pluginsDir);
+        if (pluginDir.exists()) {
+            PluginClassLoader loader = new PluginClassLoader(pluginDir);
+            loader.addPluginLoader(TokenLibrary.getInstance());
+            loader.addPluginLoader(TokenStore.inst());
+            try {
+                loader.addPluginLoader(PreParserFactory.getInstance());
+            } catch (PersistenceLayerException ex) {
+                Logging.errorPrint("createLoadPluginTask failed", ex);
+            }
+            loader.addPluginLoader(PrerequisiteTestFactory.getInstance());
+            loader.addPluginLoader(PrerequisiteWriterFactory.getInstance());
+            loader.addPluginLoader(PJEP.getJepPluginLoader());
+            loader.addPluginLoader(ExportHandler.getPluginLoader());
+            loader.addPluginLoader(TokenConverter.getPluginLoader());
+            loader.addPluginLoader(PluginManager.getInstance());
+            return loader;
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public void modifyRootRPClassDefinition(RPClass entity) {
