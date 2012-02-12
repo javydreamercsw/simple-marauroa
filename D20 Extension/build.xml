@@ -98,4 +98,11 @@
         <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
         <delete file="cobertura.ser" />
     </target>
+    
+    <target name="-post-compile">
+        <echo>Copying PCGen files to ${dist.dir}</echo>
+        <copy todir="${dist.dir}">
+            <fileset dir="PCGen"/>
+        </copy>
+    </target>
 </project>
