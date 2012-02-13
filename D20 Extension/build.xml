@@ -11,6 +11,7 @@
     <description>Builds, tests, and runs the project D20 Extension.</description>
     <import file="nbproject/build-impl.xml"/>
     <import file="../extension-build.xml"/>
+    <property file="nbproject/project.properties"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -99,11 +100,12 @@
         <delete file="cobertura.ser" />
     </target>
     
-    <target name="-pre-compile">
+    <target name="-pre-init">
         <mkdir dir="${dist.dir}"/>
+        <get src="http://www.pcgen-test.org/autobuilds/downloads/pcgen-5.17.11-SNAPSHOT-full.zip" dest="./" skipexisting="true"/>
         <unzip dest="${dist.dir}" overwrite="false">
             <fileset dir="./">
-                <include name="**/*.zip"/>
+                <include name="*.zip"/>
             </fileset>
         </unzip> 
     </target>
