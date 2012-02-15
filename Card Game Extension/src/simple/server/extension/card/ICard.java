@@ -1,4 +1,4 @@
-package simple.server.extension;
+package simple.server.extension.card;
 
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -18,4 +18,25 @@ public interface ICard extends Lookup.Provider, Comparable {
      * @return list of images related to this page
      */
     public List<ImageIcon> getImages();
+
+    /**
+     * Page set
+     * @return Set name
+     */
+    public String getSet();
+
+    /**
+     * Card name
+     * @return 
+     */
+    public String getName();
+    
+    /**
+     * Get object by field
+     * @param field
+     * @return Object matching criteria
+     */
+    Object getObjectByField(ICardField field);
+    
+    public int getCardId();
 }
