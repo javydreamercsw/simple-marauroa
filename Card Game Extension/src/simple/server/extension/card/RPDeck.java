@@ -1,4 +1,4 @@
-package simple.server.extension;
+package simple.server.extension.card;
 
 import java.util.List;
 import marauroa.common.game.Definition;
@@ -25,19 +25,13 @@ public class RPDeck extends RPEntity {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
         put("name", name);
-        if (!hasSlot(PAGES)) {
-            addSlot(PAGES);
+        update();
+        for (RPCard card : hand) {
+            addToHand(card);
         }
         for (RPCard card : cards) {
             addToDeck(card);
         }
-        if (!hasSlot(HAND)) {
-            addSlot(HAND);
-        }
-        for (RPCard card : hand) {
-            addToHand(card);
-        }
-        update();
     }
 
     @Override
@@ -57,6 +51,12 @@ public class RPDeck extends RPEntity {
         }
         if (!getMap(RECORD).containsKey(WINS)) {
             put(RECORD, WINS, 0);
+        }
+        if (!hasSlot(PAGES)) {
+            addSlot(PAGES);
+        }
+        if (!hasSlot(HAND)) {
+            addSlot(HAND);
         }
     }
 
@@ -133,29 +133,31 @@ public class RPDeck extends RPEntity {
 
     @Override
     public void generateRPClass() {
-        RPClass entity = new RPClass(CLASS_NAME);
-        entity.isA("entity");
+        if (!RPClass.hasRPClass(CLASS_NAME)) {
+            RPClass entity = new RPClass(CLASS_NAME);
+            entity.isA("entity");
 
-        /**
-         * RPCards
-         */
-        entity.addRPSlot(PAGES, -1, Definition.PRIVATE);
+            /**
+             * RPCards
+             */
+            entity.addRPSlot(PAGES, -1, Definition.PRIVATE);
 
-        /**
-         * Starting hand
-         */
-        entity.addRPSlot(HAND, -1, Definition.PRIVATE);
+            /**
+             * Starting hand
+             */
+            entity.addRPSlot(HAND, -1, Definition.PRIVATE);
 
-        /**
-         * Deck version. Starts at 1 and increases each time the deck is
-         * modified
-         */
-        entity.addAttribute(VERSION, Definition.Type.INT);
+            /**
+             * Deck version. Starts at 1 and increases each time the deck is
+             * modified
+             */
+            entity.addAttribute(VERSION, Definition.Type.INT);
 
-        /**
-         * Deck record
-         */
-        entity.addAttribute(RECORD, Definition.Type.MAP);
+            /**
+             * Deck record
+             */
+            entity.addAttribute(RECORD, Definition.Type.MAP);
+        }
     }
 
     public final void addToHand(RPCard card) {

@@ -1,11 +1,13 @@
 package simple.server.extension;
 
+import simple.server.extension.card.ICard;
+import simple.server.extension.card.ICardType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import static org.junit.Assert.*;
 import org.junit.*;
-import simple.server.extension.impl.DefaultDeck;
+import simple.server.extension.card.DefaultDeck;
 
 /**
  *

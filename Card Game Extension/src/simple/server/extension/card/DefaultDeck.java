@@ -1,10 +1,6 @@
-package simple.server.extension.impl;
+package simple.server.extension.card;
 
 import java.util.*;
-import simple.server.extension.ICard;
-import simple.server.extension.ICardType;
-import simple.server.extension.IDeck;
-import simple.server.extension.RPDeck;
 
 /**
  *

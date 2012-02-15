@@ -1,4 +1,4 @@
-package simple.server.extension;
+package simple.server.extension.card;
 
 import java.awt.Component;
 import java.awt.Font;

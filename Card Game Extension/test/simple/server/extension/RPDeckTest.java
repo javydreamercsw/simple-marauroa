@@ -1,5 +1,7 @@
 package simple.server.extension;
 
+import simple.server.extension.card.RPCard;
+import simple.server.extension.card.RPDeck;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

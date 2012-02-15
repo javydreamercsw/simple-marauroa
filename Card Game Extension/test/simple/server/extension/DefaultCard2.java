@@ -5,6 +5,8 @@ import javax.swing.ImageIcon;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
+import simple.server.extension.card.ICard;
+import simple.server.extension.card.ICardField;
 
 /**
  *
@@ -31,6 +33,26 @@ public class DefaultCard2 implements ICard, DefaultType2 {
 
     @Override
     public int compareTo(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getSet() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public String getName() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Object getObjectByField(ICardField field) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getCardId() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -1,4 +1,4 @@
-package simple.server.extension;
+package simple.server.extension.card;
 
 import java.util.Date;
 import java.util.UUID;
@@ -57,33 +57,35 @@ public class RPCard extends RPEntity {
 
     @Override
     public void generateRPClass() {
-        RPClass entity = new RPClass(CLASS_NAME);
-        entity.isA("entity");
+        if (!RPClass.hasRPClass(CLASS_NAME)) {
+            RPClass entity = new RPClass(CLASS_NAME);
+            entity.isA("entity");
 
-        /**
-         * Implementing class
-         */
-        entity.addAttribute(CLASS, Definition.Type.LONG_STRING);
+            /**
+             * Implementing class
+             */
+            entity.addAttribute(CLASS, Definition.Type.LONG_STRING);
 
-        /**
-         * Unique identifier
-         */
-        entity.addAttribute(CARD_ID, Definition.Type.LONG_STRING);
+            /**
+             * Unique identifier
+             */
+            entity.addAttribute(CARD_ID, Definition.Type.LONG_STRING);
 
-        /**
-         * Date the card was created
-         */
-        entity.addAttribute(CREATION_DATE, Definition.Type.LONG_STRING);
+            /**
+             * Date the card was created
+             */
+            entity.addAttribute(CREATION_DATE, Definition.Type.LONG_STRING);
 
-        /**
-         * Times traded
-         */
-        entity.addAttribute(TIMES_TRADED, Definition.Type.INT);
+            /**
+             * Times traded
+             */
+            entity.addAttribute(TIMES_TRADED, Definition.Type.INT);
 
-        /**
-         * Can be traded?
-         */
-        entity.addAttribute(TRADABLE, Definition.Type.STRING);
+            /**
+             * Can be traded?
+             */
+            entity.addAttribute(TRADABLE, Definition.Type.STRING);
+        }
     }
 
     public void increaseTimesTraded() {
