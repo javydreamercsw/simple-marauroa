@@ -42,28 +42,30 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     @Override
     public void generateRPClass() {
-        RPClass entity = new RPClass(RPCLASS_NAME);
+        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+            RPClass entity = new RPClass(RPCLASS_NAME);
 
-        // Some things may have a textual description
-        entity.addAttribute("description", Type.LONG_STRING, Definition.HIDDEN);
-        //TODO: refactor to D20 system extension
-        entity.addAttribute("type", Type.STRING);
-        entity.addAttribute("class", Type.STRING);
-        entity.addAttribute("subclass", Type.STRING);
-        entity.addAttribute("title", Type.STRING);
-        /*
-         * If this is set, the client will discard/ignore entity
-         */
-        entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
+            // Some things may have a textual description
+            entity.addAttribute("description", Type.LONG_STRING, Definition.HIDDEN);
+            //TODO: refactor to D20 system extension
+            entity.addAttribute("type", Type.STRING);
+            entity.addAttribute("class", Type.STRING);
+            entity.addAttribute("subclass", Type.STRING);
+            entity.addAttribute("title", Type.STRING);
+            /*
+             * If this is set, the client will discard/ignore entity
+             */
+            entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
-            logger.debug("Processing extension to modify root class definition: " + extension.getClass().getSimpleName());
-            extension.modifyRootRPClassDefinition(entity);
-        }
-        if (logger.isDebugEnabled()) {
-            for (Definition def : entity.getDefinitions()) {
-                logger.info(def.getName() + ": " + def.getType());
+            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+                MarauroaServerExtension extension = it.next();
+                logger.debug("Processing extension to modify root class definition: " + extension.getClass().getSimpleName());
+                extension.modifyRootRPClassDefinition(entity);
+            }
+            if (logger.isDebugEnabled()) {
+                for (Definition def : entity.getDefinitions()) {
+                    logger.info(def.getName() + ": " + def.getType());
+                }
             }
         }
     }

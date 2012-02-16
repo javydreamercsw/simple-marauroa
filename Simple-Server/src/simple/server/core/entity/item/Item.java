@@ -34,80 +34,79 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
 
     @Override
     public void generateRPClass() {
-        RPClass entity = new RPClass(RPCLASS_NAME);
-        entity.isA("entity");
+        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+            RPClass entity = new RPClass(RPCLASS_NAME);
+            entity.isA("entity");
 
-        // class, sword/armor/...
-        entity.addAttribute("class", Type.STRING);
+            // class, sword/armor/...
+            entity.addAttribute("class", Type.STRING);
 
-        // subclass, long sword/leather/armor/...
-        entity.addAttribute("subclass", Type.STRING);
+            // subclass, long sword/leather/armor/...
+            entity.addAttribute("subclass", Type.STRING);
 
-        // name of item (ie 'Kings Sword')
-        entity.addAttribute("name", Type.STRING);
+            // name of item (ie 'Kings Sword')
+            entity.addAttribute("name", Type.STRING);
 
-        // Some items have attack values
-        entity.addAttribute("atk", Type.SHORT);
+            // Some items have attack values
+            entity.addAttribute("atk", Type.SHORT);
 
-        // Some items indicate how often you can attack.
-        entity.addAttribute("rate", Type.SHORT);
+            // Some items indicate how often you can attack.
+            entity.addAttribute("rate", Type.SHORT);
 
-        // Some items have defense values
-        entity.addAttribute("def", Type.SHORT);
+            // Some items have defense values
+            entity.addAttribute("def", Type.SHORT);
 
-        // Some items(food) have amount of something
-        // (a bottle, a piece of meat).
-        entity.addAttribute("amount", Type.INT);
+            // Some items(food) have amount of something
+            // (a bottle, a piece of meat).
+            entity.addAttribute("amount", Type.INT);
 
-        // Some items (range weapons, ammunition, missiles)
-        // have a range.
-        entity.addAttribute("range", Type.SHORT);
+            // Some items (range weapons, ammunition, missiles)
+            // have a range.
+            entity.addAttribute("range", Type.SHORT);
 
-        // Some items(food) have regeneration
-        entity.addAttribute("regen", Type.INT);
+            // Some items(food) have regeneration
+            entity.addAttribute("regen", Type.INT);
 
-        // Some items(food) have regeneration speed
-        entity.addAttribute("frequency", Type.INT);
+            // Some items(food) have regeneration speed
+            entity.addAttribute("frequency", Type.INT);
 
-        // Some items(Stackable) have quantity
-        entity.addAttribute("quantity", Type.INT);
+            // Some items(Stackable) have quantity
+            entity.addAttribute("quantity", Type.INT);
 
-        // Some items (Stackable) have maximum quantity
-        entity.addAttribute("max_quantity", Type.INT);
+            // Some items (Stackable) have maximum quantity
+            entity.addAttribute("max_quantity", Type.INT);
 
-        // Some items have minimum level to prevent spoiling
-        // the fun for new players
-        entity.addAttribute("min_level", Type.INT);
+            // Some items have minimum level to prevent spoiling
+            // the fun for new players
+            entity.addAttribute("min_level", Type.INT);
 
-        // To store addAttributeitional info with an item
-        entity.addAttribute("infostring", Type.STRING);
+            // To store addAttributeitional info with an item
+            entity.addAttribute("infostring", Type.STRING);
 
-        // Some items have individual values
-        entity.addAttribute("persistent", Type.FLAG);
+            // Some items have individual values
+            entity.addAttribute("persistent", Type.FLAG);
 
-        // Some items have lifesteal values
-        entity.addAttribute("lifesteal", Type.FLOAT);
+            // Some items have lifesteal values
+            entity.addAttribute("lifesteal", Type.FLOAT);
 
-        // Some items are quest rewards that other players
-        // don't deserve.
-        entity.addAttribute("bound", Type.STRING);
+            // Some items are quest rewards that other players
+            // don't deserve.
+            entity.addAttribute("bound", Type.STRING);
 
-        // Some items should not be dropped on death
-        entity.addAttribute("undroppableondeath", Type.SHORT);
+            // Some items should not be dropped on death
+            entity.addAttribute("undroppableondeath", Type.SHORT);
+        }
     }
 
     /**
      *
      * Creates a new Item.
      *
-     * @param name
-     *            name of item
-     * @param clazz
-     *            class (or type) of item
-     * @param subclass
-     *            subclass of this item
-     * @param attributes
-     *            attributes (like attack). may be empty or <code>null</code>
+     * @param name name of item
+     * @param clazz class (or type) of item
+     * @param subclass subclass of this item
+     * @param attributes attributes (like attack). may be empty or
+     * <code>null</code>
      */
     public Item(String name, String clazz, String subclass,
             Map<String, String> attributes) {
@@ -131,15 +130,16 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         update();
     }
 
-    /** no public 'default' item */
+    /**
+     * no public 'default' item
+     */
     public Item() {
     }
 
     /**
      * copy constructor
      *
-     * @param item
-     *            item to copy
+     * @param item item to copy
      */
     public Item(Item item) {
         super(item);
@@ -151,8 +151,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * on which slots may this item be equipped
      *
-     * @param slots
-     *            list of allowed slots
+     * @param slots list of allowed slots
      */
     public void setEquipableSlots(List<String> slots) {
         // save slots
@@ -220,8 +219,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Set the item's persistence.
      *
-     * @param persistent
-     *            If the item's stats are persistent.
+     * @param persistent If the item's stats are persistent.
      */
     public void setPersistent(boolean persistent) {
         if (persistent) {
@@ -234,15 +232,16 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Checks if the item is of type <i>type</i>
      *
-     * @param clazz
-     *            the class to check
+     * @param clazz the class to check
      * @return true if the type matches, else false
      */
     public boolean isOfClass(String clazz) {
         return getItemClass().equals(clazz);
     }
 
-    /** @return the type of the item */
+    /**
+     * @return the type of the item
+     */
     public String getItemClass() {
         if (has("class")) {
             return get("class");
@@ -251,7 +250,9 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         throw new IllegalStateException("the item does not have a class: " + this);
     }
 
-    /** @return the type of the item */
+    /**
+     * @return the type of the item
+     */
     public String getItemSubclass() {
         if (has("subclass")) {
             return get("subclass");
@@ -279,7 +280,9 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         return 1;
     }
 
-    /** @return the list of possible slots for this item */
+    /**
+     * @return the list of possible slots for this item
+     */
     public List<String> getPossibleSlots() {
         return possibleSlots;
     }
@@ -288,7 +291,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      * Get the player this is bound to. A bound item can only be used by that
      * player.
      *
-     * @return The player name, or <code>null</code>.
+     * @return The player name, or
+     * <code>null</code>.
      */
     public String getBoundTo() {
         if (has("bound")) {
@@ -315,8 +319,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Bind this item to a player. A bound item can only be used by that player.
      *
-     * @param name
-     *            The player name, or <code>null</code>.
+     * @param name The player name, or
+     * <code>null</code>.
      */
     public void setBoundTo(String name) {
         if (name != null) {
@@ -327,7 +331,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     }
 
     /**
-     * Is the item undroppable. Undroppable items will never be dropped if the player dies.
+     * Is the item undroppable. Undroppable items will never be dropped if the
+     * player dies.
      *
      * @return true if item is undroppable.
      */
@@ -342,7 +347,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Set is the item undroppable when player dies.
      *
-     * @param unDroppableOnDeath If true, the item won't be dropped if the player dies.
+     * @param unDroppableOnDeath If true, the item won't be dropped if the
+     * player dies.
      */
     public void setUndroppableOnDeath(boolean unDroppableOnDeath) {
         if (unDroppableOnDeath) {
@@ -356,8 +362,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      * Set the item's infostring. The infostring contains context specific
      * information that is used by the implementation.
      *
-     * @param infostring
-     *            The item's infostring.
+     * @param infostring The item's infostring.
      */
     public void setInfoString(String infostring) {
         if (infostring != null) {
@@ -456,12 +461,12 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     // Entity
     //
     /**
-     * Return the name or something that can be used to identify the
-     * entity for the player
+     * Return the name or something that can be used to identify the entity for
+     * the player
      *
      * @param definite
-     *	<code>true</code> for "the", and <code>false</code> for "a/an"
-     *	in case the entity has no name.
+     * <code>true</code> for "the", and
+     * <code>false</code> for "a/an" in case the entity has no name.
      *
      * @return	The description name.
      */
@@ -479,7 +484,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Get the nicely formatted entity title/name.
      *
-     * @return The title, or <code>null</code> if unknown.
+     * @return The title, or
+     * <code>null</code> if unknown.
      */
     @Override
     public String getTitle() {

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.*;
 import org.openide.util.Lookup;
+import pcgen.system.D20Extension;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;

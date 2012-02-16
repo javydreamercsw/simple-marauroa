@@ -21,7 +21,6 @@ import simple.common.FeatureList;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
-import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
@@ -613,71 +612,73 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      */
     @Override
     public void generateRPClass() {
-        ExtensibleRPClass player = new ExtensibleRPClass("client_object");
-        player.isA("rpentity");
-        //This is the assigned key for encryption purposes on the client
-        player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
-        player.addRPEvent(TextEvent.RPCLASS_NAME, Definition.VOLATILE);
-        /*
-         * Add event player.addRPEvent("<Event RPClassName>",
-         * Definition.VOLATILE);
-         */
-        player.addRPEvent(PrivateTextEvent.RPCLASS_NAME, Definition.PRIVATE);
+        if (!RPClass.hasRPClass("client_object")) {
+            ExtensibleRPClass player = new ExtensibleRPClass("client_object");
+            player.isA("rpentity");
+            //This is the assigned key for encryption purposes on the client
+            player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
+            player.addRPEvent(TextEvent.RPCLASS_NAME, Definition.VOLATILE);
+            /*
+             * Add event player.addRPEvent("<Event RPClassName>",
+             * Definition.VOLATILE);
+             */
+            player.addRPEvent(PrivateTextEvent.RPCLASS_NAME, Definition.PRIVATE);
 
-        player.addAttribute("outfit", Type.INT);
-        player.addAttribute("outfit_org", Type.INT);
+            player.addAttribute("outfit", Type.INT);
+            player.addAttribute("outfit_org", Type.INT);
 
-        player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
-        player.addAttribute("grumpy", Type.LONG_STRING, Definition.VOLATILE);
+            player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
+            player.addAttribute("grumpy", Type.LONG_STRING, Definition.VOLATILE);
 
-        // Use this for admin menus and usage.
-        player.addAttribute("admin", Type.FLAG);
-        player.addAttribute("adminlevel", Type.INT);
-        player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
-        //User with Monitor permissions
-        player.addAttribute("monitor", Type.FLAG);
+            // Use this for admin menus and usage.
+            player.addAttribute("admin", Type.FLAG);
+            player.addAttribute("adminlevel", Type.INT);
+            player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
+            //User with Monitor permissions
+            player.addAttribute("monitor", Type.FLAG);
 
-        player.addAttribute("ghostmode", Type.FLAG);
+            player.addAttribute("ghostmode", Type.FLAG);
 
-        player.addAttribute("release", Type.STRING, Definition.PRIVATE);
+            player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
-        player.addAttribute("age", Type.INT);
+            player.addAttribute("age", Type.INT);
 
-        // We use this for the buddy system
-        player.addRPSlot("!buddy", 1, Definition.PRIVATE);
-        player.addRPSlot("!ignore", 1, Definition.HIDDEN);
-        player.addAttribute("online", Type.LONG_STRING,
-                (byte) (Definition.PRIVATE | Definition.VOLATILE));
-        player.addAttribute("offline", Type.LONG_STRING,
-                (byte) (Definition.PRIVATE | Definition.VOLATILE));
+            // We use this for the buddy system
+            player.addRPSlot("!buddy", 1, Definition.PRIVATE);
+            player.addRPSlot("!ignore", 1, Definition.HIDDEN);
+            player.addAttribute("online", Type.LONG_STRING,
+                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
+            player.addAttribute("offline", Type.LONG_STRING,
+                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
-        //TODO: move to an extension
+            //TODO: move to an extension
 //        player.addRPSlot("!quests", 1, Definition.HIDDEN);
-        player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
+            player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
 
-        player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);
-        player.addAttribute("sentence", Type.STRING, Definition.HIDDEN);
+            player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);
+            player.addAttribute("sentence", Type.STRING, Definition.HIDDEN);
 
-        player.addRPSlot("skills", 1, Definition.HIDDEN);
+            player.addRPSlot("skills", 1, Definition.HIDDEN);
 
-        // Non-removable while stored ones have values
-        player.addRPSlot("!skills", 1,
-                (byte) (Definition.HIDDEN | Definition.VOLATILE));
+            // Non-removable while stored ones have values
+            player.addRPSlot("!skills", 1,
+                    (byte) (Definition.HIDDEN | Definition.VOLATILE));
 
-        player.addRPSlot("!visited", 1, Definition.HIDDEN);
+            player.addRPSlot("!visited", 1, Definition.HIDDEN);
 
-        //TODO: move to an extension
-        // The guild name
-        player.addAttribute("guild", Type.STRING);
+            //TODO: move to an extension
+            // The guild name
+            player.addAttribute("guild", Type.STRING);
 
-        // ClientObject features
-        player.addRPSlot("!features", 1, Definition.PRIVATE);
+            // ClientObject features
+            player.addRPSlot("!features", 1, Definition.PRIVATE);
 
-        //TODO: move to an extension
-        // Last time this player attacked another player
-        player.addAttribute("last_pvp_action_time", Type.FLOAT,
-                Definition.HIDDEN);
-        extendClass(player);
+            //TODO: move to an extension
+            // Last time this player attacked another player
+            player.addAttribute("last_pvp_action_time", Type.FLOAT,
+                    Definition.HIDDEN);
+            extendClass(player);
+        }
     }
 
     protected static void extendClass(RPClass player) {

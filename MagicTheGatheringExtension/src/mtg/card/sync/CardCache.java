@@ -34,8 +34,9 @@ public class CardCache {
 
     private static boolean caching;
     private static boolean loading;
+    private static CardImageLoader loader = null;
 
-    public static void setCahchingEnabled(boolean enabled) {
+    public static void setCachingEnabled(boolean enabled) {
         caching = enabled;
     }
 
@@ -117,7 +118,7 @@ public class CardCache {
     }
     private final static ArrayList<IMagicCard> cardImageQueue = new ArrayList<IMagicCard>();
 
-    private class CardImageLoader extends Thread {
+    private static class CardImageLoader extends Thread {
 
         public CardImageLoader() {
             super("Loading card images");
@@ -156,6 +157,10 @@ public class CardCache {
         synchronized (cardImageQueue) {
             if (!cardImageQueue.contains(card)) {
                 cardImageQueue.add(card);
+            }
+            if(loader == null){
+                loader = new CardImageLoader();
+                loader.start();
             }
         }
     }
