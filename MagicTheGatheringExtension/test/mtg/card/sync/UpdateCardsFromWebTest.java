@@ -50,7 +50,7 @@ public class UpdateCardsFromWebTest {
         ParseGathererSets parser = new ParseGathererSets();
         parser.load();
         CardCache.setLoadingEnabled(true);
-        CardCache.setCahchingEnabled(true);
+        CardCache.setCachingEnabled(true);
         Set<ICardField> fieldMaps = new HashSet<ICardField>();
         fieldMaps.add(MagicCardField.TEXT);
         fieldMaps.add(MagicCardField.LANG);

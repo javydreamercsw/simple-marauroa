@@ -33,35 +33,37 @@ public class RPEntity extends Entity {
     public void generateRPClass() {
         try {
             stats = Statistics.getStatistics();
-            RPClass entity = new RPClass("rpentity");
-            entity.isA("entity");
-            entity.addAttribute("name", Type.STRING);
-            entity.addAttribute(ATTR_TITLE, Type.STRING);
-            //TODO move most of this to extensions
-            entity.addAttribute("level", Type.SHORT);
-            entity.addAttribute("xp", Type.INT);
+            if (!RPClass.hasRPClass("rpentity")) {
+                RPClass entity = new RPClass("rpentity");
+                entity.isA("entity");
+                entity.addAttribute("name", Type.STRING);
+                entity.addAttribute(ATTR_TITLE, Type.STRING);
+                //TODO move most of this to extensions
+                entity.addAttribute("level", Type.SHORT);
+                entity.addAttribute("xp", Type.INT);
 
-            entity.addAttribute("base_hp", Type.SHORT);
-            entity.addAttribute("hp", Type.SHORT);
+                entity.addAttribute("base_hp", Type.SHORT);
+                entity.addAttribute("hp", Type.SHORT);
 
-            entity.addAttribute("atk", Type.SHORT, Definition.PRIVATE);
-            entity.addAttribute("def", Type.SHORT, Definition.PRIVATE);
-            entity.addAttribute("atk_item", Type.INT,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
-            entity.addAttribute("def_item", Type.INT,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
+                entity.addAttribute("atk", Type.SHORT, Definition.PRIVATE);
+                entity.addAttribute("def", Type.SHORT, Definition.PRIVATE);
+                entity.addAttribute("atk_item", Type.INT,
+                        (byte) (Definition.PRIVATE | Definition.VOLATILE));
+                entity.addAttribute("def_item", Type.INT,
+                        (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
-            entity.addAttribute("risk", Type.BYTE, Definition.VOLATILE);
-            entity.addAttribute("damage", Type.INT, Definition.VOLATILE);
-            entity.addAttribute("heal", Type.INT, Definition.VOLATILE);
-            entity.addAttribute("title_type", Type.STRING, Definition.VOLATILE);
+                entity.addAttribute("risk", Type.BYTE, Definition.VOLATILE);
+                entity.addAttribute("damage", Type.INT, Definition.VOLATILE);
+                entity.addAttribute("heal", Type.INT, Definition.VOLATILE);
+                entity.addAttribute("title_type", Type.STRING, Definition.VOLATILE);
 
-            entity.addRPSlot("head", 1, Definition.PRIVATE);
-            entity.addRPSlot("rhand", 1, Definition.PRIVATE);
-            entity.addRPSlot("lhand", 1, Definition.PRIVATE);
-            entity.addRPSlot("belt", 1, Definition.PRIVATE);
-            entity.addRPSlot("legs", 1, Definition.PRIVATE);
-            entity.addRPSlot("feet", 1, Definition.PRIVATE);
+                entity.addRPSlot("head", 1, Definition.PRIVATE);
+                entity.addRPSlot("rhand", 1, Definition.PRIVATE);
+                entity.addRPSlot("lhand", 1, Definition.PRIVATE);
+                entity.addRPSlot("belt", 1, Definition.PRIVATE);
+                entity.addRPSlot("legs", 1, Definition.PRIVATE);
+                entity.addRPSlot("feet", 1, Definition.PRIVATE);
+            }
         } catch (SyntaxException e) {
             logger.error("cannot generateRPClass", e);
         }
@@ -71,17 +73,17 @@ public class RPEntity extends Entity {
         super(object);
     }
 
-    public RPEntity() {  
+    public RPEntity() {
     }
 
     /**
      * Gets this RPEntity's outfit.
-     * 
+     *
      * Note: some RPEntities (e.g. sheep, many NPC's, all monsters) don't use
      * the outfit system.
-     * 
+     *
      * @return The outfit, or null if this RPEntity is represented as a single
-     *         sprite rather than an outfit combination.
+     * sprite rather than an outfit combination.
      */
     @Override
     public Outfit getOutfit() {
