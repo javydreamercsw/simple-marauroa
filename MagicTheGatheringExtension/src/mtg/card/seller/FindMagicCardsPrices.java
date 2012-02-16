@@ -9,21 +9,22 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import mtg.card.IMagicCard;
-import mtg.card.MagicCard;
-import mtg.card.MagicCardFilter;
-import mtg.card.MagicFilteredCardStore;
+import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 import simple.server.extension.card.Editions;
 import simple.server.extension.card.ICard;
 import simple.server.extension.card.ISellableCard;
 import simple.server.extension.card.price.IPriceProvider;
 import simple.server.extension.card.price.IStoreUpdator;
-import simple.server.extension.card.storage.*;
+import simple.server.extension.card.storage.ICardStore;
+import simple.server.extension.card.storage.IFilteredCardStore;
+import simple.server.extension.card.storage.IStorage;
 
+@ServiceProviders({
+    @ServiceProvider(service = IStoreUpdator.class),
+    @ServiceProvider(service = IPriceProvider.class)})
 public class FindMagicCardsPrices implements IStoreUpdator, IPriceProvider {
 
     String baseURL;
@@ -61,7 +62,7 @@ public class FindMagicCardsPrices implements IStoreUpdator, IPriceProvider {
     @Override
     public void updateStore(ICardStore<ISellableCard> store, Iterable<ISellableCard> iterable, int size)
             throws IOException {
-//	TODO: use NetBeans RCP	monitor.beginTask("Loading prices from http://findmagiccards.com ...", size + 10);
+//	TODO: use NetBeans RCP to show progress.
         if (iterable == null) {
             iterable = store;
             size = store.size();
@@ -80,7 +81,6 @@ public class FindMagicCardsPrices implements IStoreUpdator, IPriceProvider {
             for (String set : sets) {
                 String id = findSetId(set);
                 if (id != null) {
-                    // System.err.println("found " + set + " " + id);
                     HashMap<String, Float> prices = null;
                     try {
                         prices = parse(id);
@@ -109,7 +109,6 @@ public class FindMagicCardsPrices implements IStoreUpdator, IPriceProvider {
                                 card.setDbPrice(price);
                                 store.update(card);
                             }
-//							monitor.worked(1);
                         }
                     }
                 }
@@ -117,7 +116,6 @@ public class FindMagicCardsPrices implements IStoreUpdator, IPriceProvider {
         } finally {
             storage.save();
             storage.setAutoCommit(true);
-//			monitor.done();
         }
     }
 
@@ -285,36 +283,8 @@ public class FindMagicCardsPrices implements IStoreUpdator, IPriceProvider {
         }
     }
 
+    @Override
     public void updateStore(IFilteredCardStore<ISellableCard> fstore) throws IOException {
         updateStore(fstore.getCardStore(), fstore, fstore.getSize());
-    }
-
-    public static void main(String[] args) throws IOException {
-        try {
-            FindMagicCardsPrices prices = new FindMagicCardsPrices();
-            MagicFilteredCardStore<IMagicCard> fstore = new MagicFilteredCardStore<IMagicCard>() {
-
-                MemoryCardStore<MemoryCardStorage<IMagicCard>> store = new MemoryCardStore<MemoryCardStorage<IMagicCard>>();
-
-                @Override
-                public ICardStore getCardStore() {
-                    return store;
-                }
-            };
-            MagicCard card = new MagicCard();
-            card.setSet("Time Spiral");
-            card.setName("Amrou Scout");
-            fstore.getCardStore().add(card);
-            fstore.update(new MagicCardFilter());
-            prices.updateStore(fstore);
-            Iterator iterator = fstore.iterator();
-            while (iterator.hasNext()) {
-                MagicCard temp = (MagicCard) iterator.next();
-                System.out.println(temp.toString());
-                System.out.println("Prize: $" + temp.getDbPrice());
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(FindMagicCardsPrices.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

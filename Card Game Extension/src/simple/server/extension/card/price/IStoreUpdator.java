@@ -3,6 +3,7 @@ package simple.server.extension.card.price;
 import java.io.IOException;
 import simple.server.extension.card.ISellableCard;
 import simple.server.extension.card.storage.ICardStore;
+import simple.server.extension.card.storage.IFilteredCardStore;
 
 public interface IStoreUpdator {
 
@@ -18,4 +19,12 @@ public interface IStoreUpdator {
     public void updateStore(ICardStore<ISellableCard> store, 
             Iterable<ISellableCard> iterable, int size)
             throws IOException;
+    
+    /**
+     * Update cards in a given store
+     *
+     * @param store - card store (used to save updates and fire the events)
+     * @throws IOException
+     */
+    public void updateStore(IFilteredCardStore<ISellableCard> store) throws IOException;
 }
