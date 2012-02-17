@@ -56,4 +56,8 @@ public class DimensionExtension extends SimpleServerExtension {
             entity.put("visibility", 100);
         }
     }
+
+    public String getName() {
+        return "Dimension Extension";
+    }
 }

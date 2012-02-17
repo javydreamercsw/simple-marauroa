@@ -4,6 +4,11 @@ import marauroa.common.game.*;
 import simple.common.game.ClientObjectInterface;
 
 public interface MarauroaServerExtension {
+    /**
+     * Get the plug-in's name
+     * @return plug-in's name
+     */
+    public abstract String getName();
 
     /**
      * Action to perform

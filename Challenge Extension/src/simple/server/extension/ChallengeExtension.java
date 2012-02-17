@@ -88,4 +88,9 @@ public class ChallengeExtension extends SimpleServerExtension implements ActionL
     public void modifyClientObjectDefinition(RPClass player) {
         player.addRPEvent(ChallengeEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
+
+    @Override
+    public String getName() {
+        return "Challenge Extension";
+    }
 }
