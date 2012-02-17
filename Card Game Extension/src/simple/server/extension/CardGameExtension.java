@@ -33,4 +33,9 @@ public class CardGameExtension extends SimpleServerExtension {
             ((RPObject) client).addSlot(COLLECTION);
         }
     }
+
+    @Override
+    public String getName() {
+        return "Card Game Extension";
+    }
 }

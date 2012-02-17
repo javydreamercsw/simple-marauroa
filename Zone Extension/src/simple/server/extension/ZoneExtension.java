@@ -243,4 +243,9 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     public void modifyClientObjectDefinition(RPClass player) {
         player.addRPEvent(ZoneEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
+
+    @Override
+    public String getName() {
+        return "Zone Extension";
+    }
 }

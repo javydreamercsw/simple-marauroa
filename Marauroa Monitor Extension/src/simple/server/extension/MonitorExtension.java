@@ -244,4 +244,9 @@ public class MonitorExtension extends SimpleServerExtension implements ActionLis
             }
         }
     }
+
+    @Override
+    public String getName() {
+        return "Monitor Extension";
+    }
 }
