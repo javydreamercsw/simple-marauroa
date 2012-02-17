@@ -99,7 +99,7 @@ public class CardCache {
         }
         String editionAbbr = set.getBaseFileName();
         int cardId = card.getCardId();
-        File loc = new File("./");//DataManager.getStateLocationFile();
+        File loc = new File("./");//TODO: Use the cache dir see http://bits.netbeans.org/dev/javadoc/org-openide-modules/org/openide/modules/Places.html getCacheDirectory()
         String locale = "EN";
         String part = "Cards/" + editionAbbr + "/" + locale + "/Card" + cardId + ".jpg";
         String file = new File(loc, part).getPath();
@@ -107,7 +107,7 @@ public class CardCache {
     }
 
     public static String createLocalSetImageFilePath(String editionAbbr, String rarity) throws MalformedURLException {
-        File loc = new File("./");//DataManager.getStateLocationFile();
+        File loc = new File("./");//TODO: Use the cache dir see http://bits.netbeans.org/dev/javadoc/org-openide-modules/org/openide/modules/Places.html getCacheDirectory()
         String part = "Sets/" + editionAbbr + "-" + rarity + ".jpg";
         String file = new File(loc, part).getPath();
         return file;
