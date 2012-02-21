@@ -1,18 +1,18 @@
 package simple.server.extension;
 
+import dreamer.card.game.ICardField;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
-import simple.server.extension.card.ICard;
-import simple.server.extension.card.ICardField;
+import simple.server.extension.card.IMarauroaCard;
 
 /**
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public class DefaultCard implements ICard {
+public class DefaultCard implements IMarauroaCard {
 
     private InstanceContent dynamicContent = new InstanceContent();
     private Lookup myLookup = new AbstractLookup(dynamicContent);

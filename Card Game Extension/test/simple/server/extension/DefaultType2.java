@@ -1,11 +1,11 @@
 package simple.server.extension;
 
-import simple.server.extension.card.ICardType;
+import dreamer.card.game.ICardType;
 
 /**
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface DefaultType2 extends ICardType{
+public interface DefaultType2 extends ICardType {
     
 }

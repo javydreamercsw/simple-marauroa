@@ -1,6 +1,6 @@
 package simple.server.extension;
 
-import simple.server.extension.card.ICardType;
+import dreamer.card.game.ICardType;
 
 /**
  *

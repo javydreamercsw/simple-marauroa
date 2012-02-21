@@ -28,7 +28,7 @@ public class CardCellRenderer extends JLabel implements ListCellRenderer {
             setBackground(list.getBackground());
             setForeground(list.getForeground());
         }
-        ICard card = (ICard) value;
+        IMarauroaCard card = (IMarauroaCard) value;
         
         setIcon(card.getImages().get(0));
         if (getIcon() != null) {
