@@ -1,5 +1,8 @@
 package simple.server.extension.card;
 
+import dreamer.card.game.ICard;
+import dreamer.card.game.ICardType;
+import dreamer.card.game.IDeck;
 import java.util.*;
 
 /**
@@ -32,8 +35,8 @@ public class DefaultDeck implements IDeck {
     @Override
     public ICard ditch(Class<? extends ICardType> type) {
         for (int i = 0; i < deck.size(); i++) {
-            if (deck.get(i).getLookup().lookup(type) != null) {
-                ICard ditched = deck.remove(i);
+            if (((IMarauroaCard) deck.get(i)).getLookup().lookup(type) != null) {
+                IMarauroaCard ditched = (IMarauroaCard) deck.remove(i);
                 used.add(ditched);
                 return ditched;
             }
@@ -48,7 +51,7 @@ public class DefaultDeck implements IDeck {
             ArrayList<Integer> indices = new ArrayList<Integer>();
             //Build a list of indices of this type
             for (int i = 0; i < deck.size(); i++) {
-                if (deck.get(i).getLookup().lookup(type) != null) {
+                if (((IMarauroaCard) deck.get(i)).getLookup().lookup(type) != null) {
                     indices.add(i);
                 }
             }
@@ -69,7 +72,7 @@ public class DefaultDeck implements IDeck {
         } else {
             for (int j = 0; j < amount; j++) {
                 for (final Iterator i = deck.iterator(); i.hasNext();) {
-                    ICard next = (ICard) i.next();
+                    IMarauroaCard next = (IMarauroaCard) i.next();
                     if (next.getLookup().lookup(type) != null) {
                         ditched.add(next);
                         break;
@@ -86,7 +89,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public ICard ditchBottom() {
-        ICard ditched = deck.remove(deck.size() - 1);
+        IMarauroaCard ditched = (IMarauroaCard) deck.remove(deck.size() - 1);
         used.add(ditched);
         return ditched;
     }
@@ -111,7 +114,7 @@ public class DefaultDeck implements IDeck {
 
     @Override
     public ICard ditch(boolean random) {
-        ICard ditched = deck.remove(random ? rand.nextInt(deck.size()) : 0);
+        IMarauroaCard ditched = (IMarauroaCard) deck.remove(random ? rand.nextInt(deck.size()) : 0);
         used.add(ditched);
         return ditched;
     }

@@ -1,18 +1,18 @@
 package simple.server.extension;
 
+import dreamer.card.game.ICardField;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
-import simple.server.extension.card.ICard;
-import simple.server.extension.card.ICardField;
+import simple.server.extension.card.IMarauroaCard;
 
 /**
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public class DefaultCard2 implements ICard, DefaultType2 {
+public class DefaultCard2 implements IMarauroaCard, DefaultType2 {
 
     private InstanceContent dynamicContent = new InstanceContent();
     private Lookup myLookup = new AbstractLookup(dynamicContent);
@@ -20,7 +20,7 @@ public class DefaultCard2 implements ICard, DefaultType2 {
     public DefaultCard2() {
         dynamicContent.add(new DefaultType2() {});
     }
-    
+
     @Override
     public List<ImageIcon> getImages() {
         throw new UnsupportedOperationException("Not supported yet.");

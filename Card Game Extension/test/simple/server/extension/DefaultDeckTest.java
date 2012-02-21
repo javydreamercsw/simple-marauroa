@@ -1,13 +1,14 @@
 package simple.server.extension;
 
-import simple.server.extension.card.ICard;
-import simple.server.extension.card.ICardType;
+import dreamer.card.game.ICard;
+import dreamer.card.game.ICardType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import static org.junit.Assert.*;
 import org.junit.*;
 import simple.server.extension.card.DefaultDeck;
+import simple.server.extension.card.IMarauroaCard;
 
 /**
  *
@@ -18,7 +19,7 @@ public class DefaultDeckTest {
     private static DefaultDeck instance = new DefaultDeck("test");
     private static int deckSize = 100, ditchCount = 0, drawCount = 0,
             interfaceCounter = 0, interfaceIndex = -1;
-    private ICard card;
+    private IMarauroaCard card;
     private List<ICard> list;
 
     public DefaultDeckTest() {
@@ -65,7 +66,7 @@ public class DefaultDeckTest {
 
         System.out.println("ditch");
         Class<? extends ICardType> type = DefaultType2.class;
-        ICard ditchedCard = instance.ditch(type);
+        IMarauroaCard ditchedCard = (IMarauroaCard) instance.ditch(type);
         assertTrue(ditchedCard == null || ditchedCard instanceof DefaultType2);
         cardDitched();
         assertTrue(instance.getUsedPileSize() == ditchCount);
@@ -73,7 +74,7 @@ public class DefaultDeckTest {
         updateInterfaceIndex();
 
         System.out.println("ditchBottom");
-        ICard toDitch = instance.getCards().get(instance.getCards().size() - 1);
+        IMarauroaCard toDitch = (IMarauroaCard) instance.getCards().get(instance.getCards().size() - 1);
         assertEquals(toDitch, instance.ditchBottom());
         cardDitched();
 
@@ -90,41 +91,41 @@ public class DefaultDeckTest {
         assertTrue(result.size() == ditch);
 
         System.out.println("ditch");
-        toDitch = instance.getCards().get(0);
-        card = instance.ditch(false);
+        toDitch = (IMarauroaCard) instance.getCards().get(0);
+        card = (IMarauroaCard) instance.ditch(false);
         cardDitched();
         assertEquals(toDitch, card);
 
         System.out.println("ditch");
-        toDitch = instance.getCards().get(0);
-        card = instance.ditch();
+        toDitch = (IMarauroaCard) instance.getCards().get(0);
+        card = (IMarauroaCard) instance.ditch();
         cardDitched();
         assertEquals(toDitch, card);
 
         System.out.println("draw");
         updateInterfaceIndex();
-        toDitch = instance.getCards().get(interfaceIndex);
-        card = instance.draw(DefaultType2.class);
+        toDitch = (IMarauroaCard) instance.getCards().get(interfaceIndex);
+        card = (IMarauroaCard) instance.draw(DefaultType2.class);
         assertEquals(toDitch, card);
         updateInterfaceIndex();
         interfaceCounter--;
         cardDrawn();
 
         System.out.println("draw");
-        ICard toDraw = instance.getCards().get(0);
-        card = instance.draw();
+        IMarauroaCard toDraw = (IMarauroaCard) instance.getCards().get(0);
+        card = (IMarauroaCard) instance.draw();
         assertEquals(toDraw, card);
         cardDrawn();
 
         System.out.println("draw");
-        toDraw = instance.getCards().get(0);
-        card = instance.draw(false);
+        toDraw = (IMarauroaCard) instance.getCards().get(0);
+        card = (IMarauroaCard) instance.draw(false);
         assertEquals(toDraw, card);
         cardDrawn();
 
         System.out.println("drawBottom");
-        toDraw = instance.getCards().get(instance.getSize() - 1);
-        card = instance.drawBottom();
+        toDraw = (IMarauroaCard) instance.getCards().get(instance.getSize() - 1);
+        card = (IMarauroaCard) instance.drawBottom();
         assertEquals(toDraw, card);
         cardDrawn();
 
