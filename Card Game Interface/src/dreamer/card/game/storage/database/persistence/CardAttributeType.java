@@ -43,7 +43,7 @@ public class CardAttributeType implements Serializable {
 
     public CardAttributeType() {
     }
-    
+
     public CardAttributeType(String name) {
         this.name = name;
     }

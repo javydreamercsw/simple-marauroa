@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Card.findByCardTypeId", query = "SELECT c FROM Card c WHERE c.cardPK.cardTypeId = :cardTypeId"),
     @NamedQuery(name = "Card.findByName", query = "SELECT c FROM Card c WHERE c.name = :name")})
 public class Card implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CardPK cardPK;
@@ -54,8 +55,10 @@ public class Card implements Serializable {
         this.text = text;
     }
 
-    public Card(int id, int cardTypeId) {
-        this.cardPK = new CardPK(id, cardTypeId);
+    public Card(int cardTypeId, String name, byte[] text) {
+        this.cardPK = new CardPK(cardTypeId);
+        this.name = name;
+        this.text = text;
     }
 
     public CardPK getCardPK() {
@@ -132,5 +135,4 @@ public class Card implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.Card[ cardPK=" + cardPK + " ]";
     }
-    
 }

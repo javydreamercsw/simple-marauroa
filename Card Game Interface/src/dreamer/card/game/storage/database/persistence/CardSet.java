@@ -39,9 +39,11 @@ public class CardSet implements Serializable {
     @Column(name = "released", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date released;
-    @JoinTable(name = "set_has_card", joinColumns = {
-        @JoinColumn(name = "set_id", referencedColumnName = "id", nullable = false)}, inverseJoinColumns = {
-        @JoinColumn(name = "card_id", referencedColumnName = "id", nullable = false)})
+    @JoinTable(name = "card_set_has_card", joinColumns = {
+        @JoinColumn(name = "card_set_id", referencedColumnName = "id", nullable = false),
+        @JoinColumn(name = "card_set_game_id", referencedColumnName = "game_id", nullable = false)}, inverseJoinColumns = {
+        @JoinColumn(name = "card_id", referencedColumnName = "id", nullable = false),
+        @JoinColumn(name = "card_card_type_id", referencedColumnName = "card_type_id", nullable = false)})
     @ManyToMany
     private List<Card> cardList;
     @JoinColumn(name = "game_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
