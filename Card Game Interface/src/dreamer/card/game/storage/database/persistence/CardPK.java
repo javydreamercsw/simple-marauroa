@@ -30,8 +30,7 @@ public class CardPK implements Serializable {
     public CardPK() {
     }
 
-    public CardPK(int id, int cardTypeId) {
-        this.id = id;
+    public CardPK(int cardTypeId) {
         this.cardTypeId = cardTypeId;
     }
 
