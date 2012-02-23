@@ -100,7 +100,7 @@
         <delete file="cobertura.ser" />
     </target>
     
-    <target name="-pre-compile">
+    <!--<target name="-pre-compile">
         <mkdir dir="${dist.dir}"/>
         <get src="http://www.pcgen-test.org/autobuilds/downloads/pcgen-5.17.11-SNAPSHOT-full.zip" dest="./" skipexisting="true"/>
         <unzip dest="${dist.dir}" overwrite="false">
@@ -108,5 +108,5 @@
                 <include name="*.zip"/>
             </fileset>
         </unzip>
-    </target>
+    </target>-->
 </project>
