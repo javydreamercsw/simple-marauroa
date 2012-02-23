@@ -22,9 +22,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CardCollectionType.findById", query = "SELECT c FROM CardCollectionType c WHERE c.id = :id"),
     @NamedQuery(name = "CardCollectionType.findByName", query = "SELECT c FROM CardCollectionType c WHERE c.name = :name")})
 public class CardCollectionType implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "CardCollectionTypeGen")
+    @TableGenerator(name = "CardCollectionTypeGen", table = "card_id",
+    pkColumnName = "tablename",
+    valueColumnName = "last_id",
+    pkColumnValue = "card_collection_type",
+    allocationSize = 1,
+    initialValue=1)
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -85,4 +91,5 @@ public class CardCollectionType implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardCollectionType[ id=" + id + " ]";
     }
+    
 }

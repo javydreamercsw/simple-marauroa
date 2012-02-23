@@ -13,7 +13,6 @@ import dreamer.card.game.storage.database.persistence.CardSet;
 import dreamer.card.game.storage.database.persistence.Game;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.IllegalOrphanException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
-import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -34,7 +33,7 @@ public class GameJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Game game) throws PreexistingEntityException, Exception {
+    public void create(Game game) {
         if (game.getCardSetList() == null) {
             game.setCardSetList(new ArrayList<CardSet>());
         }
@@ -59,11 +58,6 @@ public class GameJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findGame(game.getId()) != null) {
-                throw new PreexistingEntityException("Game " + game + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();

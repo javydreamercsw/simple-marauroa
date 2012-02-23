@@ -34,7 +34,8 @@ public class CardType implements Serializable {
     initialValue=1)
     @Column(name = "id", nullable = false)
     private Integer id;
-    @Column(name = "name", length = 80, nullable = false)
+    @Basic(optional = false)
+    @Column(name = "name", nullable = false, length = 80)
     private String name;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardType")
     private List<Card> cardList;
@@ -91,4 +92,5 @@ public class CardType implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardType[ id=" + id + " ]";
     }
+    
 }
