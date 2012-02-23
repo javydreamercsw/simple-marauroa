@@ -5,17 +5,14 @@
 package dreamer.card.game;
 
 import dreamer.card.game.storage.IDataBaseManager;
-import dreamer.card.game.storage.database.persistence.Card;
-import dreamer.card.game.storage.database.persistence.CardAttribute;
-import dreamer.card.game.storage.database.persistence.CardHasCardAttribute;
-import dreamer.card.game.storage.database.persistence.CardType;
-import dreamer.card.game.storage.database.persistence.controller.CardHasCardAttributeJpaController;
-import dreamer.card.game.storage.database.persistence.controller.CardJpaController;
-import dreamer.card.game.storage.database.persistence.controller.CardTypeJpaController;
-import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
+import dreamer.card.game.storage.database.persistence.*;
+import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.*;
 import org.openide.util.Lookup;
 import static junit.framework.Assert.*;
@@ -25,6 +22,8 @@ import static junit.framework.Assert.*;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 public class DefaultCardGameTest {
+
+    private Game game;
 
     public DefaultCardGameTest() {
     }
@@ -51,22 +50,18 @@ public class DefaultCardGameTest {
      */
     @Test
     public void testInit() {
-        System.out.println("init");
-        HashMap parameters = new HashMap();
-        DefaultCardGame instance = new DefaultCardGameImpl();
-        parameters.put("name", instance.getName());
         try {
+            System.out.println("init");
+            HashMap parameters = new HashMap();
+            DefaultCardGame instance = new DefaultCardGameImpl();
+            parameters.put("name", instance.getName());
             List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
             assertTrue(result.isEmpty());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            fail();
-        }
-        instance.init();
-        try {
-            List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
+            instance.init();
+            result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
             assertFalse(result.isEmpty());
-        } catch (Exception ex) {
+        } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }
@@ -83,85 +78,98 @@ public class DefaultCardGameTest {
 
         @Override
         public void init() {
-            super.init();
-            rarities.add("rarity.common");
-            rarities.add("rarity.uncommon");
-            rarities.add("rarity.rare");
-            rarities.add("rarity.mythic.rare");
-            rarities.add("rarity.land");
+            try {
+                super.init();
+                HashMap parameters = new HashMap();
+                parameters.put("name", getName());
+                List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
+                game = (Game) result.get(0);
+                rarities.add("rarity.common");
+                rarities.add("rarity.uncommon");
+                rarities.add("rarity.rare");
+                rarities.add("rarity.mythic.rare");
+                rarities.add("rarity.land");
 
-            creatureAttribs.add("power");
-            creatureAttribs.add("toughness");
-            Lookup.getDefault().lookup(IDataBaseManager.class).createAttributes("rarity", rarities);
-            Lookup.getDefault().lookup(IDataBaseManager.class).createAttributes("creature", creatureAttribs);
-            System.out.println("Check types");
-            HashMap parameters = new HashMap();
-            try {
+                creatureAttribs.add("power");
+                creatureAttribs.add("toughness");
+                Lookup.getDefault().lookup(IDataBaseManager.class).createAttributes("rarity", rarities);
+                Lookup.getDefault().lookup(IDataBaseManager.class).createAttributes("creature", creatureAttribs);
+                System.out.println("Check types");
                 parameters.put("name", "rarity");
-                List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
+                result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
                 assertFalse(result.isEmpty());
-            } catch (Exception ex) {
-                fail();
-            }
-            try {
                 parameters.put("name", "creature");
-                List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
+                result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
                 assertFalse(result.isEmpty());
-            } catch (Exception ex) {
-                fail();
-            }
-            System.out.println("Check the attributes");
-            for (String rarity : rarities) {
-                try {
+                System.out.println("Check the attributes");
+                for (String rarity : rarities) {
                     parameters.put("name", rarity);
-                    List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
+                    result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
                     assertFalse(result.isEmpty());
-                } catch (Exception ex) {
-                    fail();
                 }
-            }
-            for (String attr : creatureAttribs) {
-                try {
+                for (String attr : creatureAttribs) {
                     parameters.put("name", attr);
-                    List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
+                    result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
                     assertFalse(result.isEmpty());
-                } catch (Exception ex) {
-                    fail();
                 }
-            }
-            System.out.println("Create card type");
-            CardType sampleType = Lookup.getDefault().lookup(IDataBaseManager.class).createCardType("sample");
-            System.out.println("Create a card");
-            Card card = Lookup.getDefault().lookup(IDataBaseManager.class).createCard(sampleType, "Sample", "Sample body text".getBytes());
-            try {
+                System.out.println("Create card type");
+                CardType sampleType = Lookup.getDefault().lookup(IDataBaseManager.class).createCardType("sample");
+                System.out.println("Create a card");
+                Card card = Lookup.getDefault().lookup(IDataBaseManager.class).createCard(sampleType, "Sample", "Sample body text".getBytes());
+                Card card2 = Lookup.getDefault().lookup(IDataBaseManager.class).createCard(sampleType, "Sample2", "Sample body text".getBytes());
                 parameters.put("name", card.getName());
-                List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Card.findByName", parameters);
+                result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Card.findByName", parameters);
                 assertFalse(result.isEmpty());
                 Card temp = (Card) result.get(0);
                 assertTrue(temp.getName().equals(card.getName()));
                 assertTrue(temp.getText().equals(card.getText()));
-            } catch (Exception ex) {
-                fail();
-            }
-            System.out.println("Add an attribute to a card");
-            for (String rarity : rarities) {
-                try {
+                System.out.println("Add an attribute to a card");
+                for (String rarity : rarities) {
                     parameters.put("name", rarity);
-                    List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
+                    result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
                     assertFalse(result.isEmpty());
                     Lookup.getDefault().lookup(IDataBaseManager.class).addAttributeToCard(card,
                             (CardAttribute) result.get(0), "test");
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                }
+                System.out.println("Check attributes");
+                for (CardHasCardAttribute chca : card.getCardHasCardAttributeList()) {
+                    assertTrue(chca.getValue().equals("test"));
+                }
+                System.out.println("Create set");
+                CardSet cs1 = Lookup.getDefault().lookup(IDataBaseManager.class).createCardSet(game, "Test Set", "TS", new Date());
+                assertTrue(cs1 != null);
+                CardSet cs2 = Lookup.getDefault().lookup(IDataBaseManager.class).createCardSet(game, "Test Set2", "TS2", new Date());
+                assertTrue(cs2 != null);
+                System.out.println("Add card to set");
+                ArrayList<Card> cards = new ArrayList<Card>();
+                cards.add(card);
+                try {
+                    Lookup.getDefault().lookup(IDataBaseManager.class).addCardsToSet(cards, cs1);
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
                     fail();
                 }
+                assertTrue(cs1.getCardList().size() == cards.size());
+                cards.add(card2);
+                try {
+                    Lookup.getDefault().lookup(IDataBaseManager.class).addCardsToSet(cards, cs2);
+                } catch (NonexistentEntityException ex) {
+                    Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
+                    fail();
+                }
+                assertTrue(cs2.getCardList().size() == cards.size());
+                System.out.println("Print Sets");
+                String set1=Lookup.getDefault().lookup(IDataBaseManager.class).printCardsInSet(cs1);
+                String set2=Lookup.getDefault().lookup(IDataBaseManager.class).printCardsInSet(cs2);
+                assertFalse(set1.isEmpty());
+                assertFalse(set2.isEmpty());
+                assertTrue(set1.length() < set2.length());
+                System.out.println(set1);
+                System.out.println(set2);
+            } catch (Exception ex) {
+                Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
+                fail();
             }
-            System.out.println("Check attributes");
-            for (CardHasCardAttribute chca : card.getCardHasCardAttributeList()) {
-                assertTrue(chca.getValue().equals("test"));
-            }
-            System.out.println("Create set");
-
         }
     }
 }
