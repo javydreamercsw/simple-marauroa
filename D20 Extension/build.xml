@@ -102,11 +102,12 @@
     
     <target name="-pre-init">
         <mkdir dir="${dist.dir}"/>
+        <!-- TODO: TO enable when using PCGen libraries
         <get src="http://www.pcgen-test.org/autobuilds/downloads/pcgen-5.17.11-SNAPSHOT-full.zip" dest="./" skipexisting="true"/>
         <unzip dest="${dist.dir}" overwrite="false">
             <fileset dir="./">
                 <include name="*.zip"/>
             </fileset>
-        </unzip> 
+        </unzip>-->
     </target>
 </project>

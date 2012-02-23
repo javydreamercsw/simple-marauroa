@@ -137,4 +137,8 @@ public class D20Extension extends SimpleServerExtension {
         configFactory.savePropertyContexts();
         PropertyContextFactory.getDefaultFactory().savePropertyContexts();
     }
+
+    public String getName() {
+        return "D20 Extension";
+    }
 }
