@@ -4,9 +4,10 @@
  */
 package dreamer.card.game.storage;
 
-import dreamer.card.game.storage.database.persistence.Card;
-import dreamer.card.game.storage.database.persistence.CardAttribute;
-import dreamer.card.game.storage.database.persistence.CardType;
+import dreamer.card.game.storage.database.persistence.*;
+import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
+import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -47,14 +48,14 @@ public interface IDataBaseManager {
      * @param type attribute type
      * @param values list of possible values
      */
-    public void createAttributes(String type, List<String> values);
+    public void createAttributes(String type, List<String> values) throws Exception ;
     
     /**
      * Create a card type in the database.
      * @param type card type
      * @return Created card type
      */
-    public CardType createCardType(String type);
+    public CardType createCardType(String type)throws  Exception ;
     
     /**
      * Create a card
@@ -63,7 +64,7 @@ public interface IDataBaseManager {
      * @param text Card text
      * @return Created card
      */
-    public Card createCard(CardType type, String name, byte[] text);
+    public Card createCard(CardType type, String name, byte[] text)throws PreexistingEntityException, Exception ;
     
     /**
      * Add attribute to card
@@ -71,5 +72,29 @@ public interface IDataBaseManager {
      * @param attr Attribute to add
      * @param value Value of attribute
      */
-    public void addAttributeToCard(Card card, CardAttribute attr, String value);
+    public void addAttributeToCard(Card card, CardAttribute attr, String value)throws PreexistingEntityException, Exception ;
+    
+    /**
+     * Create a card set
+     * @param game Game the set is from
+     * @param name Name of the set
+     * @param abbreviation Abbreviation of the set
+     * @param released Release date
+     * @return Created CardSet
+     */
+    public CardSet createCardSet(Game game, String name, String abbreviation, Date released) throws PreexistingEntityException, Exception ;
+    
+    /**
+     * Add cards to set
+     * @param cards Cards to add
+     * @param cs CardSet to be added to
+     */
+    public void addCardsToSet(List<Card> cards, CardSet cs) throws NonexistentEntityException, Exception;
+    
+    /**
+     * Print the cards in a set
+     * @param cs CardSet
+     * @return String listing the pages in a set
+     */
+    public String printCardsInSet(CardSet cs);
 }

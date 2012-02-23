@@ -5,9 +5,7 @@
 package dreamer.card.game.storage.database.persistence;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 /**
  *
@@ -16,6 +14,13 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class CardSetPK implements Serializable {
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "CardSetGen")
+    @TableGenerator(name = "CardSetGen", table = "card_id",
+    pkColumnName = "tablename",
+    valueColumnName = "last_id",
+    pkColumnValue = "card_set",
+    allocationSize = 1,
+    initialValue=1)
     @Column(name = "id", nullable = false)
     private int id;
     @Basic(optional = false)
@@ -25,17 +30,12 @@ public class CardSetPK implements Serializable {
     public CardSetPK() {
     }
 
-    public CardSetPK(int id, int gameId) {
-        this.id = id;
+    public CardSetPK(int gameId) {
         this.gameId = gameId;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getGameId() {

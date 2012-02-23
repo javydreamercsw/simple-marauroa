@@ -4,11 +4,9 @@ import dreamer.card.game.DefaultCardGame;
 import dreamer.card.game.ICardGame;
 import dreamer.card.game.storage.database.persistence.*;
 import dreamer.card.game.storage.database.persistence.controller.*;
+import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,91 +122,94 @@ public class DataBaseManager implements IDataBaseManager {
         this.pu = pu;
     }
 
-    public void createAttributes(String type, List<String> values) {
+    public void createAttributes(String type, List<String> values) throws Exception {
         CardAttributeTypeJpaController catController = new CardAttributeTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
         HashMap parameters = new HashMap();
         String value = type;
         parameters.put("name", value);
         CardAttributeType attrType = null;
-        try {
-            List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
-            if (result.isEmpty()) {
-                attrType = new CardAttributeType(value);
-                catController.create(attrType);
-                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.ALL,
-                        "Created attribute type: " + value + " on the database!");
-            } else {
-                attrType = (CardAttributeType) result.get(0);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+        List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
+        if (result.isEmpty()) {
+            attrType = new CardAttributeType(value);
+            catController.create(attrType);
+            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.ALL,
+                    "Created attribute type: " + value + " on the database!");
+        } else {
+            attrType = (CardAttributeType) result.get(0);
         }
         //Add Card Attributes
         for (String attribute : values) {
             CardAttributeJpaController caController = new CardAttributeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
             parameters.clear();
             parameters.put("name", attribute);
-            try {
-                List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
-                if (result.isEmpty()) {
-                    CardAttribute attr = new CardAttribute(attrType.getId());
-                    attr.setName(attribute);
-                    attr.setCardAttributeType(attrType);
-                    caController.create(attr);
-                    Logger.getLogger(DefaultCardGame.class.getName()).log(Level.ALL,
-                            "Created attribute: " + attribute + " on the database!");
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+            result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
+            if (result.isEmpty()) {
+                CardAttribute attr = new CardAttribute(attrType.getId());
+                attr.setName(attribute);
+                attr.setCardAttributeType(attrType);
+                caController.create(attr);
+                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.ALL,
+                        "Created attribute: " + attribute + " on the database!");
             }
         }
     }
 
     @Override
-    public CardType createCardType(String type) {
+    public CardType createCardType(String type) throws Exception {
         CardTypeJpaController cardTypeController = new CardTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
         CardType card_type = new CardType(type);
-        try {
-            cardTypeController.create(card_type);
-        } catch (Exception ex) {
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cardTypeController.create(card_type);
         return card_type;
     }
 
     @Override
-    public Card createCard(CardType type, String name, byte[] text) {
+    public Card createCard(CardType type, String name, byte[] text) throws PreexistingEntityException, Exception {
         CardJpaController cardController = new CardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
         Card card = new Card(type.getId(), name, text);
         card.setCardType(type);
-        try {
-            cardController.create(card);
-        } catch (PreexistingEntityException ex) {
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cardController.create(card);
         return card;
     }
 
     @Override
-    public void addAttributeToCard(Card card, CardAttribute attr, String value) {
-        try {
-            CardJpaController cardController = new CardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
-            CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
-            CardHasCardAttribute chca = new CardHasCardAttribute(card.getCardPK().getId(),
-                    card.getCardPK().getCardTypeId(), attr.getCardAttributePK().getId(),
-                    attr.getCardAttributePK().getCardAttributeTypeId());
-            chca.setValue("test");
-            chca.setCard(card);
-            chca.setCardAttribute(attr);
-            chcaController.create(chca);
-            card.getCardHasCardAttributeList().add(chca);
-            cardController.edit(card);
-        } catch (PreexistingEntityException ex) {
-            Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
+    public void addAttributeToCard(Card card, CardAttribute attr, String value) throws PreexistingEntityException, Exception {
+        CardJpaController cardController = new CardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardHasCardAttribute chca = new CardHasCardAttribute(card.getCardPK().getId(),
+                card.getCardPK().getCardTypeId(), attr.getCardAttributePK().getId(),
+                attr.getCardAttributePK().getCardAttributeTypeId());
+        chca.setValue("test");
+        chca.setCard(card);
+        chca.setCardAttribute(attr);
+        chcaController.create(chca);
+        card.getCardHasCardAttributeList().add(chca);
+        cardController.edit(card);
+    }
+
+    @Override
+    public CardSet createCardSet(Game game, String name, String abbreviation, Date released) throws PreexistingEntityException, Exception {
+        CardSetJpaController csController = new CardSetJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardSet cs = new CardSet(game.getId(), abbreviation, name, released);
+        cs.setGame(game);
+        csController.create(cs);
+        return cs;
+    }
+
+    @Override
+    public void addCardsToSet(List<Card> cards, CardSet cs) throws NonexistentEntityException, Exception {
+        CardSetJpaController csController = new CardSetJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        cs.getCardList().addAll(cards);
+        csController.edit(cs);
+    }
+
+    @Override
+    public String printCardsInSet(CardSet cs) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Game: " + cs.getGame().getName()).append('\n').append(cs.getName() + ":").append('\n');
+        for (Card card : cs.getCardList()) {
+            sb.append(card.getName()).append('\n');
         }
+        sb.append("----------------------------------------------");
+        return sb.toString();
     }
 }

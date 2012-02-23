@@ -64,8 +64,11 @@ public class CardSet implements Serializable {
         this.released = released;
     }
 
-    public CardSet(int id, int gameId) {
-        this.cardSetPK = new CardSetPK(id, gameId);
+    public CardSet(int gameId, String abbreviation, String name, Date released) {
+        this.cardSetPK = new CardSetPK(gameId);
+        this.abbreviation = abbreviation;
+        this.name = name;
+        this.released = released;
     }
 
     public CardSetPK getCardSetPK() {
