@@ -9,6 +9,8 @@
     <class>dreamer.card.game.storage.database.persistence.Card</class>
     <class>dreamer.card.game.storage.database.persistence.CardType</class>
     <class>dreamer.card.game.storage.database.persistence.CardHasCardAttribute</class>
+    <class>dreamer.card.game.storage.database.persistence.CardCollection</class>
+    <class>dreamer.card.game.storage.database.persistence.CardCollectionType</class>
     <properties>
       <property name="eclipselink.logging.level" value="SEVERE"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:data/card_manager"/>
@@ -34,6 +36,8 @@
     <class>dreamer.card.game.storage.database.persistence.Card</class>
     <class>dreamer.card.game.storage.database.persistence.CardType</class>
     <class>dreamer.card.game.storage.database.persistence.CardHasCardAttribute</class>
+    <class>dreamer.card.game.storage.database.persistence.CardCollection</class>
+    <class>dreamer.card.game.storage.database.persistence.CardCollectionType</class>
     <properties>
       <property name="eclipselink.logging.level" value="SEVERE"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:data/card_manager_test"/>

@@ -166,6 +166,8 @@ public class DefaultCardGameTest {
                 assertTrue(set1.length() < set2.length());
                 System.out.println(set1);
                 System.out.println(set2);
+                System.out.println("Create Collections");
+                
             } catch (Exception ex) {
                 Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
                 fail();
