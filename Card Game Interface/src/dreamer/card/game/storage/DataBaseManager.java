@@ -212,4 +212,21 @@ public class DataBaseManager implements IDataBaseManager {
         sb.append("----------------------------------------------");
         return sb.toString();
     }
+
+    @Override
+    public CardCollectionType createCardCollectionType(String name) throws PreexistingEntityException, Exception {
+        CardCollectionTypeJpaController controller = new CardCollectionTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardCollectionType cct = new CardCollectionType(name);
+        controller.create(cct);
+        return cct;
+    }
+
+    @Override
+    public CardCollection createCardCollection(CardCollectionType type, String name) throws PreexistingEntityException, Exception {
+        CardCollectionJpaController controller = new CardCollectionJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardCollection cc = new CardCollection(type.getId(), name);
+        cc.setCardCollectionType(type);
+        controller.create(cc);
+        return cc;
+    }
 }
