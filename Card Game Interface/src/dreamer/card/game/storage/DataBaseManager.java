@@ -132,12 +132,12 @@ public class DataBaseManager implements IDataBaseManager {
         if (result.isEmpty()) {
             attrType = new CardAttributeType(value);
             catController.create(attrType);
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.ALL,
+            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.FINE,
                     "Created attribute type: " + value + " on the database!");
         } else {
             attrType = (CardAttributeType) result.get(0);
         }
-        //Add Card Attributes
+        //Add Attributes
         for (String attribute : values) {
             CardAttributeJpaController caController = new CardAttributeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
             parameters.clear();
@@ -148,7 +148,7 @@ public class DataBaseManager implements IDataBaseManager {
                 attr.setName(attribute);
                 attr.setCardAttributeType(attrType);
                 caController.create(attr);
-                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.ALL,
+                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.FINE,
                         "Created attribute: " + attribute + " on the database!");
             }
         }
@@ -159,6 +159,8 @@ public class DataBaseManager implements IDataBaseManager {
         CardTypeJpaController cardTypeController = new CardTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
         CardType card_type = new CardType(type);
         cardTypeController.create(card_type);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Created card type: " + type + " on the database!");
         return card_type;
     }
 
@@ -168,6 +170,8 @@ public class DataBaseManager implements IDataBaseManager {
         Card card = new Card(type.getId(), name, text);
         card.setCardType(type);
         cardController.create(card);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Created card: " + name + " on the database!");
         return card;
     }
 
@@ -184,6 +188,8 @@ public class DataBaseManager implements IDataBaseManager {
         chcaController.create(chca);
         card.getCardHasCardAttributeList().add(chca);
         cardController.edit(card);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Added attribute: " + attr.getName() + " with value: " + value + " on the database!");
     }
 
     @Override
@@ -192,6 +198,8 @@ public class DataBaseManager implements IDataBaseManager {
         CardSet cs = new CardSet(game.getId(), abbreviation, name, released);
         cs.setGame(game);
         csController.create(cs);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Created card set: " + name + " on the database!");
         return cs;
     }
 
@@ -200,6 +208,8 @@ public class DataBaseManager implements IDataBaseManager {
         CardSetJpaController csController = new CardSetJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
         cs.getCardList().addAll(cards);
         csController.edit(cs);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Added " + cards.size() + " to set: " + cs.getName());
     }
 
     @Override
@@ -218,6 +228,8 @@ public class DataBaseManager implements IDataBaseManager {
         CardCollectionTypeJpaController controller = new CardCollectionTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
         CardCollectionType cct = new CardCollectionType(name);
         controller.create(cct);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Created card collection type: " + name + " on the database!");
         return cct;
     }
 
@@ -227,6 +239,77 @@ public class DataBaseManager implements IDataBaseManager {
         CardCollection cc = new CardCollection(type.getId(), name);
         cc.setCardCollectionType(type);
         controller.create(cc);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Created card collection: " + name + " on the database!");
         return cc;
+    }
+
+    @Override
+    public CardCollection addCardsToCollection(HashMap<Card, Integer> cards, CardCollection collection) throws PreexistingEntityException, Exception {
+        for (Entry<Card, Integer> entry : cards.entrySet()) {
+            if (entry.getValue() < 0) {
+                throw new Exception("Invalid operation! Tried to add a negative value. Use removeCardsFromCollection instead!");
+            }
+            CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+            CardCollectionHasCard cchc = controller.findCardCollectionHasCard(new CardCollectionHasCardPK(collection.getCardCollectionPK().getId(), collection.getCardCollectionPK().getCardCollectionTypeId(),
+                    entry.getKey().getCardPK().getId(), entry.getKey().getCardPK().getCardTypeId()));
+            if (cchc == null) {
+                cchc = new CardCollectionHasCard(collection.getCardCollectionPK().getId(), collection.getCardCollectionPK().getCardCollectionTypeId(),
+                        entry.getKey().getCardPK().getId(), entry.getKey().getCardPK().getCardTypeId(), entry.getValue());
+                cchc.setCard(entry.getKey());
+                cchc.setCardCollection(collection);
+                controller.create(cchc);
+            } else {
+                cchc.setAmount(cchc.getAmount() + entry.getValue());
+                controller.edit(cchc);
+            }
+            Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                    "Added " + entry.getValue() + " instances of " + entry.getKey().getName() + " to collection: " + collection.getName());
+        }
+        CardCollectionJpaController ccController = new CardCollectionJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        collection = ccController.findCardCollection(collection.getCardCollectionPK());
+        return collection;
+    }
+
+    @Override
+    public CardCollection removeCardsFromCollection(HashMap<Card, Integer> cards, CardCollection collection) throws PreexistingEntityException, Exception {
+        for (Entry<Card, Integer> entry : cards.entrySet()) {
+            if (entry.getValue() < 0) {
+                throw new Exception("Invalid operation! Tried to remove a negative value. Use addCardsToCollection instead!");
+            }
+            CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+            CardCollectionHasCard cchc = controller.findCardCollectionHasCard(new CardCollectionHasCardPK(collection.getCardCollectionPK().getId(), collection.getCardCollectionPK().getCardCollectionTypeId(),
+                    entry.getKey().getCardPK().getId(), entry.getKey().getCardPK().getCardTypeId()));
+            if (cchc != null) {
+                int initialAmount = cchc.getAmount();
+                int finalAmount = initialAmount - entry.getValue();
+                if (finalAmount < 0) {
+                    finalAmount = 0;
+                }
+                if (finalAmount == 0) {
+                    //Remove it
+                    controller.destroy(cchc.getCardCollectionHasCardPK());
+                } else {
+                    cchc.setAmount(finalAmount);
+                    controller.edit(cchc);
+                }
+                Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                        "Removed " + (initialAmount - finalAmount) + " instances of " + entry.getKey().getName() + " from collection: " + collection.getName());
+            }
+        }
+        CardCollectionJpaController ccController = new CardCollectionJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        collection = ccController.findCardCollection(collection.getCardCollectionPK());
+        return collection;
+    }
+
+    @Override
+    public String printCardsCollection(CardCollection cc) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(cc.getCardCollectionType().getName()).append(":").append(cc.getName()).append('\n').append("contents:").append('\n');
+        for (CardCollectionHasCard card : cc.getCardCollectionHasCardList()) {
+            sb.append(card.getCard().getName()).append(" X ").append(card.getAmount()).append('\n');
+        }
+        sb.append("-----------------------------------------");
+        return sb.toString();
     }
 }

@@ -40,6 +40,9 @@ public class CardJpaController implements Serializable {
         if (card.getCardSetList() == null) {
             card.setCardSetList(new ArrayList<CardSet>());
         }
+        if (card.getCardCollectionHasCardList() == null) {
+            card.setCardCollectionHasCardList(new ArrayList<CardCollectionHasCard>());
+        }
         if (card.getCardHasCardAttributeList() == null) {
             card.setCardHasCardAttributeList(new ArrayList<CardHasCardAttribute>());
         }
@@ -59,6 +62,12 @@ public class CardJpaController implements Serializable {
                 attachedCardSetList.add(cardSetListCardSetToAttach);
             }
             card.setCardSetList(attachedCardSetList);
+            List<CardCollectionHasCard> attachedCardCollectionHasCardList = new ArrayList<CardCollectionHasCard>();
+            for (CardCollectionHasCard cardCollectionHasCardListCardCollectionHasCardToAttach : card.getCardCollectionHasCardList()) {
+                cardCollectionHasCardListCardCollectionHasCardToAttach = em.getReference(cardCollectionHasCardListCardCollectionHasCardToAttach.getClass(), cardCollectionHasCardListCardCollectionHasCardToAttach.getCardCollectionHasCardPK());
+                attachedCardCollectionHasCardList.add(cardCollectionHasCardListCardCollectionHasCardToAttach);
+            }
+            card.setCardCollectionHasCardList(attachedCardCollectionHasCardList);
             List<CardHasCardAttribute> attachedCardHasCardAttributeList = new ArrayList<CardHasCardAttribute>();
             for (CardHasCardAttribute cardHasCardAttributeListCardHasCardAttributeToAttach : card.getCardHasCardAttributeList()) {
                 cardHasCardAttributeListCardHasCardAttributeToAttach = em.getReference(cardHasCardAttributeListCardHasCardAttributeToAttach.getClass(), cardHasCardAttributeListCardHasCardAttributeToAttach.getCardHasCardAttributePK());
@@ -73,6 +82,15 @@ public class CardJpaController implements Serializable {
             for (CardSet cardSetListCardSet : card.getCardSetList()) {
                 cardSetListCardSet.getCardList().add(card);
                 cardSetListCardSet = em.merge(cardSetListCardSet);
+            }
+            for (CardCollectionHasCard cardCollectionHasCardListCardCollectionHasCard : card.getCardCollectionHasCardList()) {
+                Card oldCardOfCardCollectionHasCardListCardCollectionHasCard = cardCollectionHasCardListCardCollectionHasCard.getCard();
+                cardCollectionHasCardListCardCollectionHasCard.setCard(card);
+                cardCollectionHasCardListCardCollectionHasCard = em.merge(cardCollectionHasCardListCardCollectionHasCard);
+                if (oldCardOfCardCollectionHasCardListCardCollectionHasCard != null) {
+                    oldCardOfCardCollectionHasCardListCardCollectionHasCard.getCardCollectionHasCardList().remove(cardCollectionHasCardListCardCollectionHasCard);
+                    oldCardOfCardCollectionHasCardListCardCollectionHasCard = em.merge(oldCardOfCardCollectionHasCardListCardCollectionHasCard);
+                }
             }
             for (CardHasCardAttribute cardHasCardAttributeListCardHasCardAttribute : card.getCardHasCardAttributeList()) {
                 Card oldCardOfCardHasCardAttributeListCardHasCardAttribute = cardHasCardAttributeListCardHasCardAttribute.getCard();
@@ -107,9 +125,19 @@ public class CardJpaController implements Serializable {
             CardType cardTypeNew = card.getCardType();
             List<CardSet> cardSetListOld = persistentCard.getCardSetList();
             List<CardSet> cardSetListNew = card.getCardSetList();
+            List<CardCollectionHasCard> cardCollectionHasCardListOld = persistentCard.getCardCollectionHasCardList();
+            List<CardCollectionHasCard> cardCollectionHasCardListNew = card.getCardCollectionHasCardList();
             List<CardHasCardAttribute> cardHasCardAttributeListOld = persistentCard.getCardHasCardAttributeList();
             List<CardHasCardAttribute> cardHasCardAttributeListNew = card.getCardHasCardAttributeList();
             List<String> illegalOrphanMessages = null;
+            for (CardCollectionHasCard cardCollectionHasCardListOldCardCollectionHasCard : cardCollectionHasCardListOld) {
+                if (!cardCollectionHasCardListNew.contains(cardCollectionHasCardListOldCardCollectionHasCard)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain CardCollectionHasCard " + cardCollectionHasCardListOldCardCollectionHasCard + " since its card field is not nullable.");
+                }
+            }
             for (CardHasCardAttribute cardHasCardAttributeListOldCardHasCardAttribute : cardHasCardAttributeListOld) {
                 if (!cardHasCardAttributeListNew.contains(cardHasCardAttributeListOldCardHasCardAttribute)) {
                     if (illegalOrphanMessages == null) {
@@ -132,6 +160,13 @@ public class CardJpaController implements Serializable {
             }
             cardSetListNew = attachedCardSetListNew;
             card.setCardSetList(cardSetListNew);
+            List<CardCollectionHasCard> attachedCardCollectionHasCardListNew = new ArrayList<CardCollectionHasCard>();
+            for (CardCollectionHasCard cardCollectionHasCardListNewCardCollectionHasCardToAttach : cardCollectionHasCardListNew) {
+                cardCollectionHasCardListNewCardCollectionHasCardToAttach = em.getReference(cardCollectionHasCardListNewCardCollectionHasCardToAttach.getClass(), cardCollectionHasCardListNewCardCollectionHasCardToAttach.getCardCollectionHasCardPK());
+                attachedCardCollectionHasCardListNew.add(cardCollectionHasCardListNewCardCollectionHasCardToAttach);
+            }
+            cardCollectionHasCardListNew = attachedCardCollectionHasCardListNew;
+            card.setCardCollectionHasCardList(cardCollectionHasCardListNew);
             List<CardHasCardAttribute> attachedCardHasCardAttributeListNew = new ArrayList<CardHasCardAttribute>();
             for (CardHasCardAttribute cardHasCardAttributeListNewCardHasCardAttributeToAttach : cardHasCardAttributeListNew) {
                 cardHasCardAttributeListNewCardHasCardAttributeToAttach = em.getReference(cardHasCardAttributeListNewCardHasCardAttributeToAttach.getClass(), cardHasCardAttributeListNewCardHasCardAttributeToAttach.getCardHasCardAttributePK());
@@ -158,6 +193,17 @@ public class CardJpaController implements Serializable {
                 if (!cardSetListOld.contains(cardSetListNewCardSet)) {
                     cardSetListNewCardSet.getCardList().add(card);
                     cardSetListNewCardSet = em.merge(cardSetListNewCardSet);
+                }
+            }
+            for (CardCollectionHasCard cardCollectionHasCardListNewCardCollectionHasCard : cardCollectionHasCardListNew) {
+                if (!cardCollectionHasCardListOld.contains(cardCollectionHasCardListNewCardCollectionHasCard)) {
+                    Card oldCardOfCardCollectionHasCardListNewCardCollectionHasCard = cardCollectionHasCardListNewCardCollectionHasCard.getCard();
+                    cardCollectionHasCardListNewCardCollectionHasCard.setCard(card);
+                    cardCollectionHasCardListNewCardCollectionHasCard = em.merge(cardCollectionHasCardListNewCardCollectionHasCard);
+                    if (oldCardOfCardCollectionHasCardListNewCardCollectionHasCard != null && !oldCardOfCardCollectionHasCardListNewCardCollectionHasCard.equals(card)) {
+                        oldCardOfCardCollectionHasCardListNewCardCollectionHasCard.getCardCollectionHasCardList().remove(cardCollectionHasCardListNewCardCollectionHasCard);
+                        oldCardOfCardCollectionHasCardListNewCardCollectionHasCard = em.merge(oldCardOfCardCollectionHasCardListNewCardCollectionHasCard);
+                    }
                 }
             }
             for (CardHasCardAttribute cardHasCardAttributeListNewCardHasCardAttribute : cardHasCardAttributeListNew) {
@@ -201,6 +247,13 @@ public class CardJpaController implements Serializable {
                 throw new NonexistentEntityException("The card with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            List<CardCollectionHasCard> cardCollectionHasCardListOrphanCheck = card.getCardCollectionHasCardList();
+            for (CardCollectionHasCard cardCollectionHasCardListOrphanCheckCardCollectionHasCard : cardCollectionHasCardListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Card (" + card + ") cannot be destroyed since the CardCollectionHasCard " + cardCollectionHasCardListOrphanCheckCardCollectionHasCard + " in its cardCollectionHasCardList field has a non-nullable card field.");
+            }
             List<CardHasCardAttribute> cardHasCardAttributeListOrphanCheck = card.getCardHasCardAttributeList();
             for (CardHasCardAttribute cardHasCardAttributeListOrphanCheckCardHasCardAttribute : cardHasCardAttributeListOrphanCheck) {
                 if (illegalOrphanMessages == null) {

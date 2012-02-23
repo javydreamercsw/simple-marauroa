@@ -38,10 +38,10 @@ public class CardHasCardAttributeJpaController implements Serializable {
         if (cardHasCardAttribute.getCardHasCardAttributePK() == null) {
             cardHasCardAttribute.setCardHasCardAttributePK(new CardHasCardAttributePK());
         }
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardCardTypeId(cardHasCardAttribute.getCard().getCardPK().getCardTypeId());
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeCardAttributeTypeId(cardHasCardAttribute.getCardAttribute().getCardAttributePK().getCardAttributeTypeId());
         cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeId(cardHasCardAttribute.getCardAttribute().getCardAttributePK().getId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeCardAttributeTypeId(cardHasCardAttribute.getCardAttribute().getCardAttributePK().getCardAttributeTypeId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardCardTypeId(cardHasCardAttribute.getCard().getCardPK().getCardTypeId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -79,10 +79,10 @@ public class CardHasCardAttributeJpaController implements Serializable {
     }
 
     public void edit(CardHasCardAttribute cardHasCardAttribute) throws NonexistentEntityException, Exception {
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardCardTypeId(cardHasCardAttribute.getCard().getCardPK().getCardTypeId());
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeCardAttributeTypeId(cardHasCardAttribute.getCardAttribute().getCardAttributePK().getCardAttributeTypeId());
         cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeId(cardHasCardAttribute.getCardAttribute().getCardAttributePK().getId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeCardAttributeTypeId(cardHasCardAttribute.getCardAttribute().getCardAttributePK().getCardAttributeTypeId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardCardTypeId(cardHasCardAttribute.getCard().getCardPK().getCardTypeId());
         EntityManager em = null;
         try {
             em = getEntityManager();

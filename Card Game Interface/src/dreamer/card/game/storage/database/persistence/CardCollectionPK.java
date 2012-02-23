@@ -13,7 +13,6 @@ import javax.persistence.*;
  */
 @Embeddable
 public class CardCollectionPK implements Serializable {
-
     @Basic(optional = false)
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "CardCollectionGen")
