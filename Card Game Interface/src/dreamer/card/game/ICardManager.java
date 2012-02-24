@@ -12,7 +12,7 @@ public interface ICardManager {
     /**
      * Get a list of decks
      *
-     * @return
+     * @return list of decks
      */
     List<IDeck> getDecks();
 
@@ -31,7 +31,7 @@ public interface ICardManager {
     /**
      * Selected deck (in use)
      *
-     * @return
+     * @return selected deck
      */
     IDeck getDeck();
 

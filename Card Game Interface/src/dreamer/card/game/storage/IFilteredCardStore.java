@@ -38,11 +38,21 @@ public interface IFilteredCardStore<T> extends Iterable<T>, ICardCountable {
      * return top level cards group if grouping is enabled or null if not
      * enabled
      *
-     * @return
+     * @return CardGroup[]
      */
     public CardGroup[] getCardGroups();
 
+    /**
+     * Get CardGroup
+     * @param index Index of CardGroup
+     * @return CardGroup
+     */
     public CardGroup getCardGroup(int index);
 
+    /**
+     * Contains card?
+     * @param card Card to check
+     * @return True if contained
+     */
     public boolean contains(T card);
 }

@@ -28,7 +28,7 @@ public interface ICard extends Comparable {
     /**
      * Card name
      *
-     * @return
+     * @return Card name
      */
     public String getName();
 

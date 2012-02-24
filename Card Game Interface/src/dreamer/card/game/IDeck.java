@@ -40,7 +40,7 @@ public interface IDeck {
     /**
      * Ditch first card of that type
      *
-     * @param typemType to ditch
+     * @param type Type to ditch
      * @param random true if cards to be selected from random places on deck.
      * @param amount cards to be ditched
      * @return Cards ditched
@@ -50,7 +50,7 @@ public interface IDeck {
     /**
      * Ditch first card of that type
      *
-     * @param typemType to ditch
+     * @param type Type to ditch
      * @return Card ditched
      */
     public ICard ditch(Class<? extends ICardType> type);
@@ -99,14 +99,13 @@ public interface IDeck {
     /**
      * Ditch first card of that type
      *
-     * @param typemType to draw
+     * @param type Type to draw
      * @return Card drawn
      */
     public ICard draw(Class<? extends ICardType> type);
 
     /**
-     * Draw top card.
-     * Same as draw(false)
+     * Draw top card. Same as draw(false)
      *
      * @return Card drawn
      */
@@ -163,9 +162,10 @@ public interface IDeck {
      * @return size
      */
     public int getUsedPileSize();
-    
+
     /**
      * Get deck name
+     *
      * @return deck name
      */
     public String getName();
