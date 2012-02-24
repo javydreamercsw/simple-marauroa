@@ -75,6 +75,8 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
 
     /**
      * Count of the cards in the filtered list
+     *
+     * @return Count
      */
     @Override
     public int getCount() {
@@ -178,7 +180,7 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
                     tempFilteredList.add(elem);
                 }
                 if (tempFilteredList.size() > filter.getLimit()) {
-                    Object last = ((TreeSet) tempFilteredList).last();
+                    ICard last = (ICard) ((TreeSet) tempFilteredList).last();
                     tempFilteredList.remove(last);
                 }
             }
@@ -230,7 +232,7 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
     /**
      * @param elem
      * @param cardField
-     * @return
+     * @return CardGroup
      */
     public abstract CardGroup findGroupIndex(ICard elem, ICardField cardField);
 

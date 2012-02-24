@@ -22,9 +22,8 @@ public interface ICardSet<T> extends Iterable<T> {
 	/**
 	 * Add cards to a physical media
 	 * 
-	 * @param card
-	 * @return TODO
-	 * @return
+         * @param list 
+         * @return Successful or not
 	 */
 	public abstract boolean addAll(Collection<? extends T> list);
 
@@ -34,19 +33,21 @@ public interface ICardSet<T> extends Iterable<T> {
 	 * @param card
 	 * @return
 	 */
-	public abstract boolean remove(T o);
+	public abstract boolean remove(T card);
 
 	/**
 	 * Remove cards to a physical media
 	 * 
-	 * @param card
-	 * @return
+         * @param list 
+         * @return Successful or not
 	 */
 	public abstract boolean removeAll(Collection<? extends T> list);
 
 	/**
 	 * Remove all cards from collection
-	 */
+         * 
+         * @return Successful or not
+         */
 	public abstract boolean removeAll();
 
 	/**
