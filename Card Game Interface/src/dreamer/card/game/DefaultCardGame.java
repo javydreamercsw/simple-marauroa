@@ -6,6 +6,7 @@ import dreamer.card.game.storage.database.persistence.Game;
 import dreamer.card.game.storage.database.persistence.controller.GameJpaController;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -18,9 +19,9 @@ import org.openide.util.Lookup;
  */
 public abstract class DefaultCardGame implements ICardGame {
 
-    protected static HashMap<String, List<String>> attribs = new HashMap<String, List<String>>();
-    protected static ArrayList<String> collectionTypes = new ArrayList<String>();
-    protected static HashMap<String, String> collections = new HashMap<String, String>();
+    protected static final List<String> attribs = new ArrayList<String>();
+    protected static final ArrayList<String> collectionTypes = new ArrayList<String>();
+    protected static final HashMap<String, String> collections = new HashMap<String, String>();
 
     @Override
     public void init() {
@@ -31,22 +32,17 @@ public abstract class DefaultCardGame implements ICardGame {
             List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
             if (result.isEmpty()) {
                 controller.create(new Game(getName()));
-                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.FINE,
-                        "Created game: " + getName() + " on the database!");
+                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.FINE, "Created game: {0} on the database!", getName());
             }
-
-            //Create attributes
-            for (Entry<String, List<String>> entry : attribs.entrySet()) {
-                Lookup.getDefault().lookup(IDataBaseManager.class).createAttributes(entry.getKey(), entry.getValue());
+            for (String attr : attribs) {
+                Lookup.getDefault().lookup(IDataBaseManager.class).createAttributes(attr);
             }
-
-            //Create default Collection Types
-            for (String type : collectionTypes) {
+            for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
+                String type = it.next();
                 Lookup.getDefault().lookup(IDataBaseManager.class).createCardCollectionType(type);
             }
-
-            //Create default Collections
-            for (Entry<String, String> entry : collections.entrySet()) {
+            for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
+                Entry<String, String> entry = it.next();
                 parameters.put("name", entry.getKey());
                 CardCollectionType type = (CardCollectionType) Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardCollectionType.findByName", parameters).get(0);
                 Lookup.getDefault().lookup(IDataBaseManager.class).createCardCollection(type, entry.getValue());

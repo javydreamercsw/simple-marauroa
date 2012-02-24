@@ -10,6 +10,7 @@ import dreamer.card.game.storage.database.persistence.controller.exceptions.Pree
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -29,12 +30,36 @@ public interface IDataBaseManager {
      */
     public EntityManager getEntityManager();
 
+    /**
+     * Execute a native query (no results)
+     *
+     * @param query
+     * @throws Exception
+     */
     public void nativeQuery(String query) throws Exception;
 
+    /**
+     * Execute a native query (with results)
+     *
+     * @param query
+     * @return results
+     * @throws Exception
+     */
     public List<Object> namedQuery(String query) throws Exception;
 
+    /**
+     * Execute a native query (with results)
+     *
+     * @param query
+     * @param parameters
+     * @return results
+     * @throws Exception
+     */
     public List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws Exception;
 
+    /**
+     * Close the database
+     */
     public void close();
 
     /**
@@ -48,10 +73,9 @@ public interface IDataBaseManager {
      * Create attributes in the database
      *
      * @param type attribute type
-     * @param values list of possible values
      * @throws Exception
      */
-    public void createAttributes(String type, List<String> values) throws Exception;
+    public void createAttributes(String type) throws Exception;
 
     /**
      * Create a card type in the database.
@@ -79,11 +103,11 @@ public interface IDataBaseManager {
      *
      * @param card Card to add attribute to
      * @param attr Attribute to add
-     * @param value Value of attribute
+     * @return CardHasCardAttribute
      * @throws PreexistingEntityException
      * @throws Exception
      */
-    public void addAttributeToCard(Card card, CardAttribute attr, String value) throws PreexistingEntityException, Exception;
+    public CardHasCardAttribute addAttributeToCard(Card card, CardAttribute attr) throws PreexistingEntityException, Exception;
 
     /**
      * Create a card set
@@ -103,7 +127,7 @@ public interface IDataBaseManager {
      *
      * @param cards Cards to add
      * @param cs CardSet to be added to
-     * @throws NonexistingEntityException
+     * @throws NonexistentEntityException
      * @throws Exception
      */
     public void addCardsToSet(List<Card> cards, CardSet cs) throws NonexistentEntityException, Exception;
@@ -158,11 +182,81 @@ public interface IDataBaseManager {
      * @throws Exception
      */
     public CardCollection removeCardsFromCollection(HashMap<Card, Integer> cards, CardCollection collection) throws PreexistingEntityException, Exception;
-    
+
     /**
      * Print Card Collection contents
+     *
      * @param cc Card Collection to print
      * @return String listing the pages in a collection
      */
     public String printCardsCollection(CardCollection cc);
+
+    /**
+     * Check if attribute exists in data base
+     *
+     * @param attr
+     * @return true if exists
+     */
+    public boolean attributeExists(String attr);
+
+    /**
+     * Execute a created query
+     *
+     * @param query
+     * @return Results
+     * @throws Exception
+     */
+    public List<Object> createdQuery(String query) throws Exception;
+
+    /**
+     * Execute a created query
+     *
+     * @param query
+     * @param parameters
+     * @return results
+     * @throws Exception
+     */
+    public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws Exception;
+
+    /**
+     * Get CardAttribute from database
+     *
+     * @param attr attribute name
+     * @return CardAttribute
+     * @throws Exception
+     */
+    public CardAttribute getCardAttribute(String attr) throws Exception;
+
+    /**
+     * Add a set of attributes to a card (Map<Attribute Type, Attribute name>)
+     *
+     * @param card Card to add attributes to
+     * @param attributes Set of attributes
+     * @throws Exception
+     */
+    public void addAttributesToCard(Card card, Map<String, String> attributes) throws Exception;
+
+    /**
+     * Create a an attribute if needed
+     *
+     * @param attr attribute name
+     * @param value Attribute value
+     * @throws Exception
+     */
+    public void createAttributeIfNeeded(String attr, String value) throws Exception;
+
+    /**
+     * Get a map of attributes for a card
+     * @param name card's name
+     * @return map of attributes for a card
+     * @throws Exception
+     */
+    public Map<String, String> getAttributesForCard(String name) throws Exception;
+
+    /**
+     * Get a map of attributes for a card
+     * @param card Card
+     * @return map of attributes for a card
+     */
+    public Map<String, String> getAttributesForCard(Card card);
 }

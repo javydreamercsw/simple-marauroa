@@ -18,4 +18,9 @@ public interface ICardGame {
      * Initialize the system for this game
      */
     public void init();
+    
+    /**
+     * Update the card database
+     */
+    public void updateDatabase();
 }

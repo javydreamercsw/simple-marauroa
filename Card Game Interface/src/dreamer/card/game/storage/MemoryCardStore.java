@@ -12,6 +12,7 @@ package dreamer.card.game.storage;
 
 import dreamer.card.game.ICardCountable;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 /**
  * ArrayList based implementation for AbstractCardStore
@@ -88,4 +89,5 @@ public class MemoryCardStore<T> extends AbstractCardStoreWithStorage<T> implemen
     public boolean isLoaded() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    private static final Logger LOG = Logger.getLogger(MemoryCardStore.class.getName());
 }

@@ -1,5 +1,7 @@
 package dreamer.card.game.model.events;
 
+import java.util.logging.Logger;
+
 public class CardEvent {
 	public static final int ADD = 1;
 	public static final int REMOVE = 2;
@@ -33,4 +35,5 @@ public class CardEvent {
 	public String toString() {
 		return "event: " + type + " from " + source + " data " + data;
 	}
+    private static final Logger LOG = Logger.getLogger(CardEvent.class.getName());
 }

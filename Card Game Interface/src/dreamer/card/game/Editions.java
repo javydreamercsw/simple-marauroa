@@ -1,6 +1,5 @@
 package dreamer.card.game;
 
-import dreamer.card.game.ISearchableProperty;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -302,13 +301,11 @@ public final class Editions implements ISearchableProperty {
                     if (releaseDate != null && releaseDate.length() > 0) {
                         set.setReleaseDate(releaseDate);
                     } else {
-                        System.err.println("Missing release date " + line);
                     }
                     String type = attrs[4].trim();
                     if (type != null && type.length() > 0) {
                         set.setType(type);
                     } else {
-                        System.err.println("Missing type " + line);
                     }
                     // Block
                     // skipping
@@ -324,7 +321,6 @@ public final class Editions implements ISearchableProperty {
                         set.addFormat(string.trim());
                     }
                 } catch (Exception e) {
-                    System.err.println("bad editions record: " + line);
                     e.printStackTrace();
                 }
             }
@@ -396,4 +392,5 @@ public final class Editions implements ISearchableProperty {
     public Collection<String> getNames() {
         return new ArrayList<String>(this.name2ed.keySet());
     }
+    private static final Logger LOG = Logger.getLogger(Editions.class.getName());
 }

@@ -6,6 +6,7 @@ package dreamer.card.game.storage.database.persistence;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -91,5 +92,6 @@ public class CardCollectionType implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardCollectionType[ id=" + id + " ]";
     }
+    private static final Logger LOG = Logger.getLogger(CardCollectionType.class.getName());
     
 }

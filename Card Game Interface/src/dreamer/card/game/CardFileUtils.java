@@ -54,4 +54,7 @@ public class CardFileUtils {
         }
         return fileData.toString();
     }
+
+    private CardFileUtils() {
+    }
 }

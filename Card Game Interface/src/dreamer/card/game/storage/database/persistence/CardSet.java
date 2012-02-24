@@ -7,6 +7,7 @@ package dreamer.card.game.storage.database.persistence;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,7 +31,7 @@ public class CardSet implements Serializable {
     @EmbeddedId
     protected CardSetPK cardSetPK;
     @Basic(optional = false)
-    @Column(name = "abbreviation", nullable = false, length = 5)
+    @Column(name = "abbreviation", nullable = false, length = 80)
     private String abbreviation;
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 80)
@@ -144,5 +145,6 @@ public class CardSet implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardSet[ cardSetPK=" + cardSetPK + " ]";
     }
+    private static final Logger LOG = Logger.getLogger(CardSet.class.getName());
     
 }
