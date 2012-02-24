@@ -1,6 +1,5 @@
 package dreamer.card.game.storage;
 
-import dreamer.card.game.DefaultCardGame;
 import dreamer.card.game.ICardGame;
 import dreamer.card.game.storage.database.persistence.*;
 import dreamer.card.game.storage.database.persistence.controller.*;
@@ -21,9 +20,10 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IDataBaseManager.class)
 public class DataBaseManager implements IDataBaseManager {
 
+    private static final Logger LOG = Logger.getLogger(DataBaseManager.class.getName());
     private EntityManagerFactory emf;
     private EntityManager em;
-    private String pu;
+    private String pu = "Card_Game_InterfacePU";
 
     public void init() {
         if (emf == null) {
@@ -46,6 +46,7 @@ public class DataBaseManager implements IDataBaseManager {
     /**
      * @return the emf
      */
+    @Override
     public EntityManagerFactory getEntityManagerFactory() {
         if (emf == null) {
             init();
@@ -56,6 +57,7 @@ public class DataBaseManager implements IDataBaseManager {
     /**
      * @return the em
      */
+    @Override
     public EntityManager getEntityManager() {
         if (em == null) {
             init();
@@ -63,10 +65,37 @@ public class DataBaseManager implements IDataBaseManager {
         return em;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws Exception {
+        Query q;
+        getTransaction().begin();
+        q = getEntityManager().createQuery(query);
+        if (parameters != null) {
+            Iterator<Map.Entry<String, Object>> entries = parameters.entrySet().iterator();
+            while (entries.hasNext()) {
+                Entry<String, Object> e = entries.next();
+                q.setParameter(e.getKey().toString(), e.getValue());
+            }
+        }
+        List result = q.getResultList();
+        if (getTransaction().isActive()) {
+            getTransaction().commit();
+        }
+        return result;
+    }
+
+    @Override
+    public List<Object> createdQuery(String query) throws Exception {
+        return createdQuery(query, null);
+    }
+
+    @Override
     public List<Object> namedQuery(String query) throws Exception {
         return protectedNamedQuery(query, null, false);
     }
 
+    @Override
     public List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws Exception {
         return protectedNamedQuery(query, parameters, false);
     }
@@ -90,16 +119,18 @@ public class DataBaseManager implements IDataBaseManager {
         return result;
     }
 
+    @Override
     public void nativeQuery(String query) throws Exception {
-        EntityManager em = getEntityManager();
-        EntityTransaction transaction = em.getTransaction();
+        EntityManager localEM = getEntityManager();
+        EntityTransaction transaction = localEM.getTransaction();
         transaction.begin();
-        em.createNativeQuery(query).executeUpdate();
+        localEM.createNativeQuery(query).executeUpdate();
         if (transaction.isActive()) {
             transaction.commit();
         }
     }
 
+    @Override
     public void close() {
         getEntityManagerFactory().close();
     }
@@ -118,67 +149,49 @@ public class DataBaseManager implements IDataBaseManager {
     /**
      * @param pu the pu to set
      */
+    @Override
     public void setPU(String pu) {
         this.pu = pu;
     }
 
-    public void createAttributes(String type, List<String> values) throws Exception {
-        CardAttributeTypeJpaController catController = new CardAttributeTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
-        HashMap parameters = new HashMap();
-        String value = type;
-        parameters.put("name", value);
-        CardAttributeType attrType = null;
-        List result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
-        if (result.isEmpty()) {
-            attrType = new CardAttributeType(value);
-            catController.create(attrType);
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.FINE,
-                    "Created attribute type: " + value + " on the database!");
-        } else {
-            attrType = (CardAttributeType) result.get(0);
-        }
+    @Override
+    public void createAttributes(String type) throws Exception {
         //Add Attributes
-        for (String attribute : values) {
-            CardAttributeJpaController caController = new CardAttributeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
-            parameters.clear();
-            parameters.put("name", attribute);
-            result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
-            if (result.isEmpty()) {
-                CardAttribute attr = new CardAttribute(attrType.getId());
-                attr.setName(attribute);
-                attr.setCardAttributeType(attrType);
-                caController.create(attr);
-                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.FINE,
-                        "Created attribute: " + attribute + " on the database!");
-            }
+        CardAttributeJpaController caController = new CardAttributeJpaController(getEntityManagerFactory());
+        if (!attributeExists(type)) {
+            CardAttribute attr = new CardAttribute();
+            attr.setName(type);
+            caController.create(attr);
+            LOG.log(Level.FINE,
+                    "Created attribute: {0} on the database!", type);
         }
     }
 
     @Override
     public CardType createCardType(String type) throws Exception {
-        CardTypeJpaController cardTypeController = new CardTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardTypeJpaController cardTypeController = new CardTypeJpaController(getEntityManagerFactory());
         CardType card_type = new CardType(type);
         cardTypeController.create(card_type);
         Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Created card type: " + type + " on the database!");
+                "Created card type: {0} on the database!", type);
         return card_type;
     }
 
     @Override
     public Card createCard(CardType type, String name, byte[] text) throws PreexistingEntityException, Exception {
-        CardJpaController cardController = new CardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
         Card card = new Card(type.getId(), name, text);
         card.setCardType(type);
         cardController.create(card);
         Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Created card: " + name + " on the database!");
+                "Created card: {0} on the database!", name);
         return card;
     }
 
     @Override
-    public void addAttributeToCard(Card card, CardAttribute attr, String value) throws PreexistingEntityException, Exception {
-        CardJpaController cardController = new CardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
-        CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+    public CardHasCardAttribute addAttributeToCard(Card card, CardAttribute attr) throws PreexistingEntityException, Exception {
+        CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
+        CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
         CardHasCardAttribute chca = new CardHasCardAttribute(card.getCardPK().getId(),
                 card.getCardPK().getCardTypeId(), attr.getCardAttributePK().getId(),
                 attr.getCardAttributePK().getCardAttributeTypeId());
@@ -188,34 +201,33 @@ public class DataBaseManager implements IDataBaseManager {
         chcaController.create(chca);
         card.getCardHasCardAttributeList().add(chca);
         cardController.edit(card);
-        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Added attribute: " + attr.getName() + " with value: " + value + " on the database!");
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Added attribute: {0} to card: {1} on the database!", new Object[]{attr.getName(), card.getName()});
+        return chca;
     }
 
     @Override
     public CardSet createCardSet(Game game, String name, String abbreviation, Date released) throws PreexistingEntityException, Exception {
-        CardSetJpaController csController = new CardSetJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
         CardSet cs = new CardSet(game.getId(), abbreviation, name, released);
         cs.setGame(game);
+        cs.setReleased(released == null ? new Date() : released);
         csController.create(cs);
-        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Created card set: " + name + " on the database!");
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Created card set: {0} on the database!", name);
         return cs;
     }
 
     @Override
     public void addCardsToSet(List<Card> cards, CardSet cs) throws NonexistentEntityException, Exception {
-        CardSetJpaController csController = new CardSetJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
         cs.getCardList().addAll(cards);
         csController.edit(cs);
-        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Added " + cards.size() + " to set: " + cs.getName());
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Added {0} to set: {1}", new Object[]{cards.size(), cs.getName()});
     }
 
     @Override
     public String printCardsInSet(CardSet cs) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Game: " + cs.getGame().getName()).append('\n').append(cs.getName() + ":").append('\n');
+        sb.append("Game: ").append(cs.getGame().getName()).append('\n').append(cs.getName()).append(":").append('\n');
         for (Card card : cs.getCardList()) {
             sb.append(card.getName()).append('\n');
         }
@@ -225,22 +237,20 @@ public class DataBaseManager implements IDataBaseManager {
 
     @Override
     public CardCollectionType createCardCollectionType(String name) throws PreexistingEntityException, Exception {
-        CardCollectionTypeJpaController controller = new CardCollectionTypeJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardCollectionTypeJpaController controller = new CardCollectionTypeJpaController(getEntityManagerFactory());
         CardCollectionType cct = new CardCollectionType(name);
         controller.create(cct);
-        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Created card collection type: " + name + " on the database!");
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Created card collection type: {0} on the database!", name);
         return cct;
     }
 
     @Override
     public CardCollection createCardCollection(CardCollectionType type, String name) throws PreexistingEntityException, Exception {
-        CardCollectionJpaController controller = new CardCollectionJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardCollectionJpaController controller = new CardCollectionJpaController(getEntityManagerFactory());
         CardCollection cc = new CardCollection(type.getId(), name);
         cc.setCardCollectionType(type);
         controller.create(cc);
-        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                "Created card collection: " + name + " on the database!");
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Created card collection: {0} on the database!", name);
         return cc;
     }
 
@@ -250,7 +260,7 @@ public class DataBaseManager implements IDataBaseManager {
             if (entry.getValue() < 0) {
                 throw new Exception("Invalid operation! Tried to add a negative value. Use removeCardsFromCollection instead!");
             }
-            CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+            CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(getEntityManagerFactory());
             CardCollectionHasCard cchc = controller.findCardCollectionHasCard(new CardCollectionHasCardPK(collection.getCardCollectionPK().getId(), collection.getCardCollectionPK().getCardCollectionTypeId(),
                     entry.getKey().getCardPK().getId(), entry.getKey().getCardPK().getCardTypeId()));
             if (cchc == null) {
@@ -263,10 +273,9 @@ public class DataBaseManager implements IDataBaseManager {
                 cchc.setAmount(cchc.getAmount() + entry.getValue());
                 controller.edit(cchc);
             }
-            Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                    "Added " + entry.getValue() + " instances of " + entry.getKey().getName() + " to collection: " + collection.getName());
+            Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Added {0} instances of {1} to collection: {2}", new Object[]{entry.getValue(), entry.getKey().getName(), collection.getName()});
         }
-        CardCollectionJpaController ccController = new CardCollectionJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardCollectionJpaController ccController = new CardCollectionJpaController(getEntityManagerFactory());
         collection = ccController.findCardCollection(collection.getCardCollectionPK());
         return collection;
     }
@@ -277,7 +286,7 @@ public class DataBaseManager implements IDataBaseManager {
             if (entry.getValue() < 0) {
                 throw new Exception("Invalid operation! Tried to remove a negative value. Use addCardsToCollection instead!");
             }
-            CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+            CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(getEntityManagerFactory());
             CardCollectionHasCard cchc = controller.findCardCollectionHasCard(new CardCollectionHasCardPK(collection.getCardCollectionPK().getId(), collection.getCardCollectionPK().getCardCollectionTypeId(),
                     entry.getKey().getCardPK().getId(), entry.getKey().getCardPK().getCardTypeId()));
             if (cchc != null) {
@@ -293,11 +302,10 @@ public class DataBaseManager implements IDataBaseManager {
                     cchc.setAmount(finalAmount);
                     controller.edit(cchc);
                 }
-                Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
-                        "Removed " + (initialAmount - finalAmount) + " instances of " + entry.getKey().getName() + " from collection: " + collection.getName());
+                Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Removed {0} instances of {1} from collection: {2}", new Object[]{initialAmount - finalAmount, entry.getKey().getName(), collection.getName()});
             }
         }
-        CardCollectionJpaController ccController = new CardCollectionJpaController(Lookup.getDefault().lookup(IDataBaseManager.class).getEntityManagerFactory());
+        CardCollectionJpaController ccController = new CardCollectionJpaController(getEntityManagerFactory());
         collection = ccController.findCardCollection(collection.getCardCollectionPK());
         return collection;
     }
@@ -311,5 +319,72 @@ public class DataBaseManager implements IDataBaseManager {
         }
         sb.append("-----------------------------------------");
         return sb.toString();
+    }
+
+    @Override
+    public boolean attributeExists(String attr) {
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", attr);
+            List result = null;
+            try {
+                result = namedQuery(
+                        "CardAttribute.findByName", parameters);
+            } catch (Exception ex) {
+                Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return !result.isEmpty();
+        } catch (Exception ex) {
+            Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        }
+    }
+
+    @Override
+    public CardAttribute getCardAttribute(String attr) throws Exception {
+        HashMap parameters = new HashMap();
+        parameters.put("name", attr);
+        return (CardAttribute) namedQuery("CardAttribute.findByName", parameters).get(0);
+    }
+
+    @Override
+    public void addAttributesToCard(Card card, Map<String, String> attributes) throws Exception {
+        for (Entry<String, String> entry : attributes.entrySet()) {
+            if (entry.getKey() != null && entry.getValue() != null && !entry.getValue().trim().isEmpty()) {
+                createAttributeIfNeeded(entry.getKey(), entry.getValue());
+                CardAttribute cardAttribute = getCardAttribute(entry.getKey());
+                CardHasCardAttribute chca = addAttributeToCard(card, cardAttribute);
+                chca.setValue(entry.getValue());
+                CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
+                chcaController.edit(chca);
+                LOG.log(Level.FINE, "Added attribute: {0} to card: {1} with value: {2}",
+                        new Object[]{entry.getKey(), card.getName(), entry.getValue()});
+            }
+        }
+    }
+
+    @Override
+    public void createAttributeIfNeeded(String attr, String value) throws Exception {
+        if (!attributeExists(attr)) {
+            createAttributes(attr);
+            LOG.log(Level.FINE, "Created attribute: {0}", new Object[]{attr});
+        }
+    }
+
+    @Override
+    public Map<String, String> getAttributesForCard(String name) throws Exception {
+        HashMap parameters = new HashMap();
+        parameters.put("name", name);
+        return getAttributesForCard((Card) namedQuery("Card.findByName", parameters).get(0));
+    }
+
+    @Override
+    public Map<String, String> getAttributesForCard(Card card) {
+        HashMap<String, String> attributes = new HashMap<String, String>();
+        for (Iterator<CardHasCardAttribute> it = card.getCardHasCardAttributeList().iterator(); it.hasNext();) {
+            CardHasCardAttribute attr = it.next();
+            attributes.put(attr.getCardAttribute().getName(), attr.getValue());
+        }
+        return attributes;
     }
 }

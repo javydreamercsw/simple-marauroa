@@ -8,11 +8,12 @@ import dreamer.card.game.storage.IDataBaseManager;
 import dreamer.card.game.storage.database.persistence.*;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static junit.framework.Assert.*;
 import org.junit.*;
 import org.openide.util.Lookup;
-import static junit.framework.Assert.*;
 
 /**
  *
@@ -20,6 +21,7 @@ import static junit.framework.Assert.*;
  */
 public class DefaultCardGameTest {
 
+    private static final Logger LOG = Logger.getLogger(DefaultCardGameTest.class.getName());
     private static Game game;
 
     public DefaultCardGameTest() {
@@ -48,7 +50,6 @@ public class DefaultCardGameTest {
     @Test
     public void testDatabase() {
         try {
-            System.out.println("init");
             HashMap parameters = new HashMap();
             DefaultCardGame instance = new DefaultCardGameImpl();
             parameters.put("name", instance.getName());
@@ -58,15 +59,11 @@ public class DefaultCardGameTest {
             result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
             assertFalse(result.isEmpty());
         } catch (Exception e) {
-            e.printStackTrace();
             fail();
         }
     }
 
     public static class DefaultCardGameImpl extends DefaultCardGame {
-
-        private static ArrayList<String> rarities = new ArrayList<String>();
-        private static ArrayList<String> creatureAttribs = new ArrayList<String>();
 
         @Override
         public String getName() {
@@ -74,17 +71,11 @@ public class DefaultCardGameTest {
         }
 
         static {
-            rarities.add("rarity.common");
-            rarities.add("rarity.uncommon");
-            rarities.add("rarity.rare");
-            rarities.add("rarity.mythic.rare");
-            rarities.add("rarity.land");
+            attribs.add("rarity");
+            attribs.add("creature");
 
-            attribs.put("rarity", rarities);
-            attribs.put("creature", creatureAttribs);
-
-            creatureAttribs.add("power");
-            creatureAttribs.add("toughness");
+            attribs.add("power");
+            attribs.add("toughness");
 
             collectionTypes.add("Deck");
             collectionTypes.add("Collection");
@@ -102,21 +93,14 @@ public class DefaultCardGameTest {
                 game = (Game) result.get(0);
                 System.out.println("Check types");
                 parameters.put("name", "rarity");
-                result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
-                assertFalse(result.isEmpty());
+                assertFalse(Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters).isEmpty());
                 parameters.put("name", "creature");
-                result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttributeType.findByName", parameters);
-                assertFalse(result.isEmpty());
+                assertFalse(Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters).isEmpty());
                 System.out.println("Check the attributes");
-                for (String rarity : rarities) {
+                for (Iterator<String> it = attribs.iterator(); it.hasNext();) {
+                    String rarity = it.next();
                     parameters.put("name", rarity);
-                    result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
-                    assertFalse(result.isEmpty());
-                }
-                for (String attr : creatureAttribs) {
-                    parameters.put("name", attr);
-                    result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
-                    assertFalse(result.isEmpty());
+                    assertFalse(Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters).isEmpty());
                 }
                 System.out.println("Create card type");
                 CardType sampleType = Lookup.getDefault().lookup(IDataBaseManager.class).createCardType("sample");
@@ -128,17 +112,19 @@ public class DefaultCardGameTest {
                 assertFalse(result.isEmpty());
                 Card temp = (Card) result.get(0);
                 assertTrue(temp.getName().equals(card.getName()));
-                assertTrue(temp.getText().equals(card.getText()));
+                assertTrue(Arrays.equals(temp.getText(), card.getText()));
                 System.out.println("Add an attribute to a card");
-                for (String rarity : rarities) {
+                for (Iterator<String> it = attribs.iterator(); it.hasNext();) {
+                    String rarity = it.next();
                     parameters.put("name", rarity);
                     result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardAttribute.findByName", parameters);
                     assertFalse(result.isEmpty());
                     Lookup.getDefault().lookup(IDataBaseManager.class).addAttributeToCard(card,
-                            (CardAttribute) result.get(0), "test");
+                            (CardAttribute) result.get(0));
                 }
                 System.out.println("Check attributes");
-                for (CardHasCardAttribute chca : card.getCardHasCardAttributeList()) {
+                for (Iterator<CardHasCardAttribute> it = card.getCardHasCardAttributeList().iterator(); it.hasNext();) {
+                    CardHasCardAttribute chca = it.next();
                     assertTrue(chca.getValue().equals("test"));
                 }
                 System.out.println("Create set");
@@ -173,12 +159,14 @@ public class DefaultCardGameTest {
                 System.out.println(set1);
                 System.out.println(set2);
                 System.out.println("Check Collection Type");
-                for (String type : collectionTypes) {
+                for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
+                    String type = it.next();
                     parameters.put("name", type);
                     assertFalse(Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardCollectionType.findByName", parameters).isEmpty());
                 }
                 System.out.println("Check Collections");
-                for (Map.Entry<String, String> entry : collections.entrySet()) {
+                for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
+                    Map.Entry<String, String> entry = it.next();
                     parameters.put("name", entry.getValue());
                     assertFalse(Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("CardCollection.findByName", parameters).isEmpty());
                 }
@@ -188,7 +176,7 @@ public class DefaultCardGameTest {
                 HashMap<Card, Integer> addToCollection = new HashMap<Card, Integer>();
                 int totalPages = 3, toRemove = 1;
                 addToCollection.put(temp, totalPages);
-                assertTrue(collection.getCardCollectionHasCardList().size() == 0);
+                assertTrue(collection.getCardCollectionHasCardList().isEmpty());
                 collection = Lookup.getDefault().lookup(IDataBaseManager.class).addCardsToCollection(addToCollection, collection);
                 assertTrue(collection.getCardCollectionHasCardList().size() == 1);
                 assertTrue(collection.getCardCollectionHasCardList().get(0).getAmount() == totalPages);
@@ -201,9 +189,14 @@ public class DefaultCardGameTest {
                 assertFalse(collectionList.isEmpty());
                 System.out.println(collectionList);
             } catch (Exception ex) {
-                Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 fail();
             }
+        }
+
+        @Override
+        public void updateDatabase() {
+            //Do nothing
         }
     }
 }

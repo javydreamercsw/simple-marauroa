@@ -1,5 +1,7 @@
 package dreamer.card.game;
 
+import java.util.logging.Logger;
+
 /**
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
@@ -29,4 +31,5 @@ public class CardFilterExpr {
     public void setTranslated(boolean translated) {
         this.translated = translated;
     }
+    private static final Logger LOG = Logger.getLogger(CardFilterExpr.class.getName());
 }

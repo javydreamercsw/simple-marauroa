@@ -1,5 +1,7 @@
 package dreamer.card.game.model.events;
 
+import java.util.logging.Logger;
+
 /**
  * This class is a thread safe list that is designed for storing lists of listeners. The
  * implementation is optimized for minimal memory footprint, frequent reads and infrequent writes.
@@ -70,8 +72,9 @@ public class ListenerList {
 	 *            href="ListenerList.html#same">same</a>.
 	 */
 	public ListenerList(int mode) {
-		if (mode != EQUALITY && mode != IDENTITY)
-			throw new IllegalArgumentException();
+		if (mode != EQUALITY && mode != IDENTITY) {
+            throw new IllegalArgumentException();
+        }
 		this.identity = mode == IDENTITY;
 	}
 
@@ -85,14 +88,16 @@ public class ListenerList {
 	public synchronized void add(Object listener) {
 		// This method is synchronized to protect against multiple threads adding
 		// or removing listeners concurrently. This does not block concurrent readers.
-		if (listener == null)
-			throw new IllegalArgumentException();
+		if (listener == null) {
+            throw new IllegalArgumentException();
+        }
 		// check for duplicates
 		final int oldSize = listeners.length;
 		for (int i = 0; i < oldSize; ++i) {
 			Object listener2 = listeners[i];
-			if (identity ? listener == listener2 : listener.equals(listener2))
-				return;
+			if (identity ? listener == listener2 : listener.equals(listener2)) {
+                return;
+            }
 		}
 		// Thread safety: create new array to avoid affecting concurrent readers
 		Object[] newListeners = new Object[oldSize + 1];
@@ -136,8 +141,9 @@ public class ListenerList {
 	public synchronized void remove(Object listener) {
 		// This method is synchronized to protect against multiple threads adding
 		// or removing listeners concurrently. This does not block concurrent readers.
-		if (listener == null)
-			throw new IllegalArgumentException();
+		if (listener == null) {
+            throw new IllegalArgumentException();
+        }
 		int oldSize = listeners.length;
 		for (int i = 0; i < oldSize; ++i) {
 			Object listener2 = listeners[i];
@@ -172,4 +178,5 @@ public class ListenerList {
 	public synchronized void clear() {
 		listeners = EmptyArray;
 	}
+    private static final Logger LOG = Logger.getLogger(ListenerList.class.getName());
 }

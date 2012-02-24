@@ -38,10 +38,6 @@ public class CardAttributePK implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getCardAttributeTypeId() {
         return cardAttributeTypeId;
     }

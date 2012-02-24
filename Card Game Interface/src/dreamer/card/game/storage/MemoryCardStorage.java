@@ -12,6 +12,7 @@ package dreamer.card.game.storage;
 
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * ArrayList based implementation for AbstractCardStore
@@ -92,4 +93,5 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
     public boolean isVirtual() {
         return true;
     }
+    private static final Logger LOG = Logger.getLogger(MemoryCardStorage.class.getName());
 }

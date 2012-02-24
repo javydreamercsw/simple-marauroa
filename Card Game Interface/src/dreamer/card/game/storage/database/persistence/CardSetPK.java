@@ -5,6 +5,7 @@
 package dreamer.card.game.storage.database.persistence;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 import javax.persistence.*;
 
 /**
@@ -74,5 +75,6 @@ public class CardSetPK implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardSetPK[ id=" + id + ", gameId=" + gameId + " ]";
     }
+    private static final Logger LOG = Logger.getLogger(CardSetPK.class.getName());
     
 }

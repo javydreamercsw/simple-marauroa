@@ -2,6 +2,7 @@ package dreamer.card.game.storage.database.persistence.controller.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class IllegalOrphanException extends Exception {
     private List<String> messages;
@@ -17,4 +18,5 @@ public class IllegalOrphanException extends Exception {
     public List<String> getMessages() {
         return messages;
     }
+    private static final Logger LOG = Logger.getLogger(IllegalOrphanException.class.getName());
 }

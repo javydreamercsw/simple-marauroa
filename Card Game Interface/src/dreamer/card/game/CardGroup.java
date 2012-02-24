@@ -10,11 +10,10 @@
  */
 package dreamer.card.game;
 
-import dreamer.card.game.ICardCountable;
-import dreamer.card.game.ICardField;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 /**
  * @author Alena
@@ -121,4 +120,5 @@ public class CardGroup implements ICardCountable {
             }
         }
     }
+    private static final Logger LOG = Logger.getLogger(CardGroup.class.getName());
 }

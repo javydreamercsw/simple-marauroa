@@ -5,10 +5,8 @@
 package dreamer.card.game.storage.database.persistence;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -30,11 +28,6 @@ public class CardAttribute implements Serializable {
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 45)
     private String name;
-    @JoinColumn(name = "card_attribute_type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private CardAttributeType cardAttributeType;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cardAttribute")
-    private List<CardHasCardAttribute> cardHasCardAttributeList;
 
     public CardAttribute() {
     }
@@ -66,23 +59,6 @@ public class CardAttribute implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public CardAttributeType getCardAttributeType() {
-        return cardAttributeType;
-    }
-
-    public void setCardAttributeType(CardAttributeType cardAttributeType) {
-        this.cardAttributeType = cardAttributeType;
-    }
-
-    @XmlTransient
-    public List<CardHasCardAttribute> getCardHasCardAttributeList() {
-        return cardHasCardAttributeList;
-    }
-
-    public void setCardHasCardAttributeList(List<CardHasCardAttribute> cardHasCardAttributeList) {
-        this.cardHasCardAttributeList = cardHasCardAttributeList;
     }
 
     @Override
