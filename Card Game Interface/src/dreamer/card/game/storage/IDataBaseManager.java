@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dreamer.card.game.storage;
 
 import dreamer.card.game.storage.database.persistence.*;
@@ -247,6 +243,7 @@ public interface IDataBaseManager {
 
     /**
      * Get a map of attributes for a card
+     *
      * @param name card's name
      * @return map of attributes for a card
      * @throws Exception
@@ -255,8 +252,16 @@ public interface IDataBaseManager {
 
     /**
      * Get a map of attributes for a card
+     *
      * @param card Card
      * @return map of attributes for a card
      */
     public Map<String, String> getAttributesForCard(Card card);
+
+    /**
+     * Set data base connection properties.
+     * 
+     * @param dataBaseProperties the DataBase Properties to set
+     */
+    public void setDataBaseProperties(Map<String, String> dataBaseProperties);
 }

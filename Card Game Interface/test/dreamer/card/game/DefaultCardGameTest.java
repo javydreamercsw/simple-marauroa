@@ -195,8 +195,9 @@ public class DefaultCardGameTest {
         }
 
         @Override
-        public void updateDatabase() {
+        public Runnable getUpdateRunnable() {
             //Do nothing
+            return null;
         }
     }
 }

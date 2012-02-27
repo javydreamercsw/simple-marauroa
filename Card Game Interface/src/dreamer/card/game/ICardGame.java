@@ -20,7 +20,8 @@ public interface ICardGame {
     public void init();
     
     /**
-     * Update the card database
+     * 
+     * @return
      */
-    public void updateDatabase();
+    public Runnable getUpdateRunnable();
 }

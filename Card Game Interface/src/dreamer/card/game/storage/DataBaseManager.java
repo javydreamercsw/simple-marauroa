@@ -24,10 +24,19 @@ public class DataBaseManager implements IDataBaseManager {
     private EntityManagerFactory emf;
     private EntityManager em;
     private String pu = "Card_Game_InterfacePU";
+    private Map<String, String> dataBaseProperties = null;
 
     public void init() {
         if (emf == null) {
-            emf = Persistence.createEntityManagerFactory(getPU());
+            if (dataBaseProperties == null) {
+                emf = Persistence.createEntityManagerFactory(getPU());
+            } else {
+                LOG.info("Provided the following configuration options:");
+                for (Entry<String, String> entry : dataBaseProperties.entrySet()) {
+                    LOG.log(Level.INFO, "{0}: {1}", new Object[]{entry.getKey(), entry.getValue()});
+                }
+                emf = Persistence.createEntityManagerFactory(getPU(), dataBaseProperties);
+            }
             if (em != null) {
                 em.close();
             }
@@ -386,5 +395,10 @@ public class DataBaseManager implements IDataBaseManager {
             attributes.put(attr.getCardAttribute().getName(), attr.getValue());
         }
         return attributes;
+    }
+
+    @Override
+    public void setDataBaseProperties(Map<String, String> dataBaseProperties) {
+        this.dataBaseProperties = dataBaseProperties;
     }
 }
