@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors: Alena Laskavaia - initial API and implementation
- ******************************************************************************
+ * *****************************************************************************
  */
 package dreamer.card.game.storage;
 
@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * @param <T>
  * @author Alena
  *
  */
@@ -47,16 +48,12 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
         load();
     }
 
-    ;
-
-	public synchronized void unload() {
+    public synchronized void unload() {
         setLoaded(false);
         clearCache();
     }
 
-    ;
-
-	public abstract void clearCache();
+    public abstract void clearCache();
 
     protected abstract void doLoad();
 
@@ -148,9 +145,7 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
         }
     }
 
-    ;
-
-	protected abstract boolean doAddCard(T card);
+    protected abstract boolean doAddCard(T card);
 
     @Override
     public void setAutoCommit(boolean value) {

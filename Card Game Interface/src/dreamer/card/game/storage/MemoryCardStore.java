@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 /**
  * ArrayList based implementation for AbstractCardStore
  *
+ * @param <T> 
  * @author Alena
  *
  */
