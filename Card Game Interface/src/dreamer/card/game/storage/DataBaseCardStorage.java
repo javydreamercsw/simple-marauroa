@@ -1,10 +1,12 @@
 package dreamer.card.game.storage;
 
+import dreamer.card.game.ICard;
 import dreamer.card.game.ICardGame;
 import dreamer.card.game.storage.database.persistence.*;
 import dreamer.card.game.storage.database.persistence.controller.*;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -15,16 +17,18 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
+ * @param <T>
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IDataBaseManager.class)
-public class DataBaseManager implements IDataBaseManager {
+public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataBaseManager<T> {
 
-    private static final Logger LOG = Logger.getLogger(DataBaseManager.class.getName());
+    private static final Logger LOG = Logger.getLogger(DataBaseCardStorage.class.getName());
     private EntityManagerFactory emf;
     private EntityManager em;
     private String pu = "Card_Game_InterfacePU";
     private Map<String, String> dataBaseProperties = null;
+    protected final List<T> list = Collections.synchronizedList(new ArrayList<T>());
 
     public void init() {
         if (emf == null) {
@@ -188,6 +192,9 @@ public class DataBaseManager implements IDataBaseManager {
 
     @Override
     public Card createCard(CardType type, String name, byte[] text) throws PreexistingEntityException, Exception {
+        if (!cardTypeExists(type.getName())) {
+            type = createCardType(type.getName());
+        }
         CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
         Card card = new Card(type.getId(), name, text);
         card.setCardType(type);
@@ -340,11 +347,11 @@ public class DataBaseManager implements IDataBaseManager {
                 result = namedQuery(
                         "CardAttribute.findByName", parameters);
             } catch (Exception ex) {
-                Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
             return !result.isEmpty();
         } catch (Exception ex) {
-            Logger.getLogger(DataBaseManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             return true;
         }
     }
@@ -400,5 +407,112 @@ public class DataBaseManager implements IDataBaseManager {
     @Override
     public void setDataBaseProperties(Map<String, String> dataBaseProperties) {
         this.dataBaseProperties = dataBaseProperties;
+    }
+
+    @Override
+    public void clearCache() {
+        //Do nothing
+    }
+
+    @Override
+    protected void doLoad() {
+        try {
+            List result = namedQuery("Card.findAll");
+            synchronized (list) {
+                list.clear();
+                for (Iterator it = result.iterator(); it.hasNext();) {
+                    list.add((T) it.next());
+                }
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    protected void doSave() throws FileNotFoundException {
+        //Do nothing
+    }
+
+    @Override
+    protected boolean doAddCard(T card) {
+        if (card instanceof Card) {
+            try {
+                Card iCard = (Card) card;
+                HashMap parameters = new HashMap();
+                parameters.put("name", iCard.getName());
+                if (namedQuery("Card.findByName", parameters).isEmpty()) {
+                    createCard(iCard.getCardType(), iCard.getName(), iCard.getText());
+                }
+                return true;
+            } catch (Exception ex) {
+                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    protected boolean doRemoveCard(T card) {
+        if (card instanceof ICard) {
+            try {
+                ICard iCard = (ICard) card;
+                HashMap parameters = new HashMap();
+                parameters.put("name", iCard.getName());
+                List result = namedQuery("Card.findByName", parameters);
+                if (!result.isEmpty()) {
+                    new CardJpaController(getEntityManagerFactory()).destroy(((Card) result.get(0)).getCardPK());
+                    return true;
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "db";
+    }
+
+    @Override
+    public String getComment() {
+        return null;
+    }
+
+    @Override
+    public boolean isVirtual() {
+        return false;
+    }
+
+    @Override
+    public int size() {
+        try {
+            return namedQuery("Card.findAll").size();
+        } catch (Exception ex) {
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        synchronized (list) {
+            ArrayList x = new ArrayList(list);
+            return x.iterator();
+        }
+    }
+
+    @Override
+    public boolean cardTypeExists(String name) {
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", name);
+            return namedQuery("CardType.findByName", parameters).isEmpty();
+        } catch (Exception ex) {
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 }
