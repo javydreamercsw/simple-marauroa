@@ -515,4 +515,16 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         }
         return false;
     }
+
+    @Override
+    public String getCardAttribute(Card card, String name) {
+        String result = null;
+        for(CardHasCardAttribute chca:card.getCardHasCardAttributeList()){
+            if(chca.getCardAttribute().getName().equals(name)){
+                result = chca.getValue();
+                break;
+            }
+        }
+        return result;
+    }
 }

@@ -3,6 +3,9 @@
  */
 package dreamer.card.game;
 
+import dreamer.card.game.storage.cache.ICardCache;
+import java.util.List;
+
 /**
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
@@ -24,4 +27,10 @@ public interface ICardGame {
      * @return
      */
     public Runnable getUpdateRunnable();
+    
+    /**
+     * Get cache implementations
+     * @return List of implementations
+     */
+    public List<ICardCache> getCardCacheImplementations();
 }
