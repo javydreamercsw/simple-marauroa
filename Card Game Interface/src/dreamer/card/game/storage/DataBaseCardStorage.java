@@ -209,8 +209,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
         CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
         CardHasCardAttribute chca = new CardHasCardAttribute(card.getCardPK().getId(),
-                card.getCardPK().getCardTypeId(), attr.getCardAttributePK().getId(),
-                attr.getCardAttributePK().getCardAttributeTypeId());
+                card.getCardPK().getCardTypeId(), attr.getId());
         chca.setValue("test");
         chca.setCard(card);
         chca.setCardAttribute(attr);
@@ -344,12 +343,11 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             parameters.put("name", attr);
             List result = null;
             try {
-                result = namedQuery(
-                        "CardAttribute.findByName", parameters);
+                result = namedQuery("CardAttribute.findByName", parameters);
             } catch (Exception ex) {
                 Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            return !result.isEmpty();
+            return result != null && !result.isEmpty();
         } catch (Exception ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             return true;
@@ -519,8 +517,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     @Override
     public String getCardAttribute(Card card, String name) {
         String result = null;
-        for(CardHasCardAttribute chca:card.getCardHasCardAttributeList()){
-            if(chca.getCardAttribute().getName().equals(name)){
+        for (CardHasCardAttribute chca : card.getCardHasCardAttributeList()) {
+            if (chca.getCardAttribute().getName().equals(name)) {
                 result = chca.getValue();
                 break;
             }

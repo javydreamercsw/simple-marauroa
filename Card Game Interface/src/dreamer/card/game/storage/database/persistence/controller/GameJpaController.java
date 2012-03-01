@@ -4,20 +4,19 @@
  */
 package dreamer.card.game.storage.database.persistence.controller;
 
+import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import dreamer.card.game.storage.database.persistence.CardSet;
 import dreamer.card.game.storage.database.persistence.Game;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.IllegalOrphanException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -199,6 +198,5 @@ public class GameJpaController implements Serializable {
             em.close();
         }
     }
-    private static final Logger LOG = Logger.getLogger(GameJpaController.class.getName());
     
 }

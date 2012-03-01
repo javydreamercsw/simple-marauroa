@@ -5,7 +5,6 @@
 package dreamer.card.game.storage.database.persistence.controller;
 
 import dreamer.card.game.storage.database.persistence.CardAttribute;
-import dreamer.card.game.storage.database.persistence.CardAttributePK;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
 import java.io.Serializable;
@@ -33,9 +32,6 @@ public class CardAttributeJpaController implements Serializable {
     }
 
     public void create(CardAttribute cardAttribute) throws PreexistingEntityException, Exception {
-        if (cardAttribute.getCardAttributePK() == null) {
-            cardAttribute.setCardAttributePK(new CardAttributePK());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -43,7 +39,7 @@ public class CardAttributeJpaController implements Serializable {
             em.persist(cardAttribute);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findCardAttribute(cardAttribute.getCardAttributePK()) != null) {
+            if (findCardAttribute(cardAttribute.getId()) != null) {
                 throw new PreexistingEntityException("CardAttribute " + cardAttribute + " already exists.", ex);
             }
             throw ex;
@@ -64,7 +60,7 @@ public class CardAttributeJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                CardAttributePK id = cardAttribute.getCardAttributePK();
+                Integer id = cardAttribute.getId();
                 if (findCardAttribute(id) == null) {
                     throw new NonexistentEntityException("The cardAttribute with id " + id + " no longer exists.");
                 }
@@ -77,7 +73,7 @@ public class CardAttributeJpaController implements Serializable {
         }
     }
 
-    public void destroy(CardAttributePK id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -85,7 +81,7 @@ public class CardAttributeJpaController implements Serializable {
             CardAttribute cardAttribute;
             try {
                 cardAttribute = em.getReference(CardAttribute.class, id);
-                cardAttribute.getCardAttributePK();
+                cardAttribute.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cardAttribute with id " + id + " no longer exists.", enfe);
             }
@@ -122,7 +118,7 @@ public class CardAttributeJpaController implements Serializable {
         }
     }
 
-    public CardAttribute findCardAttribute(CardAttributePK id) {
+    public CardAttribute findCardAttribute(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(CardAttribute.class, id);
@@ -143,5 +139,4 @@ public class CardAttributeJpaController implements Serializable {
             em.close();
         }
     }
-    
 }

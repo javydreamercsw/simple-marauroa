@@ -5,7 +5,6 @@
 package dreamer.card.game.storage.database.persistence;
 
 import java.io.Serializable;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,18 +24,14 @@ public class CardHasCardAttributePK implements Serializable {
     @Basic(optional = false)
     @Column(name = "card_attribute_id", nullable = false)
     private int cardAttributeId;
-    @Basic(optional = false)
-    @Column(name = "card_attribute_card_attribute_type_id", nullable = false)
-    private int cardAttributeCardAttributeTypeId;
 
     public CardHasCardAttributePK() {
     }
 
-    public CardHasCardAttributePK(int cardId, int cardCardTypeId, int cardAttributeId, int cardAttributeCardAttributeTypeId) {
+    public CardHasCardAttributePK(int cardId, int cardCardTypeId, int cardAttributeId) {
         this.cardId = cardId;
         this.cardCardTypeId = cardCardTypeId;
         this.cardAttributeId = cardAttributeId;
-        this.cardAttributeCardAttributeTypeId = cardAttributeCardAttributeTypeId;
     }
 
     public int getCardId() {
@@ -63,21 +58,12 @@ public class CardHasCardAttributePK implements Serializable {
         this.cardAttributeId = cardAttributeId;
     }
 
-    public int getCardAttributeCardAttributeTypeId() {
-        return cardAttributeCardAttributeTypeId;
-    }
-
-    public void setCardAttributeCardAttributeTypeId(int cardAttributeCardAttributeTypeId) {
-        this.cardAttributeCardAttributeTypeId = cardAttributeCardAttributeTypeId;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) cardId;
         hash += (int) cardCardTypeId;
         hash += (int) cardAttributeId;
-        hash += (int) cardAttributeCardAttributeTypeId;
         return hash;
     }
 
@@ -97,16 +83,12 @@ public class CardHasCardAttributePK implements Serializable {
         if (this.cardAttributeId != other.cardAttributeId) {
             return false;
         }
-        if (this.cardAttributeCardAttributeTypeId != other.cardAttributeCardAttributeTypeId) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "dreamer.card.game.storage.database.persistence.CardHasCardAttributePK[ cardId=" + cardId + ", cardCardTypeId=" + cardCardTypeId + ", cardAttributeId=" + cardAttributeId + ", cardAttributeCardAttributeTypeId=" + cardAttributeCardAttributeTypeId + " ]";
+        return "dreamer.card.game.storage.database.persistence.CardHasCardAttributePK[ cardId=" + cardId + ", cardCardTypeId=" + cardCardTypeId + ", cardAttributeId=" + cardAttributeId + " ]";
     }
-    private static final Logger LOG = Logger.getLogger(CardHasCardAttributePK.class.getName());
     
 }

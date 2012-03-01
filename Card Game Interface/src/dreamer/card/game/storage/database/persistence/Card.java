@@ -24,17 +24,16 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Card.findByCardTypeId", query = "SELECT c FROM Card c WHERE c.cardPK.cardTypeId = :cardTypeId"),
     @NamedQuery(name = "Card.findByName", query = "SELECT c FROM Card c WHERE c.name = :name")})
 public class Card implements Serializable {
-
+    @Basic(optional = false)
+    @Lob
+    @Column(name = "text", nullable = false)
+    private byte[] text;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CardPK cardPK;
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    @Basic(optional = false)
-    @Lob
-    @Column(name = "text", nullable = false)
-    private byte[] text;
     @ManyToMany(mappedBy = "cardList")
     private List<CardSet> cardSetList;
     @JoinColumn(name = "card_type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
@@ -78,14 +77,6 @@ public class Card implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public byte[] getText() {
-        return text;
-    }
-
-    public void setText(byte[] text) {
-        this.text = text;
     }
 
     @XmlTransient
@@ -148,4 +139,12 @@ public class Card implements Serializable {
         return "dreamer.card.game.storage.database.persistence.Card[ cardPK=" + cardPK + " ]";
     }
     private static final Logger LOG = Logger.getLogger(Card.class.getName());
+
+    public byte[] getText() {
+        return text;
+    }
+
+    public void setText(byte[] text) {
+        this.text = text;
+    }
 }

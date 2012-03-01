@@ -58,7 +58,8 @@ public class DefaultCardGameTest {
             instance.init();
             result = Lookup.getDefault().lookup(IDataBaseManager.class).namedQuery("Game.findByName", parameters);
             assertFalse(result.isEmpty());
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
             fail();
         }
     }

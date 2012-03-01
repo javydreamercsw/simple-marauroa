@@ -4,21 +4,20 @@
  */
 package dreamer.card.game.storage.database.persistence.controller;
 
-import dreamer.card.game.storage.database.persistence.Card;
+import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import dreamer.card.game.storage.database.persistence.CardCollection;
+import dreamer.card.game.storage.database.persistence.Card;
 import dreamer.card.game.storage.database.persistence.CardCollectionHasCard;
 import dreamer.card.game.storage.database.persistence.CardCollectionHasCardPK;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
-import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -39,8 +38,8 @@ public class CardCollectionHasCardJpaController implements Serializable {
         if (cardCollectionHasCard.getCardCollectionHasCardPK() == null) {
             cardCollectionHasCard.setCardCollectionHasCardPK(new CardCollectionHasCardPK());
         }
-        cardCollectionHasCard.getCardCollectionHasCardPK().setCardCollectionId(cardCollectionHasCard.getCardCollection().getCardCollectionPK().getId());
         cardCollectionHasCard.getCardCollectionHasCardPK().setCardId(cardCollectionHasCard.getCard().getCardPK().getId());
+        cardCollectionHasCard.getCardCollectionHasCardPK().setCardCollectionId(cardCollectionHasCard.getCardCollection().getCardCollectionPK().getId());
         cardCollectionHasCard.getCardCollectionHasCardPK().setCardCollectionCardCollectionTypeId(cardCollectionHasCard.getCardCollection().getCardCollectionPK().getCardCollectionTypeId());
         cardCollectionHasCard.getCardCollectionHasCardPK().setCardCardTypeId(cardCollectionHasCard.getCard().getCardPK().getCardTypeId());
         EntityManager em = null;
@@ -80,8 +79,8 @@ public class CardCollectionHasCardJpaController implements Serializable {
     }
 
     public void edit(CardCollectionHasCard cardCollectionHasCard) throws NonexistentEntityException, Exception {
-        cardCollectionHasCard.getCardCollectionHasCardPK().setCardCollectionId(cardCollectionHasCard.getCardCollection().getCardCollectionPK().getId());
         cardCollectionHasCard.getCardCollectionHasCardPK().setCardId(cardCollectionHasCard.getCard().getCardPK().getId());
+        cardCollectionHasCard.getCardCollectionHasCardPK().setCardCollectionId(cardCollectionHasCard.getCardCollection().getCardCollectionPK().getId());
         cardCollectionHasCard.getCardCollectionHasCardPK().setCardCollectionCardCollectionTypeId(cardCollectionHasCard.getCardCollection().getCardCollectionPK().getCardCollectionTypeId());
         cardCollectionHasCard.getCardCollectionHasCardPK().setCardCardTypeId(cardCollectionHasCard.getCard().getCardPK().getCardTypeId());
         EntityManager em = null;
@@ -211,6 +210,5 @@ public class CardCollectionHasCardJpaController implements Serializable {
             em.close();
         }
     }
-    private static final Logger LOG = Logger.getLogger(CardCollectionHasCardJpaController.class.getName());
     
 }
