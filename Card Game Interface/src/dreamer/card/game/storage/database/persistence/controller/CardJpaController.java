@@ -328,4 +328,5 @@ public class CardJpaController implements Serializable {
             em.close();
         }
     }
+    
 }

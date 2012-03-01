@@ -5,7 +5,6 @@
 package dreamer.card.game.storage.database.persistence;
 
 import java.io.Serializable;
-import java.util.logging.Logger;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -21,7 +20,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CardHasCardAttribute.findByCardId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardId = :cardId"),
     @NamedQuery(name = "CardHasCardAttribute.findByCardCardTypeId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardCardTypeId = :cardCardTypeId"),
     @NamedQuery(name = "CardHasCardAttribute.findByCardAttributeId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardAttributeId = :cardAttributeId"),
-    @NamedQuery(name = "CardHasCardAttribute.findByCardAttributeCardAttributeTypeId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardAttributeCardAttributeTypeId = :cardAttributeCardAttributeTypeId"),
     @NamedQuery(name = "CardHasCardAttribute.findByValue", query = "SELECT c FROM CardHasCardAttribute c WHERE c.value = :value")})
 public class CardHasCardAttribute implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -30,9 +28,7 @@ public class CardHasCardAttribute implements Serializable {
     @Basic(optional = false)
     @Column(name = "value", nullable = false, length = 80)
     private String value;
-    @JoinColumns({
-        @JoinColumn(name = "card_attribute_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false),
-        @JoinColumn(name = "card_attribute_card_attribute_type_id", referencedColumnName = "card_attribute_type_id", nullable = false, insertable = false, updatable = false)})
+    @JoinColumn(name = "card_attribute_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CardAttribute cardAttribute;
     @JoinColumns({
@@ -53,8 +49,8 @@ public class CardHasCardAttribute implements Serializable {
         this.value = value;
     }
 
-    public CardHasCardAttribute(int cardId, int cardCardTypeId, int cardAttributeId, int cardAttributeCardAttributeTypeId) {
-        this.cardHasCardAttributePK = new CardHasCardAttributePK(cardId, cardCardTypeId, cardAttributeId, cardAttributeCardAttributeTypeId);
+    public CardHasCardAttribute(int cardId, int cardCardTypeId, int cardAttributeId) {
+        this.cardHasCardAttributePK = new CardHasCardAttributePK(cardId, cardCardTypeId, cardAttributeId);
     }
 
     public CardHasCardAttributePK getCardHasCardAttributePK() {
@@ -113,6 +109,5 @@ public class CardHasCardAttribute implements Serializable {
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardHasCardAttribute[ cardHasCardAttributePK=" + cardHasCardAttributePK + " ]";
     }
-    private static final Logger LOG = Logger.getLogger(CardHasCardAttribute.class.getName());
     
 }

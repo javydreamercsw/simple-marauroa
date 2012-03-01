@@ -27,6 +27,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CardSet.findByName", query = "SELECT c FROM CardSet c WHERE c.name = :name"),
     @NamedQuery(name = "CardSet.findByReleased", query = "SELECT c FROM CardSet c WHERE c.released = :released")})
 public class CardSet implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "released", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date released;
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CardSetPK cardSetPK;
@@ -36,10 +40,6 @@ public class CardSet implements Serializable {
     @Basic(optional = false)
     @Column(name = "name", nullable = false, length = 80)
     private String name;
-    @Basic(optional = false)
-    @Column(name = "released", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date released;
     @JoinTable(name = "card_set_has_card", joinColumns = {
         @JoinColumn(name = "card_set_id", referencedColumnName = "id", nullable = false),
         @JoinColumn(name = "card_set_game_id", referencedColumnName = "game_id", nullable = false)}, inverseJoinColumns = {
@@ -96,14 +96,6 @@ public class CardSet implements Serializable {
         this.name = name;
     }
 
-    public Date getReleased() {
-        return released;
-    }
-
-    public void setReleased(Date released) {
-        this.released = released;
-    }
-
     @XmlTransient
     public List<Card> getCardList() {
         return cardList;
@@ -146,5 +138,13 @@ public class CardSet implements Serializable {
         return "dreamer.card.game.storage.database.persistence.CardSet[ cardSetPK=" + cardSetPK + " ]";
     }
     private static final Logger LOG = Logger.getLogger(CardSet.class.getName());
+
+    public Date getReleased() {
+        return released;
+    }
+
+    public void setReleased(Date released) {
+        this.released = released;
+    }
     
 }

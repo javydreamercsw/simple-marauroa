@@ -5,22 +5,21 @@
 package dreamer.card.game.storage.database.persistence.controller;
 
 import dreamer.card.game.storage.database.persistence.CardCollection;
+import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import dreamer.card.game.storage.database.persistence.CardCollectionType;
 import dreamer.card.game.storage.database.persistence.CardCollectionHasCard;
 import dreamer.card.game.storage.database.persistence.CardCollectionPK;
-import dreamer.card.game.storage.database.persistence.CardCollectionType;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.IllegalOrphanException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.NonexistentEntityException;
 import dreamer.card.game.storage.database.persistence.controller.exceptions.PreexistingEntityException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -240,6 +239,5 @@ public class CardCollectionJpaController implements Serializable {
             em.close();
         }
     }
-    private static final Logger LOG = Logger.getLogger(CardCollectionJpaController.class.getName());
     
 }
