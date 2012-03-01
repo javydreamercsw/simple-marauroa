@@ -1,6 +1,7 @@
 package dreamer.card.game;
 
 import dreamer.card.game.storage.IDataBaseManager;
+import dreamer.card.game.storage.cache.ICardCache;
 import dreamer.card.game.storage.database.persistence.CardCollectionType;
 import dreamer.card.game.storage.database.persistence.Game;
 import dreamer.card.game.storage.database.persistence.controller.GameJpaController;
@@ -50,5 +51,16 @@ public abstract class DefaultCardGame implements ICardGame {
         } catch (Exception ex) {
             Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public List<ICardCache> getCardCacheImplementations() {
+        ArrayList<ICardCache> caches = new ArrayList<ICardCache>();
+        for (ICardCache cache : Lookup.getDefault().lookupAll(ICardCache.class)) {
+            if(cache.getGameName().equals(getName())){
+                caches.add(cache);
+            }
+        }
+        return caches;
     }
 }

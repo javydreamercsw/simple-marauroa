@@ -12,10 +12,10 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @param <T> 
+ * @param <T>
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public interface IDataBaseManager<T> extends IStorage<T>{
+public interface IDataBaseManager<T> extends IStorage<T> {
 
     /**
      * @return the Entity Manager Factory
@@ -261,15 +261,25 @@ public interface IDataBaseManager<T> extends IStorage<T>{
 
     /**
      * Set data base connection properties.
-     * 
+     *
      * @param dataBaseProperties the DataBase Properties to set
      */
     public void setDataBaseProperties(Map<String, String> dataBaseProperties);
-    
+
     /**
      * Check if card type exists
+     *
      * @param name type name
      * @return true if it exists, false otherwise
      */
     public boolean cardTypeExists(String name);
+
+    /**
+     * Get the card's attribute value.
+     *
+     * @param card Card to check
+     * @param name Attribute name
+     * @return Value or null if not found
+     */
+    public String getCardAttribute(Card card, String name);
 }
