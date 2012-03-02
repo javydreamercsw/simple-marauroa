@@ -10,65 +10,176 @@
 <project name="Card_Game_Interface_DataBase_Implementation" default="default" basedir=".">
     <description>Builds, tests, and runs the project Card Game Interface DataBase Implementation.</description>
     <import file="nbproject/build-impl.xml"/>
-    <!--
+    <property name="lib.dir" value="../../Simple Libs/tools"/>
+    <property name="ant-contrib-filename" value="ant-contrib-1.0b3.jar"/>
+    <condition property="simple.libs.exists">
+        <available file="${lib.dir}../" type="dir"/>
+    </condition>
+    
+    <scriptdef name="substring" language="javascript">
+        <attribute name="text" />
+        <attribute name="start" />
+        <attribute name="end" />
+        <attribute name="property" />
+     <![CDATA[
+       var text = attributes.get("text");
+       var start = attributes.get("start");
+       var end = attributes.get("end") || text.length;
+       project.setProperty(attributes.get("property"), text.substring(start, end));
+     ]]>
+    </scriptdef>
+    
+    <target name="clean" depends="Card_Game_Interface_DataBase_Implementation-impl.clean, -init-netbeans, -init-hudson">
+        <propertyselector property="dependencies" match="dependency\.(.*)" select="\1"/>
+        <for list="${dependencies}" param="dependency">
+            <sequential>
+                <if>
+                    <available file="${dependency.@{dependency}}/build.xml"/>
+                    <then>
+                        <clean-dependency-project path="${dependency.@{dependency}}"/>
+                    </then>
+                    <else>
+                        <echo>Unable to find dependency project at ${dependency.@{dependency}} for cleaning</echo>
+                    </else>
+                </if>
+            </sequential>
+        </for>
+    </target>
+    
+    <target name="-pre-compile" depends="-init-netbeans, -init-hudson">       
+        <propertyselector property="dependencies" match="dependency\.(.*)" select="\1"/>
+        <for list="${dependencies}" param="dependency">
+            <sequential>
+                <if>
+                    <and>
+                        <available file="${dependency.@{dependency}}/nbproject/project.properties"/>
+                        <not>
+                            <isset property="@{dependency}.compiled"/>
+                        </not>
+                    </and>
+                    <then>
+                        <property file="${dependency.@{dependency}}/nbproject/project.properties" prefix="@{dependency}.extension-lib"/>
+                        <length string="${@{dependency}.extension-lib.dist.dir}" property="@{dependency}.length.dist" />
+                        <math result="@{dependency}.length.dist" operand1="1" operation="+" operand2="${@{dependency}.length.dist}" datatype="int"/>
+                        <length string="${@{dependency}.extension-lib.dist.jar}" property="@{dependency}.length.dist.jar" />
+                        <substring text="${@{dependency}.extension-lib.dist.jar}" start="${@{dependency}.length.dist}" 
+                                   end="${@{dependency}.length.dist.jar}" property="@{dependency}.extension-lib.dist.jar" />
+                        <compile-dependency-project path="${dependency.@{dependency}}"/>
+                        <copy todir="lib" file="${dependency.@{dependency}}/dist/${@{dependency}.extension-lib.dist.jar}"/>
+                        <property name="@{dependency}.compiled" value=""/>
+                    </then>
+                    <else>
+                        <echo>Skiping...</echo>
+                    </else>
+                </if>
+            </sequential>
+        </for>
+        <!--Marauroa is an exceptional case since is not a normal NetBeans project-->
+        <if>
+            <available file="${marauroa.path}/build.xml"/>
+            <then>
+                <compile-dependency-project path="${marauroa.path}"/>
+                <copy todir="../jWrestlingLibs" 
+                      file="${marauroa.path}/build-archive/marauroa.jar"/>
+            </then>
+        </if>
+    </target>
+    
+    <target name="-check-env" depends="-getAntContribJar">
+        <condition property="isNetbeans">
+            <not>
+                <isset property="Hudson"/>
+            </not>
+        </condition>
+        <property name="xmltasks-loc" value="${lib.dir}/xmltask.jar"/>
+        <available file="${xmltasks-loc}" property="xmltasks.present"/>
+        <fail unless="xmltasks.present" message="The xmltasks jar doesn't exist at: ${xmltasks-loc}, can't build. Check your settings!" />
+        <taskdef name="xmltask" 
+                 classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+            <classpath>
+                <pathelement location="${xmltasks-loc}"/>
+            </classpath>
+        </taskdef>
+    </target>
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
-    before and after some main targets. They are: 
+    <target name="-getAntContribJar">
+        <fileset id="ant-contrib-jar" dir="${lib.dir}">
+            <include name="ant-contrib-*.jar" />
+        </fileset>
+        <pathconvert property="ant-contrib-jar" refid="ant-contrib-jar" pathsep="," />
+        <basename property="ant-contrib-filename" file="${ant-contrib-jar}"/>
+    </target>
 
-      -pre-init:                 called before initialization of project properties
-      -post-init:                called after initialization of project properties
-      -pre-compile:              called before javac compilation
-      -post-compile:             called after javac compilation
-      -pre-compile-single:       called before javac compilation of single file
-      -post-compile-single:      called after javac compilation of single file
-      -pre-compile-test:         called before javac compilation of JUnit tests
-      -post-compile-test:        called after javac compilation of JUnit tests
-      -pre-compile-test-single:  called before javac compilation of single JUnit test
-      -post-compile-test-single: called after javac compilation of single JUunit test
-      -pre-jar:                  called before JAR building
-      -post-jar:                 called after JAR building
-      -post-clean:               called after cleaning build products
+    <target name="-init-netbeans" depends="-check-env" if="isNetbeans">
+        <echo>Configuring ant-contrib for Netbeans use...</echo>
+        <property name="ant-contrib-loc" value="${lib.dir}/${ant-contrib-filename}"/>
+        <available file="${ant-contrib-loc}" property="ant-contrib.present"/>
+        <fail unless="ant-contrib.present" message="The ant-contrib jar doesn't exist at: ${ant-contrib-loc}, can't build. Check your settings!" />
+        <!--We are in not Hudson-->
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+    </target>
 
-    (Targets beginning with '-' are not intended to be called on their own.)
-
-    Example of inserting an obfuscator after compilation could look like this:
-
-        <target name="-post-compile">
-            <obfuscate>
-                <fileset dir="${build.classes.dir}"/>
-            </obfuscate>
-        </target>
-
-    For list of available properties check the imported 
-    nbproject/build-impl.xml file. 
-
-
-    Another way to customize the build is by overriding existing main targets.
-    The targets of interest are: 
-
-      -init-macrodef-javac:     defines macro for javac compilation
-      -init-macrodef-junit:     defines macro for junit execution
-      -init-macrodef-debug:     defines macro for class debugging
-      -init-macrodef-java:      defines macro for class execution
-      -do-jar-with-manifest:    JAR building (if you are using a manifest)
-      -do-jar-without-manifest: JAR building (if you are not using a manifest)
-      run:                      execution of project 
-      -javadoc-build:           Javadoc generation
-      test-report:              JUnit report generation
-
-    An example of overriding the target for project execution could look like this:
-
-        <target name="run" depends="Card_Game_Interface_DataBase_Implementation-impl.jar">
-            <exec dir="bin" executable="launcher.exe">
-                <arg file="${dist.jar}"/>
-            </exec>
-        </target>
-
-    Notice that the overridden target depends on the jar target and not only on 
-    the compile target as the regular run target does. Again, for a list of available 
-    properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file. 
-
-    -->
+    <target name="-init-hudson" depends="-check-env" unless="isNetbeans">
+        <echo>Configuring ant-contrib for Hudson use...</echo>
+        <!--Import Hudson environment variables-->
+        <property environment="env"/>
+        <property name="ant-contrib-loc" value="${env.ANT_HOME}/lib/${ant-contrib-filename}"/>
+        <available file="${ant-contrib-loc}" property="ant-contrib.present"/>
+        <fail unless="ant-contrib.present" message="The ant-contrib jar doesn't exist at: ${ant-contrib-loc}, can't build. Check your settings!" />
+        <!--Define it. For some reason the approach in -init-netbeans doesn't work in Hudson.-->
+        <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="propertyregex" classname="net.sf.antcontrib.property.RegexTask">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="if" classname="net.sf.antcontrib.logic.IfTask">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="math" classname="net.sf.antcontrib.math.MathTask">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="var" classname="net.sf.antcontrib.property.Variable">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+        <taskdef name="foreach" classname="net.sf.antcontrib.logic.ForEach">
+            <classpath>
+                <pathelement location="${ant-contrib-loc}"/>
+            </classpath>
+        </taskdef>
+    </target>
+    
+    <macrodef name="clean-dependency-project">
+        <attribute name="path"/>
+        <sequential>
+            <echo message="Cleaning @{path}"/>
+            <ant dir="@{path}" usenativebasedir="true"
+                 target="clean" inheritall="false" inheritrefs="false"/>
+            <echo message="Done cleaning @{path}"/>
+        </sequential>
+    </macrodef>
+    
+    <macrodef name="compile-dependency-project">
+        <attribute name="path"/>
+        <sequential>
+            <echo message="Compiling @{path}"/>
+            <ant dir="@{path}" usenativebasedir="true"
+                 target="jar" inheritall="false" inheritrefs="false"/>
+            <echo message="Done compiling @{path}"/>
+        </sequential>
+    </macrodef>
 </project>
