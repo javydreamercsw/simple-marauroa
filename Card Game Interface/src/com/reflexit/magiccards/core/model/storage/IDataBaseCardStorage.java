@@ -235,7 +235,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param card Card
      * @return map of attributes for a card
      */
-    public Map<String, String> getAttributesForCard(T card);
+    public Map<String, String> getAttributesForCard(ICard card);
 
     /**
      * Set data base connection properties.
@@ -259,7 +259,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param name Attribute name
      * @return Value or null if not found
      */
-    public String getCardAttribute(T card, String name);
+    public String getCardAttribute(ICard card, String name);
 
     /**
      * Create a game in the database

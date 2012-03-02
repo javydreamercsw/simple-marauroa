@@ -515,7 +515,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public Map<String, String> getAttributesForCard(T card) {
+    public Map<String, String> getAttributesForCard(ICard card) {
         HashMap<String, String> attributes = new HashMap<String, String>();
         for (Iterator<CardHasCardAttribute> it = ((Card) card).getCardHasCardAttributeList().iterator(); it.hasNext();) {
             CardHasCardAttribute attr = it.next();
@@ -525,7 +525,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public String getCardAttribute(T card, String name) {
+    public String getCardAttribute(ICard card, String name) {
         String result = null;
         for (Iterator<CardHasCardAttribute> it = ((Card) card).getCardHasCardAttributeList().iterator(); it.hasNext();) {
             CardHasCardAttribute chca = it.next();
@@ -549,6 +549,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     public Map<String, String> getAttributesForCard(String name) throws Exception {
         HashMap parameters = new HashMap();
         parameters.put("name", name);
-        return getAttributesForCard((T) namedQuery("Card.findByName", parameters).get(0));
+        return getAttributesForCard((ICard) namedQuery("Card.findByName", parameters).get(0));
     }
 }
