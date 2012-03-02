@@ -227,7 +227,9 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         cs.setGame(game);
         cs.setReleased(released == null ? new Date() : released);
         csController.create(cs);
-        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE, "Created card set: {0} on the database!", name);
+        Logger.getLogger(IDataBaseManager.class.getName()).log(Level.FINE,
+                "Created card set: {0} with abbreviation: {1} "
+                + "and release date: {2} on the database!", new Object[]{name, abbreviation, released});
         return cs;
     }
 
