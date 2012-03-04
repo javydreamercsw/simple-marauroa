@@ -551,4 +551,9 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         parameters.put("name", name);
         return getAttributesForCard((ICard) namedQuery("Card.findByName", parameters).get(0));
     }
+    
+    @Override
+    public void initialize(){
+        getEntityManagerFactory();
+    }
 }
