@@ -58,6 +58,7 @@
                         </not>
                     </and>
                     <then>
+                        <echo>@{dependency}</echo>
                         <property file="${dependency.@{dependency}}/nbproject/project.properties" prefix="@{dependency}.extension-lib"/>
                         <length string="${@{dependency}.extension-lib.dist.dir}" property="@{dependency}.length.dist" />
                         <math result="@{dependency}.length.dist" operand1="1" operation="+" operand2="${@{dependency}.length.dist}" datatype="int"/>
