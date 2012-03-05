@@ -1,6 +1,6 @@
 package simple.server.extension.card;
 
-import dreamer.card.game.ICard;
+import com.reflexit.magiccards.core.model.ICardWithImages;
 import org.openide.util.Lookup;
 
 /**
@@ -8,5 +8,5 @@ import org.openide.util.Lookup;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface IMarauroaCard extends Lookup.Provider, ICard {
+public interface IMarauroaCard extends Lookup.Provider, ICardWithImages {
 }

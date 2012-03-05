@@ -1,6 +1,7 @@
 package simple.server.extension;
 
-import dreamer.card.game.ICardType;
+import com.reflexit.magiccards.core.model.ICardType;
+
 
 /**
  *
