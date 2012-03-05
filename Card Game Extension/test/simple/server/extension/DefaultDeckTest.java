@@ -1,7 +1,7 @@
 package simple.server.extension;
 
-import dreamer.card.game.ICard;
-import dreamer.card.game.ICardType;
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

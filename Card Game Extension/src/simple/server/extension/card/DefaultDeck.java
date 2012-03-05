@@ -1,8 +1,8 @@
 package simple.server.extension.card;
 
-import dreamer.card.game.ICard;
-import dreamer.card.game.ICardType;
-import dreamer.card.game.IDeck;
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardType;
+import com.reflexit.magiccards.core.model.IDeck;
 import java.util.*;
 
 /**

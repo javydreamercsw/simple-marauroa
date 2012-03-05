@@ -1,6 +1,6 @@
 package simple.server.extension;
 
-import dreamer.card.game.ICardField;
+import com.reflexit.magiccards.core.model.ICardField;
 import java.util.List;
 import javax.swing.ImageIcon;
 import org.openide.util.Lookup;
@@ -18,7 +18,13 @@ public class DefaultCard implements IMarauroaCard {
     private Lookup myLookup = new AbstractLookup(dynamicContent);
 
     public DefaultCard() {
-        dynamicContent.add(new DefaultType() {});
+        dynamicContent.add(new DefaultType() {
+
+            @Override
+            public String getName() {
+                return "DefaultType";
+            }
+        });
     }
 
     @Override
