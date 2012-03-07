@@ -22,7 +22,24 @@ public interface ICard extends Comparable {
      */
     Object getObjectByField(ICardField field);
 
+    /**
+     * Get the card's ID
+     *
+     * @return card ID
+     */
     public int getCardId();
 
+    /**
+     * Get card's set
+     *
+     * @return card's set
+     */
     public String getSet();
+
+    /**
+     * Set card's set
+     *
+     * @param set card's set
+     */
+    public void setSet(String set);
 }

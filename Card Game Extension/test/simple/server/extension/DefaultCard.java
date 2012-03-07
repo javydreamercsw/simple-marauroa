@@ -7,19 +7,19 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import simple.server.extension.card.IMarauroaCard;
+import simple.server.extension.card.RPCard;
 
 /**
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public class DefaultCard implements IMarauroaCard {
+public class DefaultCard extends RPCard implements IMarauroaCard {
 
     private InstanceContent dynamicContent = new InstanceContent();
     private Lookup myLookup = new AbstractLookup(dynamicContent);
 
     public DefaultCard() {
         dynamicContent.add(new DefaultType() {
-
             @Override
             public String getName() {
                 return "DefaultType";
@@ -39,6 +39,11 @@ public class DefaultCard implements IMarauroaCard {
 
     @Override
     public int compareTo(Object o) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setSet(String set) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

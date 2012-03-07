@@ -1,5 +1,7 @@
 package simple.server.extension.card;
 
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardField;
 import java.util.Date;
 import java.util.UUID;
 import marauroa.common.game.Definition;
@@ -13,11 +15,12 @@ import simple.server.core.entity.RPEntityInterface;
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = RPEntityInterface.class, position = 1001)
-public class RPCard extends RPEntity {
+public class RPCard extends RPEntity implements ICard {
 
     public final static String CLASS = "class",
             CARD_ID = "card_id", CREATION_DATE = "creation_date",
-            TIMES_TRADED = "times_traded", TRADABLE = "tradable", CLASS_NAME = "card";
+            TIMES_TRADED = "times_traded", TRADABLE = "tradable",
+            CLASS_NAME = "card", SET = "set";
 
     public RPCard() {
     }
@@ -94,5 +97,33 @@ public class RPCard extends RPEntity {
         } else {
             throw new RuntimeException("Traded a non tradable card?");
         }
+    }
+
+    @Override
+    public Object getObjectByField(ICardField field) {
+        return get(field.name());
+    }
+
+    @Override
+    public int getCardId() {
+        return getInt(CARD_ID);
+    }
+
+    @Override
+    public String getSet() {
+        return get(SET);
+    }
+
+    @Override
+    public void setSet(String set) {
+        put(SET, set);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof RPCard) || o.getClass() != getClass()) {
+            return -1;
+        }
+        return equals(o) ? 0 : -1;
     }
 }

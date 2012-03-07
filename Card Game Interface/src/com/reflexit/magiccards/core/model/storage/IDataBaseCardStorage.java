@@ -267,4 +267,9 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return created game 
      */
     public IGame createGame(String name);
+
+    /**
+     * Initialize the database
+     */
+    public void initialize();
 }

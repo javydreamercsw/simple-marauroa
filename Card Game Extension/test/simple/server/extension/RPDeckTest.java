@@ -1,7 +1,5 @@
 package simple.server.extension;
 
-import simple.server.extension.card.RPCard;
-import simple.server.extension.card.RPDeck;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +13,8 @@ import org.junit.*;
 import org.openide.util.Lookup;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;
+import simple.server.extension.card.RPCard;
+import simple.server.extension.card.RPDeck;
 
 /**
  *
@@ -121,6 +121,8 @@ public class RPDeckTest {
         assertTrue(test.hasSlot(CardGameExtension.DECK));
         test.getSlot(CardGameExtension.DECK).add(deck);
         assertTrue(test.getSlot(CardGameExtension.DECK).has(deck.getID()));
+        //Test deck operations
+        
     }
 
     private class DummyObject extends ClientObject {
