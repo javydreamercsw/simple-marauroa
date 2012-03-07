@@ -61,7 +61,7 @@
                         <echo>@{dependency}</echo>
                         <property file="${dependency.@{dependency}}/nbproject/project.properties" prefix="@{dependency}.extension-lib"/>
                         <length string="${@{dependency}.extension-lib.dist.dir}" property="@{dependency}.length.dist" />
-                        <math result="@{dependency}.length.dist" operand1="1" operation="+" operand2="${@{dependency}.length.dist}" datatype="int"/>
+                        <!--<math result="@{dependency}.length.dist" operand1="1" operation="+" operand2="${@{dependency}.length.dist}" datatype="int"/>-->
                         <length string="${@{dependency}.extension-lib.dist.jar}" property="@{dependency}.length.dist.jar" />
                         <substring text="${@{dependency}.extension-lib.dist.jar}" start="${@{dependency}.length.dist}" 
                                    end="${@{dependency}.length.dist.jar}" property="@{dependency}.extension-lib.dist.jar" />

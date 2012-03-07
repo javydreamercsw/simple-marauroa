@@ -1,8 +1,13 @@
 package simple.server.extension.card;
 
-import java.util.List;
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardType;
+import com.reflexit.magiccards.core.model.IDeck;
+import java.util.*;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
@@ -12,13 +17,22 @@ import simple.server.core.entity.RPEntityInterface;
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = RPEntityInterface.class, position = 1002)
-public class RPDeck extends RPEntity {
+public class RPDeck extends RPEntity implements IDeck {
 
     public static final String PAGES = "pages",
             HAND = "hand", WINS = "wins", LOSES = "loses", DRAWS = "draws",
-            VERSION = "version", RECORD = "record", CLASS_NAME = "deck";
+            VERSION = "version", RECORD = "record", CLASS_NAME = "deck",
+            DISCARD_PILE = "discard";
+    protected Random rand = new Random();
 
     public RPDeck() {
+    }
+
+    public RPDeck(String name) {
+        setRPClass(CLASS_NAME);
+        put("type", CLASS_NAME);
+        put("name", name);
+        update();
     }
 
     public RPDeck(String name, List<RPCard> cards, List<RPCard> hand) {
@@ -57,6 +71,9 @@ public class RPDeck extends RPEntity {
         }
         if (!hasSlot(HAND)) {
             addSlot(HAND);
+        }
+        if (!hasSlot(DISCARD_PILE)) {
+            addSlot(DISCARD_PILE);
         }
     }
 
@@ -148,6 +165,11 @@ public class RPDeck extends RPEntity {
             entity.addRPSlot(HAND, -1, Definition.PRIVATE);
 
             /**
+             * Discard Pile
+             */
+            entity.addRPSlot(DISCARD_PILE, -1, Definition.PRIVATE);
+
+            /**
              * Deck version. Starts at 1 and increases each time the deck is
              * modified
              */
@@ -166,5 +188,236 @@ public class RPDeck extends RPEntity {
 
     public final void addToDeck(RPCard card) {
         getSlot(PAGES).add(card);
+    }
+
+    public List<ICard> getHand() {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        for (Iterator<RPObject> it = getSlot(RPDeck.HAND).iterator(); it.hasNext();) {
+            cards.add((RPCard) it.next());
+        }
+        return cards;
+    }
+
+    protected List<ICard> getDeck() {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        for (Iterator<RPObject> it = getSlot(RPDeck.PAGES).iterator(); it.hasNext();) {
+            cards.add((RPCard) it.next());
+        }
+        return cards;
+    }
+
+    protected List<ICard> getDiscardPile() {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        for (Iterator<RPObject> it = getSlot(RPDeck.DISCARD_PILE).iterator(); it.hasNext();) {
+            cards.add((RPCard) it.next());
+        }
+        return cards;
+    }
+
+    @Override
+    public List<ICard> getCards() {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        cards.addAll(getDeck());
+        return cards;
+    }
+
+    @Override
+    public List<ICard> getUsedCards() {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        cards.addAll(getDiscardPile());
+        return cards;
+    }
+
+    @Override
+    public List<ICard> ditch(Class<? extends ICardType> type, boolean random, int amount) {
+        ArrayList<ICard> ditched = new ArrayList<ICard>();
+        if (random) {
+            ArrayList<Integer> indices = new ArrayList<Integer>();
+            //Build a list of indices of this type
+            int index = 0;
+            for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
+                if (((IMarauroaCard) it).getLookup().lookup(type) != null) {
+                    indices.add(index);
+                }
+                index++;
+            }
+            Collections.sort(indices);
+            //Now randomly pick one from the list to be removed
+            int remove = indices.size() < 0 ? 0
+                    : (indices.size() < amount ? indices.size() : amount);
+            int count = 0;
+            for (int j = 0; j < remove; j++) {
+                for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
+                    int toRemove = indices.remove(rand.nextInt(indices.size()));
+                    if (count == toRemove) {
+                        i.remove();
+                    }
+                    count++;
+                }
+            }
+        } else {
+            for (int j = 0; j < amount; j++) {
+                for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
+                    IMarauroaCard next = (IMarauroaCard) i.next();
+                    if (next.getLookup().lookup(type) != null) {
+                        ditched.add(next);
+                        break;
+                    }
+                }
+            }
+        }
+        for (Iterator<ICard> it = ditched.iterator(); it.hasNext();) {
+            RPCard card = (RPCard) it.next();
+            ditchCard(card);
+        }
+        return ditched;
+    }
+
+    @Override
+    public ICard ditch(Class<? extends ICardType> type) {
+        int count = 0;
+        for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
+            RPCard card = (RPCard) it.next();
+            if (card instanceof Lookup.Provider) {
+                if (((IMarauroaCard) card).getLookup().lookup(type) != null) {
+                    ditchCard(card);
+                    return card;
+                }
+            } else if (card.getClass().isInstance(type)) {
+                ditchCard(card);
+                return card;
+            }
+            count++;
+            System.out.println("Check number: " + count);
+        }
+        return null;
+    }
+
+    @Override
+    public ICard ditchBottom() {
+        for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
+            RPCard card = (RPCard) it.next();
+            if (!it.hasNext()) {
+                ditchCard(card);
+                return card;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<ICard> ditch(int amount, boolean random) {
+        ArrayList<ICard> ditched = new ArrayList<ICard>();
+        for (int i = 0; i < amount; i++) {
+            ditched.add(ditch(random));
+        }
+        return ditched;
+    }
+
+    private void ditchCard(RPCard ditched) {
+        used.add(ditched);
+        getSlot(PAGES).remove(ditched.getID());
+        getSlot(DISCARD_PILE).add(ditched);
+    }
+
+    @Override
+    public ICard ditch(boolean random) {
+        int index_to_ditch = (random ? rand.nextInt(deck.size()) : 0), i = 0;
+        RPCard ditched = null;
+        for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
+            RPCard card = (RPCard) it.next();
+            if (i == index_to_ditch) {
+                ditched = card;
+                break;
+            }
+        }
+        if (ditched != null) {
+            ditchCard(ditched);
+        }
+        return ditched;
+    }
+
+    @Override
+    public List<ICard> ditch(int amount) {
+        ArrayList<ICard> ditched = new ArrayList<ICard>();
+        for (int i = 0; i < amount; i++) {
+            ditched.add(ditch());
+        }
+        return ditched;
+    }
+
+    @Override
+    public ICard ditch() {
+        return ditch(false);
+    }
+
+    @Override
+    public ICard draw(Class<? extends ICardType> type) {
+        for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
+            RPCard card = (RPCard) it.next();
+            if (card.getClass().isInstance(type)) {
+                ditchCard(card);
+                addToHand(card);
+                return card;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ICard draw() {
+        return draw(false);
+    }
+
+    @Override
+    public ICard draw(boolean random) {
+        ICard drawn;
+        if (random) {
+            drawn = deck.remove(rand.nextInt(deck.size()));
+        } else {
+            drawn = deck.remove(0);
+        }
+        hand.add(drawn);
+        return drawn;
+    }
+
+    @Override
+    public ICard drawBottom() {
+        RPCard ditched = (RPCard) deck.remove(deck.size() - 1);
+        used.add(ditched);
+        return ditched;
+    }
+
+    @Override
+    public List<ICard> draw(int amount, boolean random) {
+        ArrayList<ICard> drawn = new ArrayList<ICard>();
+        for (int i = 0; i < amount; i++) {
+            drawn.add(draw(random));
+        }
+        return drawn;
+    }
+
+    @Override
+    public List<ICard> draw(int amount) {
+        ArrayList<ICard> drawn = new ArrayList<ICard>();
+        for (int i = 0; i < amount; i++) {
+            drawn.add(draw());
+        }
+        return drawn;
+    }
+
+    @Override
+    public void shuffle() {
+        java.util.Collections.shuffle(deck);
+    }
+
+    @Override
+    public int getSize() {
+        return getSlot(PAGES).size();
+    }
+
+    @Override
+    public int getUsedPileSize() {
+        return getSlot(DISCARD_PILE).size();
     }
 }

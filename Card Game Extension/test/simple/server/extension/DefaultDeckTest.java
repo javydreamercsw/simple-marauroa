@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Random;
 import static org.junit.Assert.*;
 import org.junit.*;
-import simple.server.extension.card.DefaultDeck;
+import org.openide.util.Lookup;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.card.IMarauroaCard;
+import simple.server.extension.card.RPDeck;
 
 /**
  *
@@ -16,7 +18,7 @@ import simple.server.extension.card.IMarauroaCard;
  */
 public class DefaultDeckTest {
 
-    private static DefaultDeck instance = new DefaultDeck("test");
+    private static RPDeck instance;
     private static int deckSize = 100, ditchCount = 0, drawCount = 0,
             interfaceCounter = 0, interfaceIndex = -1;
     private IMarauroaCard card;
@@ -27,12 +29,16 @@ public class DefaultDeckTest {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        for (RPEntityInterface entity : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
+            entity.generateRPClass();
+        }
+        instance = new RPDeck("test");
         Random rand = new Random();
         for (int i = 0; i < deckSize; i++) {
             if (rand.nextBoolean()) {
-                instance.getCards().add(new DefaultCard());
+                instance.addToDeck(new DefaultCard());
             } else {
-                instance.getCards().add(new DefaultCard2());
+                instance.addToDeck(new DefaultCard2());
                 if (interfaceIndex < 0) {
                     interfaceIndex = i + 1;
                 }
