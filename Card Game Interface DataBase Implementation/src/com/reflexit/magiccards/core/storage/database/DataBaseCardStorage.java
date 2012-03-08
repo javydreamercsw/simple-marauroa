@@ -208,6 +208,19 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             return true;
         }
     }
+    
+    @Override
+    public boolean cardExists(String name) {
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", name);
+            List result = namedQuery("Card.findByName", parameters);
+            return result != null && !result.isEmpty();
+        } catch (DBException ex) {
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        }
+    }
 
     @Override
     public void createAttributeIfNeeded(String attr, String value) throws DBException {
@@ -324,6 +337,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         }
     }
 
+    @Override
     public boolean cardSetExists(String name) {
         try {
             HashMap parameters = new HashMap();
