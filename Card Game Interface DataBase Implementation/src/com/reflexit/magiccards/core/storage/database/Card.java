@@ -74,6 +74,7 @@ public class Card implements Serializable, ICard {
         this.cardPK = cardPK;
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -168,6 +169,11 @@ public class Card implements Serializable, ICard {
 
     @Override
     public String getSet() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setSet(String string) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
