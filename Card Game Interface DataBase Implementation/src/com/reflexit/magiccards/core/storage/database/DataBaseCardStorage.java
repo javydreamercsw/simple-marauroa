@@ -2,8 +2,12 @@ package com.reflexit.magiccards.core.storage.database;
 
 import com.reflexit.magiccards.core.model.*;
 import com.reflexit.magiccards.core.model.storage.AbstractStorage;
-import com.reflexit.magiccards.core.model.storage.IDataBaseCardStorage;
+import com.reflexit.magiccards.core.model.storage.db.DBException;
+import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import com.reflexit.magiccards.core.storage.database.controller.*;
+import com.reflexit.magiccards.core.storage.database.controller.exceptions.IllegalOrphanException;
+import com.reflexit.magiccards.core.storage.database.controller.exceptions.NonexistentEntityException;
+import com.reflexit.magiccards.core.storage.database.controller.exceptions.PreexistingEntityException;
 import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Map.Entry;
@@ -57,7 +61,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     /**
      * @return the emf
      */
-
     public EntityManagerFactory getEntityManagerFactory() {
         if (emf == null) {
             init();
@@ -77,7 +80,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws Exception {
+    public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws DBException {
         Query q;
         getTransaction().begin();
         q = getEntityManager().createQuery(query);
@@ -96,22 +99,22 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public List<Object> createdQuery(String query) throws Exception {
+    public List<Object> createdQuery(String query) throws DBException {
         return createdQuery(query, null);
     }
 
     @Override
-    public List<Object> namedQuery(String query) throws Exception {
+    public List<Object> namedQuery(String query) throws DBException {
         return protectedNamedQuery(query, null, false);
     }
 
     @Override
-    public List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws Exception {
+    public List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws DBException {
         return protectedNamedQuery(query, parameters, false);
     }
 
     @SuppressWarnings("unchecked")
-    protected List<Object> protectedNamedQuery(String query, HashMap<String, Object> parameters, boolean locked) throws Exception {
+    protected List<Object> protectedNamedQuery(String query, HashMap<String, Object> parameters, boolean locked) throws DBException {
         Query q;
         getTransaction().begin();
         q = getEntityManager().createNamedQuery(query);
@@ -130,7 +133,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public void nativeQuery(String query) throws Exception {
+    public void nativeQuery(String query) throws DBException {
         EntityManager localEM = getEntityManager();
         EntityTransaction transaction = localEM.getTransaction();
         transaction.begin();
@@ -145,7 +148,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         getEntityManagerFactory().close();
     }
 
-    private EntityTransaction getTransaction() throws Exception {
+    private EntityTransaction getTransaction() throws DBException {
         return getEntityManager().getTransaction();
     }
 
@@ -165,20 +168,26 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public void createAttributes(String type) throws Exception {
+    public void createAttributes(String type) throws DBException {
         //Add Attributes
         CardAttributeJpaController caController = new CardAttributeJpaController(getEntityManagerFactory());
         if (!attributeExists(type)) {
-            CardAttribute attr = new CardAttribute();
-            attr.setName(type);
-            caController.create(attr);
-            LOG.log(Level.FINE,
-                    "Created attribute: {0} on the database!", type);
+            try {
+                CardAttribute attr = new CardAttribute();
+                attr.setName(type);
+                caController.create(attr);
+                LOG.log(Level.FINE,
+                        "Created attribute: {0} on the database!", type);
+            } catch (PreexistingEntityException ex) {
+                throw new DBException(ex.toString());
+            } catch (Exception ex) {
+                throw new DBException(ex.toString());
+            }
         }
     }
 
     @Override
-    public ICardType createCardType(String type) throws Exception {
+    public ICardType createCardType(String type) throws DBException {
         CardTypeJpaController cardTypeController = new CardTypeJpaController(getEntityManagerFactory());
         CardType card_type = new CardType(type);
         cardTypeController.create(card_type);
@@ -192,21 +201,16 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         try {
             HashMap parameters = new HashMap();
             parameters.put("name", attr);
-            List result = null;
-            try {
-                result = namedQuery("CardAttribute.findByName", parameters);
-            } catch (Exception ex) {
-                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            List result = namedQuery("CardAttribute.findByName", parameters);
             return result != null && !result.isEmpty();
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             return true;
         }
     }
 
     @Override
-    public void createAttributeIfNeeded(String attr, String value) throws Exception {
+    public void createAttributeIfNeeded(String attr, String value) throws DBException {
         if (!attributeExists(attr)) {
             createAttributes(attr);
             LOG.log(Level.FINE, "Created attribute: {0}", new Object[]{attr});
@@ -233,7 +237,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     list.add((T) it.next());
                 }
             }
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -254,7 +258,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     createCard(T.getCardType(), T.getName(), T.getText());
                 }
                 return true;
-            } catch (Exception ex) {
+            } catch (DBException ex) {
                 Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -273,8 +277,15 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     new CardJpaController(getEntityManagerFactory()).destroy(((Card) result.get(0)).getCardPK());
                     return true;
                 }
-            } catch (Exception ex) {
+            } catch (IllegalOrphanException ex) {
                 Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            } catch (DBException ex) {
+                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
         }
         return false;
@@ -299,7 +310,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     public int size() {
         try {
             return namedQuery("Card.findAll").size();
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
@@ -319,62 +330,92 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             HashMap parameters = new HashMap();
             parameters.put("name", name);
             return namedQuery("CardType.findByName", parameters).isEmpty();
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
 
     @Override
-    public ICard createCard(ICardType type, String name, byte[] text) throws Exception {
-        if (!cardTypeExists(type.getName())) {
-            type = (CardType) createCardType(type.getName());
+    public ICard createCard(ICardType type, String name, byte[] text) throws DBException {
+        try {
+            if (!cardTypeExists(type.getName())) {
+                type = (CardType) createCardType(type.getName());
+            }
+            CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
+            Card card = new Card(((CardType) type).getId(), name, text);
+            card.setCardType((CardType) type);
+            cardController.create(card);
+            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE,
+                    "Created card: {0} on the database!", name);
+            return (ICard) card;
+        } catch (PreexistingEntityException ex) {
+            throw new DBException(ex.toString());
+        } catch (Exception ex) {
+            throw new DBException(ex.toString());
         }
-        CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
-        Card card = new Card(((CardType) type).getId(), name, text);
-        card.setCardType((CardType) type);
-        cardController.create(card);
-        Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE,
-                "Created card: {0} on the database!", name);
-        return (ICard) card;
     }
 
     @Override
-    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr) throws Exception {
-        CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
-        CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
-        CardHasCardAttribute chca = new CardHasCardAttribute(((Card) card).getCardPK().getId(),
-                ((Card) card).getCardPK().getCardTypeId(), ((CardAttribute) attr).getId());
-        chca.setValue("test");
-        chca.setCard(((Card) card));
-        chca.setCardAttribute(((CardAttribute) attr));
-        chcaController.create(chca);
-        ((Card) card).getCardHasCardAttributeList().add(chca);
-        cardController.edit(((Card) card));
-        Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, "Added attribute: {0} to card: {1} on the database!", new Object[]{attr.getName(), card.getName()});
-        return chca;
+    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr) throws DBException {
+        try {
+            CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
+            CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
+            CardHasCardAttribute chca = new CardHasCardAttribute(((Card) card).getCardPK().getId(),
+                    ((Card) card).getCardPK().getCardTypeId(), ((CardAttribute) attr).getId());
+            chca.setValue("test");
+            chca.setCard(((Card) card));
+            chca.setCardAttribute(((CardAttribute) attr));
+            chcaController.create(chca);
+            ((Card) card).getCardHasCardAttributeList().add(chca);
+            cardController.edit(((Card) card));
+            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, "Added attribute: {0} to card: {1} on the database!", new Object[]{attr.getName(), card.getName()});
+            return chca;
+        } catch (PreexistingEntityException ex) {
+            throw new DBException(ex.toString());
+        } catch (Exception ex) {
+            throw new DBException(ex.toString());
+        }
     }
 
     @Override
-    public ICardSet createCardSet(IGame game, String name, String abbreviation, Date released) throws Exception {
-        CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
-        CardSet cs = new CardSet(((Game) game).getId(), abbreviation, name, released);
-        cs.setGame(((Game) game));
-        cs.setReleased(released == null ? new Date() : released);
-        csController.create(cs);
-        Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE,
-                "Created card set: {0} with abbreviation: {1} "
-                + "and release date: {2} on the database!", new Object[]{name, abbreviation, released});
-        return (ICardSet) cs;
+    public ICardSet createCardSet(IGame game, String name, String abbreviation, Date released) throws DBException {
+        try {
+            CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
+            CardSet cs = new CardSet(((Game) game).getId(), abbreviation, name, released);
+            cs.setGame(((Game) game));
+            cs.setReleased(released == null ? new Date() : released);
+            csController.create(cs);
+            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE,
+                    "Created card set: {0} with abbreviation: {1} "
+                    + "and release date: {2} on the database!", new Object[]{name, abbreviation, released});
+            return (ICardSet) cs;
+        } catch (PreexistingEntityException ex) {
+            throw new DBException(ex.toString());
+        } catch (Exception ex) {
+            throw new DBException(ex.toString());
+        }
     }
 
     @Override
-    public void addCardsToSet(List<ICard> cards, ICardSet cs) throws Exception {
-        CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
+    public void addCardToSet(ICard card, ICardSet cs) throws DBException {
+        try {
+            CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
+            ((CardSet) cs).getCardList().add((Card) card);
+            csController.edit(((CardSet) cs));
+            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, "Added {0} to set: {1}", new Object[]{card.getName(), cs.getName()});
+        } catch (NonexistentEntityException ex) {
+            throw new DBException(ex.toString());
+        } catch (Exception ex) {
+            throw new DBException(ex.toString());
+        }
+    }
+
+    @Override
+    public void addCardsToSet(List<ICard> cards, ICardSet cs) throws DBException {
         for (ICard card : cards) {
-            ((CardSet) cs).getCardList().add((Card)card);
+            addCardToSet(card, cs);
         }
-        csController.edit(((CardSet) cs));
         Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, "Added {0} to set: {1}", new Object[]{cards.size(), cs.getName()});
     }
 
@@ -391,7 +432,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public ICardCollectionType createCardCollectionType(String name) throws Exception {
+    public ICardCollectionType createCardCollectionType(String name) throws DBException {
         CardCollectionTypeJpaController controller = new CardCollectionTypeJpaController(getEntityManagerFactory());
         CardCollectionType cct = new CardCollectionType(name);
         controller.create(cct);
@@ -400,21 +441,27 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public ICardCollection createCardCollection(ICardCollectionType type, String name) throws Exception {
-        CardCollectionJpaController controller = new CardCollectionJpaController(getEntityManagerFactory());
-        CardCollection cc = new CardCollection(((CardCollectionType) type).getId(), name);
-        cc.setCardCollectionType((CardCollectionType) type);
-        controller.create(cc);
-        Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, "Created card collection: {0} on the database!", name);
-        return (ICardCollection) cc;
+    public ICardCollection createCardCollection(ICardCollectionType type, String name) throws DBException {
+        try {
+            CardCollectionJpaController controller = new CardCollectionJpaController(getEntityManagerFactory());
+            CardCollection cc = new CardCollection(((CardCollectionType) type).getId(), name);
+            cc.setCardCollectionType((CardCollectionType) type);
+            controller.create(cc);
+            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, "Created card collection: {0} on the database!", name);
+            return (ICardCollection) cc;
+        } catch (PreexistingEntityException ex) {
+            throw new DBException(ex.toString());
+        } catch (Exception ex) {
+            throw new DBException(ex.toString());
+        }
     }
 
     @Override
-    public ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards, ICardCollection collection) throws Exception {
+    public ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards, ICardCollection collection) throws DBException {
         for (Iterator<Entry<ICard, Integer>> it = cards.entrySet().iterator(); it.hasNext();) {
             Entry<ICard, Integer> entry = it.next();
             if (entry.getValue() < 0) {
-                throw new Exception("Invalid operation! Tried to add a negative value. Use removeCardsFromCollection instead!");
+                throw new DBException("Invalid operation! Tried to add a negative value. Use removeCardsFromCollection instead!");
             }
             CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(getEntityManagerFactory());
             CardCollectionHasCard cchc = controller.findCardCollectionHasCard(new CardCollectionHasCardPK(
@@ -422,22 +469,34 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     ((CardCollection) collection).getCardCollectionPK().getCardCollectionTypeId(),
                     ((Card) entry.getKey()).getCardPK().getId(), ((Card) entry.getKey()).getCardPK().getCardTypeId()));
             if (cchc == null) {
-                cchc = new CardCollectionHasCard(
-                        ((CardCollection) collection).getCardCollectionPK().getId(),
-                        ((CardCollection) collection).getCardCollectionPK().getCardCollectionTypeId(),
-                        ((Card) entry.getKey()).getCardPK().getId(),
-                        ((Card) entry.getKey()).getCardPK().getCardTypeId(),
-                        entry.getValue());
-                cchc.setCard(((Card) entry.getKey()));
-                cchc.setCardCollection(((CardCollection) collection));
-                controller.create(cchc);
+                try {
+                    cchc = new CardCollectionHasCard(
+                            ((CardCollection) collection).getCardCollectionPK().getId(),
+                            ((CardCollection) collection).getCardCollectionPK().getCardCollectionTypeId(),
+                            ((Card) entry.getKey()).getCardPK().getId(),
+                            ((Card) entry.getKey()).getCardPK().getCardTypeId(),
+                            entry.getValue());
+                    cchc.setCard(((Card) entry.getKey()));
+                    cchc.setCardCollection(((CardCollection) collection));
+                    controller.create(cchc);
+                } catch (PreexistingEntityException ex) {
+                    throw new DBException(ex.toString());
+                } catch (Exception ex) {
+                    throw new DBException(ex.toString());
+                }
             } else {
                 cchc.setAmount(cchc.getAmount() + entry.getValue());
-                controller.edit(cchc);
+                try {
+                    controller.edit(cchc);
+                } catch (NonexistentEntityException ex) {
+                    throw new DBException(ex.toString());
+                } catch (Exception ex) {
+                    throw new DBException(ex.toString());
+                }
             }
-            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, 
-                    "Added {0} instances of {1} to collection: {2}", 
-                    new Object[]{entry.getValue(), entry.getKey().getName(), ((CardCollection)collection).getName()});
+            Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE,
+                    "Added {0} instances of {1} to collection: {2}",
+                    new Object[]{entry.getValue(), entry.getKey().getName(), ((CardCollection) collection).getName()});
         }
         CardCollectionJpaController ccController = new CardCollectionJpaController(getEntityManagerFactory());
         collection = (ICardCollection) ccController.findCardCollection(((CardCollection) collection).getCardCollectionPK());
@@ -445,10 +504,10 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards, ICardCollection collection) throws Exception {
+    public ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards, ICardCollection collection) throws DBException {
         for (Entry<ICard, Integer> entry : cards.entrySet()) {
             if (entry.getValue() < 0) {
-                throw new Exception("Invalid operation! Tried to remove a negative value. Use addCardsToCollection instead!");
+                throw new DBException("Invalid operation! Tried to remove a negative value. Use addCardsToCollection instead!");
             }
             CardCollectionHasCardJpaController controller = new CardCollectionHasCardJpaController(getEntityManagerFactory());
             CardCollectionHasCard cchc = controller.findCardCollectionHasCard(
@@ -463,14 +522,24 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     finalAmount = 0;
                 }
                 if (finalAmount == 0) {
-                    //Remove it
-                    controller.destroy(cchc.getCardCollectionHasCardPK());
+                    try {
+                        //Remove it
+                        controller.destroy(cchc.getCardCollectionHasCardPK());
+                    } catch (NonexistentEntityException ex) {
+                        throw new DBException(ex.toString());
+                    }
                 } else {
-                    cchc.setAmount(finalAmount);
-                    controller.edit(cchc);
+                    try {
+                        cchc.setAmount(finalAmount);
+                        controller.edit(cchc);
+                    } catch (NonexistentEntityException ex) {
+                        throw new DBException(ex.toString());
+                    } catch (Exception ex) {
+                        throw new DBException(ex.toString());
+                    }
                 }
-                Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE, 
-                        "Removed {0} instances of {1} from collection: {2}", 
+                Logger.getLogger(IDataBaseCardStorage.class.getName()).log(Level.FINE,
+                        "Removed {0} instances of {1} from collection: {2}",
                         new Object[]{initialAmount - finalAmount, entry.getKey().getName(), ((CardCollection) collection).getName()});
             }
         }
@@ -492,24 +561,30 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public ICardAttribute getCardAttribute(String attr) throws Exception {
+    public ICardAttribute getCardAttribute(String attr) throws DBException {
         HashMap parameters = new HashMap();
         parameters.put("name", attr);
         return (ICardAttribute) namedQuery("CardAttribute.findByName", parameters).get(0);
     }
 
     @Override
-    public void addAttributesToCard(ICard card, Map<String, String> attributes) throws Exception {
+    public void addAttributesToCard(ICard card, Map<String, String> attributes) throws DBException {
         for (Entry<String, String> entry : attributes.entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null && !entry.getValue().trim().isEmpty()) {
-                createAttributeIfNeeded(entry.getKey(), entry.getValue());
-                ICardAttribute cardAttribute = getCardAttribute(entry.getKey());
-                CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, cardAttribute);
-                chca.setValue(entry.getValue());
-                CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
-                chcaController.edit(chca);
-                LOG.log(Level.FINE, "Added attribute: {0} to card: {1} with value: {2}",
-                        new Object[]{entry.getKey(), card.getName(), entry.getValue()});
+                try {
+                    createAttributeIfNeeded(entry.getKey(), entry.getValue());
+                    ICardAttribute cardAttribute = getCardAttribute(entry.getKey());
+                    CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, cardAttribute);
+                    chca.setValue(entry.getValue());
+                    CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
+                    chcaController.edit(chca);
+                    LOG.log(Level.FINE, "Added attribute: {0} to card: {1} with value: {2}",
+                            new Object[]{entry.getKey(), card.getName(), entry.getValue()});
+                } catch (NonexistentEntityException ex) {
+                    throw new DBException(ex.toString());
+                } catch (Exception ex) {
+                    throw new DBException(ex.toString());
+                }
             }
         }
     }
@@ -546,14 +621,14 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public Map<String, String> getAttributesForCard(String name) throws Exception {
+    public Map<String, String> getAttributesForCard(String name) throws DBException {
         HashMap parameters = new HashMap();
         parameters.put("name", name);
         return getAttributesForCard((ICard) namedQuery("Card.findByName", parameters).get(0));
     }
-    
+
     @Override
-    public void initialize(){
+    public void initialize() {
         getEntityManagerFactory();
     }
 }

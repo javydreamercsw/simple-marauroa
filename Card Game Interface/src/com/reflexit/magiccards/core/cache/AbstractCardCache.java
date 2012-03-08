@@ -7,7 +7,7 @@ import com.reflexit.magiccards.core.model.Editions;
 import com.reflexit.magiccards.core.model.Editions.Edition;
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardSet;
-import com.reflexit.magiccards.core.model.storage.IDataBaseCardStorage;
+import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

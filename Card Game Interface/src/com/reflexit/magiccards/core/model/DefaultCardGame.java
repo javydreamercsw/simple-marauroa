@@ -1,7 +1,8 @@
 package com.reflexit.magiccards.core.model;
 
 import com.reflexit.magiccards.core.cache.ICardCache;
-import com.reflexit.magiccards.core.model.storage.IDataBaseCardStorage;
+import com.reflexit.magiccards.core.model.storage.db.DBException;
+import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,23 +24,30 @@ public abstract class DefaultCardGame implements ICardGame {
 
     @Override
     public void init() {
-        Lookup.getDefault().lookup(IDataBaseCardStorage.class).createGame(getName());
-        HashMap parameters = new HashMap();
         try {
-            for (String attr : attribs) {
-                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createAttributes(attr);
+            HashMap parameters = new HashMap();
+            parameters.put("name", getName());
+            if (Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters).isEmpty()) {
+                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createGame(getName());
             }
-            for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
-                String type = it.next();
-                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollectionType(type);
+            try {
+                for (String attr : attribs) {
+                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).createAttributes(attr);
+                }
+                for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
+                    String type = it.next();
+                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollectionType(type);
+                }
+                for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
+                    Entry<String, String> entry = it.next();
+                    parameters.put("name", entry.getKey());
+                    ICardCollectionType type = (ICardCollectionType) Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardCollectionType.findByName", parameters).get(0);
+                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollection(type, entry.getValue());
+                }
+            } catch (DBException ex) {
+                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
-                Entry<String, String> entry = it.next();
-                parameters.put("name", entry.getKey());
-                ICardCollectionType type = (ICardCollectionType) Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardCollectionType.findByName", parameters).get(0);
-                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollection(type, entry.getValue());
-            }
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -53,5 +61,15 @@ public abstract class DefaultCardGame implements ICardGame {
             }
         }
         return caches;
+    }
+
+    @Override
+    public Runnable getUpdateRunnable() {
+        for (ICardCache icache : getCardCacheImplementations()) {
+            if (icache.getGameName().equals(getName())) {
+                return icache.getCacheTask();
+            }
+        }
+        return null;
     }
 }
