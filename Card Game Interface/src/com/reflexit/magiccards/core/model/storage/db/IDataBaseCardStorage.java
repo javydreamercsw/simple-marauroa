@@ -284,4 +284,18 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @throws DBException 
      */
     public void initialize() throws DBException;
+    
+    /**
+     * Check if set exists
+     * @param name set name
+     * @return true if exists
+     */
+    public boolean cardSetExists(String name);
+    
+    /**
+     * Check if card exists
+     * @param name card name
+     * @return true if exists
+     */
+    public boolean cardExists(String name);
 }
