@@ -324,12 +324,25 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         }
     }
 
+    public boolean cardSetExists(String name) {
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", name);
+            List result = namedQuery("CardSet.findByName", parameters);
+            return result != null && !result.isEmpty();
+        } catch (DBException ex) {
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
     @Override
     public boolean cardTypeExists(String name) {
         try {
             HashMap parameters = new HashMap();
             parameters.put("name", name);
-            return namedQuery("CardType.findByName", parameters).isEmpty();
+            List result = namedQuery("CardType.findByName", parameters);
+            return result != null && !result.isEmpty();
         } catch (DBException ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -381,6 +394,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     @Override
     public ICardSet createCardSet(IGame game, String name, String abbreviation, Date released) throws DBException {
         try {
+
             CardSetJpaController csController = new CardSetJpaController(getEntityManagerFactory());
             CardSet cs = new CardSet(((Game) game).getId(), abbreviation, name, released);
             cs.setGame(((Game) game));
