@@ -13,7 +13,8 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @Entity
-@Table(name = "card_type")
+@Table(name = "card_type", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"name"})})
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CardType.findAll", query = "SELECT c FROM CardType c"),
