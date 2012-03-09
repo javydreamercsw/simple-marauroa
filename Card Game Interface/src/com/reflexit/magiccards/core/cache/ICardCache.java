@@ -4,6 +4,7 @@ import com.reflexit.magiccards.core.CannotDetermineSetAbbriviation;
 import com.reflexit.magiccards.core.model.Editions;
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardSet;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,9 +76,10 @@ public interface ICardCache {
      * @return
      */
     public Runnable getCacheTask();
-    
+
     /**
      * Load card image offline
+     *
      * @param card Card to load
      * @param set Set to load the card for
      * @param forceUpdate force updating cache
@@ -86,4 +88,18 @@ public interface ICardCache {
      * @throws CannotDetermineSetAbbriviation
      */
     public boolean loadCardImageOffline(ICard card, ICardSet set, boolean forceUpdate) throws IOException, CannotDetermineSetAbbriviation;
+
+    /**
+     * Get current cache directory
+     *
+     * @return
+     */
+    public File getCacheLocationFile();
+
+    /**
+     * Set current cache directory
+     *
+     * @param aCacheDir the cacheDir to set
+     */
+    public void setCacheDir(File aCacheDir);
 }
