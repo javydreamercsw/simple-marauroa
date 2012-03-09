@@ -1,8 +1,7 @@
 package com.reflexit.magiccards.core.storage.database;
 
 import com.reflexit.magiccards.core.model.*;
-import com.reflexit.magiccards.core.model.storage.IDataBaseCardStorage;
-import com.reflexit.magiccards.core.storage.database.controller.exceptions.NonexistentEntityException;
+import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -132,20 +131,10 @@ public class DefaultCardGameTest {
                 System.out.println("Add card to set");
                 ArrayList<Card> cards = new ArrayList<Card>();
                 cards.add(card);
-                try {
-                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).addCardsToSet(cards, cs1);
-                } catch (NonexistentEntityException ex) {
-                    Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
-                    fail();
-                }
+                Lookup.getDefault().lookup(IDataBaseCardStorage.class).addCardsToSet(cards, cs1);
                 assertTrue(cs1.getCardList().size() == cards.size());
                 cards.add(card2);
-                try {
-                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).addCardsToSet(cards, cs2);
-                } catch (NonexistentEntityException ex) {
-                    Logger.getLogger(DefaultCardGameTest.class.getName()).log(Level.SEVERE, null, ex);
-                    fail();
-                }
+                Lookup.getDefault().lookup(IDataBaseCardStorage.class).addCardsToSet(cards, cs2);
                 assertTrue(cs2.getCardList().size() == cards.size());
                 System.out.println("Print Sets");
                 String set1 = Lookup.getDefault().lookup(IDataBaseCardStorage.class).printCardsInSet(cs1);
@@ -174,15 +163,15 @@ public class DefaultCardGameTest {
                 int totalPages = 3, toRemove = 1;
                 addToCollection.put(temp, totalPages);
                 assertTrue(collection.getCardCollectionHasCardList().isEmpty());
-                collection = (CardCollection) Lookup.getDefault().lookup(IDataBaseCardStorage.class).addCardsToCollection(addToCollection, (ICardCollection)collection);
+                collection = (CardCollection) Lookup.getDefault().lookup(IDataBaseCardStorage.class).addCardsToCollection(addToCollection, (ICardCollection) collection);
                 assertTrue(collection.getCardCollectionHasCardList().size() == 1);
                 assertTrue(collection.getCardCollectionHasCardList().get(0).getAmount() == totalPages);
                 System.out.println("Removing pages from collection");
                 addToCollection.put(temp, toRemove);
-                collection = (CardCollection) Lookup.getDefault().lookup(IDataBaseCardStorage.class).removeCardsFromCollection(addToCollection, (ICardCollection)collection);
+                collection = (CardCollection) Lookup.getDefault().lookup(IDataBaseCardStorage.class).removeCardsFromCollection(addToCollection, (ICardCollection) collection);
                 assertTrue(collection.getCardCollectionHasCardList().get(0).getAmount() == (totalPages - toRemove));
                 System.out.println("Print collection");
-                String collectionList = Lookup.getDefault().lookup(IDataBaseCardStorage.class).printCardsCollection((ICardCollection)collection);
+                String collectionList = Lookup.getDefault().lookup(IDataBaseCardStorage.class).printCardsCollection((ICardCollection) collection);
                 assertFalse(collectionList.isEmpty());
                 System.out.println(collectionList);
             } catch (Exception ex) {

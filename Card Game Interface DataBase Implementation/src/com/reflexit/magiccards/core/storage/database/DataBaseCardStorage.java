@@ -82,7 +82,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     @Override
     public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws DBException {
         Query q;
-        getTransaction().begin();
+        EntityTransaction transaction = getTransaction();
+        transaction.begin();
         q = getEntityManager().createQuery(query);
         if (parameters != null) {
             Iterator<Map.Entry<String, Object>> entries = parameters.entrySet().iterator();
@@ -92,9 +93,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             }
         }
         List result = q.getResultList();
-        if (getTransaction().isActive()) {
-            getTransaction().commit();
-        }
+        transaction.commit();
         return result;
     }
 
@@ -116,7 +115,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     @SuppressWarnings("unchecked")
     protected List<Object> protectedNamedQuery(String query, HashMap<String, Object> parameters, boolean locked) throws DBException {
         Query q;
-        getTransaction().begin();
+        EntityTransaction transaction = getTransaction();
+        transaction.begin();
         q = getEntityManager().createNamedQuery(query);
         if (parameters != null) {
             Iterator<Map.Entry<String, Object>> entries = parameters.entrySet().iterator();
@@ -126,9 +126,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             }
         }
         List result = q.getResultList();
-        if (getTransaction().isActive()) {
-            getTransaction().commit();
-        }
+        transaction.commit();
         return result;
     }
 
@@ -149,7 +147,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     private EntityTransaction getTransaction() throws DBException {
-        return getEntityManager().getTransaction();
+        return getEntityManagerFactory().createEntityManager().getTransaction();
     }
 
     /**
@@ -614,7 +612,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     throw new DBException(ex.toString());
                 } catch (PreexistingEntityException ex) {
                     //Do nothing, no need to add it
-                }catch (Exception ex) {
+                } catch (Exception ex) {
                     //Do nothing, no need to add it
                 }
             }
