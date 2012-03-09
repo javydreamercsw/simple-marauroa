@@ -208,7 +208,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             return true;
         }
     }
-    
+
     @Override
     public boolean cardExists(String name) {
         try {
@@ -600,6 +600,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         for (Entry<String, String> entry : attributes.entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null && !entry.getValue().trim().isEmpty()) {
                 try {
+                    LOG.log(Level.FINE, "Adding attribute: {0} to card: {1} with value: {2}",
+                            new Object[]{entry.getKey(), card.getName(), entry.getValue()});
                     createAttributeIfNeeded(entry.getKey(), entry.getValue());
                     ICardAttribute cardAttribute = getCardAttribute(entry.getKey());
                     CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, cardAttribute);
@@ -610,8 +612,10 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                             new Object[]{entry.getKey(), card.getName(), entry.getValue()});
                 } catch (NonexistentEntityException ex) {
                     throw new DBException(ex.toString());
-                } catch (Exception ex) {
-                    throw new DBException(ex.toString());
+                } catch (PreexistingEntityException ex) {
+                    //Do nothing, no need to add it
+                }catch (Exception ex) {
+                    //Do nothing, no need to add it
                 }
             }
         }
