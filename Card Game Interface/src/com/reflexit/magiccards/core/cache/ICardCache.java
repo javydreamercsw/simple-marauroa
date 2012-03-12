@@ -4,6 +4,7 @@ import com.reflexit.magiccards.core.CannotDetermineSetAbbriviation;
 import com.reflexit.magiccards.core.model.Editions;
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardSet;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -102,4 +103,13 @@ public interface ICardCache {
      * @param aCacheDir the cacheDir to set
      */
     public void setCacheDir(File aCacheDir);
+
+    /**
+     * Get icon for set
+     *
+     * @param set Set to look icon for
+     * @return Icon or null if none
+     * @throws IOException
+     */
+    public Image getSetIcon(ICardSet set) throws IOException;
 }
