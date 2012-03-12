@@ -31,30 +31,34 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     private String pu = "Card_Game_InterfacePU";
     private Map<String, String> dataBaseProperties = null;
     protected final List<T> list = Collections.synchronizedList(new ArrayList<T>());
+    private boolean initialized = false;
 
-    public void init() {
-        if (emf == null) {
-            if (dataBaseProperties == null) {
-                emf = Persistence.createEntityManagerFactory(getPU());
-            } else {
-                LOG.info("Provided the following configuration options:");
-                for (Entry<String, String> entry : dataBaseProperties.entrySet()) {
-                    LOG.log(Level.INFO, "{0}: {1}", new Object[]{entry.getKey(), entry.getValue()});
+    @Override
+    public void initialize() {
+        if (!initialized) {
+            if (emf == null) {
+                if (dataBaseProperties == null) {
+                    emf = Persistence.createEntityManagerFactory(getPU());
+                } else {
+                    LOG.info("Provided the following configuration options:");
+                    for (Entry<String, String> entry : dataBaseProperties.entrySet()) {
+                        LOG.log(Level.INFO, "{0}: {1}", new Object[]{entry.getKey(), entry.getValue()});
+                    }
+                    emf = Persistence.createEntityManagerFactory(getPU(), dataBaseProperties);
                 }
-                emf = Persistence.createEntityManagerFactory(getPU(), dataBaseProperties);
+                if (em != null) {
+                    em.close();
+                }
+                em = null;
             }
-            if (em != null) {
-                em.close();
+            if (em == null) {
+                em = emf.createEntityManager();
             }
-            em = null;
-        }
-        if (em == null) {
-            em = emf.createEntityManager();
-        }
-        //initialize the games in the database
-        for (ICardGame game : Lookup.getDefault().lookupAll(ICardGame.class)) {
-            //Init should generate/update the database entries related to this game, not the pages itself.
-            game.init();
+            for (ICardGame game : Lookup.getDefault().lookupAll(ICardGame.class)) {
+                //Init should generate/update the database entries related to this game, not the pages itself.
+                game.init();
+            }
+            initialized = true;
         }
     }
 
@@ -62,9 +66,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
      * @return the emf
      */
     public EntityManagerFactory getEntityManagerFactory() {
-        if (emf == null) {
-            init();
-        }
         return emf;
     }
 
@@ -72,9 +73,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
      * @return the em
      */
     public EntityManager getEntityManager() {
-        if (em == null) {
-            init();
-        }
         return em;
     }
 
@@ -655,10 +653,5 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         HashMap parameters = new HashMap();
         parameters.put("name", name);
         return getAttributesForCard((ICard) namedQuery("Card.findByName", parameters).get(0));
-    }
-
-    @Override
-    public void initialize() {
-        getEntityManagerFactory();
     }
 }

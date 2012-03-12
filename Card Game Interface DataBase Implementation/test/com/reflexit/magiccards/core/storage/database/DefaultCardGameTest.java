@@ -2,6 +2,7 @@ package com.reflexit.magiccards.core.storage.database;
 
 import com.reflexit.magiccards.core.model.*;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
+import java.awt.Image;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -183,6 +184,11 @@ public class DefaultCardGameTest {
         @Override
         public Runnable getUpdateRunnable() {
             //Do nothing
+            return null;
+        }
+
+        @Override
+        public Image getBackCardIcon() {
             return null;
         }
     }
