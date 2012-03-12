@@ -24,28 +24,32 @@ public abstract class DefaultCardGame implements ICardGame {
 
     @Override
     public void init() {
+        HashMap parameters = new HashMap();
         try {
-            HashMap parameters = new HashMap();
             parameters.put("name", getName());
             if (Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters).isEmpty()) {
                 Lookup.getDefault().lookup(IDataBaseCardStorage.class).createGame(getName());
             }
-            try {
-                for (String attr : attribs) {
-                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).createAttributes(attr);
-                }
-                for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
-                    String type = it.next();
-                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollectionType(type);
-                }
-                for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
-                    Entry<String, String> entry = it.next();
-                    parameters.put("name", entry.getKey());
-                    ICardCollectionType type = (ICardCollectionType) Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardCollectionType.findByName", parameters).get(0);
-                    Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollection(type, entry.getValue());
-                }
-            } catch (DBException ex) {
-                Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DBException ex) {
+            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            //Create game attributes
+            for (Iterator<String> it = attribs.iterator(); it.hasNext();) {
+                String attr = it.next();
+                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createAttributes(attr);
+            }
+            //Create default collection types
+            for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
+                String type = it.next();
+                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollectionType(type);
+            }
+            //Create default Collections
+            for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
+                Entry<String, String> entry = it.next();
+                parameters.put("name", entry.getKey());
+                ICardCollectionType type = (ICardCollectionType) Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardCollectionType.findByName", parameters).get(0);
+                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollection(type, entry.getValue());
             }
         } catch (DBException ex) {
             Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);

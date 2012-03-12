@@ -91,6 +91,7 @@ public class CardSet implements Serializable, ICardSet{
         this.abbreviation = abbreviation;
     }
 
+    @Override
     public String getName() {
         return name;
     }
