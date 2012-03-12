@@ -329,29 +329,6 @@ public final class Editions implements ISearchableProperty {
         }
     }
 
-    public synchronized void save() throws FileNotFoundException {
-//        File file = new File(DataManager.getStateLocationFile(), EDITIONS_FILE);
-//        PrintStream st = new PrintStream(file);
-//        try {
-//            for (Iterator<String> iterator = this.name2ed.keySet().iterator(); iterator.hasNext();) {
-//                String name = iterator.next();
-//                Editions.Edition ed = getEditionByName(name);
-//                String rel = "";
-//                if (ed.getReleaseDate() != null) {
-//                    rel = Editions.Edition.formatter.format(ed.getReleaseDate());
-//                }
-//                String type = "";
-//                if (ed.getType() != null) {
-//                    type = ed.getType();
-//                }
-//                st.println(name + "|" + ed.getMainAbbreviation() + "|" + ed.getExtraAbbreviation() + "|" + rel + "|" + type + "||"
-//                        + ed.getFormatString());
-//            }
-//        } finally {
-//            st.close();
-//        }
-    }
-
     @Override
     public String getIdPrefix() {
         return "edition";
@@ -369,12 +346,12 @@ public final class Editions implements ISearchableProperty {
     }
 
     public String getPrefConstant(String abbr) {
-        return "";//FilterHelper.getPrefConstant(getIdPrefix(), abbr);
+        return "";//TODO:FilterHelper.getPrefConstant(getIdPrefix(), abbr);
     }
 
     public String getPrefConstantByName(String name) {
         String abbr = getAbbrByName(name);
-        return "";//FilterHelper.getPrefConstant(getIdPrefix(), abbr);
+        return "";//TODO: FilterHelper.getPrefConstant(getIdPrefix(), abbr);
     }
 
     @Override
