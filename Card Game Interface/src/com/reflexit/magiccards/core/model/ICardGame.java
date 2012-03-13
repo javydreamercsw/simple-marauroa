@@ -41,7 +41,13 @@ public interface ICardGame {
     /**
      * Get the game specific back card icon
      *
-     * @return game special back card icon
+     * @return game special back card icon or null if not defined
      */
     public Image getBackCardIcon();
+    
+    /**
+     * Get the game specific game icon
+     * @return game specific game icon or null if not defined
+     */
+    public Image getGameIcon();
 }
