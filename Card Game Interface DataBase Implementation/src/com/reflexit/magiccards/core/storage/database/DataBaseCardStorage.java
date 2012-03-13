@@ -80,7 +80,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     @Override
     public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws DBException {
         Query q;
-        EntityTransaction transaction = getTransaction();
+        EntityManager localEM = getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = localEM.getTransaction();
         transaction.begin();
         q = getEntityManager().createQuery(query);
         if (parameters != null) {
@@ -113,9 +114,10 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     @SuppressWarnings("unchecked")
     protected List<Object> protectedNamedQuery(String query, HashMap<String, Object> parameters, boolean locked) throws DBException {
         Query q;
-        EntityTransaction transaction = getTransaction();
+        EntityManager localEM = getEntityManagerFactory().createEntityManager();
+        EntityTransaction transaction = localEM.getTransaction();
         transaction.begin();
-        q = getEntityManager().createNamedQuery(query);
+        q = localEM.createNamedQuery(query);
         if (parameters != null) {
             Iterator<Map.Entry<String, Object>> entries = parameters.entrySet().iterator();
             while (entries.hasNext()) {
@@ -130,22 +132,16 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
 
     @Override
     public void nativeQuery(String query) throws DBException {
-        EntityManager localEM = getEntityManager();
+        EntityManager localEM = getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = localEM.getTransaction();
         transaction.begin();
         localEM.createNativeQuery(query).executeUpdate();
-        if (transaction.isActive()) {
-            transaction.commit();
-        }
+        transaction.commit();
     }
 
     @Override
     public void close() {
         getEntityManagerFactory().close();
-    }
-
-    private EntityTransaction getTransaction() throws DBException {
-        return getEntityManagerFactory().createEntityManager().getTransaction();
     }
 
     /**
