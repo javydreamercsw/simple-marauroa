@@ -2,12 +2,10 @@ package com.reflexit.magiccards.core.cache;
 
 import com.reflexit.magiccards.core.CachedImageNotFoundException;
 import com.reflexit.magiccards.core.CannotDetermineSetAbbriviation;
-import com.reflexit.magiccards.core.model.CardFileUtils;
-import com.reflexit.magiccards.core.model.Editions;
 import com.reflexit.magiccards.core.model.Editions.Edition;
-import com.reflexit.magiccards.core.model.ICard;
-import com.reflexit.magiccards.core.model.ICardSet;
+import com.reflexit.magiccards.core.model.*;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import org.openide.util.Lookup;
 
 /**
@@ -28,6 +27,7 @@ public abstract class AbstractCardCache implements ICardCache {
     private static boolean loading;
     private static File cacheDir;
     private String name;
+    private static final Logger LOG = Logger.getLogger(AbstractCardCache.class.getName());
 
     public static void setCahchingEnabled(boolean enabled) {
         caching = enabled;
@@ -54,6 +54,8 @@ public abstract class AbstractCardCache implements ICardCache {
 
     public AbstractCardCache(String name) {
         this.name = name;
+        setLoadingEnabled(true);
+        setCachingEnabled(true);
     }
 
     @Override
@@ -109,8 +111,8 @@ public abstract class AbstractCardCache implements ICardCache {
         String file = new File(loc, part).getPath();
         return file;
     }
-    
-    public boolean cardImageExists(ICard card, ICardSet set){
+
+    public boolean cardImageExists(ICard card, ICardSet set) {
         try {
             return new File(createLocalImageFilePath(card, set)).exists();
         } catch (CannotDetermineSetAbbriviation ex) {
@@ -223,5 +225,67 @@ public abstract class AbstractCardCache implements ICardCache {
     @Override
     public String getGameName() {
         return name;
+    }
+
+    /**
+     * Download image from URL
+     *
+     * @param url url to download file from
+     * @param dest File to store the image to
+     * @param overwrite overwrite file if found
+     * @return Downloaded image
+     * @throws IOException
+     */
+    protected Image downloadImageFromURL(URL url, File dest, boolean overwrite) throws IOException {
+        InputStream st = null;
+        if (!dest.exists() || overwrite) {
+            LOG.log(Level.FINE, "Downloading file from: {0}", url);
+            try {
+                st = url.openStream();
+            } catch (IOException e) {
+                throw new IOException("Cannot connect: " + e.getMessage());
+            }
+            File file2 = new File(dest.getAbsolutePath() + ".part");
+            CardFileUtils.saveStream(st, file2);
+            st.close();
+            if (file2.exists()) {
+                file2.renameTo(dest);
+                if (!dest.exists()) {
+                    throw new IOException("failed to rename into " + dest.toString());
+                }
+            }
+        }
+        if (dest.exists()) {
+            return (new ImageIcon(dest.toURI().toURL(), "icon")).getImage();
+        }
+        throw new FileNotFoundException(dest.toString());
+    }
+
+    @Override
+    public String getSetIconPath(ICardSet set) {
+        File loc = getCacheLocationFile();
+        Edition edition = Editions.getInstance().getEditionByName(set.getName());
+        String locale = "EN";
+        String part = set.getGameName() + System.getProperty("file.separator") + "Sets"
+                + System.getProperty("file.separator") + edition.getMainAbbreviation() + System.getProperty("file.separator")
+                + locale + System.getProperty("file.separator") + edition.getMainAbbreviation() + ".jpg";
+        return new File(loc, part).getPath();
+    }
+
+    @Override
+    public String getGameIconPath() {
+        File loc = getCacheLocationFile();
+        String part = getGame().getName() + System.getProperty("file.separator")
+                + "game.jpg";
+        return new File(loc, part).getPath();
+    }
+
+    private ICardGame getGame() {
+        for (ICardGame game : Lookup.getDefault().lookupAll(ICardGame.class)) {
+            if (game.getName().equals(getGameName())) {
+                return game;
+            }
+        }
+        return null;
     }
 }

@@ -167,14 +167,4 @@ public class Card implements Serializable, ICard {
     public int compareTo(Object o) {
         return equals(o) ? 0 : -1;
     }
-
-    @Override
-    public String getSet() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setSet(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }

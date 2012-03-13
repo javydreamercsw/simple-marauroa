@@ -1,6 +1,5 @@
 package com.reflexit.magiccards.core.model.storage;
 
-import com.reflexit.magiccards.core.model.Editions.Edition;
 import com.reflexit.magiccards.core.model.*;
 import java.util.*;
 
@@ -31,7 +30,7 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see com.reflexit.magiccards.core.model.IFilteredCardStore#getSize()
      */
     @Override
@@ -195,32 +194,33 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
     }
 
     protected Collection<ICard> removeSetDuplicates(Collection<ICard> filteredList) {
-        LinkedHashMap<String, ICard> unique = new LinkedHashMap<String, ICard>();
-        for (Iterator<ICard> iterator = filteredList.iterator(); iterator.hasNext();) {
-            ICard elem = iterator.next();
-            if (elem instanceof ICard) {
-                ICard card = (ICard) elem;
-                ICard old = unique.get(card.getName());
-            if (old == null) {
-                unique.put(card.getName(), card);
-            } else {
-                Edition oldE = Editions.getInstance().getEditionByName(old.getSet());
-                Edition newE = Editions.getInstance().getEditionByName(card.getSet());
-                if (oldE != null && newE != null && oldE.getReleaseDate() != null && newE.getReleaseDate() != null) {
-                    if (oldE.getReleaseDate().before(newE.getReleaseDate())) {
-                        unique.put(card.getName(), card);
-                    }
-                    continue;
-                }
-                if (old.getCardId() < card.getCardId()) {
-                    unique.put(card.getName(), card);
-                }
-            }
-        }
-        }
-        if (unique.size() > 0) {
-            return unique.values();
-        }
+        //Not needed, duplicates handled at database level
+//        LinkedHashMap<String, ICard> unique = new LinkedHashMap<String, ICard>();
+//        for (Iterator<ICard> iterator = filteredList.iterator(); iterator.hasNext();) {
+//            ICard elem = iterator.next();
+//            if (elem instanceof ICard) {
+//                ICard card = (ICard) elem;
+//                ICard old = unique.get(card.getName());
+//            if (old == null) {
+//                unique.put(card.getName(), card);
+//            } else {
+//                Edition oldE = Editions.getInstance().getEditionByName(old.getSetName());
+//                Edition newE = Editions.getInstance().getEditionByName(card.getSetName());
+//                if (oldE != null && newE != null && oldE.getReleaseDate() != null && newE.getReleaseDate() != null) {
+//                    if (oldE.getReleaseDate().before(newE.getReleaseDate())) {
+//                        unique.put(card.getName(), card);
+//                    }
+//                    continue;
+//                }
+//                if (old.getCardId() < card.getCardId()) {
+//                    unique.put(card.getName(), card);
+//                }
+//            }
+//        }
+//        }
+//        if (unique.size() > 0) {
+//            return unique.values();
+//        }
         return filteredList;
     }
 
@@ -242,8 +242,9 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
 
     /*
      * (non-Javadoc)
-     * 
-     * @see com.reflexit.magiccards.core.model.IFilteredCardStore#getCardGroups()
+     *
+     * @see
+     * com.reflexit.magiccards.core.model.IFilteredCardStore#getCardGroups()
      */
     @Override
     public CardGroup[] getCardGroups() {

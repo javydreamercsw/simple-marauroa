@@ -3,6 +3,7 @@ package com.reflexit.magiccards.core.cache;
 import com.reflexit.magiccards.core.CannotDetermineSetAbbriviation;
 import com.reflexit.magiccards.core.model.Editions;
 import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardGame;
 import com.reflexit.magiccards.core.model.ICardSet;
 import java.awt.Image;
 import java.io.File;
@@ -112,4 +113,26 @@ public interface ICardCache {
      * @throws IOException
      */
     public Image getSetIcon(ICardSet set) throws IOException;
+    
+    /**
+     * Get path to a set's icon.
+     * @param set Set to get the path for
+     * @return path to a set's icon
+     */
+    public String getSetIconPath(ICardSet set);
+
+    /**
+     * Get the icon for the game
+     * 
+     * @param game Game to get the icon for
+     * @return Icon or null if none
+     * @throws IOException  
+     */
+    public Image getGameIcon(ICardGame game) throws IOException;
+    
+    /**
+     * Get path to a game's icon.
+     * @return path to a game's icon
+     */
+    public String getGameIconPath();
 }

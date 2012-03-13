@@ -3,6 +3,8 @@ package com.reflexit.magiccards.core.model;
 import com.reflexit.magiccards.core.cache.ICardCache;
 import com.reflexit.magiccards.core.model.storage.db.DBException;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
+import java.awt.Image;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +23,7 @@ public abstract class DefaultCardGame implements ICardGame {
     protected static final List<String> attribs = new ArrayList<String>();
     protected static final ArrayList<String> collectionTypes = new ArrayList<String>();
     protected static final HashMap<String, String> collections = new HashMap<String, String>();
+    private static final Logger LOG = Logger.getLogger(DefaultCardGame.class.getName());
 
     @Override
     public void init() {
@@ -31,7 +34,7 @@ public abstract class DefaultCardGame implements ICardGame {
                 Lookup.getDefault().lookup(IDataBaseCardStorage.class).createGame(getName());
             }
         } catch (DBException ex) {
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         try {
             //Create game attributes
@@ -52,7 +55,7 @@ public abstract class DefaultCardGame implements ICardGame {
                 Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardCollection(type, entry.getValue());
             }
         } catch (DBException ex) {
-            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -75,5 +78,15 @@ public abstract class DefaultCardGame implements ICardGame {
             }
         }
         return null;
+    }
+
+    @Override
+    public Image getGameIcon() {
+        try {
+            return Lookup.getDefault().lookup(ICardCache.class).getGameIcon((ICardGame) this);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }
