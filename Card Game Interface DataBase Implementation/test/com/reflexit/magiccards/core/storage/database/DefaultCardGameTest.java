@@ -26,6 +26,7 @@ public class DefaultCardGameTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         Lookup.getDefault().lookup(IDataBaseCardStorage.class).setPU("Card_Game_Interface_TestPU");
+        Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
     }
 
     @AfterClass
