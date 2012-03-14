@@ -663,6 +663,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                 CardSet temp = (CardSet) result.get(0);
                 for (Iterator<Card> it = temp.getCardList().iterator(); it.hasNext();) {
                     Card card = it.next();
+                    card.setSetName(temp.getName());
                     cards.add(card);
                 }
             }
@@ -712,6 +713,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             ICardSet set = it.next();
             for (Iterator<Card> it2 = ((CardSet) set).getCardList().iterator(); it2.hasNext();) {
                 ICard card = it2.next();
+                card.setSetName(set.getName());
                 cards.add(card);
             }
         }
