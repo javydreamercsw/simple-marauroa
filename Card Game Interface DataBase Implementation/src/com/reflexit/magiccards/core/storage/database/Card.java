@@ -4,9 +4,7 @@
  */
 package com.reflexit.magiccards.core.storage.database;
 
-import com.reflexit.magiccards.core.model.ICard;
-import com.reflexit.magiccards.core.model.ICardField;
-import java.io.Serializable;
+import com.reflexit.magiccards.core.model.CardImpl;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.*;
@@ -26,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Card.findById", query = "SELECT c FROM Card c WHERE c.cardPK.id = :id"),
     @NamedQuery(name = "Card.findByCardTypeId", query = "SELECT c FROM Card c WHERE c.cardPK.cardTypeId = :cardTypeId"),
     @NamedQuery(name = "Card.findByName", query = "SELECT c FROM Card c WHERE c.name = :name")})
-public class Card implements Serializable, ICard {
+public class Card extends CardImpl {
 
     @Basic(optional = false)
     @Lob
@@ -151,11 +149,6 @@ public class Card implements Serializable, ICard {
 
     public void setText(byte[] text) {
         this.text = text;
-    }
-
-    @Override
-    public Object getObjectByField(ICardField field) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
