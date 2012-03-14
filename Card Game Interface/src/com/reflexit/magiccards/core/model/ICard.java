@@ -28,4 +28,18 @@ public interface ICard extends Comparable {
      * @return card ID
      */
     public int getCardId();
+    
+    /**
+     * Get card's set
+     * 
+     * @return card's set
+     */
+    public String getSetName();
+    
+    /**
+     * Set card's set
+     *
+     * @param set card's set
+     */
+    public void setSetName(String set);
 }

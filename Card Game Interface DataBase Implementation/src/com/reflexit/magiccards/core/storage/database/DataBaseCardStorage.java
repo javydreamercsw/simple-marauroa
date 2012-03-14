@@ -40,9 +40,9 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                 if (dataBaseProperties == null) {
                     emf = Persistence.createEntityManagerFactory(getPU());
                 } else {
-                    LOG.info("Provided the following configuration options:");
+                    LOG.fine("Provided the following configuration options:");
                     for (Entry<String, String> entry : dataBaseProperties.entrySet()) {
-                        LOG.log(Level.INFO, "{0}: {1}", new Object[]{entry.getKey(), entry.getValue()});
+                        LOG.log(Level.FINE, "{0}: {1}", new Object[]{entry.getKey(), entry.getValue()});
                     }
                     emf = Persistence.createEntityManagerFactory(getPU(), dataBaseProperties);
                 }
@@ -196,7 +196,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             List result = namedQuery("CardAttribute.findByName", parameters);
             return result != null && !result.isEmpty();
         } catch (DBException ex) {
-            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             return true;
         }
     }
@@ -209,7 +209,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             List result = namedQuery("Card.findByName", parameters);
             return result != null && !result.isEmpty();
         } catch (DBException ex) {
-            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             return true;
         }
     }
@@ -243,7 +243,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                 }
             }
         } catch (DBException ex) {
-            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -264,7 +264,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                 }
                 return true;
             } catch (DBException ex) {
-                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
             }
         }
         return false;
@@ -283,13 +283,13 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
                     return true;
                 }
             } catch (IllegalOrphanException ex) {
-                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 return false;
             } catch (NonexistentEntityException ex) {
-                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 return false;
             } catch (DBException ex) {
-                Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 return false;
             }
         }
@@ -316,7 +316,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         try {
             return namedQuery("Card.findAll").size();
         } catch (DBException ex) {
-            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -337,7 +337,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             List result = namedQuery("CardSet.findByName", parameters);
             return result != null && !result.isEmpty();
         } catch (DBException ex) {
-            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -350,7 +350,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
             List result = namedQuery("CardType.findByName", parameters);
             return result != null && !result.isEmpty();
         } catch (DBException ex) {
-            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         return false;
     }
@@ -649,5 +649,72 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
         HashMap parameters = new HashMap();
         parameters.put("name", name);
         return getAttributesForCard((ICard) namedQuery("Card.findByName", parameters).get(0));
+    }
+
+    @Override
+    public List<ICard> getCardsForSet(ICardSet set) {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        try {
+            //Fill lookup with pages for the selected game
+            HashMap parameters = new HashMap();
+            parameters.put("name", set.getName());
+            List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardSet.findByName", parameters);
+            if (!result.isEmpty()) {
+                CardSet temp = (CardSet) result.get(0);
+                for (Iterator<Card> it = temp.getCardList().iterator(); it.hasNext();) {
+                    Card card = it.next();
+                    cards.add(card);
+                }
+            }
+        } catch (DBException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return cards;
+    }
+
+    @Override
+    public List<IGame> getGames() {
+        ArrayList<IGame> games = new ArrayList<IGame>();
+        try {
+            //Fill lookup with games
+            List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findAll");
+            if (!result.isEmpty()) {
+                Game game = (Game) result.get(0);
+                games.add(game);
+            }
+        } catch (DBException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return games;
+    }
+
+    @Override
+    public List<ICardSet> getSetsForGame(ICardGame game) {
+        ArrayList<ICardSet> sets = new ArrayList<ICardSet>();
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", game.getName());
+            List<Game> result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters);
+            if (!result.isEmpty()) {
+                Game temp = (Game) result.get(0);
+                sets.addAll(temp.getCardSetList());
+            }
+        } catch (DBException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return sets;
+    }
+
+    @Override
+    public List<ICard> getCardsForGame(ICardGame game) {
+        ArrayList<ICard> cards = new ArrayList<ICard>();
+        for (Iterator<ICardSet> it = getSetsForGame(game).iterator(); it.hasNext();) {
+            ICardSet set = it.next();
+            for (Iterator<Card> it2 = ((CardSet) set).getCardList().iterator(); it2.hasNext();) {
+                ICard card = it2.next();
+                cards.add(card);
+            }
+        }
+        return cards;
     }
 }
