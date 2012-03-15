@@ -89,4 +89,15 @@ public abstract class DefaultCardGame implements ICardGame {
             return null;
         }
     }
+    
+    @Override
+    public List<IGameDataManager> getGameDataManagerImplementations() {
+        ArrayList<IGameDataManager> dms=new ArrayList<IGameDataManager>();
+        for (IGameDataManager dm : Lookup.getDefault().lookupAll(IGameDataManager.class)) {
+            if (dm.getGame().getName().equals(getName())) {
+                dms.add(dm);
+            }
+        }
+        return dms;
+    }
 }
