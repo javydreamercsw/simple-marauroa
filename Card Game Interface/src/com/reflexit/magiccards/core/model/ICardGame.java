@@ -11,14 +11,7 @@ import java.util.List;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public interface ICardGame {
-
-    /**
-     * The game name
-     *
-     * @return game name
-     */
-    public String getName();
+public interface ICardGame extends IGame{
 
     /**
      * Initialize the system for this game
@@ -37,6 +30,13 @@ public interface ICardGame {
      * @return List of implementations
      */
     public List<ICardCache> getCardCacheImplementations();
+    
+    /**
+     * Get cache implementations
+     *
+     * @return List of implementations
+     */
+    public List<IGameDataManager> getGameDataManagerImplementations();
 
     /**
      * Get the game specific back card icon

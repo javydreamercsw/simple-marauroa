@@ -318,12 +318,12 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param game game to get sets for
      * @return list of sets
      */
-    public List<ICardSet> getSetsForGame(ICardGame game);
+    public List<ICardSet> getSetsForGame(IGame game);
 
     /**
      * Get cards for game
      * @param game game to get cards for
      * @return list of cards
      */
-    public List<ICard> getCardsForGame(ICardGame game);
+    public List<ICard> getCardsForGame(IGame game);
 }
