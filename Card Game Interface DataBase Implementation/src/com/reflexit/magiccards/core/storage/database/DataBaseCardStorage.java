@@ -690,7 +690,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public List<ICardSet> getSetsForGame(ICardGame game) {
+    public List<ICardSet> getSetsForGame(IGame game) {
         ArrayList<ICardSet> sets = new ArrayList<ICardSet>();
         try {
             HashMap parameters = new HashMap();
@@ -707,7 +707,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T> implements IDataB
     }
 
     @Override
-    public List<ICard> getCardsForGame(ICardGame game) {
+    public List<ICard> getCardsForGame(IGame game) {
         ArrayList<ICard> cards = new ArrayList<ICard>();
         for (Iterator<ICardSet> it = getSetsForGame(game).iterator(); it.hasNext();) {
             ICardSet set = it.next();
