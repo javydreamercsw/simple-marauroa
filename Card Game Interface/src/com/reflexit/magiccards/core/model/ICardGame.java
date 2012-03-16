@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public interface ICardGame extends IGame{
+public interface ICardGame extends IGame {
 
     /**
      * Initialize the system for this game
@@ -20,6 +20,7 @@ public interface ICardGame extends IGame{
 
     /**
      * Gets the Runnable responsible for updating this game.
+     *
      * @return Runnable responsible for updating this game
      */
     public Runnable getUpdateRunnable();
@@ -30,7 +31,7 @@ public interface ICardGame extends IGame{
      * @return List of implementations
      */
     public List<ICardCache> getCardCacheImplementations();
-    
+
     /**
      * Get cache implementations
      *
@@ -44,10 +45,18 @@ public interface ICardGame extends IGame{
      * @return game special back card icon or null if not defined
      */
     public Image getBackCardIcon();
-    
+
     /**
      * Get the game specific game icon
+     *
      * @return game specific game icon or null if not defined
      */
     public Image getGameIcon();
+
+    /**
+     * Get attribute formatters for this game
+     *
+     * @return attribute formatters for this game
+     */
+    public List<ICardAttributeFormatter> getGameCardAttributeFormatterImplementations();
 }

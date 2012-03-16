@@ -246,6 +246,7 @@ public abstract class AbstractCardCache implements ICardCache {
                 throw new IOException("Cannot connect: " + e.getMessage());
             }
             File file2 = new File(dest.getAbsolutePath() + ".part");
+            dest.getParentFile().mkdirs();
             CardFileUtils.saveStream(st, file2);
             st.close();
             if (file2.exists()) {
@@ -254,6 +255,7 @@ public abstract class AbstractCardCache implements ICardCache {
                     throw new IOException("failed to rename into " + dest.toString());
                 }
             }
+            file2.delete();
         }
         if (dest.exists()) {
             return (new ImageIcon(dest.toURI().toURL(), "icon")).getImage();
@@ -265,10 +267,9 @@ public abstract class AbstractCardCache implements ICardCache {
     public String getSetIconPath(ICardSet set) {
         File loc = getCacheLocationFile();
         Edition edition = Editions.getInstance().getEditionByName(set.getName());
-        String locale = "EN";
         String part = set.getGameName() + System.getProperty("file.separator") + "Sets"
                 + System.getProperty("file.separator") + edition.getMainAbbreviation() + System.getProperty("file.separator")
-                + locale + System.getProperty("file.separator") + edition.getMainAbbreviation() + ".jpg";
+                + System.getProperty("file.separator") + edition.getMainAbbreviation() + ".jpg";
         return new File(loc, part).getPath();
     }
 
