@@ -87,6 +87,7 @@ public abstract class AbstractCardCache implements ICardCache {
         return localUrl;
     }
 
+    @Override
     public String createLocalImageFilePath(ICard card, ICardSet set) throws CannotDetermineSetAbbriviation {
         String editionName = set.getName();
         Editions editions = Editions.getInstance();
@@ -133,7 +134,8 @@ public abstract class AbstractCardCache implements ICardCache {
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
-    public File downloadAndSaveImage(ICard card, ICardSet set, URL url, boolean remote, boolean forceRemote) throws IOException, CannotDetermineSetAbbriviation {
+    @Override
+    public File getCardImage(ICard card, ICardSet set, URL url, boolean remote, boolean forceRemote) throws IOException, CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
         File file = new File(path);
         if (forceRemote == false && file.exists()) {
