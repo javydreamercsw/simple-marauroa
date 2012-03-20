@@ -13,7 +13,7 @@ import simple.server.extension.card.RPCard;
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public class DefaultCard extends RPCard implements IMarauroaCard {
+public class DefaultCard extends RPCard implements IMarauroaCard, DefaultType {
 
     private InstanceContent dynamicContent = new InstanceContent();
     private Lookup myLookup = new AbstractLookup(dynamicContent);

@@ -4,7 +4,6 @@ import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardType;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import static org.junit.Assert.*;
 import org.junit.*;
 import org.openide.util.Lookup;
@@ -33,9 +32,8 @@ public class DefaultDeckTest {
             entity.generateRPClass();
         }
         instance = new RPDeck("test");
-        Random rand = new Random();
         for (int i = 0; i < deckSize; i++) {
-            if (rand.nextBoolean()) {
+            if (i % 2 == 0) {
                 instance.addToDeck(new DefaultCard());
             } else {
                 instance.addToDeck(new DefaultCard2());
@@ -83,6 +81,7 @@ public class DefaultDeckTest {
         IMarauroaCard toDitch = (IMarauroaCard) instance.getCards().get(instance.getCards().size() - 1);
         assertEquals(toDitch, instance.ditchBottom());
         cardDitched();
+        assertEquals(ditchCount, instance.getUsedPileSize());
 
         System.out.println("ditch");
         int ditch = 2;
@@ -100,12 +99,14 @@ public class DefaultDeckTest {
         toDitch = (IMarauroaCard) instance.getCards().get(0);
         card = (IMarauroaCard) instance.ditch(false);
         cardDitched();
+        assertEquals(ditchCount, instance.getUsedPileSize());
         assertEquals(toDitch, card);
 
         System.out.println("ditch");
         toDitch = (IMarauroaCard) instance.getCards().get(0);
         card = (IMarauroaCard) instance.ditch();
         cardDitched();
+        assertEquals(ditchCount, instance.getUsedPileSize());
         assertEquals(toDitch, card);
 
         System.out.println("draw");
@@ -116,24 +117,28 @@ public class DefaultDeckTest {
         updateInterfaceIndex();
         interfaceCounter--;
         cardDrawn();
+        assertEquals(ditchCount, instance.getUsedPileSize());
 
         System.out.println("draw");
         IMarauroaCard toDraw = (IMarauroaCard) instance.getCards().get(0);
         card = (IMarauroaCard) instance.draw();
         assertEquals(toDraw, card);
         cardDrawn();
+        assertEquals(ditchCount, instance.getUsedPileSize());
 
         System.out.println("draw");
         toDraw = (IMarauroaCard) instance.getCards().get(0);
         card = (IMarauroaCard) instance.draw(false);
         assertEquals(toDraw, card);
         cardDrawn();
+        assertEquals(ditchCount, instance.getUsedPileSize());
 
         System.out.println("drawBottom");
         toDraw = (IMarauroaCard) instance.getCards().get(instance.getSize() - 1);
         card = (IMarauroaCard) instance.drawBottom();
         assertEquals(toDraw, card);
         cardDrawn();
+        assertEquals(ditchCount, instance.getUsedPileSize());
 
         System.out.println("draw");
         int draw = 5;
@@ -161,12 +166,12 @@ public class DefaultDeckTest {
     }
 
     private void cardDitched() {
-        increaseDitch();
-        decreaseDeckSize();
+        ditchCount++;
+        deckSize--;
     }
 
     private void cardDrawn() {
-        decreaseDeckSize();
+        deckSize--;
         drawCount++;
     }
 
@@ -174,20 +179,14 @@ public class DefaultDeckTest {
         for (int i = 0; i < drawn; i++) {
             cardDrawn();
         }
+        assertEquals(ditchCount, instance.getUsedPileSize());
     }
 
     private void cardDitched(int times) {
         for (int i = 0; i < times; i++) {
             cardDitched();
         }
-    }
-
-    private void increaseDitch() {
-        ditchCount++;
-    }
-
-    private void decreaseDeckSize() {
-        deckSize--;
+        assertEquals(ditchCount, instance.getUsedPileSize());
     }
 
     private void updateInterfaceIndex() {

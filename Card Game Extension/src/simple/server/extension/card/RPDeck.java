@@ -247,10 +247,11 @@ public class RPDeck extends RPEntity implements IDeck {
                     : (indices.size() < amount ? indices.size() : amount);
             int count = 0;
             for (int j = 0; j < remove; j++) {
+                int toRemove = indices.remove(rand.nextInt(indices.size()));
                 for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
-                    int toRemove = indices.remove(rand.nextInt(indices.size()));
+                    IMarauroaCard next = (IMarauroaCard) i.next();
                     if (count == toRemove) {
-                        i.remove();
+                        ditched.add(next);
                     }
                     count++;
                 }
@@ -283,12 +284,11 @@ public class RPDeck extends RPEntity implements IDeck {
                     ditchCard(card);
                     return card;
                 }
-            } else if (card.getClass().isInstance(type)) {
+            } else if (card.getClass().isInstance(type) || type.isAssignableFrom(card.getClass())) {
                 ditchCard(card);
                 return card;
             }
             count++;
-            System.out.println("Check number: " + count);
         }
         return null;
     }
@@ -315,7 +315,6 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     private void ditchCard(RPCard ditched) {
-        used.add(ditched);
         getSlot(PAGES).remove(ditched.getID());
         getSlot(DISCARD_PILE).add(ditched);
     }
@@ -324,11 +323,15 @@ public class RPDeck extends RPEntity implements IDeck {
     public ICard ditch(boolean random) {
         int index_to_ditch = (random ? rand.nextInt(deck.size()) : 0), i = 0;
         RPCard ditched = null;
-        for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
-            RPCard card = (RPCard) it.next();
-            if (i == index_to_ditch) {
-                ditched = card;
-                break;
+        if (index_to_ditch == 0) {
+            ditched = (RPCard) getSlot(PAGES).getFirst();
+        } else {
+            for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
+                RPCard card = (RPCard) it.next();
+                if (i == index_to_ditch) {
+                    ditched = card;
+                    break;
+                }
             }
         }
         if (ditched != null) {
@@ -356,7 +359,7 @@ public class RPDeck extends RPEntity implements IDeck {
         for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
             if (card.getClass().isInstance(type) || type.isAssignableFrom(card.getClass())) {
-                ditchCard(card);
+                getSlot(PAGES).remove(card.getID());
                 addToHand(card);
                 return card;
             }
@@ -371,21 +374,42 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public ICard draw(boolean random) {
-        ICard drawn;
+        ICard drawn = null;
+        RPCard object = null;
         if (random) {
-            drawn = deck.remove(rand.nextInt(deck.size()));
+            int toRemove = rand.nextInt(getSlot(PAGES).size());
+            int count = 0;
+            for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
+                if (count == toRemove) {
+                    object = (RPCard) i.next();
+                    getSlot(PAGES).remove(object.getID());
+                    break;
+                }
+                count++;
+            }
         } else {
-            drawn = deck.remove(0);
+            object = (RPCard) getSlot(PAGES).getFirst();
+            getSlot(PAGES).remove(object.getID());
         }
-        hand.add(drawn);
+        if (object != null) {
+            drawn = object;
+            addToHand((RPCard) drawn);
+        }
         return drawn;
     }
 
     @Override
     public ICard drawBottom() {
-        RPCard ditched = (RPCard) deck.remove(deck.size() - 1);
-        used.add(ditched);
-        return ditched;
+        RPCard drawn = null;
+        for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
+            drawn = (RPCard) i.next();
+            if (!i.hasNext()) {
+                getSlot(PAGES).remove(drawn.getID());
+                break;
+            }
+        }
+        addToHand(drawn);
+        return drawn;
     }
 
     @Override
@@ -408,7 +432,12 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public void shuffle() {
-        java.util.Collections.shuffle(deck);
+        List<ICard> deckCards = getDeck();
+        java.util.Collections.shuffle(deckCards);
+        getSlot(PAGES).clear();
+        for (ICard card : deckCards) {
+            getSlot(PAGES).add((RPCard) card);
+        }
     }
 
     @Override
