@@ -43,12 +43,12 @@ public class DefaultCard extends RPCard implements IMarauroaCard {
     }
 
     @Override
-    public void setSet(String set) {
+    public void setSetName(String set) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public String getSet() {
+    public String getSetName() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

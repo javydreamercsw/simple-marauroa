@@ -110,12 +110,12 @@ public class RPCard extends RPEntity implements ICard {
     }
 
     @Override
-    public String getSet() {
+    public String getSetName() {
         return get(SET);
     }
 
     @Override
-    public void setSet(String set) {
+    public void setSetName(String set) {
         put(SET, set);
     }
 
