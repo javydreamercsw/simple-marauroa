@@ -355,7 +355,7 @@ public class RPDeck extends RPEntity implements IDeck {
     public ICard draw(Class<? extends ICardType> type) {
         for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
-            if (card.getClass().isInstance(type)) {
+            if (card.getClass().isInstance(type) || type.isAssignableFrom(card.getClass())) {
                 ditchCard(card);
                 addToHand(card);
                 return card;
