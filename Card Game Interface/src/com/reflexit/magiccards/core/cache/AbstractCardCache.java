@@ -215,8 +215,7 @@ public abstract class AbstractCardCache implements ICardCache {
     /**
      * @param aCacheDir the cacheDir to set
      */
-    @Override
-    public void setCacheDir(File aCacheDir) {
+    public static void setCacheDir(File aCacheDir) {
         cacheDir = aCacheDir;
         cacheDir.mkdirs();
     }

@@ -99,13 +99,6 @@ public interface ICardCache {
     public File getCacheLocationFile();
 
     /**
-     * Set current cache directory
-     *
-     * @param aCacheDir the cacheDir to set
-     */
-    public void setCacheDir(File aCacheDir);
-
-    /**
      * Get icon for set
      *
      * @param set Set to look icon for
@@ -137,6 +130,13 @@ public interface ICardCache {
      * @return path to a game's icon
      */
     public String getGameIconPath();
+    
+    /**
+     * Get path to a game's folder.
+     *
+     * @return path to a game's folder
+     */
+    public String getGamePath();
 
     /**
      * Get path to card image

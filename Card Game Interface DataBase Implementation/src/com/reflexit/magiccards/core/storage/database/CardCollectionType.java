@@ -53,6 +53,7 @@ public class CardCollectionType implements Serializable, ICardCollectionType {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
