@@ -83,6 +83,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         }
         List result = q.getResultList();
         transaction.commit();
+        localEM.close();
         return result;
     }
 
@@ -119,6 +120,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         }
         List result = q.getResultList();
         transaction.commit();
+        localEM.close();
         return result;
     }
 
@@ -129,6 +131,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         transaction.begin();
         localEM.createNativeQuery(query).executeUpdate();
         transaction.commit();
+        localEM.close();
     }
 
     @Override
