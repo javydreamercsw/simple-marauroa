@@ -32,7 +32,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     private Map<String, String> dataBaseProperties = null;
     protected final List<T> list = Collections.synchronizedList(new ArrayList<T>());
     private boolean initialized = false;
-    //TODO: Separate system and client tables: http://wiki.eclipse.org/EclipseLink/UserGuide/JPA/Advanced_JPA_Development/Composite_Persistence_Units
 
     @Override
     public void initialize() {
