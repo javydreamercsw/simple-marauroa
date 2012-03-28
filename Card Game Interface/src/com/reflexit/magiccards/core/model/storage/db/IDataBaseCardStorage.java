@@ -37,7 +37,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param query
      * @param parameters
      * @return results
-     * @throws DBException  
+     * @throws DBException
      */
     public List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws DBException;
 
@@ -111,13 +111,13 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @throws DBException
      */
     public void addCardsToSet(List<ICard> cards, ICardSet cs) throws DBException;
-    
-    
+
     /**
      * Add card to set
+     *
      * @param card Card to add
      * @param set CardSet to be added to
-     * @throws DBException  
+     * @throws DBException
      */
     public void addCardToSet(ICard card, ICardSet set) throws DBException;
 
@@ -273,48 +273,61 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
 
     /**
      * Create a game in the database
+     *
      * @param name game name
      * @return created game
-     * @throws DBException  
+     * @throws DBException
      */
     public IGame createGame(String name) throws DBException;
 
     /**
      * Initialize the database
-     * @throws DBException 
+     *
+     * @throws DBException
      */
     public void initialize() throws DBException;
-    
+
+    /**
+     * Is the database ready?
+     *
+     * @return true if initialized
+     */
+    public boolean isInitialized();
+
     /**
      * Check if set exists
+     *
      * @param name set name
      * @return true if exists
      */
     public boolean cardSetExists(String name);
-    
+
     /**
      * Check if card exists
+     *
      * @param name card name
      * @return true if exists
      */
     public boolean cardExists(String name);
-    
+
     /**
      * Get the cards for the current game
      *
-     * @param set 
+     * @param set
      * @return List of cards
      */
     public List<ICard> getCardsForSet(ICardSet set);
-    
+
     /**
      * Get all games
+     *
      * @return List of games
      */
     public List<IGame> getGames();
 
     /**
      * Get sets for game
+     *
      * @param game game to get sets for
      * @return list of sets
      */
@@ -322,8 +335,18 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
 
     /**
      * Get cards for game
+     *
      * @param game game to get cards for
      * @return list of cards
      */
     public List<ICard> getCardsForGame(IGame game);
+
+    /**
+     * Check if card is already in set
+     *
+     * @param set Set to check on
+     * @param card Card to check
+     * @return true if already part of set.
+     */
+    public boolean setHasCard(ICardSet set, ICard card);
 }
