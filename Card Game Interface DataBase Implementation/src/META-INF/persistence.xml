@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <persistence-unit name="Card_Game_InterfacePU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.reflexit.magiccards.core.storage.database.Card</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardAttribute</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardCollection</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardCollectionHasCard</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardCollectionType</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardHasCardAttribute</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardSet</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardType</class>
-    <class>com.reflexit.magiccards.core.storage.database.Game</class>
-    <properties>
-      <property name="eclipselink.logging.level" value="SEVERE"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:data/card_manager"/>
-      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
-      <property name="javax.persistence.jdbc.password" value="card_manager"/>
-      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
-      <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.DefaultSessionLog"/>
-    </properties>
-  </persistence-unit>
-  <persistence-unit name="Card_Game_Interface_TestPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.reflexit.magiccards.core.storage.database.Card</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardAttribute</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardCollection</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardCollectionHasCard</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardCollectionType</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardHasCardAttribute</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardSet</class>
-    <class>com.reflexit.magiccards.core.storage.database.CardType</class>
-    <class>com.reflexit.magiccards.core.storage.database.Game</class>
-    <properties>
-      <property name="eclipselink.logging.level" value="SEVERE"/>
-      <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:data/card_manager_test"/>
-      <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
-      <property name="javax.persistence.jdbc.password" value="tester"/>
-      <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
-      <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.DefaultSessionLog"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="Card_Game_InterfacePU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.reflexit.magiccards.core.storage.database.Card</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardAttribute</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardCollection</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardCollectionHasCard</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardCollectionType</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardHasCardAttribute</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardSet</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardType</class>
+        <class>com.reflexit.magiccards.core.storage.database.Game</class>
+        <properties>
+            <property name="eclipselink.logging.level" value="SEVERE"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:data/card_manager"/>
+            <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
+            <property name="javax.persistence.jdbc.password" value="card_manager"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="eclipselink.ddl-generation" value="create-tables"/>
+            <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.DefaultSessionLog"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="Card_Game_Interface_TestPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.reflexit.magiccards.core.storage.database.Card</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardAttribute</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardCollection</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardCollectionHasCard</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardCollectionType</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardHasCardAttribute</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardSet</class>
+        <class>com.reflexit.magiccards.core.storage.database.CardType</class>
+        <class>com.reflexit.magiccards.core.storage.database.Game</class>
+        <properties>
+            <property name="eclipselink.logging.level" value="SEVERE"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:data/card_manager_test"/>
+            <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
+            <property name="javax.persistence.jdbc.password" value="tester"/>
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <property name="eclipselink.logging.logger" value="org.eclipse.persistence.logging.DefaultSessionLog"/>
+        </properties>
+    </persistence-unit>
 </persistence>
