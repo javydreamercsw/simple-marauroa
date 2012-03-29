@@ -4,12 +4,22 @@ import com.reflexit.magiccards.core.model.events.ICardEventListener;
 
 public interface ICardEventManager<ICard> {
 
+    /**
+     * Add a listener
+     *
+     * @param lis listener
+     */
     public void addListener(ICardEventListener lis);
 
+    /**
+     * Remove a listener
+     *
+     * @param lis listener
+     */
     public void removeListener(ICardEventListener lis);
 
     /**
-     * card values were updated
+     * Card values were updated
      *
      * @param card
      */
