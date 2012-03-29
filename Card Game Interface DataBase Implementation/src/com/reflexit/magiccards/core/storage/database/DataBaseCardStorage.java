@@ -797,4 +797,16 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     public boolean isInitialized() {
         return initialized;
     }
+
+    @Override
+    public boolean gameExists(String name) {
+        try {
+            HashMap parameters= new HashMap();
+            parameters.put("name", name);
+            return !namedQuery("Game.findByName",parameters).isEmpty();
+        } catch (DBException ex) {
+            Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        }
+    }
 }
