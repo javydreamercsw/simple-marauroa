@@ -25,6 +25,11 @@ public interface IStorage<T> extends Iterable<T> {
      */
     public void save();
 
+    /**
+     * Needs to be saved?
+     *
+     * @return true if true
+     */
     public boolean isNeedToBeSaved();
 
     /**
@@ -108,7 +113,17 @@ public interface IStorage<T> extends Iterable<T> {
      */
     public boolean remove(T card);
 
+    /**
+     * Size
+     *
+     * @return size
+     */
     public int size();
 
+    /**
+     * Get storage name
+     *
+     * @return name
+     */
     public String getName();
 }
