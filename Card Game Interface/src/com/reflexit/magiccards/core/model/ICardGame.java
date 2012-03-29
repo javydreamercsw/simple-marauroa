@@ -59,4 +59,11 @@ public interface ICardGame extends IGame {
      * @return attribute formatters for this game
      */
     public List<ICardAttributeFormatter> getGameCardAttributeFormatterImplementations();
+
+    /**
+     * Game card sets
+     *
+     * @return Game card sets
+     */
+    public List<ICardSet> getGameCardSets();
 }

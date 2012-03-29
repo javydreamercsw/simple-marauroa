@@ -117,4 +117,15 @@ public abstract class DefaultCardGame implements ICardGame {
         }
         return formatters;
     }
+    
+    @Override
+    public List<ICardSet> getGameCardSets() {
+        try {
+            HashMap parameters= new HashMap();
+            return Lookup.getDefault().lookup(IDataBaseCardStorage.class).createdQuery("", parameters);
+        } catch (DBException ex) {
+            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+            return new ArrayList<ICardSet>();
+        }
+    }
 }

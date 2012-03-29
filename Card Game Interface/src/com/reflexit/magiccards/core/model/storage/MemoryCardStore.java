@@ -11,8 +11,9 @@
 package com.reflexit.magiccards.core.model.storage;
 
 import com.reflexit.magiccards.core.model.ICardCountable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.logging.Logger;
+import java.util.Iterator;
 
 /**
  * ArrayList based implementation for AbstractCardStore
@@ -22,8 +23,6 @@ import java.util.logging.Logger;
  *
  */
 public class MemoryCardStore<T> extends AbstractCardStoreWithStorage<T> implements ICardCountable, IStorage<T> {
-
-    private static final Logger LOG = Logger.getLogger(MemoryCardStore.class.getName());
 
     /**
      * creates empty card store
@@ -96,5 +95,14 @@ public class MemoryCardStore<T> extends AbstractCardStoreWithStorage<T> implemen
     @Override
     public String getGameName() {
         return getStorage().getName();
+    }
+
+    @Override
+    public Collection<T> getCards() {
+        ArrayList<T> cards = new ArrayList<T>();
+        for (Iterator<T> it = getStorage().iterator(); it.hasNext();) {
+            cards.add(it.next());
+        }
+        return cards;
     }
 }

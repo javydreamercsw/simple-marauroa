@@ -6,6 +6,7 @@ package com.reflexit.magiccards.core.storage.database;
 
 import com.reflexit.magiccards.core.model.ICardSet;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -159,5 +160,10 @@ public class CardSet implements Serializable, ICardSet{
     @Override
     public String getGameName() {
         return getGame().getName();
+    }
+
+    @Override
+    public Collection getCards() {
+        return getCardList();
     }
 }
