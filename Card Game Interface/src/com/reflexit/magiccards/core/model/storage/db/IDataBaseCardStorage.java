@@ -309,6 +309,14 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return true if exists
      */
     public boolean cardExists(String name);
+    
+    /**
+     * Check if game exists
+     *
+     * @param name game name
+     * @return true if exists
+     */
+    public boolean gameExists(String name);
 
     /**
      * Get the cards for the current game
