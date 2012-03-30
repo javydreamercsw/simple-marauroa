@@ -288,13 +288,6 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
     public void initialize() throws DBException;
 
     /**
-     * Is the database ready?
-     *
-     * @return true if initialized
-     */
-    public boolean isInitialized();
-
-    /**
      * Check if set exists
      *
      * @param name set name
@@ -309,7 +302,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return true if exists
      */
     public boolean cardExists(String name);
-    
+
     /**
      * Check if game exists
      *
@@ -357,4 +350,25 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return true if already part of set.
      */
     public boolean setHasCard(ICardSet set, ICard card);
+
+    /**
+     * Add a DataBaseStateListener
+     *
+     * @param listener DataBaseStateListener
+     */
+    public void addDataBaseStateListener(DataBaseStateListener listener);
+
+    /**
+     * Remove a DataBaseStateListener
+     *
+     * @param listener DataBaseStateListener
+     */
+    public void removeDataBaseStateListener(DataBaseStateListener listener);
+
+    /**
+     * Get the required information to connect to the database
+     *
+     * @return required information to connect to the database
+     */
+    public Map<String, String> getConnectionSettings();
 }

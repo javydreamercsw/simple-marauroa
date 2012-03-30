@@ -3,6 +3,7 @@ package com.reflexit.magiccards.core.storage.database;
 import com.reflexit.magiccards.core.model.*;
 import com.reflexit.magiccards.core.model.storage.AbstractStorage;
 import com.reflexit.magiccards.core.model.storage.db.DBException;
+import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import com.reflexit.magiccards.core.storage.database.controller.*;
 import com.reflexit.magiccards.core.storage.database.controller.exceptions.IllegalOrphanException;
@@ -29,12 +30,18 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     private static final Logger LOG = Logger.getLogger(DataBaseCardStorage.class.getName());
     private EntityManagerFactory emf;
     private String pu = "Card_Game_InterfacePU";
-    private Map<String, String> dataBaseProperties = null;
+    private Map<String, String> dataBaseProperties = new HashMap<String, String>();
     protected final List<T> list = Collections.synchronizedList(new ArrayList<T>());
     private boolean initialized = false;
+    protected final ArrayList<DataBaseStateListener> listeners = new ArrayList<DataBaseStateListener>();
 
     @Override
     public void initialize() {
+        //Register all using the Lookup
+        for (Iterator<? extends DataBaseStateListener> it = Lookup.getDefault().lookupAll(DataBaseStateListener.class).iterator(); it.hasNext();) {
+            DataBaseStateListener listener = it.next();
+            listeners.add(listener);
+        }
         if (!initialized) {
             if (emf == null) {
                 if (dataBaseProperties == null) {
@@ -54,6 +61,12 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 game.init();
             }
             initialized = true;
+            ArrayList<DataBaseStateListener> clone = (ArrayList<DataBaseStateListener>) listeners.clone();
+            //Notify listeners
+            for (Iterator<DataBaseStateListener> it = clone.iterator(); it.hasNext();) {
+                DataBaseStateListener listener = it.next();
+                listener.initialized();
+            }
         }
     }
 
@@ -794,19 +807,37 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
 
     @Override
-    public boolean isInitialized() {
-        return initialized;
-    }
-
-    @Override
     public boolean gameExists(String name) {
         try {
-            HashMap parameters= new HashMap();
+            HashMap parameters = new HashMap();
             parameters.put("name", name);
-            return !namedQuery("Game.findByName",parameters).isEmpty();
+            return !namedQuery("Game.findByName", parameters).isEmpty();
         } catch (DBException ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             return true;
         }
+    }
+
+    @Override
+    public void addDataBaseStateListener(DataBaseStateListener dl) {
+        synchronized (listeners) {
+            if (!listeners.contains(dl)) {
+                listeners.add(dl);
+            }
+        }
+    }
+
+    @Override
+    public void removeDataBaseStateListener(DataBaseStateListener dl) {
+        synchronized (listeners) {
+            if (listeners.contains(dl)) {
+                listeners.remove(dl);
+            }
+        }
+    }
+
+    @Override
+    public Map<String, String> getConnectionSettings() {
+        return dataBaseProperties;
     }
 }

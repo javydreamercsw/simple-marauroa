@@ -2,6 +2,7 @@ package com.reflexit.magiccards.core.model;
 
 import com.reflexit.magiccards.core.cache.ICardCache;
 import com.reflexit.magiccards.core.model.storage.db.DBException;
+import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.awt.Image;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import org.openide.util.Lookup;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public abstract class DefaultCardGame implements ICardGame {
+public abstract class DefaultCardGame implements ICardGame, DataBaseStateListener {
 
     protected static final List<String> attribs = new ArrayList<String>();
     protected static final ArrayList<String> collectionTypes = new ArrayList<String>();
@@ -27,15 +28,13 @@ public abstract class DefaultCardGame implements ICardGame {
 
     @Override
     public void init() {
+        //Games auto register themselves
+        Lookup.getDefault().lookup(IDataBaseCardStorage.class).addDataBaseStateListener(this);
+    }
+
+    @Override
+    public void initialized() {
         HashMap parameters = new HashMap();
-        try {
-            parameters.put("name", getName());
-            if (Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters).isEmpty()) {
-                Lookup.getDefault().lookup(IDataBaseCardStorage.class).createGame(getName());
-            }
-        } catch (DBException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        }
         try {
             synchronized (attribs) {
                 //Create game attributes
@@ -117,11 +116,11 @@ public abstract class DefaultCardGame implements ICardGame {
         }
         return formatters;
     }
-    
+
     @Override
     public List<ICardSet> getGameCardSets() {
         try {
-            HashMap parameters= new HashMap();
+            HashMap parameters = new HashMap();
             return Lookup.getDefault().lookup(IDataBaseCardStorage.class).createdQuery("", parameters);
         } catch (DBException ex) {
             Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
