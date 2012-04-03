@@ -388,7 +388,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
 
     @Override
-    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr)
+    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr, String value)
             throws DBException {
         try {
             CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
@@ -396,7 +396,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                     new CardHasCardAttributeJpaController(getEntityManagerFactory());
             CardHasCardAttribute chca = new CardHasCardAttribute(((Card) card).getCardPK().getId(),
                     ((Card) card).getCardPK().getCardTypeId(), ((CardAttribute) attr).getId());
-            chca.setValue("test");
+            chca.setValue(value);
             chca.setCard(((Card) card));
             chca.setCardAttribute(((CardAttribute) attr));
             chcaController.create(chca);
@@ -612,7 +612,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     public ICardAttribute getCardAttribute(String attr) throws DBException {
         HashMap parameters = new HashMap();
         parameters.put("name", attr);
-        return (ICardAttribute) namedQuery("CardAttribute.findByName", parameters).get(0);
+        List<Object> result = namedQuery("CardAttribute.findByName", parameters);
+        return (ICardAttribute) (result.isEmpty() ? null : result.get(0));
     }
 
     @Override
@@ -624,7 +625,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                             new Object[]{entry.getKey(), card.getName(), entry.getValue()});
                     createAttributeIfNeeded(entry.getKey(), entry.getValue());
                     ICardAttribute cardAttribute = getCardAttribute(entry.getKey());
-                    CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, cardAttribute);
+                    CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, cardAttribute, entry.getValue());
                     chca.setValue(entry.getValue());
                     CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
                     chcaController.edit(chca);
