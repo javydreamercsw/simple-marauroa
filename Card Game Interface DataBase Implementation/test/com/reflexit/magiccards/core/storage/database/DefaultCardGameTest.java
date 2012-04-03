@@ -1,6 +1,10 @@
 package com.reflexit.magiccards.core.storage.database;
 
-import com.reflexit.magiccards.core.model.*;
+import com.reflexit.magiccards.core.model.DefaultCardGame;
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardCollection;
+import com.reflexit.magiccards.core.model.IGame;
+import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.awt.Image;
 import java.util.*;
@@ -40,54 +44,38 @@ public class DefaultCardGameTest {
     @After
     public void tearDown() {
     }
-
+    
     /**
      * Test the database.
      */
     @Test
     public void testDatabase() {
         try {
-            HashMap parameters = new HashMap();
-            DefaultCardGame instance = new DefaultCardGameImpl();
-            parameters.put("name", instance.getName());
-            List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters);
-            assertTrue(result.isEmpty());
-            instance.init();
-            result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters);
-            assertFalse(result.isEmpty());
+            Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
     }
 
-    public static class DefaultCardGameImpl extends DefaultCardGame {
+    public static class DefaultCardGameImpl extends DefaultCardGame implements DataBaseStateListener {
 
         @Override
         public String getName() {
             return "Test Game";
         }
 
-        static {
-            attribs.add("rarity");
-            attribs.add("creature");
-
-            attribs.add("power");
-            attribs.add("toughness");
-
-            collectionTypes.add("Deck");
-            collectionTypes.add("Collection");
-
-            collections.put("Collection", "My Pages");
-        }
-
         @Override
-        public void init() {
+        public void initialized() {
             try {
-                super.init();
                 HashMap parameters = new HashMap();
-                parameters.put("name", getName());
+                DefaultCardGame instance = new DefaultCardGameImpl();
+                parameters.put("name", instance.getName());
                 List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters);
+                assertTrue(result.isEmpty());
+                super.initialized();
+                parameters.put("name", getName());
+                result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters);
                 game = (Game) result.get(0);
                 System.out.println("Check types");
                 parameters.put("name", "rarity");
@@ -118,7 +106,7 @@ public class DefaultCardGameTest {
                     result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardAttribute.findByName", parameters);
                     assertFalse(result.isEmpty());
                     Lookup.getDefault().lookup(IDataBaseCardStorage.class).addAttributeToCard((ICard) card,
-                            (ICardAttribute) result.get(0));
+                            rarity, "test");
                 }
                 System.out.println("Check attributes");
                 for (Iterator<CardHasCardAttribute> it = card.getCardHasCardAttributeList().iterator(); it.hasNext();) {
@@ -180,6 +168,19 @@ public class DefaultCardGameTest {
                 LOG.log(Level.SEVERE, null, ex);
                 fail();
             }
+        }
+
+        static {
+            attribs.add("rarity");
+            attribs.add("creature");
+
+            attribs.add("power");
+            attribs.add("toughness");
+
+            collectionTypes.add("Deck");
+            collectionTypes.add("Collection");
+
+            collections.put("Collection", "My Pages");
         }
 
         @Override
