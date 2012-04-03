@@ -226,10 +226,9 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * Create a an attribute if needed
      *
      * @param attr attribute name
-     * @param value Attribute value
      * @throws DBException
      */
-    public void createAttributeIfNeeded(String attr, String value) throws DBException;
+    public void createAttributeIfNeeded(String attr) throws DBException;
 
     /**
      * Get a map of attributes for a card

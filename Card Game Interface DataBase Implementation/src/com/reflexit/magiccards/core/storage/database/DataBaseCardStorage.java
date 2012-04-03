@@ -227,7 +227,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
 
     @Override
-    public void createAttributeIfNeeded(String attr, String value)
+    public void createAttributeIfNeeded(String attr)
             throws DBException {
         if (!attributeExists(attr)) {
             createAttributes(attr);
@@ -388,24 +388,36 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
 
     @Override
-    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr, String value)
+    public ICardHasCardAttribute addAttributeToCard(ICard card, String attr, String value)
             throws DBException {
         try {
             CardJpaController cardController = new CardJpaController(getEntityManagerFactory());
+            createAttributeIfNeeded(attr);
+            ICardAttribute cardAttribute = getCardAttribute(attr);
             CardHasCardAttributeJpaController chcaController =
                     new CardHasCardAttributeJpaController(getEntityManagerFactory());
-            CardHasCardAttribute chca = new CardHasCardAttribute(((Card) card).getCardPK().getId(),
-                    ((Card) card).getCardPK().getCardTypeId(), ((CardAttribute) attr).getId());
+            CardHasCardAttribute chca = chcaController.findCardHasCardAttribute(new CardHasCardAttributePK(((Card) card).getCardPK().getId(),
+                    ((Card) card).getCardPK().getCardTypeId(), ((CardAttribute) cardAttribute).getId()));
+            boolean add = false;
+            if (chca == null) {
+                chca = new CardHasCardAttribute(((Card) card).getCardPK().getId(),
+                        ((Card) card).getCardPK().getCardTypeId(), ((CardAttribute) cardAttribute).getId());
+                add = true;
+            }
             chca.setValue(value);
             chca.setCard(((Card) card));
-            chca.setCardAttribute(((CardAttribute) attr));
-            chcaController.create(chca);
-            ((Card) card).getCardHasCardAttributeList().add(chca);
-            cardController.edit(((Card) card));
+            chca.setCardAttribute(((CardAttribute) cardAttribute));
+            if (add) {
+                chcaController.create(chca);
+                ((Card) card).getCardHasCardAttributeList().add(chca);
+                cardController.edit(((Card) card));
+            }
             LOG.log(Level.FINE,
-                    "Added attribute: {0} to card: {1} on the database!", new Object[]{attr.getName(), card.getName()});
+                    "Added attribute: {0} to card: {1} on the database!",
+                    new Object[]{attr, card.getName()});
             return chca;
         } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
             throw new DBException(ex.toString());
         }
     }
@@ -623,9 +635,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 try {
                     LOG.log(Level.FINE, "Adding attribute: {0} to card: {1} with value: {2}",
                             new Object[]{entry.getKey(), card.getName(), entry.getValue()});
-                    createAttributeIfNeeded(entry.getKey(), entry.getValue());
-                    ICardAttribute cardAttribute = getCardAttribute(entry.getKey());
-                    CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, cardAttribute, entry.getValue());
+                    CardHasCardAttribute chca = (CardHasCardAttribute) addAttributeToCard(card, entry.getKey(), entry.getValue());
                     chca.setValue(entry.getValue());
                     CardHasCardAttributeJpaController chcaController = new CardHasCardAttributeJpaController(getEntityManagerFactory());
                     chcaController.edit(chca);
