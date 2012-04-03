@@ -679,7 +679,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 }
             }
             return result;
-        } catch (DBException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DataBaseCardStorage.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
