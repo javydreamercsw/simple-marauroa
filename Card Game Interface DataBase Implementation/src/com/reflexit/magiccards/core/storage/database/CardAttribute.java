@@ -45,12 +45,7 @@ public class CardAttribute implements Serializable, ICardAttribute {
     public CardAttribute() {
     }
 
-    public CardAttribute(Integer id) {
-        this.id = id;
-    }
-
-    public CardAttribute(Integer id, String name) {
-        this.id = id;
+    public CardAttribute(String name) {
         this.name = name;
     }
 

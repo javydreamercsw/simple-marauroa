@@ -86,10 +86,11 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      *
      * @param card Card to add attribute to
      * @param attr Attribute to add
+     * @param value Value to set
      * @return CardHasCardAttribute
      * @throws DBException
      */
-    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr) throws DBException;
+    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr, String value) throws DBException;
 
     /**
      * Create a card set
