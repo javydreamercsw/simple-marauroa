@@ -90,7 +90,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return CardHasCardAttribute
      * @throws DBException
      */
-    public ICardHasCardAttribute addAttributeToCard(ICard card, ICardAttribute attr, String value) throws DBException;
+    public ICardHasCardAttribute addAttributeToCard(ICard card, String attr, String value) throws DBException;
 
     /**
      * Create a card set
