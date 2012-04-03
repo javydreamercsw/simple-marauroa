@@ -116,7 +116,7 @@ public abstract class AbstractCardCache implements ICardCache {
     public boolean cardImageExists(ICard card, ICardSet set) {
         try {
             return new File(createLocalImageFilePath(card, set)).exists();
-        } catch (CannotDetermineSetAbbriviation ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AbstractCardCache.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
