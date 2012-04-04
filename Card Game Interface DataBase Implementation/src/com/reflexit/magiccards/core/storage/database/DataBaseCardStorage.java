@@ -44,13 +44,15 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         }
         if (!initialized) {
             if (emf == null) {
-                if (dataBaseProperties == null) {
+                if (dataBaseProperties == null || dataBaseProperties.isEmpty()) {
                     emf = Persistence.createEntityManagerFactory(getPU());
                 } else {
                     LOG.fine("Provided the following configuration options:");
-                    for (Entry<String, String> entry : dataBaseProperties.entrySet()) {
-                        LOG.log(Level.FINE, "{0}: {1}",
-                                new Object[]{entry.getKey(), entry.getValue()});
+                    if (LOG.isLoggable(Level.FINE)) {
+                        for (Entry<String, String> entry : dataBaseProperties.entrySet()) {
+                            LOG.log(Level.FINE, "{0}: {1}",
+                                    new Object[]{entry.getKey(), entry.getValue()});
+                        }
                     }
                     emf = Persistence.createEntityManagerFactory(getPU(),
                             dataBaseProperties);
@@ -81,6 +83,9 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     @Override
     public List<Object> createdQuery(String query,
             HashMap<String, Object> parameters) throws DBException {
+        if (!initialized) {
+            throw new DBException("Database not initialized yet!");
+        }
         Query q;
         EntityManager localEM = getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = localEM.getTransaction();
@@ -119,6 +124,9 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     @SuppressWarnings("unchecked")
     protected List<Object> protectedNamedQuery(String query,
             HashMap<String, Object> parameters, boolean locked) throws DBException {
+        if (!initialized) {
+            throw new DBException("Database not initialized yet!");
+        }
         Query q;
         EntityManager localEM = getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = localEM.getTransaction();
@@ -139,6 +147,9 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
 
     @Override
     public void nativeQuery(String query) throws DBException {
+        if (!initialized) {
+            throw new DBException("Database not initialized yet!");
+        }
         EntityManager localEM = getEntityManagerFactory().createEntityManager();
         EntityTransaction transaction = localEM.getTransaction();
         transaction.begin();
