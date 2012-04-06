@@ -33,11 +33,11 @@ public interface ICardGame extends IGame {
     public List<ICardCache> getCardCacheImplementations();
 
     /**
-     * Get cache implementations
+     * Get cache implementation
      *
-     * @return List of implementations
+     * @return implementation
      */
-    public List<IGameDataManager> getGameDataManagerImplementations();
+    public IGameDataManager getGameDataManagerImplementation();
 
     /**
      * Get the game specific back card icon

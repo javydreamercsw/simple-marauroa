@@ -96,14 +96,13 @@ public abstract class DefaultCardGame implements ICardGame, DataBaseStateListene
     }
 
     @Override
-    public List<IGameDataManager> getGameDataManagerImplementations() {
-        ArrayList<IGameDataManager> dms = new ArrayList<IGameDataManager>();
+    public IGameDataManager getGameDataManagerImplementation() {
         for (IGameDataManager dm : Lookup.getDefault().lookupAll(IGameDataManager.class)) {
             if (dm.getGame().getName().equals(getName())) {
-                dms.add(dm);
+                return dm;
             }
         }
-        return dms;
+        return null;
     }
 
     @Override
