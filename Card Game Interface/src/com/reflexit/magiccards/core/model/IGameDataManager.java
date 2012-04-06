@@ -34,4 +34,9 @@ public interface IGameDataManager extends Provider {
      * Load the data
      */
     public void load();
+
+    /**
+     * Stop loading data
+     */
+    public void stop();
 }
