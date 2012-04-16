@@ -8,10 +8,11 @@
     <property name="build.instrumented.dir" value="build/instrumented"/>
     <property name="build.report.dir" value="build/report"/>
     <property name="build.report.cobertura.dir" value="build/cobertura"/>
+    <property name="libs.dir" value="build/cobertura"/>
     <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
     <!--Check to see if Simple Libs is present to update my libraries-->
     <condition property="simple.libs.exists">
-        <available file="../../Simple Libs" type="dir"/>
+        <available file="${libs.dir}" type="dir"/>
     </condition>
 	
     <target name="can-update-simple-libs">
@@ -28,15 +29,15 @@
     </target>
     
     <target name="update-simple-libs" depends="can-update-simple-libs" if="update-simple-libs">
-        <delete file="../../Simple Libs/marauroa.jar"/>
-        <copy todir="../../Simple Libs" 
+        <delete file="${libs.dir}/marauroa.jar"/>
+        <copy todir="${libs.dir}" 
               file="${original.project.dir}/build-archive/marauroa.jar"/>
     </target>
 
     <target name="pmd" if="simple.libs.exists">
         <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
             <classpath>
-                <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+                <pathelement location="${libs.dir}/tools/PMD/pmd-4.3.jar"/>
             </classpath>
         </taskdef>
         <mkdir dir="reports/pmd"/>
