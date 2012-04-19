@@ -1,11 +1,13 @@
 package com.reflexit.magiccards.core.model;
 
+import org.openide.util.Lookup;
+
 /**
  * Represents a card
  *
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
-public interface ICard extends Comparable {
+public interface ICard extends Comparable, Lookup.Provider {
 
     /**
      * Card name
@@ -28,14 +30,14 @@ public interface ICard extends Comparable {
      * @return card ID
      */
     public int getCardId();
-    
+
     /**
      * Get card's set
-     * 
+     *
      * @return card's set
      */
     public String getSetName();
-    
+
     /**
      * Set card's set
      *
