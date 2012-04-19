@@ -2,8 +2,9 @@ package com.reflexit.magiccards.core.cache;
 
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardField;
-import static org.junit.Assert.assertEquals;
 import org.junit.*;
+import static org.junit.Assert.assertEquals;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -64,6 +65,11 @@ public class CacheDataTest {
             @Override
             public int compareTo(Object o) {
                 return o.equals(this) ? 0 : -1;
+            }
+
+            @Override
+            public Lookup getLookup() {
+                throw new UnsupportedOperationException("Not supported yet.");
             }
         };
         CacheData instance = new CacheData();
