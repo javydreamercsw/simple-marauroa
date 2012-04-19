@@ -7,7 +7,6 @@ import java.util.*;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
-import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
@@ -276,19 +275,14 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public ICard ditch(Class<? extends ICardType> type) {
-        int count = 0;
         for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
-            if (card instanceof Lookup.Provider) {
-                if (((IMarauroaCard) card).getLookup().lookup(type) != null) {
-                    ditchCard(card);
-                    return card;
-                }
-            } else if (card.getClass().isInstance(type) || type.isAssignableFrom(card.getClass())) {
+            System.out.println(card.getName());
+            if (!card.getLookup().lookupAll(type).isEmpty()) {
+                System.out.println("Ditching: " + card.getName());
                 ditchCard(card);
                 return card;
             }
-            count++;
         }
         return null;
     }
@@ -435,7 +429,8 @@ public class RPDeck extends RPEntity implements IDeck {
         List<ICard> deckCards = getDeck();
         java.util.Collections.shuffle(deckCards);
         getSlot(PAGES).clear();
-        for (ICard card : deckCards) {
+        for (Iterator<ICard> it = deckCards.iterator(); it.hasNext();) {
+            ICard card = it.next();
             getSlot(PAGES).add((RPCard) card);
         }
     }
@@ -448,5 +443,23 @@ public class RPDeck extends RPEntity implements IDeck {
     @Override
     public int getUsedPileSize() {
         return getSlot(DISCARD_PILE).size();
+    }
+
+    public void sortHand() {
+        sortHand(null);
+    }
+
+    public void sortHand(Comparator comp) {
+        List<ICard> handCards = getHand();
+        if (comp == null) {
+            java.util.Collections.sort(handCards);
+        } else {
+            java.util.Collections.sort(handCards, comp);
+        }
+        getSlot(HAND).clear();
+        for (Iterator<ICard> it = handCards.iterator(); it.hasNext();) {
+            ICard card = it.next();
+            getSlot(HAND).add((RPCard) card);
+        }
     }
 }
