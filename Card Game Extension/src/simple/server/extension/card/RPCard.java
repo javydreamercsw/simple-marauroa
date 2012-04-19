@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.UUID;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
+import org.openide.util.Lookup;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
@@ -21,6 +24,11 @@ public class RPCard extends RPEntity implements ICard {
             CARD_ID = "card_id", CREATION_DATE = "creation_date",
             TIMES_TRADED = "times_traded", TRADABLE = "tradable",
             CLASS_NAME = "card", SET = "set";
+    private InstanceContent content = new InstanceContent();
+    /**
+     * Lookup instance
+     */
+    private Lookup lookup = new AbstractLookup(content);
 
     public RPCard() {
     }
@@ -124,6 +132,20 @@ public class RPCard extends RPEntity implements ICard {
         if (!(o instanceof RPCard) || o.getClass() != getClass()) {
             return -1;
         }
-        return equals(o) ? 0 : -1;
+        if (equals(o)) {
+            return 0;
+        } else {
+            RPCard card = (RPCard) o;
+            return getName().compareTo(card.getName());
+        }
+    }
+    
+    @Override
+    public Lookup getLookup() {
+        return lookup;
+    }
+
+    public void addToLookup(Object entity) {
+        content.add(entity);
     }
 }
