@@ -53,4 +53,9 @@ public abstract class CardImpl implements ICard, Serializable {
     public void setSetName(String name) {
         this.setName = name;
     }
+
+    @Override
+    public Lookup getLookup() {
+        return Lookup.EMPTY;
+    }
 }
