@@ -2,12 +2,13 @@ package com.reflexit.magiccards.core.model;
 
 import java.awt.Component;
 import org.openide.util.Lookup.Provider;
+import org.openide.util.LookupListener;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface IGameDataManager extends Provider {
+public interface IGameDataManager extends Provider, LookupListener {
 
     /**
      * Set the game for this manager
@@ -29,7 +30,7 @@ public interface IGameDataManager extends Provider {
      * @return
      */
     Component getComponent();
-    
+
     /**
      * Load the data
      */
