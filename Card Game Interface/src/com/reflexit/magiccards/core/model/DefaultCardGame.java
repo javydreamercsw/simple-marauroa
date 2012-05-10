@@ -120,7 +120,13 @@ public abstract class DefaultCardGame implements ICardGame, DataBaseStateListene
     public List<ICardSet> getGameCardSets() {
         try {
             HashMap parameters = new HashMap();
-            return Lookup.getDefault().lookup(IDataBaseCardStorage.class).createdQuery("", parameters);
+            parameters.put("name", getName());
+            List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Game.findByName", parameters);
+            if (result.isEmpty()) {
+                throw new RuntimeException("Unable to find game " + getName() + " in database!");
+            }
+            parameters.clear();
+            return Lookup.getDefault().lookup(IDataBaseCardStorage.class).getSetsForGame((IGame)result.get(0));
         } catch (DBException ex) {
             Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<ICardSet>();
