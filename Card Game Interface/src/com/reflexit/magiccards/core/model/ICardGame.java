@@ -66,4 +66,10 @@ public interface ICardGame extends IGame {
      * @return Game card sets
      */
     public List<ICardSet> getGameCardSets();
+    
+    /**
+     * Get CellRendererImageFactory for this game
+     * @return CellRendererImageFactory for this game
+     */
+    public IGameCellRendererImageFactory getCellRendererImageFactory();
 }
