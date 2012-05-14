@@ -2,8 +2,8 @@ package com.reflexit.magiccards.core.cache;
 
 import com.reflexit.magiccards.core.CachedImageNotFoundException;
 import com.reflexit.magiccards.core.CannotDetermineSetAbbriviation;
-import com.reflexit.magiccards.core.model.Editions.Edition;
 import com.reflexit.magiccards.core.model.*;
+import com.reflexit.magiccards.core.model.Editions.Edition;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.awt.Image;
 import java.io.File;
@@ -93,7 +93,7 @@ public abstract class AbstractCardCache implements ICardCache {
         Editions editions = Editions.getInstance();
         Edition cset = editions.getEditionByName(editionName);
         if (cset == null) {
-            throw new CannotDetermineSetAbbriviation(cset);
+            throw new CannotDetermineSetAbbriviation(editionName);
         }
         String editionAbbr = cset.getBaseFileName();
         Integer cardId = Integer.valueOf(Lookup.getDefault().lookup(IDataBaseCardStorage.class).getCardAttribute(card, "CardId"));
@@ -113,13 +113,8 @@ public abstract class AbstractCardCache implements ICardCache {
         return file;
     }
 
-    public boolean cardImageExists(ICard card, ICardSet set) {
-        try {
-            return new File(createLocalImageFilePath(card, set)).exists();
-        } catch (Exception ex) {
-            Logger.getLogger(AbstractCardCache.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    public boolean cardImageExists(ICard card, ICardSet set) throws CannotDetermineSetAbbriviation {
+        return new File(createLocalImageFilePath(card, set)).exists();
     }
 
     /**
