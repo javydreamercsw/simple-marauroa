@@ -9,4 +9,8 @@ public class CannotDetermineSetAbbriviation extends Exception {
     public CannotDetermineSetAbbriviation(Editions.Edition set) {
         super("Cannot determine set abbreviation for " + set.getName());
     }
+    
+    public CannotDetermineSetAbbriviation(String set) {
+        super("Cannot determine set abbreviation for " + set);
+    }
 }
