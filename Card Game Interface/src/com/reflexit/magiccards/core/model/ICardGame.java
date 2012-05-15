@@ -72,4 +72,10 @@ public interface ICardGame extends IGame {
      * @return CellRendererImageFactory for this game
      */
     public IGameCellRendererImageFactory getCellRendererImageFactory();
+    
+    /**
+     * Get the card columns for this game
+     * @return card columns for this game
+     */
+    public List<String> getColumns();
 }
