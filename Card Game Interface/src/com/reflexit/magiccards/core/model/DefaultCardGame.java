@@ -126,10 +126,35 @@ public abstract class DefaultCardGame implements ICardGame, DataBaseStateListene
                 throw new RuntimeException("Unable to find game " + getName() + " in database!");
             }
             parameters.clear();
-            return Lookup.getDefault().lookup(IDataBaseCardStorage.class).getSetsForGame((IGame)result.get(0));
+            return Lookup.getDefault().lookup(IDataBaseCardStorage.class).getSetsForGame((IGame) result.get(0));
         } catch (DBException ex) {
             Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
             return new ArrayList<ICardSet>();
         }
+    }
+
+    @Override
+    public List<String> getColumns() {
+        ArrayList<String> columns = new ArrayList<String>();
+        try {
+            columns.add("Name");
+            columns.add("Set");
+            HashMap parameters = new HashMap();
+            parameters.put("game", getName());
+            List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).createdQuery(
+                    "select distinct chca.cardAttribute from "
+                    + "CardHasCardAttribute chca, Card c, CardSet cs, Game g"
+                    + " where cs.game =g and g.name =:game and cs member of c.cardSetList"
+                    + " and chca.card =c order by chca.cardAttribute.name", parameters);
+            for (Object obj : result) {
+                ICardAttribute attr = (ICardAttribute) obj;
+                if (!columns.contains(attr.getName())) {
+                    columns.add(attr.getName());
+                }
+            }
+        } catch (DBException ex) {
+            Logger.getLogger(DefaultCardGame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return columns;
     }
 }
