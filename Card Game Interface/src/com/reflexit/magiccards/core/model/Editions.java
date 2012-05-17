@@ -1,13 +1,8 @@
 package com.reflexit.magiccards.core.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class Editions implements ISearchableProperty {
@@ -208,12 +203,7 @@ public final class Editions implements ISearchableProperty {
      * This is not public API, only called by tests
      */
     public void init() {
-        try {
-            this.name2ed = new HashMap<String, Editions.Edition>();
-            load();
-        } catch (IOException ex) {
-            Logger.getLogger(Editions.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        name2ed = new HashMap<String, Editions.Edition>();
     }
 
     public static Editions getInstance() {
@@ -267,71 +257,6 @@ public final class Editions implements ISearchableProperty {
         return this.name2ed.get(name);
     }
 
-    private synchronized void load() throws IOException {
-//        File file = new File(DataManager.getStateLocationFile(), EDITIONS_FILE);
-//        if (DbActivator.getDefault() != null) {
-//            InputStream ist = DbActivator.loadResource(EDITIONS_FILE);
-//            loadEditions(ist);
-//        }
-//        if (!file.exists()) {
-//            save();
-//        }
-//        InputStream st = new FileInputStream(file);
-//        loadEditions(st);
-    }
-
-    private synchronized void loadEditions(InputStream st) throws IOException {
-        BufferedReader r = new BufferedReader(new InputStreamReader(st));
-        try {
-            String line;
-            while ((line = r.readLine()) != null) {
-                try {
-                    String[] attrs = line.split("\\|");
-                    String name = attrs[0].trim();
-                    String abbr1 = attrs[1].trim();
-                    Editions.Edition set = addEdition(name, abbr1);
-                    if (attrs.length < 3) {
-                        continue; // old style
-                    }
-                    String abbrOther = attrs[2].trim();
-                    if (abbrOther.equals("en-us") || abbrOther.equals("EN")) {
-                        continue; // old style
-                    }
-                    if (abbrOther.length() > 0) {
-                        set.addAbbreviation(abbrOther);
-                    }
-                    String releaseDate = attrs[3].trim();
-                    if (releaseDate != null && releaseDate.length() > 0) {
-                        set.setReleaseDate(releaseDate);
-                    } else {
-                    }
-                    String type = attrs[4].trim();
-                    if (type != null && type.length() > 0) {
-                        set.setType(type);
-                    } else {
-                    }
-                    // Block
-                    // skipping
-                    if (attrs.length <= 6) {
-                        continue;
-                    }
-                    // Legality
-                    String legality = attrs[6].trim();
-                    String[] legs = legality.split(",");
-                    set.clearLegality();
-                    for (int i = 0; i < legs.length; i++) {
-                        String string = legs[i];
-                        set.addFormat(string.trim());
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } finally {
-            r.close();
-        }
-    }
-
     @Override
     public String getIdPrefix() {
         return "edition";
@@ -349,12 +274,11 @@ public final class Editions implements ISearchableProperty {
     }
 
     public String getPrefConstant(String abbr) {
-        return "";//TODO:FilterHelper.getPrefConstant(getIdPrefix(), abbr);
+        return getPrefConstant(getIdPrefix(), abbr);
     }
 
     public String getPrefConstantByName(String name) {
-        String abbr = getAbbrByName(name);
-        return "";//TODO: FilterHelper.getPrefConstant(getIdPrefix(), abbr);
+        return getPrefConstant(getIdPrefix(), getAbbrByName(name));
     }
 
     @Override
@@ -373,4 +297,14 @@ public final class Editions implements ISearchableProperty {
         return new ArrayList<String>(this.name2ed.keySet());
     }
     private static final Logger LOG = Logger.getLogger(Editions.class.getName());
+
+    public static String escapeProperty(String string) {
+        String res = string.toLowerCase();
+        res = res.replaceAll("[^\\w-./]", "_");
+        return res;
+    }
+
+    public static String getPrefConstant(String sub, String name) {
+        return "com.reflexit.magiccards.core" + ".filter." + sub + "." + escapeProperty(name);
+    }
 }
