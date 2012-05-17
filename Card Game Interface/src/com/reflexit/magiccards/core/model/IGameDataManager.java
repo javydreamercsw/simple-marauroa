@@ -30,14 +30,4 @@ public interface IGameDataManager extends Provider, LookupListener {
      * @return
      */
     Component getComponent();
-
-    /**
-     * Load the data
-     */
-    public void load();
-
-    /**
-     * Stop loading data
-     */
-    public void stop();
 }

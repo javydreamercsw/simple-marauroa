@@ -4,6 +4,7 @@ import com.reflexit.magiccards.core.model.DefaultCardGame;
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardCollection;
 import com.reflexit.magiccards.core.model.IGame;
+import com.reflexit.magiccards.core.model.IGameCellRendererImageFactory;
 import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.awt.Image;
@@ -191,6 +192,11 @@ public class DefaultCardGameTest {
 
         @Override
         public Image getBackCardIcon() {
+            return null;
+        }
+
+        @Override
+        public IGameCellRendererImageFactory getCellRendererImageFactory() {
             return null;
         }
     }
