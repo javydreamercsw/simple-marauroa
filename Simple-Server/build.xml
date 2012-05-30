@@ -8,10 +8,28 @@
     <property file="build.ant.properties"/>
     <property name="original.project.dir" value="../../marauroa"/>
     <available file="${original.project.dir}/build.xml" property="custom.marauroa.present"/>
+    <property name="super.lib.dir" value="../../Simple Libs"/>
+    <property name="lib.dir" value="./Simple Libs"/>
     <!--Check to see if Simple Libs is present to update my libraries-->
     <condition property="simple.libs.exists">
-        <available file="../../Simple Libs" type="dir"/>
+        <available file="${super.lib.dir}" type="dir"/>
     </condition>
+    
+    <target name="jar">
+        <antcall target="-updateLibs"/>
+        <antcall target="Marauroa-Simple-Server-impl.jar"/>
+    </target>
+    
+    <target name="-updateLibs" if="simple.libs.exists">
+        <echo>Updating libraries</echo>
+        <delete includeemptydirs="true">
+            <fileset dir="${lib.dir}" includes="**/*"/>
+        </delete>
+        <mkdir dir="${lib.dir}"/>
+        <copy todir="${lib.dir}"> 
+            <fileset dir="${super.lib.dir}"/>
+        </copy>
+    </target>
 
     <target name="-post-compile">
         <copy file="server.ini" todir="dist/"/>
@@ -23,22 +41,22 @@
         <antcall target="update-simple-libs"/>
     </target>
 	
-	<target name="can-update-simple-libs">
-		<condition property="update-simple-libs">
-			<and>
-			<not>
-				<equals arg1="${simple.libs.exists}" arg2="$${simple.libs.exists}" />
-			</not>
-			<not>
-				<equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
-			</not>
-			</and>
-		</condition>
-	</target>
+    <target name="can-update-simple-libs">
+        <condition property="update-simple-libs">
+            <and>
+                <not>
+                    <equals arg1="${simple.libs.exists}" arg2="$${simple.libs.exists}" />
+                </not>
+                <not>
+                    <equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
+                </not>
+            </and>
+        </condition>
+    </target>
     
     <target name="update-simple-libs" depends="can-update-simple-libs" if="update-simple-libs">
-        <delete file="../../Simple Libs/marauroa.jar"/>
-        <copy todir="../../Simple Libs" 
+        <delete file="${lib.dir}/marauroa.jar"/>
+        <copy todir="${lib.dir}" 
               file="${original.project.dir}/build-archive/marauroa.jar"/>
     </target>
 
@@ -201,7 +219,7 @@
     <target name="pmd" if="simple.libs.exists">
         <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
             <classpath>
-                <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+                <pathelement location="${lib.dir}/tools/PMD/pmd-4.3.jar"/>
             </classpath>
         </taskdef>
         <mkdir dir="../reports/pmd"/>
@@ -217,7 +235,7 @@
     
     <target name="-pre-compile-test" >
         <path id="cobertura.classpath">
-            <fileset dir="../../Simple Libs/tools/Cobertura/">
+            <fileset dir="${lib.dir}/tools/Cobertura/">
                 <include name="cobertura.jar" />
                 <include name="lib/**/*.jar" />
             </fileset>
