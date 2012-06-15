@@ -10,7 +10,7 @@
 <project name="Card_Game_Interface_DataBase_Implementation" default="default" basedir=".">
     <description>Builds, tests, and runs the project Card Game Interface DataBase Implementation.</description>
     <import file="nbproject/build-impl.xml"/>
-    <property name="lib.dir" value="./tools"/>
+    <property name="lib.dir" value="../../Simple Libs/tools"/>
     <property name="ant-contrib-filename" value="ant-contrib-1.0b3.jar"/>
     
     <scriptdef name="substring" language="javascript">
