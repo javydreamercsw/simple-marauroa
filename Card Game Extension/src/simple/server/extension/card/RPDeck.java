@@ -315,7 +315,7 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public ICard ditch(boolean random) {
-        int index_to_ditch = (random ? rand.nextInt(deck.size()) : 0), i = 0;
+        int index_to_ditch = (random ? rand.nextInt(getSlot(PAGES).size()) : 0), i = 0;
         RPCard ditched = null;
         if (index_to_ditch == 0) {
             ditched = (RPCard) getSlot(PAGES).getFirst();
@@ -326,6 +326,7 @@ public class RPDeck extends RPEntity implements IDeck {
                     ditched = card;
                     break;
                 }
+                i++;
             }
         }
         if (ditched != null) {
