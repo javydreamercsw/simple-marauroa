@@ -16,7 +16,6 @@
     </condition>
     
     <target name="jar">
-        <antcall target="-updateLibs"/>
         <antcall target="Marauroa-Simple-Server-impl.jar"/>
     </target>
     
@@ -38,7 +37,6 @@
 
     <target name="-post-jar">
         <antcall target="update_bat"/>
-        <antcall target="update-simple-libs"/>
     </target>
 	
     <target name="can-update-simple-libs">
@@ -50,6 +48,9 @@
                 <not>
                     <equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
                 </not>
+                <not>
+                    <equals arg1="${simple-libs-updated}" arg2="$${simple-libs-updated}" />
+                </not>
             </and>
         </condition>
     </target>
@@ -58,6 +59,7 @@
         <delete file="${lib.dir}/marauroa.jar"/>
         <copy todir="${lib.dir}" 
               file="${original.project.dir}/build-archive/marauroa.jar"/>
+        <property name="simple-libs-updated" value="true"/>
     </target>
 
     <target name="update_bat">
@@ -152,7 +154,7 @@
     </target>
     
     <target name="-pre-init">
-	<!-- We update the version number -->
+        <!-- We update the version number -->
         <replaceregexp file="server.ini"
                        match="server_version?=?.*"
                        replace="server_version = ${version}"
@@ -252,9 +254,9 @@
         </cobertura-instrument>
     </target>
     <target name="-post-test-run">
-      <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
+        <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
         <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
-      <!-- Used by the hudson plug-in -->
+        <!-- Used by the hudson plug-in -->
         <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
         <delete file="cobertura.ser" />
     </target>

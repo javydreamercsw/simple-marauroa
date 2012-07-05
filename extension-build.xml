@@ -24,6 +24,9 @@
                 <not>
                     <equals arg1="${custom.marauroa.present}" arg2="$${custom.marauroa.present}" />
                 </not>
+                <not>
+                    <equals arg1="${simple-libs-updated}" arg2="$${simple-libs-updated}" />
+                </not>
             </and>
         </condition>
     </target>
@@ -32,6 +35,7 @@
         <delete file="${libs.dir}/marauroa.jar"/>
         <copy todir="${libs.dir}" 
               file="${original.project.dir}/build-archive/marauroa.jar"/>
+        <property name="simple-libs-updated" value="true"/>
     </target>
 
     <target name="pmd" if="simple.libs.exists">
@@ -55,7 +59,7 @@
     <macrodef name="iterate">
         <attribute name="target"/>
         <sequential>
-            <subant target="@{target}">
+            <subant target="@{target}" inheritall="true">
                 <fileset dir="." 
                          includes="**/*Extension/build.xml"
                          excludes="build.xml"/>
@@ -64,6 +68,7 @@
     </macrodef>
 
     <target name="build"  description="Build all sub projects">
+        <antcall target="update-simple-libs"/>
         <iterate target="jar"/>
     </target>
 
