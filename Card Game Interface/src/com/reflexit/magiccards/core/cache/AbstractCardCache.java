@@ -96,14 +96,19 @@ public abstract class AbstractCardCache implements ICardCache {
             throw new CannotDetermineSetAbbriviation(editionName);
         }
         String editionAbbr = cset.getBaseFileName();
-        Integer cardId = Integer.valueOf(Lookup.getDefault().lookup(IDataBaseCardStorage.class).getCardAttribute(card, "CardId"));
-        File loc = getCacheLocationFile();
-        String locale = "EN";
-        String part = set.getGameName() + System.getProperty("file.separator") + "Cards"
-                + System.getProperty("file.separator") + editionAbbr + System.getProperty("file.separator")
-                + locale + System.getProperty("file.separator") + "Card" + cardId + ".jpg";
-        String file = new File(loc, part).getPath();
-        return file;
+        String id = Lookup.getDefault().lookup(IDataBaseCardStorage.class).getCardAttribute(card, "CardId");
+        if (id != null) {
+            Integer cardId = Integer.valueOf(id);
+            File loc = getCacheLocationFile();
+            String locale = "EN";
+            String part = set.getGameName() + System.getProperty("file.separator") + "Cards"
+                    + System.getProperty("file.separator") + editionAbbr + System.getProperty("file.separator")
+                    + locale + System.getProperty("file.separator") + "Card" + cardId + ".jpg";
+            String file = new File(loc, part).getPath();
+            return file;
+        } else {
+            return null;
+        }
     }
 
     public String createLocalSetImageFilePath(String editionAbbr, String rarity) throws MalformedURLException {
