@@ -169,7 +169,7 @@
         <!--Update local libraries-->
         <mkdir dir="Simple Libs"/>
         <copy todir="Simple Libs">
-            <fileset dir="${simple.libs}"/>
+            <fileset dir="${super.lib.dir}"/>
         </copy>
     </target>
 
