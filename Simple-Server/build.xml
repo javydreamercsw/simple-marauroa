@@ -161,9 +161,18 @@
                        byline="true"/>
     </target>
     
-    <target name="-pre-compile">       
+    <target name="-pre-compile" depends="-copy-libs">       
         <antcall target="compile-custom-marauroa"/>
     </target>
+    
+    <target name="-copy-libs" if="simple.libs.exists">
+        <!--Update local libraries-->
+        <mkdir dir="Simple Libs"/>
+        <copy todir="Simple Libs">
+            <fileset dir="${simple.libs}"/>
+        </copy>
+    </target>
+
     
     <target name="clean" depends="clean-custom-marauroa, Marauroa-Simple-Server-impl.clean"/>
     
@@ -253,6 +262,7 @@
             </fileset>
         </cobertura-instrument>
     </target>
+    
     <target name="-post-test-run">
         <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
         <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>

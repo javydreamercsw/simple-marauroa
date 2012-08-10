@@ -5,10 +5,11 @@
 <project name="Simple-Client" default="default" basedir=".">
     <description>Builds, tests, and runs the project Simple-Client.</description>
     <import file="nbproject/build-impl.xml"/>
+    <property name="simple.libs" value="../../Simple Libs"/>
     <property file="build.ant.properties"/>
 	<!--Check to see if Simple Libs is present to update my libraries-->
     <condition property="simple.libs.exists">
-        <available file="../../Simple Libs" type="dir"/>
+        <available file="${simple.libs}" type="dir"/>
     </condition>
     <!--
 
@@ -71,11 +72,19 @@
     nbproject/build-impl.xml file. 
 
     -->
-    <target name="-pre-compile">
+    <target name="-pre-compile" depends="-copy-libs">
         <echo>Deleting logs...</echo>
         <available file="log/" property="log.present" type="dir"/>
         <antcall target="delete.logs"/>
         <mkdir dir="log" />
+    </target>
+    
+    <target name="-copy-libs" if="simple.libs.exists">
+        <!--Update local libraries-->
+        <mkdir dir="Simple Libs"/>
+        <copy todir="Simple Libs">
+            <fileset dir="${simple.libs}"/>
+        </copy>
     </target>
     
     <target name="delete.logs" if="log.present">
@@ -148,9 +157,9 @@
     <target name="-pre-init">
         <!-- We update the version number -->
         <replaceregexp file="src/simple/client/TextClient.java"
-   			match="&quot;+[0-9].+[0-9]*&quot;"
-  			replace="&quot;${version}&quot;"
-   			byline="true"/>
+                       match="&quot;+[0-9].+[0-9]*&quot;"
+                       replace="&quot;${version}&quot;"
+                       byline="true"/>
     </target>
         
     <target name="remove-svn-history">
@@ -160,10 +169,10 @@
         </replaceregexp>
     </target>
 	
-	<target name="pmd" if="simple.libs.exists">
+    <target name="pmd" if="simple.libs.exists">
         <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
             <classpath>
-                <pathelement location="../../Simple Libs/tools/PMD/pmd-4.3.jar"/>
+                <pathelement location="Simple Libs/tools/PMD/pmd-4.3.jar"/>
             </classpath>
         </taskdef>
         <mkdir dir="../reports/pmd"/>
@@ -179,7 +188,7 @@
     
     <target name="-pre-compile-test" >
         <path id="cobertura.classpath">
-            <fileset dir="../../Simple Libs/tools/Cobertura/">
+            <fileset dir="Simple Libs/tools/Cobertura/">
                 <include name="cobertura.jar" />
                 <include name="lib/**/*.jar" />
             </fileset>
@@ -197,9 +206,9 @@
     </target>
 	
     <target name="-post-test-run">
-      <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
+        <!-- You can disable the html portion if you are using the hudson plugin and rely on the xml -->
         <cobertura-report format="html" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
-      <!-- Used by the hudson plug-in -->
+        <!-- Used by the hudson plug-in -->
         <cobertura-report format="xml" srcdir="${src.dir}" destdir="${build.report.cobertura.dir}"/>
         <delete file="cobertura.ser" />
     </target>
