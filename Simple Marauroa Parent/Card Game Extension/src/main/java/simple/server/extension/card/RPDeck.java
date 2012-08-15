@@ -228,7 +228,7 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     @Override
-    public List<ICard> ditch(Class<? extends ICardType> type, boolean random, int amount) {
+    public List<ICard> ditch(String slot, Class<? extends ICardType> type, boolean random, int amount) {
         ArrayList<ICard> ditched = new ArrayList<ICard>();
         if (random) {
             ArrayList<Integer> indices = new ArrayList<Integer>();
@@ -268,19 +268,19 @@ public class RPDeck extends RPEntity implements IDeck {
         }
         for (Iterator<ICard> it = ditched.iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
-            ditchCard(card);
+            ditchCard(slot, card);
         }
         return ditched;
     }
 
     @Override
-    public ICard ditch(Class<? extends ICardType> type) {
+    public ICard ditch(String slot, Class<? extends ICardType> type) {
         for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
             System.out.println(card.getName());
             if (!card.getLookup().lookupAll(type).isEmpty()) {
                 System.out.println("Ditching: " + card.getName());
-                ditchCard(card);
+                ditchCard(slot, card);
                 return card;
             }
         }
@@ -292,7 +292,7 @@ public class RPDeck extends RPEntity implements IDeck {
         for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
             if (!it.hasNext()) {
-                ditchCard(card);
+                ditchCard(PAGES, card);
                 return card;
             }
         }
@@ -300,53 +300,59 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     @Override
-    public List<ICard> ditch(int amount, boolean random) {
+    public List<ICard> ditch(String slot, int amount, boolean random) {
         ArrayList<ICard> ditched = new ArrayList<ICard>();
         for (int i = 0; i < amount; i++) {
-            ditched.add(ditch(random));
+            ditched.add(ditch(slot, random));
         }
         return ditched;
     }
 
-    private void ditchCard(RPCard ditched) {
-        getSlot(PAGES).remove(ditched.getID());
+    private void ditchCard(String slot, RPCard ditched) {
+        getSlot(slot).remove(ditched.getID());
         getSlot(DISCARD_PILE).add(ditched);
     }
 
+    public void ditchFromHand() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     @Override
-    public ICard ditch(boolean random) {
-        int index_to_ditch = (random ? rand.nextInt(getSlot(PAGES).size()) : 0), i = 0;
+    public ICard ditch(String slot, boolean random) {
         RPCard ditched = null;
-        if (index_to_ditch == 0) {
-            ditched = (RPCard) getSlot(PAGES).getFirst();
-        } else {
-            for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
-                RPCard card = (RPCard) it.next();
-                if (i == index_to_ditch) {
-                    ditched = card;
-                    break;
+        if (slot.equals(PAGES) || slot.equals(HAND)) {
+            int index_to_ditch = (random ? rand.nextInt(getSlot(slot).size()) : 0), i = 0;
+            if (index_to_ditch == 0) {
+                ditched = (RPCard) getSlot(slot).getFirst();
+            } else {
+                for (Iterator<RPObject> it = getSlot(slot).iterator(); it.hasNext();) {
+                    RPCard card = (RPCard) it.next();
+                    if (i == index_to_ditch) {
+                        ditched = card;
+                        break;
+                    }
+                    i++;
                 }
-                i++;
+            }
+            if (ditched != null) {
+                ditchCard(slot, ditched);
             }
         }
-        if (ditched != null) {
-            ditchCard(ditched);
-        }
         return ditched;
     }
 
     @Override
-    public List<ICard> ditch(int amount) {
+    public List<ICard> ditch(String slot, int amount) {
         ArrayList<ICard> ditched = new ArrayList<ICard>();
         for (int i = 0; i < amount; i++) {
-            ditched.add(ditch());
+            ditched.add(ditch(slot));
         }
         return ditched;
     }
 
     @Override
-    public ICard ditch() {
-        return ditch(false);
+    public ICard ditch(String slot) {
+        return ditch(slot, false);
     }
 
     @Override
