@@ -70,7 +70,7 @@ public class DefaultDeckTest {
 
         System.out.println("ditch");
         Class<? extends ICardType> type = DefaultType2.class;
-        IMarauroaCard ditchedCard = (IMarauroaCard) instance.ditch(type);
+        IMarauroaCard ditchedCard = (IMarauroaCard) instance.ditch(RPDeck.PAGES, type);
         assertTrue(ditchedCard == null || ditchedCard instanceof DefaultType2);
         cardDitched();
         assertTrue(instance.getUsedPileSize() == ditchCount);
@@ -85,26 +85,26 @@ public class DefaultDeckTest {
 
         System.out.println("ditch");
         int ditch = 2;
-        List<ICard> ditched = instance.ditch(ditch, false);
+        List<ICard> ditched = instance.ditch(RPDeck.PAGES, ditch, false);
         cardDitched(ditch);
         assertTrue(ditched.size() == ditch);
 
         System.out.println("ditch");
         ditch = 5;
-        List result = instance.ditch(ditch);
+        List result = instance.ditch(RPDeck.PAGES, ditch);
         cardDitched(ditch);
         assertTrue(result.size() == ditch);
 
         System.out.println("ditch");
         toDitch = (IMarauroaCard) instance.getCards().get(0);
-        card = (IMarauroaCard) instance.ditch(false);
+        card = (IMarauroaCard) instance.ditch(RPDeck.PAGES, false);
         cardDitched();
         assertEquals(ditchCount, instance.getUsedPileSize());
         assertEquals(toDitch, card);
 
         System.out.println("ditch");
         toDitch = (IMarauroaCard) instance.getCards().get(0);
-        card = (IMarauroaCard) instance.ditch();
+        card = (IMarauroaCard) instance.ditch(RPDeck.PAGES);
         cardDitched();
         assertEquals(ditchCount, instance.getUsedPileSize());
         assertEquals(toDitch, card);

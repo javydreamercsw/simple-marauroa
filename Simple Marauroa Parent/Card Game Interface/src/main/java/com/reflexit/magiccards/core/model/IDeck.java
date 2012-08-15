@@ -45,7 +45,7 @@ public interface IDeck {
      * @param amount cards to be ditched
      * @return Cards ditched
      */
-    public List<ICard> ditch(Class<? extends ICardType> type, boolean random, int amount);
+    public List<ICard> ditch(String slot, Class<? extends ICardType> type, boolean random, int amount);
 
     /**
      * Ditch first card of that type
@@ -53,7 +53,7 @@ public interface IDeck {
      * @param type Type to ditch
      * @return Card ditched
      */
-    public ICard ditch(Class<? extends ICardType> type);
+    public ICard ditch(String slot, Class<? extends ICardType> type);
 
     /**
      * Ditch bottom card
@@ -70,7 +70,7 @@ public interface IDeck {
      * False otherwise.
      * @return Ditched cards
      */
-    public List<ICard> ditch(int amount, boolean random);
+    public List<ICard> ditch(String slot, int amount, boolean random);
 
     /**
      * Ditch 1 card
@@ -79,7 +79,7 @@ public interface IDeck {
      * False otherwise.
      * @return Ditched cards
      */
-    public ICard ditch(boolean random);
+    public ICard ditch(String slot, boolean random);
 
     /**
      * Ditch x amount of cards. Equivalent to ditch(x, false)
@@ -87,14 +87,14 @@ public interface IDeck {
      * @param amount amount to ditch
      * @return Ditched cards
      */
-    public List<ICard> ditch(int amount);
+    public List<ICard> ditch(String slot, int amount);
 
     /**
      * Ditch 1 card. Equivalent to ditch(1, false)
      *
      * @return Ditched cards
      */
-    public ICard ditch();
+    public ICard ditch(String slot);
 
     /**
      * Ditch first card of that type
