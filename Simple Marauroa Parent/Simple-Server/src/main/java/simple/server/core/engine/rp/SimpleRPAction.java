@@ -40,14 +40,12 @@ public class SimpleRPAction {
     public static boolean placeat(SimpleRPZone zone, Entity entity) {
         // check in case of players that that they are still in game
         // because the entity is added to the world again otherwise.
-        if (entity instanceof ClientObjectInterface) {
-            if (Lookup.getDefault().lookup(IRPObjectFactory.class).createDefaultClientObject(entity).isDisconnected()) {
-                return true;
-            }
+        if (entity instanceof ClientObjectInterface && Lookup.getDefault().lookup(IRPObjectFactory.class).createDefaultClientObject(entity).isDisconnected()) {
+            return true;
         }
 
         SimpleRPZone oldZone = entity.getZone();
-        boolean zoneChanged = (oldZone != zone);
+        boolean zoneChanged = ( oldZone != zone );
 
         /*
          * Remove from old zone (if any) during zone change
@@ -76,7 +74,7 @@ public class SimpleRPAction {
          * ClientObjectInterface specific post-change handling
          */
         if (entity instanceof ClientObjectInterface) {
-            ClientObjectInterface player = 
+            ClientObjectInterface player =
                     Lookup.getDefault().lookup(IRPObjectFactory.class).createDefaultClientObject(entity);
 
             if (zoneChanged) {
@@ -89,7 +87,7 @@ public class SimpleRPAction {
                     String source = oldZone.getName();
                     String destination = zone.getName();
 
-                    ((SimpleRPRuleProcessor)Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(
+                    ( (SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class) ).addGameEvent(
                             player.getName(), "change zone", destination);
 
                     TutorialNotifier.zoneChange(player, source, destination);
