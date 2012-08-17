@@ -1,16 +1,19 @@
 package simple.server.core.engine;
 
-
 import java.io.*;
 import java.util.Date;
 import marauroa.common.crypto.RSAKey;
 
 public class GenerateINI {
 
-    /** Where data is read from. */
+    /**
+     * Where data is read from.
+     */
     private static BufferedReader in = new BufferedReader(
             new InputStreamReader(System.in));
-    /** The name of the output file. */
+    /**
+     * The name of the output file.
+     */
     static final String FILENAME = "server.ini";
     private static String gameName = SimpleRPRuleProcessor.getGAMENAME();
     private static String databaseName;
@@ -30,15 +33,14 @@ public class GenerateINI {
     private static String dbEntityManager, clientObject;
     private static RSAKey rsakey;
     private static String factory;
+    private static String supportEmail;
 
     /**
      * reads a String from the input. When no String is chosen the defaultValue
      * is used.
      *
-     * @param input
-     *            the buffered input, usually System.in
-     * @param defaultValue
-     *            if no value is written.
+     * @param input the buffered input, usually System.in
+     * @param defaultValue if no value is written.
      * @return the string read or default if none was read.
      */
     public static String getStringWithDefault(final BufferedReader input,
@@ -46,14 +48,13 @@ public class GenerateINI {
         String ret = "";
         try {
             ret = input.readLine();
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
-        if (ret != null) {
-            if ((ret.length() == 0) && (defaultValue != null)) {
-                ret = defaultValue;
-            }
+        if (ret != null && ( ret.length() == 0 ) && ( defaultValue != null )) {
+            ret = defaultValue;
         }
         return ret;
 
@@ -63,22 +64,21 @@ public class GenerateINI {
      * reads a String from the input. When no String is choosen the errorMessage
      * is is displayed and the application is terminated.
      *
-     * @param input
-     *            the input stream, usually System.in
-     * @param errorMessage
-     *            the error message to print when failing
+     * @param input the input stream, usually System.in
+     * @param errorMessage the error message to print when failing
      * @return string read from input
      */
     public static String getStringWithoutDefault(final BufferedReader input, final String errorMessage) {
         String ret = "";
         try {
             ret = input.readLine();
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             e.printStackTrace();
             System.exit(1);
         }
 
-        if ((ret == null) || (ret.length() == 0)) {
+        if (( ret == null ) || ( ret.length() == 0 )) {
             System.out.println(errorMessage);
             System.out.println("Terminating...");
             System.exit(1);
@@ -89,8 +89,7 @@ public class GenerateINI {
     /**
      * Makes the first letter of the source uppercase.
      *
-     * @param source
-     *            the string
+     * @param source the string
      * @return *T*he string, with first letter is upper case.
      */
     public static String uppcaseFirstLetter(final String source) {
@@ -112,8 +111,12 @@ public class GenerateINI {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        /** Write configuration for database */
-        /** Write configuration for database */
+        /**
+         * Write configuration for database
+         */
+        /**
+         * Write configuration for database
+         */
         databaseImplementation = getDatabaseImplementation();
         databaseSystem = getDatabaseSystem();
         if (databaseSystem.equals("mysql")) {
@@ -155,6 +158,8 @@ public class GenerateINI {
         statisticsFilename = getStatisticsFilename();
 
         factory = getFactoryImplementation();
+        
+        supportEmail = getSupportEmail();
 
         /* The size of the RSA Key in bits, usually 512 */
         final String keySize = getRSAKeyBits();
