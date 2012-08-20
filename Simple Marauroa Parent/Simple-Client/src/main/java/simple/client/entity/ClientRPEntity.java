@@ -10,13 +10,13 @@ import marauroa.common.game.RPObject;
 import simple.client.HeaderLessEventLine;
 import simple.client.SimpleUI;
 import simple.common.Grammar;
-import simple.common.ItemTools;
 import simple.common.NotificationType;
+import simple.server.core.entity.item.ItemTools;
 
 /**
  * This class is a link between client graphical objects and server attributes
- * objects.<br>
- * You need to extend this object in order to add new elements to the game.
+ * objects.<br> You need to extend this object in order to add new elements to
+ * the game.
  */
 public abstract class ClientRPEntity extends ClientEntity {
 
@@ -111,7 +111,9 @@ public abstract class ClientRPEntity extends ClientEntity {
     private int atkItem = -1;
     private int defItem = -1;
 
-    /** Creates a new game entity. */
+    /**
+     * Creates a new game entity.
+     */
     public ClientRPEntity() {
         textIndicators = new LinkedList<TextIndicator>();
         attackTarget = null;
@@ -124,10 +126,8 @@ public abstract class ClientRPEntity extends ClientEntity {
     /**
      * Create/add a text indicator message.
      *
-     * @param text
-     *            The text message.
-     * @param type
-     *            The indicator type.
+     * @param text The text message.
+     * @param type The indicator type.
      */
     protected void addTextIndicator(final String text,
             final NotificationType type) {
@@ -276,18 +276,20 @@ public abstract class ClientRPEntity extends ClientEntity {
      */
     @Override
     public String getTitle() {
+        String result;
         if (title != null) {
-            return title;
+            result = title;
         } else if (name != null) {
-            return name;
+            result = name;
         } else if (clazz != null) {
             // replace underscores in clazz and type without calling the function UpdateConverter.transformItemName() located in server code
-            return ItemTools.itemNameToDisplayName(clazz);
+            result = ItemTools.itemNameToDisplayName(clazz);
         } else if (type != null) {
-            return ItemTools.itemNameToDisplayName(type);
+            result = ItemTools.itemNameToDisplayName(type);
         } else {
-            return null;
+            result = null;
         }
+        return result;
     }
 
     /**
@@ -336,12 +338,7 @@ public abstract class ClientRPEntity extends ClientEntity {
      */
     public boolean isBeingAttackedByUser() {
         User user = User.get();
-
-        if (user == null) {
-            return false;
-        }
-
-        return attackers.contains(user);
+        return user == null ? false : attackers.contains(user);
     }
 
     /**
@@ -607,8 +604,7 @@ public abstract class ClientRPEntity extends ClientEntity {
     /**
      * Initialize this entity for an object.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      *
      * @see #release()
      */
@@ -682,7 +678,7 @@ public abstract class ClientRPEntity extends ClientEntity {
          */
         if (object.has("poisoned")) {
             // To remove the - sign on poison.
-            // onPoisoned(Math.abs(object.getInt("poisoned")));
+            //onPoisoned(Math.abs(object.getInt("poisoned")));
         }
 
         /*
@@ -737,8 +733,7 @@ public abstract class ClientRPEntity extends ClientEntity {
     /**
      * Update cycle.
      *
-     * @param delta
-     *            The time (in ms) since last call.
+     * @param delta The time (in ms) since last call.
      */
     @Override
     public void update(final int delta) {
@@ -765,10 +760,8 @@ public abstract class ClientRPEntity extends ClientEntity {
     /**
      * The object added/changed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedAdded(final RPObject object, final RPObject changes) {
@@ -961,10 +954,8 @@ public abstract class ClientRPEntity extends ClientEntity {
     /**
      * The object removed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedRemoved(final RPObject object, final RPObject changes) {
@@ -1014,10 +1005,8 @@ public abstract class ClientRPEntity extends ClientEntity {
         /**
          * Create a floating message.
          *
-         * @param text
-         *            The text to drawn.
-         * @param type
-         *            The indicator type.
+         * @param text The text to drawn.
+         * @param type The indicator type.
          */
         public TextIndicator(final String text, final NotificationType type) {
             this.text = text;
@@ -1032,8 +1021,7 @@ public abstract class ClientRPEntity extends ClientEntity {
         /**
          * Add to the age of this message.
          *
-         * @param time
-         *            The amout to add.
+         * @param time The amout to add.
          *
          * @return The new age (in milliseconds).
          */
