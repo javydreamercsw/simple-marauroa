@@ -1,7 +1,4 @@
-
 package simple.server.core.config;
-
-
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,7 +20,9 @@ import simple.server.core.rule.defaultruleset.DefaultItem;
 
 public class ItemsXMLLoader extends DefaultHandler {
 
-    /** the logger instance. */
+    /**
+     * the logger instance.
+     */
     private static final Logger logger = Log4J.getLogger(ItemsXMLLoader.class);
     private String name;
     private String clazz;
@@ -32,9 +31,13 @@ public class ItemsXMLLoader extends DefaultHandler {
     private String text;
     private double weight;
     private int value;
-    /** slots where this item can be equipped. */
+    /**
+     * slots where this item can be equipped.
+     */
     private List<String> slots;
-    /** Attributes of the item. */
+    /**
+     * Attributes of the item.
+     */
     private Map<String, String> attributes;
     private List<DefaultItem> list;
     private boolean attributesTag;
@@ -132,7 +135,7 @@ public class ItemsXMLLoader extends DefaultHandler {
         } else if (qName.equals("description")) {
             if (text != null) {
                 description = text.trim();
-                description.replaceAll(" +", " ");
+                description = description.replaceAll(" +", " ");
             }
         }
     }

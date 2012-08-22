@@ -49,7 +49,7 @@ public class ListenerList {
      */
     private final boolean identity;
     /**
-     * The list of listeners. Initially empty but initialized to an array of
+     * The list of listeners. Initialy empty but initialized to an array of
      * size capacity the first time a listener is added. Maintains invariant:
      * listeners != null
      */
@@ -115,7 +115,7 @@ public class ListenerList {
      * @return the list of registered listeners
      */
     public Object[] getListeners() {
-        return listeners;
+        return listeners.clone();
     }
 
     /**

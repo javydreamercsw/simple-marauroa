@@ -12,7 +12,6 @@ package com.reflexit.magiccards.core.model.storage;
 
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * ArrayList based implementation for AbstractCardStore
@@ -94,7 +93,6 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
     public boolean isVirtual() {
         return true;
     }
-    private static final Logger LOG = Logger.getLogger(MemoryCardStorage.class.getName());
 
     @Override
     public boolean add(T card) {
@@ -102,13 +100,13 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
     }
 
     @Override
-    public boolean addAll(Collection list) {
-        return list.addAll(list);
+    public boolean addAll(Collection toAdd) {
+        return list.addAll(toAdd);
     }
 
     @Override
-    public boolean removeAll(Collection<? extends T> list) {
-        return list.retainAll(list);
+    public boolean removeAll(Collection<? extends T> toRemove) {
+        return list.removeAll(toRemove);
     }
 
     @Override

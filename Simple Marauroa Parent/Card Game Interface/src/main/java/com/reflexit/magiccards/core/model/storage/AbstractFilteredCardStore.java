@@ -2,6 +2,8 @@ package com.reflexit.magiccards.core.model.storage;
 
 import com.reflexit.magiccards.core.model.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class that implements IFilteredCardStore, it is only contains filtered
@@ -21,11 +23,15 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
 
     @Override
     public ICardFilter getFilter() {
-        return filter;
+        synchronized (this) {
+            return filter;
+        }
     }
 
     public void setFilter(ICardFilter filter) {
-        this.filter = filter;
+        synchronized (this) {
+            this.filter = filter;
+        }
     }
 
     /*
@@ -54,6 +60,7 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
             try {
                 doInitialize();
             } catch (Exception e) {
+                Logger.getLogger(AbstractFilteredCardStore.class.getSimpleName()).log(Level.SEVERE, null, e);
             } finally {
                 this.initialized = true;
             }
@@ -94,14 +101,16 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
 
     @Override
     public boolean contains(T card) {
+        boolean result = false;
         synchronized (this) {
             for (T element : this) {
                 if (element.equals(card)) {
-                    return true;
+                    result = true;
+                    break;
                 }
             }
-            return false;
         }
+        return result;
     }
 
     protected synchronized void addFilteredCard(T card) {
@@ -248,10 +257,8 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
      */
     @Override
     public CardGroup[] getCardGroups() {
-        if (this.groupsList.isEmpty()) {
-            return EMPTY_CARD_GROUP;
-        }
-        return this.groupsList.values().toArray(new CardGroup[this.groupsList.size()]);
+        return groupsList.isEmpty() ? EMPTY_CARD_GROUP
+                : groupsList.values().toArray(new CardGroup[groupsList.size()]);
     }
 
     @Override

@@ -4,6 +4,7 @@ import marauroa.common.game.*;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
+import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 
 public abstract class SimpleServerExtension implements MarauroaServerExtension,
@@ -72,7 +73,7 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     }
 
     @Override
-    public void clientObjectUpdate(ClientObjectInterface client) {
+    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
         //Do nothing by default
     }
 
@@ -80,15 +81,15 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     public void rootRPClassUpdate(RPObject entity) {
         //Do nothing by default
     }
-    
+
     @Override
-    public void onRPClassAddAttribute(RPClass rpclass, 
+    public void onRPClassAddAttribute(RPClass rpclass,
             String name, Definition.Type type, byte flags) {
         //Do nothing by default
     }
-    
+
     @Override
-    public void onRPClassAddAttribute(RPClass rpclass, 
+    public void onRPClassAddAttribute(RPClass rpclass,
             String name, Definition.Type type) {
         //Do nothing by default
     }

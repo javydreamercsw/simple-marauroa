@@ -122,18 +122,18 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     /**
-     * Get wins
+     * Get loses
      *
-     * @return wins
+     * @return loses
      */
     public final int getLoses() {
         return Integer.valueOf(get(RECORD, LOSES));
     }
 
     /**
-     * Get wins
+     * Get draws
      *
-     * @return wins
+     * @return draws
      */
     public final int getDraws() {
         return Integer.valueOf(get(RECORD, DRAWS));
@@ -318,7 +318,7 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     @Override
-    public ICard ditch(final String slot,final  boolean random) {
+    public ICard ditch(final String slot, final boolean random) {
         RPCard ditched = null;
         if (slot.equals(PAGES) || slot.equals(HAND)) {
             int index_to_ditch = (random ? rand.nextInt(getSlot(slot).size()) : 0), i = 0;
@@ -468,5 +468,31 @@ public class RPDeck extends RPEntity implements IDeck {
             ICard card = it.next();
             getSlot(HAND).add((RPCard) card);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if (obj != null && getClass() == obj.getClass() && obj instanceof RPDeck) {
+            RPDeck rpDeck = (RPDeck) obj;
+            result = ((RPObject) obj).equals((RPObject) this);
+            if (result) {
+                result = result && rpDeck.getCards().equals(getCards())
+                        && rpDeck.getDeck().equals(getDeck())
+                        && rpDeck.getDiscardPile().equals(getDiscardPile())
+                        && rpDeck.getDraws() == getDraws()
+                        && rpDeck.getHand().equals(getHand())
+                        && rpDeck.getLoses() == getLoses()
+                        && rpDeck.getVersion() == getVersion()
+                        && rpDeck.getWins() == getWins();
+            }
+        }
+        return result;
     }
 }
