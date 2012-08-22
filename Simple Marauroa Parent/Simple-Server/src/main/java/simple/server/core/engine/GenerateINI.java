@@ -2,6 +2,8 @@ package simple.server.core.engine;
 
 import java.io.*;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.crypto.RSAKey;
 
 public class GenerateINI {
@@ -34,6 +36,7 @@ public class GenerateINI {
     private static RSAKey rsakey;
     private static String factory;
     private static String supportEmail;
+    private static final Logger LOG = Logger.getLogger(GenerateINI.class.getSimpleName());
 
     /**
      * reads a String from the input. When no String is chosen the defaultValue
@@ -48,12 +51,11 @@ public class GenerateINI {
         String ret = "";
         try {
             ret = input.readLine();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
+        } catch (final IOException e) {
+            LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
-        if (ret != null && ( ret.length() == 0 ) && ( defaultValue != null )) {
+        if (ret != null && (ret.length() == 0) && (defaultValue != null)) {
             ret = defaultValue;
         }
         return ret;
@@ -72,13 +74,12 @@ public class GenerateINI {
         String ret = "";
         try {
             ret = input.readLine();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
+        } catch (final IOException e) {
+            LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
 
-        if (( ret == null ) || ( ret.length() == 0 )) {
+        if ((ret == null) || (ret.length() == 0)) {
             System.out.println(errorMessage);
             System.out.println("Terminating...");
             System.exit(1);
@@ -93,10 +94,7 @@ public class GenerateINI {
      * @return *T*he string, with first letter is upper case.
      */
     public static String uppcaseFirstLetter(final String source) {
-        if (source.length() > 0) {
-            return Character.toUpperCase(source.charAt(0)) + source.substring(1);
-        }
-        return source;
+        return source.length() > 0 ? Character.toUpperCase(source.charAt(0)) + source.substring(1) : source;
     }
 
     private static String getDatabaseSystem() {
@@ -158,8 +156,8 @@ public class GenerateINI {
         statisticsFilename = getStatisticsFilename();
 
         factory = getFactoryImplementation();
-        
-        supportEmail = getSupportEmail();
+
+        setSupportEmail(getSupportEmail());
 
         /* The size of the RSA Key in bits, usually 512 */
         final String keySize = getRSAKeyBits();
@@ -235,7 +233,7 @@ public class GenerateINI {
         out.println("# World and RP configuration. Don't edit.");
         out.println("world=" + worldImplementation);
         out.println("ruleprocessor=" + ruleprocessorImplementation);
-        out.println("client_object= " + clientObject);
+        out.println("client_object= " + getClientObject());
         out.println();
         out.println("turn_length=" + turnLength);
         out.println();
@@ -302,5 +300,26 @@ public class GenerateINI {
     private static String getClientObjectImplementation() {
         System.out.print("Write Client Object Implementation to be used [simple.server.core.entity.clientobject.ClientObject]: ");
         return getStringWithDefault(in, "simple.server.core.entity.clientobject.ClientObject");
+    }
+
+    /**
+     * @return the dbEntityManager
+     */
+    public static String getDbEntityManager() {
+        return dbEntityManager;
+    }
+
+    /**
+     * @return the clientObject
+     */
+    public static String getClientObject() {
+        return clientObject;
+    }
+
+    /**
+     * @param aSupportEmail the supportEmail to set
+     */
+    public static void setSupportEmail(String aSupportEmail) {
+        supportEmail = aSupportEmail;
     }
 }

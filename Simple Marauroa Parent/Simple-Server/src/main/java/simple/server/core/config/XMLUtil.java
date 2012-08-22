@@ -1,6 +1,4 @@
-
 package simple.server.core.config;
-
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +24,7 @@ public class XMLUtil {
     /**
      * Get all the direct children elements of an element.
      *
-     * @param parent
-     *            The parent element.
+     * @param parent The parent element.
      *
      * @return A list of Element's.
      */
@@ -51,10 +48,8 @@ public class XMLUtil {
      * Get all the direct children elements of an element that have a specific
      * tag name.
      *
-     * @param parent
-     *            The parent element.
-     * @param name
-     *            The tag name to match.
+     * @param parent The parent element.
+     * @param name The tag name to match.
      *
      * @return A list of Element's.
      */
@@ -82,8 +77,7 @@ public class XMLUtil {
     /**
      * Get the direct text content of an element.
      *
-     * @param element
-     *            The element.
+     * @param element The element.
      *
      * @return The contained text.
      */
@@ -98,12 +92,9 @@ public class XMLUtil {
     /**
      * Get the text content of an element.
      *
-     * @param element
-     *            The element.
-     * @param sbuf
-     *            The buffer to append to.
-     * @param decend
-     *            Whether to descend into child elements.
+     * @param element The element.
+     * @param sbuf The buffer to append to.
+     * @param decend Whether to descend into child elements.
      */
     public static void getText(final Element element, final StringBuilder sbuf,
             final boolean decend) {
@@ -119,8 +110,9 @@ public class XMLUtil {
                     if (decend) {
                         getText((Element) node, sbuf, decend);
                     }
-
                     break;
+                default:
+                    //Do nothing.
             }
 
             node = node.getNextSibling();
@@ -130,17 +122,14 @@ public class XMLUtil {
     /**
      * Parse an XML document.
      *
-     * @param in
-     *            The input stream.
+     * @param in The input stream.
      *
      * @return A Document.
      *
-     * @throws SAXException
-     *             If there is a parsing error.
-     * @throws IOException
-     *             If there is an I/O error.
-     * @throws IllegalArgumentException
-     *             If there is a parser configuration error.
+     * @throws SAXException If there is a parsing error.
+     * @throws IOException If there is an I/O error.
+     * @throws IllegalArgumentException If there is a parser configuration
+     * error.
      */
     public static Document parse(InputStream in) throws SAXException,
             IOException {
@@ -150,17 +139,14 @@ public class XMLUtil {
     /**
      * Parse an XML document.
      *
-     * @param is
-     *            The input source.
+     * @param is The input source.
      *
      * @return A Document.
      *
-     * @throws SAXException
-     *             If there is a parsing error.
-     * @throws IOException
-     *             If there is an I/O error.
-     * @throws IllegalArgumentException
-     *             If there is a parser configuration error.
+     * @throws SAXException If there is a parsing error.
+     * @throws IOException If there is an I/O error.
+     * @throws IllegalArgumentException If there is a parser configuration
+     * error.
      */
     public static Document parse(InputSource is) throws SAXException,
             IOException {

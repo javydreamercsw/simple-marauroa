@@ -11,14 +11,15 @@ import java.util.logging.Level;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-import marauroa.common.game.Definition.Type;
 import marauroa.common.game.*;
+import marauroa.common.game.Definition.Type;
 import marauroa.common.io.UnicodeSupportingInputStreamReader;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import simple.common.FeatureList;
 import simple.common.NotificationType;
+import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.SimpleRPZone;
@@ -84,7 +85,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * list of super admins read from admins.list.
      */
-    private static List<String> adminNames;
+    private static List<String> adminNames = new LinkedList<String>();
     private int adminLevel;
     private boolean disconnected;
     private PlayerQuests quests = new PlayerQuests(this);
@@ -111,7 +112,11 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
             MarauroaServerExtension extension = it.next();
             logger.debug("Processing extension to update client object class definition: " + extension.getClass().getSimpleName());
-            extension.clientObjectUpdate(this);
+            try {
+                extension.clientObjectUpdate(this);
+            } catch (SimpleException ex) {
+                java.util.logging.Logger.getLogger(ClientObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         super.update();
     }
@@ -125,8 +130,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Get the away message.
      *
-     * @return The away message, or
-     * <code>null</code> if unset.
+     * @return The away message, or <code>null</code> if unset.
      */
     @Override
     public String getAwayMessage() {
@@ -136,8 +140,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Get the grumpy message.
      *
-     * @return The grumpy message, or
-     * <code>null</code> if unset.
+     * @return The grumpy message, or <code>null</code> if unset.
      */
     @Override
     public String getGrumpyMessage() {
@@ -147,8 +150,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Set the away message.
      *
-     * @param message An away message, or
-     * <code>null</code>.
+     * @param message An away message, or <code>null</code>.
      */
     @Override
     public void setAwayMessage(final String message) {
@@ -168,8 +170,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      *
      * @param name The name of the other player.
      *
-     * @return
-     * <code>true</code> if the player should be notified.
+     * @return <code>true</code> if the player should be notified.
      */
     @Override
     public boolean isAwayNotifyNeeded(String name) {
@@ -371,8 +372,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Set whether this player is a ghost (invisible/non-interactive).
      *
-     * @param ghost
-     * <code>true</code> if a ghost.
+     * @param ghost <code>true</code> if a ghost.
      */
     @Override
     public void setGhost(final boolean ghost) {
@@ -396,8 +396,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Set the grumpy message.
      *
-     * @param message A grumpy message, or
-     * <code>null</code>.
+     * @param message A grumpy message, or <code>null</code>.
      */
     @Override
     public void setGrumpyMessage(final String message) {
@@ -412,8 +411,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     /**
      * Set whether this player is invisible to creatures.
      *
-     * @param invisible
-     * <code>true</code> if invisible.
+     * @param invisible <code>true</code> if invisible.
      */
     @Override
     public void setInvisible(final boolean invisible) {
@@ -573,8 +571,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      * @param player ClientObject to check for super admin status.
      */
     protected static void readAdminsFromFile(ClientObject player) {
-        if (adminNames == null) {
-            adminNames = new LinkedList<String>();
+        if (adminNames.isEmpty()) {
 
             String adminFilename = "data/conf/admins.list";
 
@@ -859,10 +856,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     }
 
     public Outfit getOriginalOutfit() {
-        if (has("outfit_org")) {
-            return new Outfit(getInt("outfit_org"));
-        }
-        return null;
+        return has("outfit_org") ? new Outfit(getInt("outfit_org")) : null;
     }
 
     /**
@@ -871,17 +865,12 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      * @param name The slot name.
      * @param key The value key.
      *
-     * @return The keyed value of the slot, or
-     * <code>null</code> if not set.
+     * @return The keyed value of the slot, or <code>null</code> if not set.
      */
     @Override
     public String getKeyedSlot(String name, String key) {
         RPObject object = getKeyedSlotObject(this, name);
-        if (object == null) {
-            return null;
-        }
-
-        return object.has(key) ? object.get(key) : null;
+        return object == null ? null : object.has(key) ? object.get(key) : null;
     }
 
     /**
@@ -889,12 +878,10 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      *
      * @param name The slot name.
      * @param key The value key.
-     * @param value The value to assign (or remove if
-     * <code>null</code>).
+     * @param value The value to assign (or remove if <code>null</code>).
      *
-     * @return
-     * <code>true</code> if value changed,
-     * <code>false</code> if there was a problem.
+     * @return <code>true</code> if value changed, <code>false</code> if there
+     * was a problem.
      */
     @Override
     public boolean setKeyedSlot(String name, String key, String value) {
@@ -902,13 +889,11 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
         if (object == null) {
             return false;
         }
-
         if (value != null) {
             object.put(key, value);
         } else if (object.has(key)) {
             object.remove(key);
         }
-
         return true;
     }
 
@@ -916,8 +901,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      * @return the single object of a "keyed slot".
      *
      * @param name name of key slot
-     * @return object or
-     * <code>null</code> it does not exist
+     * @return object or <code>null</code> it does not exist
      */
     static RPObject getKeyedSlotObject(RPObject object, String name) {
         if (!object.hasSlot(name)) {
@@ -985,13 +969,12 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
      * Add a player ignore entry.
      *
      * @param name The player name.
-     * @param duration The ignore duration (in minutes), or
-     * <code>0</code> for infinite.
+     * @param duration The ignore duration (in minutes), or <code>0</code> for
+     * infinite.
      * @param reply The reply.
      *
-     * @return
-     * <code>true</code> if value changed,
-     * <code>false</code> if there was a problem.
+     * @return <code>true</code> if value changed, <code>false</code> if there
+     * was a problem.
      */
     @Override
     public boolean addIgnore(String name, int duration, String reply) {

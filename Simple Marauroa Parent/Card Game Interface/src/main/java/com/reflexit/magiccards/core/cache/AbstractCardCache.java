@@ -154,8 +154,7 @@ public abstract class AbstractCardCache implements ICardCache {
         CardFileUtils.saveStream(st, file2);
         st.close();
         if (file2.exists()) {
-            file2.renameTo(file);
-            if (!file.exists()) {
+            if (!file2.renameTo(file) || !file.exists()) {
                 throw new IOException("failed to rename into " + file.toString());
             }
             return file;
@@ -251,8 +250,7 @@ public abstract class AbstractCardCache implements ICardCache {
             CardFileUtils.saveStream(st, file2);
             st.close();
             if (file2.exists()) {
-                file2.renameTo(dest);
-                if (!dest.exists()) {
+                if (file2.renameTo(dest) || !dest.exists()) {
                     throw new IOException("failed to rename into " + dest.toString());
                 }
             }

@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 public final class Editions implements ISearchableProperty {
 
-    private static final String EDITIONS_FILE = "editions.txt";
     private static Editions instance = new Editions();
     private HashMap<String, Editions.Edition> name2ed;
 
@@ -18,7 +17,6 @@ public final class Editions implements ISearchableProperty {
         private Date release;
         private String type = "?";
         private Set<String> format;
-        private static final SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
 
         public Edition(String name, String abbr) {
             this.name = name;
@@ -38,12 +36,13 @@ public final class Editions implements ISearchableProperty {
             if (date == null || date.length() == 0 || date.equals("?")) {
                 release = null;
             } else {
+                SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
                 release = formatter.parse(date);
             }
         }
 
         public Date getReleaseDate() {
-            return release;
+            return (Date) release.clone();
         }
 
         public boolean abbreviationOf(String abbr) {
@@ -79,10 +78,7 @@ public final class Editions implements ISearchableProperty {
         }
 
         public boolean isLegal(String leg) {
-            if (format == null) {
-                return false;
-            }
-            return format.contains(leg);
+            return format == null ? false : format.contains(leg);
         }
 
         private boolean isAbbreviationFake() {
@@ -90,14 +86,11 @@ public final class Editions implements ISearchableProperty {
         }
 
         public String getMainAbbreviation() {
-            return abbrs[0];
+            return abbrs.length >= 1 ? abbrs[0] : "";
         }
 
         public String getExtraAbbreviation() {
-            if (abbrs.length > 1) {
-                return abbrs[1];
-            }
-            return "";
+            return abbrs.length > 1 ? abbrs[1] : "";
         }
 
         public void setType(String type) {
@@ -112,7 +105,7 @@ public final class Editions implements ISearchableProperty {
         }
 
         public void setReleaseDate(Date time) {
-            release = time;
+            release.setTime(time.getTime());
         }
 
         public String getType() {

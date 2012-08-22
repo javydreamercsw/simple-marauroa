@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -139,7 +140,7 @@ public class RPCard extends RPEntity implements ICard {
             return getName().compareTo(card.getName());
         }
     }
-    
+
     @Override
     public Lookup getLookup() {
         return lookup;
@@ -147,5 +148,29 @@ public class RPCard extends RPEntity implements ICard {
 
     public void addToLookup(Object entity) {
         content.add(entity);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RPCard other = (RPCard) obj;
+        if (this.content != other.content && (this.content == null || !this.content.equals(other.content))) {
+            return false;
+        }
+        if (this.lookup != other.lookup && (this.lookup == null || !this.lookup.equals(other.lookup))) {
+            return false;
+        }
+        return true;
     }
 }

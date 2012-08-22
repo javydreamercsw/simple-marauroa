@@ -154,11 +154,15 @@ public abstract class AbstractCardStore<T> extends EventManager implements ICard
     }
 
     public void setInitialized(boolean b) {
-        initialized = b;
+        synchronized (this) {
+            initialized = b;
+        }
     }
 
-    public synchronized boolean isInitialized() {
-        return initialized;
+    public boolean isInitialized() {
+        synchronized (this) {
+            return initialized;
+        }
     }
 
     protected abstract boolean doAddCard(T card);

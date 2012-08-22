@@ -4,6 +4,7 @@ import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
+import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 
 /**
@@ -25,12 +26,17 @@ public class CardGameExtension extends SimpleServerExtension {
     }
 
     @Override
-    public void clientObjectUpdate(ClientObjectInterface client) {
-        if (!((RPObject) client).hasSlot(DECK)) {
-            ((RPObject) client).addSlot(DECK);
-        }
-        if (!((RPObject) client).hasSlot(COLLECTION)) {
-            ((RPObject) client).addSlot(COLLECTION);
+    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
+        if (client instanceof RPObject) {
+            RPObject rpObject = (RPObject) client;
+            if (!rpObject.hasSlot(DECK)) {
+                rpObject.addSlot(DECK);
+            }
+            if (!rpObject.hasSlot(COLLECTION)) {
+                rpObject.addSlot(COLLECTION);
+            }
+        } else {
+            throw new SimpleException("Client object not an instance of RPObject! (" + client + ")");
         }
     }
 

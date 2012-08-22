@@ -55,7 +55,7 @@ public class ChallengeExtension extends SimpleServerExtension implements ActionL
                 if (challenged != null && challenger != null) {
                     logger.debug("Both players still exist. Send the Challenge to the challenged.");
                     challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER), action.get(_CHALLENGED), ChallengeEvent.CHALLENGE));
-                    if (player != null) {
+                    if (player instanceof RPObject) {
                         ((RPObject) player).addEvent(new TextEvent("Command completed", "System"));
                     }
                     challenged.notifyWorldAboutChanges();

@@ -30,18 +30,19 @@ public class CardFileUtils {
      * @throws IOException
      */
     public static void saveStream(InputStream in, File out) throws IOException {
-        out.getAbsoluteFile().getParentFile().mkdirs();
-        FileOutputStream fos = new FileOutputStream(out);
-        try {
-            byte[] buf = new byte[1024 * 4];
-            int i;
-            while ((i = in.read(buf)) != -1) {
-                fos.write(buf, 0, i);
+        if (out.getAbsoluteFile().getParentFile().mkdirs()) {
+            FileOutputStream fos = new FileOutputStream(out);
+            try {
+                byte[] buf = new byte[1024 * 4];
+                int i;
+                while ((i = in.read(buf)) != -1) {
+                    fos.write(buf, 0, i);
+                }
+            } catch (IOException e) {
+                throw e;
+            } finally {
+                fos.close();
             }
-        } catch (IOException e) {
-            throw e;
-        } finally {
-            fos.close();
         }
     }
 
