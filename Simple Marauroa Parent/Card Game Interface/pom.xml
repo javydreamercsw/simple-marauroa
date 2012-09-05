@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>simple.server</groupId>
+        <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
         <version>0.02.05-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>

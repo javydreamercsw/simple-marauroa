@@ -3,11 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>simple.server</groupId>
+        <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
         <version>0.02.05-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <groupId>simple.server</groupId>
+    
     <artifactId>Marauroa-Monitor-Extension</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Marauroa-Monitor-Extension</name>
@@ -23,7 +24,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>simple.server</groupId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
             <version>0.02.05-SNAPSHOT</version>
         </dependency>

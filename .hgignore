@@ -11,3 +11,5 @@ Simple-Client/log/*
 lib/marauroa.jar
 Marauroa Monitor Extension/*cobertura*
 **/target/*
+**/keystore
+**/nbactions-release-sign-artifacts.xml
