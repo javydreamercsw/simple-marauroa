@@ -4,12 +4,12 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.05</version>
+        <version>0.02.06-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
     <artifactId>Marauroa-Monitor-Extension</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Marauroa-Monitor-Extension</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>0.02.05</version>
+            <version>0.02.06-SNAPSHOT</version>
         </dependency>
     </dependencies>
   
