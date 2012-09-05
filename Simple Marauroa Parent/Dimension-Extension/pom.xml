@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.05</version>
+        <version>0.02.05-SNAPSHOT</version>
     </parent>
 
     <artifactId>Dimension-Extension</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <name>Dimension-Extension</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -29,7 +30,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>0.02.05</version>
+            <version>0.02.05-SNAPSHOT</version>
         </dependency>
     </dependencies>
   
