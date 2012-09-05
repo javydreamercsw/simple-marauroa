@@ -41,6 +41,10 @@
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/javydreamercsw/simple-marauroa-java</developerConnection>
         <tag>HEAD</tag>
     </scm>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://xinco.ci.cloudbees.com/</url>
+    </ciManagement>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
