@@ -42,12 +42,11 @@ public class TextClient extends Thread {
         character = c;
         port = P;
         version = v;
-        gameName=name;
+        gameName = name;
 
         world_objects = new HashMap<RPObject.ID, RPObject>();
 
         handler = new PerceptionHandler(new IPerceptionListener() {
-
             @Override
             public boolean onAdded(RPObject object) {
                 return false;
@@ -140,7 +139,6 @@ public class TextClient extends Thread {
         version = gversion;
         clientManager = new marauroa.client.ClientFramework(
                 "log4j.properties") {
-
             @Override
             protected String getGameName() {
                 return gameName;
@@ -265,7 +263,7 @@ public class TextClient extends Thread {
             clientManager.login(username, password);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, null, ex);
-            System.exit(1);
+            throw new RuntimeException(ex);
         } catch (LoginFailedException e) {
             try {
                 System.out.println("Creating account and logging in to continue....");
@@ -303,6 +301,8 @@ public class TextClient extends Thread {
             try {
                 sleep(100);
             } catch (InterruptedException e) {
+                logger.log(Level.SEVERE, null, e);
+                cond = false;
             }
         }
     }

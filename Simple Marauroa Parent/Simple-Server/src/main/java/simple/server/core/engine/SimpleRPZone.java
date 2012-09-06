@@ -115,29 +115,27 @@ public class SimpleRPZone extends MarauroaRPZone {
         if (object instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) object;
             players.remove(player.getName());
-            if (object instanceof ClientObjectInterface) {
-                try {
-                    //Make sure that the correct onRemoved method is called
-                    Configuration conf = Configuration.getConfiguration();
-                    Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
-                    Class[] types = new Class[]{IRPZone.class};
-                    java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("onRemoved", types);
-                    localSingleton.invoke(clientObjectClass.cast(object), this);
-                } catch (IllegalAccessException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalArgumentException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                } catch (InvocationTargetException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                } catch (NoSuchMethodException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                } catch (SecurityException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                }
+            try {
+                //Make sure that the correct onRemoved method is called
+                Configuration conf = Configuration.getConfiguration();
+                Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
+                Class[] types = new Class[]{IRPZone.class};
+                java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("onRemoved", types);
+                localSingleton.invoke(clientObjectClass.cast(object), this);
+            } catch (IllegalAccessException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchMethodException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            } catch (SecurityException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
             }
             //Let everyone else know
             applyPublicEvent(new PrivateTextEvent(
@@ -181,15 +179,15 @@ public class SimpleRPZone extends MarauroaRPZone {
      * @return A list of all players.
      */
     public String getPlayersInString(String separator) {
-        String playerList = "";
+        StringBuilder playerList = new StringBuilder();
         Iterator i = players.values().iterator();
         while (i.hasNext()) {
-            playerList += ((ClientObjectInterface) i.next()).getName();
+            playerList.append(((ClientObjectInterface) i.next()).getName());
             if (i.hasNext()) {
-                playerList += separator;
+                playerList.append(separator);
             }
         }
-        return playerList;
+        return playerList.toString();
     }
 
     /**
@@ -427,12 +425,12 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     public void setPassword(String pass) throws IOException {
         /**
-         * Encrypt password with private key. This way encryption is unique per
+         * encrypt password with private key. This way encryption is unique per
          * server. (Assuming that the server.ini file was generated and not
          * copied)
          */
         if (pass != null && !pass.isEmpty()) {
-            password = Tool.Encrypt(pass, Configuration.getConfiguration().get("d"));
+            password = Tool.encrypt(pass, Configuration.getConfiguration().get("d"));
         }
     }
 
@@ -458,7 +456,7 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     public boolean isPassword(String pass) {
         try {
-            return Tool.Encrypt(pass, Configuration.getConfiguration().get("d")).equals(password);
+            return Tool.encrypt(pass, Configuration.getConfiguration().get("d")).equals(password);
         } catch (IOException ex) {
             logger.error(ex);
             return false;

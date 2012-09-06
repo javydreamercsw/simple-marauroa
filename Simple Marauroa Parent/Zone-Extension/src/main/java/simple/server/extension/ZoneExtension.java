@@ -54,7 +54,6 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             //Just wait a little bit...
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                     new DelayedAction(new AbstractAction() {
-
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     list(player, ZoneEvent.LISTZONES, action);
@@ -123,10 +122,11 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             logger.info("Scheduling moving player to created zone...");
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(2,
                     new DelayedAction(new AbstractAction() {
-
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    world.changeZone(action.get(ROOM), (RPObject) player);
+                    if (player instanceof RPObject) {
+                        world.changeZone(action.get(ROOM), (RPObject) player);
+                    }
                 }
             }));
         } else {
@@ -135,30 +135,32 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
     }
 
     private void join(ClientObjectInterface player, RPAction action) {
-        //If in same room, tell the player. The client should handle this but just in case...
-        if (action.get(ROOM).equals(((RPObject) player).get("zoneid"))) {
-            player.sendPrivateText("You already are in " + action.get(ROOM) + " room.");
-        } //Make sure the zone exists...
-        else if (Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(new ID(action.get(ROOM)))) {
-            SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(((RPObject) player).get("zoneid"));
-            //If it's locked it means you need a password, you better have it...
-            if (jZone.isLocked()) {
-                if (action.get(PASSWORD) != null) {
-                    logger.debug("Room is locked but password is provided...");
-                    if (jZone.isPassword(action.get(PASSWORD))) {
-                        logger.debug("Password correct, changing zone...");
-                        Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
-                    } else {
-                        ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
-                        logger.debug("Room is locked. " + re);
-                        logger.debug("Wrong password, requesting again...");
-                        ((RPObject) player).addEvent(re);
-                        player.notifyWorldAboutChanges();
+        if (player != null && action != null) {
+            //If in same room, tell the player. The client should handle this but just in case...
+            if (player instanceof RPObject && action.get(ROOM).equals(((RPObject) player).get("zoneid"))) {
+                player.sendPrivateText("You already are in " + action.get(ROOM) + " room.");
+            } //Make sure the zone exists...
+            else if (Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(new ID(action.get(ROOM)))) {
+                SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(((RPObject) player).get("zoneid"));
+                //If it's locked it means you need a password, you better have it...
+                if (jZone.isLocked()) {
+                    if (action.get(PASSWORD) != null) {
+                        logger.debug("Room is locked but password is provided...");
+                        if (jZone.isPassword(action.get(PASSWORD))) {
+                            logger.debug("Password correct, changing zone...");
+                            Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
+                        } else {
+                            ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
+                            logger.debug("Room is locked. " + re);
+                            logger.debug("Wrong password, requesting again...");
+                            ((RPObject) player).addEvent(re);
+                            player.notifyWorldAboutChanges();
+                        }
                     }
+                } else {
+                    //The room is open so just join it.
+                    Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
                 }
-            } else {
-                //The room is open so just join it.
-                Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
             }
         }
     }
@@ -182,15 +184,13 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             Collection<ClientObjectInterface> players = zone.getPlayers();
             for (ClientObjectInterface clientObject : players) {
                 world.changeZone(Lookup.getDefault().lookup(
-                        IRPWorld.class).getDefaultZone().getID().getID(), 
+                        IRPWorld.class).getDefaultZone().getID().getID(),
                         (RPObject) clientObject);
             }
-            if (zone != null) {
-                try {
-                    world.removeRPZone(new ID(action.get(ROOM)));
-                } catch (Exception ex) {
-                    java.util.logging.Logger.getLogger(ZoneExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
-                }
+            try {
+                world.removeRPZone(new ID(action.get(ROOM)));
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(ZoneExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
             }
             world.applyPublicEvent(null,
                     new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
@@ -198,7 +198,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionListen
             for (ClientObjectInterface p : zone.getPlayers()) {
                 p.notifyWorldAboutChanges();
             }
-            if (player != null) {
+            if (player != null && player instanceof RPObject) {
                 ((RPObject) player).addEvent(new PrivateTextEvent(
                         NotificationType.INFORMATION, "Command completed"));
                 player.notifyWorldAboutChanges();

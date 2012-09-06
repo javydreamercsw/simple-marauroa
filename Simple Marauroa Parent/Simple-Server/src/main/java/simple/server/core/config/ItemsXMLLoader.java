@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -47,11 +48,12 @@ public class ItemsXMLLoader extends DefaultHandler {
         list = new LinkedList<DefaultItem>();
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
+        InputStream is = null;
         try {
             // Parse the input
             SAXParser saxParser = factory.newSAXParser();
 
-            InputStream is = getClass().getResourceAsStream(uri.getPath());
+            is = getClass().getResourceAsStream(uri.getPath());
 
             if (is == null) {
                 throw new FileNotFoundException("cannot find resource '" + uri + "' in classpath");
@@ -62,6 +64,14 @@ public class ItemsXMLLoader extends DefaultHandler {
         } catch (IOException e) {
             logger.error(e);
             throw new SAXException(e);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(ItemsXMLLoader.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
 
         return list;

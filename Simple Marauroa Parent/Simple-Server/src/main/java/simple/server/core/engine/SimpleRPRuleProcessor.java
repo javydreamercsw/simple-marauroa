@@ -119,16 +119,18 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
 
     @Override
     public void setContext(RPServerManager rpman) {
-        try {
-            /*
-             * Print version information.
-             */
-            logger.info("Running " + getGAMENAME() + " Server version '" + getVERSION() + "'");
-            SimpleRPRuleProcessor.rpman = rpman;
-            SimpleRPAction.initialize(rpman);
-        } catch (Exception e) {
-            logger.error("Cannot set Context. Exiting...", e);
-            System.exit(-1);
+        if (SimpleRPRuleProcessor.rpman == null) {
+            try {
+                /*
+                 * Print version information.
+                 */
+                logger.info("Running " + getGAMENAME() + " Server version '" + getVERSION() + "'");
+                SimpleRPRuleProcessor.rpman = rpman;
+                SimpleRPAction.initialize(rpman);
+            } catch (Exception e) {
+                logger.error("Cannot set Context. Exiting...", e);
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -343,7 +345,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
     public static void sendMessageToSupporters(final String message) {
         ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forFilteredPlayersExecute(
                 new Task<ClientObjectInterface>() {
-
                     @Override
                     public void execute(ClientObjectInterface player) {
                         player.sendPrivateText(message);
@@ -351,7 +352,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
                     }
                 },
                 new FilterCriteria<ClientObjectInterface>() {
-
                     @Override
                     public boolean passes(ClientObjectInterface p) {
                         return p.getAdminLevel() >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
@@ -379,7 +379,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
     public static void notifyOnlineStatus(boolean isOnline, final String name) {
         if (isOnline) {
             ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
-
                 @Override
                 public void execute(ClientObjectInterface player) {
                     player.notifyOnline(name);
@@ -388,7 +387,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
 
         } else {
             ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
-
                 @Override
                 public void execute(ClientObjectInterface player) {
                     player.notifyOffline(name);

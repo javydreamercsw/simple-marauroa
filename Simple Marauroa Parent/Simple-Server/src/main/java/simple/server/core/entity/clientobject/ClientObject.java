@@ -89,7 +89,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
     private int adminLevel;
     private boolean disconnected;
     private PlayerQuests quests = new PlayerQuests(this);
-    public static String CLASS_NAME = "client_object";
+    public static final String CLASS_NAME = "client_object";
 
     /**
      * Constructor
@@ -591,6 +591,10 @@ public class ClientObject extends RPEntity implements ClientObjectInterface {
                         }
                     } catch (Exception e) {
                         logger.error("Error loading admin names from: " + adminFilename, e);
+                    } finally {
+                        if (in != null) {
+                            in.close();
+                        }
                     }
                 }
             } catch (Exception e) {

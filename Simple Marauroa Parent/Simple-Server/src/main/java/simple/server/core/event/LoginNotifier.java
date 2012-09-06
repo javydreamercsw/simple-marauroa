@@ -16,9 +16,7 @@ import simple.common.game.ClientObjectInterface;
  */
 @ServiceProvider(service = ILoginNotifier.class)
 public final class LoginNotifier implements ILoginNotifier {
-
-    /** The Singleton instance. */
-    private static LoginNotifier instance;
+    
     /**
      * Holds a list of all registered listeners.
      */

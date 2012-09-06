@@ -1,6 +1,5 @@
 package simple.server.core.action;
 
-
 import java.util.concurrent.ConcurrentHashMap;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
@@ -12,8 +11,9 @@ import simple.server.core.action.chat.ChatAction;
 
 public class CommandCenter {
 
+    //TODO: Replace with Lookup
     private static final UnknownAction UNKNOWN_ACTION = new UnknownAction();
-    private static ConcurrentHashMap<String, ActionListener> actionsMap;
+    private static volatile ConcurrentHashMap<String, ActionListener> actionsMap;
     private static final Logger logger = Log4J.getLogger(CommandCenter.class);
 
     protected static ConcurrentHashMap<String, ActionListener> getActionsMap() {
@@ -94,9 +94,7 @@ public class CommandCenter {
                     type = action.get("type");
                 }
                 logger.warn(player + " tried to execute unknown action " + type);
-                if (player != null) {
-                    player.sendPrivateText("Unknown command '" + type + "'");
-                }
+                player.sendPrivateText("Unknown command '" + type + "'");
             }
         }
     }

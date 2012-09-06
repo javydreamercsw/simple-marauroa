@@ -11,7 +11,7 @@ public class Tool {
 
     private static final Logger LOGGER = Log4J.getLogger(Tool.class);
 
-    public static String Encrypt(final String str, final String key) {
+    public static String encrypt(final String str, final String key) {
         StringBuilder sb = new StringBuilder(str);
 
         final int lenStr = str.length();
@@ -29,12 +29,12 @@ public class Tool {
         return sb.toString();
     }
 
-    public static String Decrypt(final String str, final String key) {
+    public static String decrypt(final String str, final String key) {
         /**
          * To 'decrypt' the string, simply apply the same technique. Is safe to
          * have this since the client never knows the private key.
          */
-        return Encrypt(str, key);
+        return encrypt(str, key);
     }
 
     public static String removeUnderscores(String value) {

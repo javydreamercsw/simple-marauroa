@@ -23,7 +23,7 @@ import simple.server.extension.MarauroaServerExtension;
 public class Entity extends RPObject implements RPEntityInterface {
 
     private static final long serialVersionUID = 1L;
-    public static String RPCLASS_NAME = "entity";
+    public static final String RPCLASS_NAME = "entity";
     /**
      * The logger.
      */
