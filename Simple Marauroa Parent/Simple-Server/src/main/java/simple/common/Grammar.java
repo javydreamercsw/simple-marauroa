@@ -47,7 +47,7 @@ public class Grammar {
      *            The quantity to examine
      * @return Either "It" or "Them" as appropriate
      */
-    public static String ItThem(int quantity) {
+    public static String itThem(int quantity) {
         return makeUpperCaseWord(itthem(quantity));
     }
 
@@ -69,7 +69,7 @@ public class Grammar {
      *            The quantity to examine
      * @return Either "It" or "They" as appropriate
      */
-    public static String ItThey(int quantity) {
+    public static String itThey(int quantity) {
         return makeUpperCaseWord(itthey(quantity));
     }
 
@@ -91,7 +91,7 @@ public class Grammar {
      *            The quantity to examine
      * @return Either "Is" or "Are" as appropriate
      */
-    public static String IsAre(int quantity) {
+    public static String isAre(int quantity) {
         return makeUpperCaseWord(isare(quantity));
     }
 

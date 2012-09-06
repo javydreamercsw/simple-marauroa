@@ -35,7 +35,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     private String[] available_characters;
     private ClientObjectInterface player;
     private String userName;
-    public static String LOG4J_PROPERTIES = "log4j.properties";
+    public static final String LOG4J_PROPERTIES = "log4j.properties";
     public ArrayList<String> whoplayers;
     protected Enum state;
     protected ChatScreenInterface mainFrame;
@@ -118,7 +118,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     }
 
     public String[] getAvailableCharacters() {
-        return available_characters;
+        return available_characters.clone();
     }
 
     public ClientObjectInterface getPlayerRPC() {

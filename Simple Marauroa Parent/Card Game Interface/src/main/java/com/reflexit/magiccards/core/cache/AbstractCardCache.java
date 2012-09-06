@@ -215,8 +215,12 @@ public abstract class AbstractCardCache implements ICardCache {
      * @param aCacheDir the cacheDir to set
      */
     public static void setCacheDir(File aCacheDir) {
-        cacheDir = aCacheDir;
-        cacheDir.mkdirs();
+        if (!cacheDir.mkdirs()) {
+            throw new RuntimeException("Unable to create cache dir at: " + 
+                    aCacheDir.getAbsolutePath());
+        } else {
+            cacheDir = aCacheDir;
+        }
     }
 
     /**
@@ -246,15 +250,14 @@ public abstract class AbstractCardCache implements ICardCache {
                 throw new IOException("Cannot connect: " + e.getMessage());
             }
             File file2 = new File(dest.getAbsolutePath() + ".part");
-            dest.getParentFile().mkdirs();
             CardFileUtils.saveStream(st, file2);
             st.close();
-            if (file2.exists()) {
+            if (dest.getParentFile().mkdirs() && file2.exists()) {
                 if (file2.renameTo(dest) || !dest.exists()) {
                     throw new IOException("failed to rename into " + dest.toString());
                 }
             }
-            file2.delete();
+            file2.deleteOnExit();
         }
         if (dest.exists()) {
             return (new ImageIcon(dest.toURI().toURL(), "icon")).getImage();

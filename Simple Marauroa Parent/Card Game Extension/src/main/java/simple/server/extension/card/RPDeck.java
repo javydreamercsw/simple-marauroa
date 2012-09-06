@@ -314,7 +314,7 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     public void ditchFromHand() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        ditch(HAND, true);
     }
 
     @Override

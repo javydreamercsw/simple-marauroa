@@ -22,7 +22,7 @@ public class RPEntity extends Entity {
      * The title attribute name.
      */
     protected static final String ATTR_TITLE = "title";
-    protected static Statistics stats;
+    protected static final Statistics stats = Statistics.getStatistics();
     private int level;
     /**
      * the logger instance.
@@ -32,7 +32,6 @@ public class RPEntity extends Entity {
     @Override
     public void generateRPClass() {
         try {
-            stats = Statistics.getStatistics();
             if (!RPClass.hasRPClass("rpentity")) {
                 RPClass entity = new RPClass("rpentity");
                 entity.isA("entity");
