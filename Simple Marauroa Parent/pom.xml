@@ -37,7 +37,7 @@
     </licenses>
     <scm>
         <url>https://bitbucket.org/javydreamercsw/output-handler/src</url>
-        <connection>scm:hg:https://javydreamercsw@bitbucket.org/javydreamercsw/simple-marauroa-java</connection>
+        <connection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-java/src</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/javydreamercsw/simple-marauroa-java</developerConnection>
         <tag>HEAD</tag>
     </scm>
