@@ -4,12 +4,12 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.06-SNAPSHOT</version>
+        <version>0.02.05</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>Marauroa-Simple-Client</artifactId>
-    <version>0.02.06-SNAPSHOT</version>
+    <version>0.02.05</version>
     <packaging>jar</packaging>
 
     <name>Marauroa-Simple-Client</name>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>0.02.06-SNAPSHOT</version>
+            <version>0.02.05</version>
         </dependency>
     </dependencies>
     
