@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>Simple-Marauroa</artifactId>
-    <version>0.02.06-SNAPSHOT</version>
+    <version>0.02.05</version>
     <packaging>pom</packaging>
     
     <parent>
