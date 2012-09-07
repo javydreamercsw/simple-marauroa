@@ -1,6 +1,7 @@
 package com.reflexit.magiccards.core.model.storage;
 
 import com.reflexit.magiccards.core.model.*;
+import com.reflexit.magiccards.core.model.Editions.Edition;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -203,33 +204,32 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
     }
 
     protected Collection<ICard> removeSetDuplicates(Collection<ICard> filteredList) {
-        //Not needed, duplicates handled at database level
-//        LinkedHashMap<String, ICard> unique = new LinkedHashMap<String, ICard>();
-//        for (Iterator<ICard> iterator = filteredList.iterator(); iterator.hasNext();) {
-//            ICard elem = iterator.next();
-//            if (elem instanceof ICard) {
-//                ICard card = (ICard) elem;
-//                ICard old = unique.get(card.getName());
-//            if (old == null) {
-//                unique.put(card.getName(), card);
-//            } else {
-//                Edition oldE = Editions.getInstance().getEditionByName(old.getSetName());
-//                Edition newE = Editions.getInstance().getEditionByName(card.getSetName());
-//                if (oldE != null && newE != null && oldE.getReleaseDate() != null && newE.getReleaseDate() != null) {
-//                    if (oldE.getReleaseDate().before(newE.getReleaseDate())) {
-//                        unique.put(card.getName(), card);
-//                    }
-//                    continue;
-//                }
-//                if (old.getCardId() < card.getCardId()) {
-//                    unique.put(card.getName(), card);
-//                }
-//            }
-//        }
-//        }
-//        if (unique.size() > 0) {
-//            return unique.values();
-//        }
+        LinkedHashMap<String, ICard> unique = new LinkedHashMap<String, ICard>();
+        for (Iterator<ICard> iterator = filteredList.iterator(); iterator.hasNext();) {
+            ICard elem = iterator.next();
+            if (elem instanceof ICard) {
+                ICard card = (ICard) elem;
+                ICard old = unique.get(card.getName());
+                if (old == null) {
+                    unique.put(card.getName(), card);
+                } else {
+                    Edition oldE = Editions.getInstance().getEditionByName(old.getSetName());
+                    Edition newE = Editions.getInstance().getEditionByName(card.getSetName());
+                    if (oldE != null && newE != null && oldE.getReleaseDate() != null && newE.getReleaseDate() != null) {
+                        if (oldE.getReleaseDate().before(newE.getReleaseDate())) {
+                            unique.put(card.getName(), card);
+                        }
+                        continue;
+                    }
+                    if (old.getCardId() < card.getCardId()) {
+                        unique.put(card.getName(), card);
+                    }
+                }
+            }
+        }
+        if (unique.size() > 0) {
+            return unique.values();
+        }
         return filteredList;
     }
 

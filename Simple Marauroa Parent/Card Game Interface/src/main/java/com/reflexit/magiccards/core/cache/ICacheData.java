@@ -9,27 +9,29 @@ import com.reflexit.magiccards.core.model.ICard;
 public interface ICacheData {
 
     /**
-     * Add a card to the queue
+     * Add a card to the queue.
      *
      * @param card card to add
      */
     void add(ICard card);
 
     /**
-     * Get next card to cache. Can return null (if nothing to cache)
+     * Get next card to cache. Can return null (if nothing to cache).
      *
-     * @return
+     * @return Next card to cache
      */
     ICard next();
-    
+
     /**
-     * Amount of cards pending caching
+     * Amount of cards pending caching.
+     *
      * @return Amount of cards pending caching
      */
     int toCacheAmount();
-    
+
     /**
-     * Amount of cards cached
+     * Amount of cards cached.
+     *
      * @return Amount of cards cached
      */
     int cachedAmount();

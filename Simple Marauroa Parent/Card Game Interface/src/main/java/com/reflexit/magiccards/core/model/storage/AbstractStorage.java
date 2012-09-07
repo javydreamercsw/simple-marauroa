@@ -63,7 +63,8 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
             doSave();
             setNeedToSave(false);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(AbstractStorage.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AbstractStorage.class.getName())
+                    .log(Level.SEVERE, null, ex);
         }
     }
 

@@ -12,7 +12,7 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean isAutoCommit();
 
     /**
-     * Set auto commit
+     * Set auto commit.
      *
      * @param value auto commit value
      */
@@ -53,7 +53,7 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean isLoaded();
 
     /**
-     * Get comment for this storage
+     * Get comment for this storage.
      *
      * @return
      */
@@ -67,7 +67,7 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean isVirtual();
 
     /**
-     * Add card
+     * Add card.
      *
      * @param card card to add
      * @return true if successful
@@ -75,7 +75,7 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean add(T card);
 
     /**
-     * Add list of cards
+     * Add list of cards.
      *
      * @param list list of cards
      * @return true if successful
@@ -83,7 +83,7 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean addAll(Collection<? extends T> list);
 
     /**
-     * Remove list of cards
+     * Remove list of cards.
      *
      * @param list list of cards
      * @return true if successful
@@ -91,14 +91,14 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean removeAll(Collection<? extends T> list);
 
     /**
-     * Remove all cards
+     * Remove all cards.
      *
      * @return true if successful
      */
     public boolean removeAll();
 
     /**
-     * Check if card is contained
+     * Check if card is contained.
      *
      * @param card card to check
      * @return true if successful
@@ -106,7 +106,7 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean contains(T card);
 
     /**
-     * Remove card
+     * Remove card.
      *
      * @param card card to remove
      * @return true if successful
@@ -114,14 +114,14 @@ public interface IStorage<T> extends Iterable<T> {
     public boolean remove(T card);
 
     /**
-     * Size
+     * Size.
      *
      * @return size
      */
     public int size();
 
     /**
-     * Get storage name
+     * Get storage name.
      *
      * @return name
      */

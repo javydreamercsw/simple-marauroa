@@ -11,8 +11,8 @@ package com.reflexit.magiccards.core.model.events;
 public abstract class EventManager {
 
     /**
-     * An empty array that can be returned from a call to {@link #getListeners()}
-     * when {@link #listenerList} is
+     * An empty array that can be returned from a call to
+     * {@link #getListeners()} when {@link #listenerList} is
      * <code>null</code>.
      */
     private static final Object[] EMPTY_ARRAY = new Object[0];
@@ -27,8 +27,7 @@ public abstract class EventManager {
      * Adds a listener to this manager that will be notified when this manager's
      * state changes.
      *
-     * @param listener The listener to be added; must not be
-     * <code>null</code>.
+     * @param listener The listener to be added; must not be <code>null</code>.
      */
     protected synchronized final void addListenerObject(final Object listener) {
         if (listenerList == null) {
@@ -63,8 +62,7 @@ public abstract class EventManager {
     /**
      * Whether one or more listeners are attached to the manager.
      *
-     * @return
-     * <code>true</code> if listeners are attached to the manager;
+     * @return <code>true</code> if listeners are attached to the manager;
      * <code>false</code> otherwise.
      */
     protected final boolean isListenerAttached() {

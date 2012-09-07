@@ -22,7 +22,8 @@ import java.util.*;
  */
 public class MemoryCardStorage<T> extends AbstractStorage<T> {
 
-    protected final List<T> list = Collections.synchronizedList(new ArrayList<T>());
+    protected final List<T> list = 
+            Collections.synchronizedList(new ArrayList<T>());
 
     @Override
     public Iterator<T> iterator() {
@@ -47,6 +48,12 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
         return this.getList().add(card);
     }
 
+    /**
+     * Update card.
+     *
+     * @param card card to update
+     * @return true if updated.
+     */
     protected boolean doUpdate(T card) {
         return true;
     }
@@ -58,6 +65,11 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
         return this.list;
     }
 
+    /**
+     * Set list.
+     *
+     * @param list list to set
+     */
     protected void doSetList(List<T> list) {
         list.clear();
         list.addAll(Collections.synchronizedList(list));

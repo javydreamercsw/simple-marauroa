@@ -23,25 +23,61 @@ import org.openide.util.Lookup;
  */
 public abstract class AbstractCardCache implements ICardCache {
 
+    /**
+     * Is caching in progress
+     */
     private static boolean caching;
+    /**
+     * Is loading in progress
+     */
     private static boolean loading;
+    /**
+     * Cache directory
+     */
     private static File cacheDir;
+    /**
+     * Cache name
+     */
     private String name;
-    private static final Logger LOG = Logger.getLogger(AbstractCardCache.class.getName());
+    /**
+     * Logger
+     */
+    private static final Logger LOG =
+            Logger.getLogger(AbstractCardCache.class.getName());
 
-    public static void setCahchingEnabled(boolean enabled) {
+    /**
+     * Enable/disable cache
+     *
+     * @param enabled
+     */
+    public static void setCahchingEnabled(final boolean enabled) {
         caching = enabled;
     }
 
-    public static void setLoadingEnabled(boolean enabled) {
+    /**
+     * Enable/disable loading
+     *
+     * @param enabled
+     */
+    public static void setLoadingEnabled(final boolean enabled) {
         loading = enabled;
     }
 
+    /**
+     * Is loading enabled?
+     *
+     * @return
+     */
     public static boolean isLoadingEnabled() {
         return loading;
     }
 
-    public static void setCachingEnabled(boolean enabled) {
+    /**
+     * Set caching enabled
+     *
+     * @param enabled
+     */
+    public static void setCachingEnabled(final boolean enabled) {
         caching = enabled;
     }
 
@@ -52,15 +88,22 @@ public abstract class AbstractCardCache implements ICardCache {
         return caching;
     }
 
-    public AbstractCardCache(String name) {
+    /**
+     * Constructor
+     *
+     * @param name Cache name
+     */
+    public AbstractCardCache(final String name) {
         this.name = name;
         setLoadingEnabled(true);
         setCachingEnabled(true);
     }
 
     @Override
-    public URL createSetImageURL(ICard card, String editionAbbr, boolean upload) throws IOException {
-        String rarity = Lookup.getDefault().lookup(IDataBaseCardStorage.class).getCardAttribute(card, "rarity");
+    public URL createSetImageURL(final ICard card, final String editionAbbr,
+            final boolean upload) throws IOException {
+        String rarity = Lookup.getDefault().lookup(IDataBaseCardStorage.class)
+                .getCardAttribute(card, "rarity");
         if (editionAbbr == null) {
             return null;
         }
@@ -88,7 +131,8 @@ public abstract class AbstractCardCache implements ICardCache {
     }
 
     @Override
-    public String createLocalImageFilePath(ICard card, ICardSet set) throws CannotDetermineSetAbbriviation {
+    public String createLocalImageFilePath(final ICard card, final ICardSet set)
+            throws CannotDetermineSetAbbriviation {
         String editionName = set.getName();
         Editions editions = Editions.getInstance();
         Edition cset = editions.getEditionByName(editionName);
@@ -96,14 +140,18 @@ public abstract class AbstractCardCache implements ICardCache {
             throw new CannotDetermineSetAbbriviation(editionName);
         }
         String editionAbbr = cset.getBaseFileName();
-        String id = Lookup.getDefault().lookup(IDataBaseCardStorage.class).getCardAttribute(card, "CardId");
+        String id = Lookup.getDefault().lookup(IDataBaseCardStorage.class)
+                .getCardAttribute(card, "CardId");
         if (id != null) {
             Integer cardId = Integer.valueOf(id);
             File loc = getCacheLocationFile();
             String locale = "EN";
-            String part = set.getGameName() + System.getProperty("file.separator") + "Cards"
-                    + System.getProperty("file.separator") + editionAbbr + System.getProperty("file.separator")
-                    + locale + System.getProperty("file.separator") + "Card" + cardId + ".jpg";
+            String part = set.getGameName()
+                    + System.getProperty("file.separator") + "Cards"
+                    + System.getProperty("file.separator") + editionAbbr
+                    + System.getProperty("file.separator")
+                    + locale + System.getProperty("file.separator") + "Card"
+                    + cardId + ".jpg";
             String file = new File(loc, part).getPath();
             return file;
         } else {
@@ -111,14 +159,32 @@ public abstract class AbstractCardCache implements ICardCache {
         }
     }
 
-    public String createLocalSetImageFilePath(String editionAbbr, String rarity) throws MalformedURLException {
+    /**
+     * Create image path
+     *
+     * @param editionAbbr Edition abbreviation
+     * @param rarity Rarity
+     * @return Path
+     * @throws MalformedURLException
+     */
+    public String createLocalSetImageFilePath(final String editionAbbr,
+            final String rarity) throws MalformedURLException {
         File loc = getCacheLocationFile();
         String part = "Sets/" + editionAbbr + "-" + rarity + ".jpg";
         String file = new File(loc, part).getPath();
         return file;
     }
 
-    public boolean cardImageExists(ICard card, ICardSet set) throws CannotDetermineSetAbbriviation {
+    /**
+     * Check if image already exists
+     *
+     * @param card Card to check image for
+     * @param set Set the card is from
+     * @return true if exists
+     * @throws CannotDetermineSetAbbriviation
+     */
+    public boolean cardImageExists(final ICard card, final ICardSet set)
+            throws CannotDetermineSetAbbriviation {
         return new File(createLocalImageFilePath(card, set)).exists();
     }
 
@@ -135,14 +201,17 @@ public abstract class AbstractCardCache implements ICardCache {
      * @throws CannotDetermineSetAbbriviation
      */
     @Override
-    public File getCardImage(ICard card, ICardSet set, URL url, boolean remote, boolean forceRemote) throws IOException, CannotDetermineSetAbbriviation {
+    public File getCardImage(final ICard card, final ICardSet set,
+            final URL url, final boolean remote, final boolean forceRemote)
+            throws IOException, CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
         File file = new File(path);
         if (forceRemote == false && file.exists()) {
             return file;
         }
         if (!remote) {
-            throw new CachedImageNotFoundException("Cannot find cached image for " + card.getName());
+            throw new CachedImageNotFoundException(
+                    "Cannot find cached image for " + card.getName());
         }
         InputStream st = null;
         try {
@@ -155,7 +224,8 @@ public abstract class AbstractCardCache implements ICardCache {
         st.close();
         if (file2.exists()) {
             if (!file2.renameTo(file) || !file.exists()) {
-                throw new IOException("failed to rename into " + file.toString());
+                throw new IOException("failed to rename into "
+                        + file.toString());
             }
             return file;
         }
@@ -176,14 +246,17 @@ public abstract class AbstractCardCache implements ICardCache {
      * @throws CannotDetermineSetAbbriviation
      */
     @Override
-    public boolean loadCardImageOffline(ICard card, ICardSet set, boolean forceUpdate) throws IOException, CannotDetermineSetAbbriviation {
+    public boolean loadCardImageOffline(final ICard card, final ICardSet set,
+            final boolean forceUpdate) throws IOException,
+            CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
         File file = new File(path);
         if (file.exists() && forceUpdate == false) {
             return true;
         }
         if (!isLoadingEnabled()) {
-            throw new CachedImageNotFoundException("Cannot find cached image for " + card.getName());
+            throw new CachedImageNotFoundException(
+                    "Cannot find cached image for " + card.getName());
         }
         Lookup.getDefault().lookup(ICacheData.class).add(card);
         return false;
@@ -197,7 +270,8 @@ public abstract class AbstractCardCache implements ICardCache {
      * @return true or false
      * @throws CannotDetermineSetAbbriviation
      */
-    public boolean isImageCached(ICard card, ICardSet set) throws CannotDetermineSetAbbriviation {
+    public boolean isImageCached(final ICard card, final ICardSet set)
+            throws CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
         File file = new File(path);
         if (file.exists()) {
@@ -212,18 +286,22 @@ public abstract class AbstractCardCache implements ICardCache {
     }
 
     /**
+     * Set the cache's directory
+     *
      * @param aCacheDir the cacheDir to set
      */
-    public static void setCacheDir(File aCacheDir) {
+    public static void setCacheDir(final File aCacheDir) {
         if (!cacheDir.mkdirs()) {
-            throw new RuntimeException("Unable to create cache dir at: " + 
-                    aCacheDir.getAbsolutePath());
+            throw new RuntimeException("Unable to create cache dir at: "
+                    + aCacheDir.getAbsolutePath());
         } else {
             cacheDir = aCacheDir;
         }
     }
 
     /**
+     * Get game name
+     *
      * @return the name
      */
     @Override
@@ -240,7 +318,8 @@ public abstract class AbstractCardCache implements ICardCache {
      * @return Downloaded image
      * @throws IOException
      */
-    protected Image downloadImageFromURL(URL url, File dest, boolean overwrite) throws IOException {
+    protected Image downloadImageFromURL(final URL url, final File dest,
+            final boolean overwrite) throws IOException {
         InputStream st = null;
         if (!dest.exists() || overwrite) {
             LOG.log(Level.FINE, "Downloading file from: {0}", url);
@@ -254,7 +333,8 @@ public abstract class AbstractCardCache implements ICardCache {
             st.close();
             if (dest.getParentFile().mkdirs() && file2.exists()) {
                 if (file2.renameTo(dest) || !dest.exists()) {
-                    throw new IOException("failed to rename into " + dest.toString());
+                    throw new IOException("failed to rename into "
+                            + dest.toString());
                 }
             }
             file2.deleteOnExit();
@@ -266,19 +346,25 @@ public abstract class AbstractCardCache implements ICardCache {
     }
 
     @Override
-    public String getSetIconPath(ICardSet set) {
+    public String getSetIconPath(final ICardSet set) {
         File loc = getCacheLocationFile();
-        Edition edition = Editions.getInstance().getEditionByName(set.getName());
-        String part = set.getGameName() + System.getProperty("file.separator") + "Sets"
-                + System.getProperty("file.separator") + edition.getMainAbbreviation() + System.getProperty("file.separator")
-                + System.getProperty("file.separator") + edition.getMainAbbreviation() + ".jpg";
+        Edition edition = Editions.getInstance()
+                .getEditionByName(set.getName());
+        String part = set.getGameName()
+                + System.getProperty("file.separator") + "Sets"
+                + System.getProperty("file.separator")
+                + edition.getMainAbbreviation()
+                + System.getProperty("file.separator")
+                + System.getProperty("file.separator")
+                + edition.getMainAbbreviation() + ".jpg";
         return new File(loc, part).getPath();
     }
 
     @Override
     public String getGameIconPath() {
         File loc = getCacheLocationFile();
-        String part = getGame().getName() + System.getProperty("file.separator")
+        String part = getGame().getName()
+                + System.getProperty("file.separator")
                 + "game.jpg";
         return new File(loc, part).getPath();
     }

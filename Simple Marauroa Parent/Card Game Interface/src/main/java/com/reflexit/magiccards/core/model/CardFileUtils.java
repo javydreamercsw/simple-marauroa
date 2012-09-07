@@ -7,7 +7,15 @@ public class CardFileUtils {
 
     public static final String UTF8 = "UTF-8";
 
-    public static void copyFile(File in, File out) throws IOException {
+    /**
+     * Copy file
+     *
+     * @param in source
+     * @param out destination
+     * @throws IOException if any IO operation fails
+     */
+    public static void copyFile(final File in, final File out) 
+            throws IOException {
         FileChannel inChannel = new FileInputStream(in).getChannel();
         FileChannel outChannel = new FileOutputStream(out).getChannel();
         try {
@@ -25,11 +33,14 @@ public class CardFileUtils {
     }
 
     /**
-     * @param in
-     * @param out
-     * @throws IOException
+     * Save stream on file.
+     *
+     * @param in source
+     * @param out destination
+     * @throws IOException if any IO operation fails
      */
-    public static void saveStream(InputStream in, File out) throws IOException {
+    public static void saveStream(final InputStream in, final File out) 
+            throws IOException {
         if (out.getAbsoluteFile().getParentFile().mkdirs()) {
             FileOutputStream fos = new FileOutputStream(out);
             try {
@@ -46,7 +57,14 @@ public class CardFileUtils {
         }
     }
 
-    public static String readFileAsString(BufferedReader reader) throws IOException {
+    /**
+     *
+     * @param reader
+     * @return
+     * @throws IOException
+     */
+    public static String readFileAsString(final BufferedReader reader) 
+            throws IOException {
         StringBuilder fileData = new StringBuilder(4096);
         char[] buf = new char[1024 * 4];
         int numRead;
