@@ -91,11 +91,9 @@
                             <artifactId>findbugs-maven-plugin</artifactId>
                             <version>2.5.2</version>
                             <configuration>
-                                <excludes>
-                                    <exclude>**/reflexit/magiccards/core/*.java</exclude>
-                                </excludes>
                                 <excludeRoots>
                                     <excludeRoot>target/generated-sources</excludeRoot>
+                                    <excludeRoot>src/main/java/com/reflexit/magiccards/core/storage/database</excludeRoot>
                                     <excludeRoot>target/generated-test-sources</excludeRoot>
                                 </excludeRoots>
                             </configuration>
