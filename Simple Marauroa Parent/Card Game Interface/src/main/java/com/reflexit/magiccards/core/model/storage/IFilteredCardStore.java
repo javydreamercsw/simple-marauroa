@@ -6,28 +6,44 @@ import com.reflexit.magiccards.core.model.ICardFilter;
 
 public interface IFilteredCardStore<T> extends Iterable<T>, ICardCountable {
 
+    /**
+     * Update based on filter.
+     *
+     * @param filter filter
+     * @throws Exception
+     */
     public void update(ICardFilter filter) throws Exception;
 
+    /**
+     * Get filter.
+     *
+     * @return Filter
+     */
     public ICardFilter getFilter();
 
+    /**
+     * Get card store.
+     *
+     * @return
+     */
     public ICardStore getCardStore();
 
     /**
-     * Size of filtered list
+     * Size of filtered list.
      *
      * @return
      */
     public int getSize();
 
     /**
-     * Elements in filtered list
+     * Elements in filtered list.
      *
      * @return
      */
     public Object[] getElements();
 
     /**
-     * Returns given element in filtered list
+     * Returns given element in filtered list.
      *
      * @param index
      * @return
@@ -35,15 +51,16 @@ public interface IFilteredCardStore<T> extends Iterable<T>, ICardCountable {
     public Object getElement(int index);
 
     /**
-     * return top level cards group if grouping is enabled or null if not
-     * enabled
+     * Return top level cards group if grouping is enabled or null if not
+     * enabled.
      *
      * @return CardGroup[]
      */
     public CardGroup[] getCardGroups();
 
     /**
-     * Get CardGroup
+     * Get CardGroup.
+     *
      * @param index Index of CardGroup
      * @return CardGroup
      */
@@ -51,6 +68,7 @@ public interface IFilteredCardStore<T> extends Iterable<T>, ICardCountable {
 
     /**
      * Contains card?
+     *
      * @param card Card to check
      * @return True if contained
      */

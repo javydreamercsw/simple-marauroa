@@ -22,7 +22,8 @@ import java.util.Iterator;
  * @author Alena
  *
  */
-public class MemoryCardStore<T> extends AbstractCardStoreWithStorage<T> implements ICardCountable, IStorage<T> {
+public class MemoryCardStore<T> extends AbstractCardStoreWithStorage<T>
+        implements ICardCountable, IStorage<T> {
 
     /**
      * creates empty card store

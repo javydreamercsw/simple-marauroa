@@ -15,51 +15,52 @@ import java.util.Map;
 public interface IDataBaseCardStorage<T> extends IStorage<T> {
 
     /**
-     * Execute a native query (no results)
+     * Execute a native query (no results).
      *
      * @param query
      * @throws DBException
      */
-    public void nativeQuery(String query) throws DBException;
+    void nativeQuery(String query) throws DBException;
 
     /**
-     * Execute a native query (with results)
+     * Execute a native query (with results).
      *
      * @param query
      * @return results
      * @throws DBException
      */
-    public List<Object> namedQuery(String query) throws DBException;
+    List<Object> namedQuery(String query) throws DBException;
 
     /**
-     * Execute a native query (with results)
+     * Execute a native query (with results).
      *
      * @param query
      * @param parameters
      * @return results
      * @throws DBException
      */
-    public List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws DBException;
+    List<Object> namedQuery(String query, HashMap<String, 
+            Object> parameters) throws DBException;
 
     /**
-     * Close the database
+     * Close the database.
      */
-    public void close();
+    void close();
 
     /**
-     * Set specific Persistence Unit
+     * Set specific Persistence Unit.
      *
      * @param pu new persistence unit
      */
-    public void setPU(String pu);
+    void setPU(String pu);
 
     /**
-     * Create attributes in the database
+     * Create attributes in the database.
      *
      * @param type attribute type
      * @throws DBException
      */
-    public void createAttributes(String type) throws DBException;
+    void createAttributes(String type) throws DBException;
 
     /**
      * Create a card type in the database.
@@ -68,10 +69,10 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Created card type
      * @throws DBException
      */
-    public ICardType createCardType(String type) throws DBException;
+    ICardType createCardType(String type) throws DBException;
 
     /**
-     * Create a card
+     * Create a card.
      *
      * @param type CardType
      * @param name Card name
@@ -79,10 +80,11 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Created card
      * @throws DBException
      */
-    public ICard createCard(ICardType type, String name, byte[] text) throws DBException;
+    ICard createCard(ICardType type, String name, byte[] text) 
+            throws DBException;
 
     /**
-     * Add attribute to card
+     * Add attribute to card.
      *
      * @param card Card to add attribute to
      * @param attr Attribute to add
@@ -90,10 +92,11 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return CardHasCardAttribute
      * @throws DBException
      */
-    public ICardHasCardAttribute addAttributeToCard(ICard card, String attr, String value) throws DBException;
+    ICardHasCardAttribute addAttributeToCard(ICard card, String attr, 
+            String value) throws DBException;
 
     /**
-     * Create a card set
+     * Create a card set.
      *
      * @param game Game the set is from
      * @param name Name of the set
@@ -102,165 +105,172 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Created CardSet
      * @throws DBException
      */
-    public ICardSet createCardSet(IGame game, String name, String abbreviation, Date released) throws DBException;
+    ICardSet createCardSet(IGame game, String name, String abbreviation, 
+            Date released) throws DBException;
 
     /**
-     * Add cards to set
+     * Add cards to set.
      *
      * @param cards Cards to add
      * @param cs CardSet to be added to
      * @throws DBException
      */
-    public void addCardsToSet(List<ICard> cards, ICardSet cs) throws DBException;
+    void addCardsToSet(List<ICard> cards, ICardSet cs) throws DBException;
 
     /**
-     * Add card to set
+     * Add card to set.
      *
      * @param card Card to add
      * @param set CardSet to be added to
      * @throws DBException
      */
-    public void addCardToSet(ICard card, ICardSet set) throws DBException;
+    void addCardToSet(ICard card, ICardSet set) throws DBException;
 
     /**
-     * Print the cards in a set
+     * Print the cards in a set.
      *
      * @param cs CardSet
      * @return String listing the pages in a set
      */
-    public String printCardsInSet(ICardSet cs);
+    String printCardsInSet(ICardSet cs);
 
     /**
-     * Create a card collection type (deck, owned pages, etc)
+     * Create a card collection type (deck, owned pages, etc).
      *
      * @param name collection's name
      * @return the created collection type
      * @throws DBException
      */
-    public ICardCollectionType createCardCollectionType(String name) throws DBException;
+    ICardCollectionType createCardCollectionType(String name) 
+            throws DBException;
 
     /**
-     * Create a card collection
+     * Create a card collection.
      *
      * @param type Collection type
      * @param name Collection name
      * @return Created Card Collection
      * @throws DBException
      */
-    public ICardCollection createCardCollection(ICardCollectionType type, String name) throws DBException;
+    ICardCollection createCardCollection(ICardCollectionType type, 
+            String name) throws DBException;
 
     /**
-     * Add cards to a collection
+     * Add cards to a collection.
      *
      * @param cards Cards to add
      * @param collection Collection to add the pages to
      * @return Updated CardCollection
      * @throws DBException
      */
-    public ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards, ICardCollection collection) throws DBException;
+    ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards, 
+            ICardCollection collection) throws DBException;
 
     /**
-     * Remove cards from collection
+     * Remove cards from collection.
      *
      * @param cards Cards to remove
      * @param collection Collection to remove the pages from
      * @return Updated CardCollection
      * @throws DBException
      */
-    public ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards, ICardCollection collection) throws DBException;
+    ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards, 
+            ICardCollection collection) throws DBException;
 
     /**
-     * Print Card Collection contents
+     * Print Card Collection contents.
      *
      * @param cc Card Collection to print
      * @return String listing the pages in a collection
      */
-    public String printCardsCollection(ICardCollection cc);
+    String printCardsCollection(ICardCollection cc);
 
     /**
-     * Check if attribute exists in data base
+     * Check if attribute exists in data base.
      *
      * @param attr
      * @return true if exists
      */
-    public boolean attributeExists(String attr);
+    boolean attributeExists(String attr);
 
     /**
-     * Execute a created query
+     * Execute a created query.
      *
      * @param query
      * @return Results
      * @throws DBException
      */
-    public List<Object> createdQuery(String query) throws DBException;
+    List<Object> createdQuery(String query) throws DBException;
 
     /**
-     * Execute a created query
+     * Execute a created query.
      *
      * @param query
      * @param parameters
      * @return results
      * @throws DBException
      */
-    public List<Object> createdQuery(String query, HashMap<String, Object> parameters) throws DBException;
+    List<Object> createdQuery(String query, HashMap<String, Object> parameters) 
+            throws DBException;
 
     /**
-     * Get CardAttribute from database
+     * Get CardAttribute from database.
      *
      * @param attr attribute name
      * @return CardAttribute
      * @throws DBException
      */
-    public ICardAttribute getCardAttribute(String attr) throws DBException;
+    ICardAttribute getCardAttribute(String attr) throws DBException;
 
     /**
-     * Add a set of attributes to a card (Map<Attribute Type, Attribute name>)
+     * Add a set of attributes to a card (Map<Attribute Type, Attribute name>).
      *
      * @param card Card to add attributes to
      * @param attributes Set of attributes
      * @throws DBException
      */
-    public void addAttributesToCard(ICard card, Map<String, String> attributes) throws DBException;
+    void addAttributesToCard(ICard card, Map<String, String> attributes) 
+            throws DBException;
 
     /**
-     * Create a an attribute if needed
+     * Create a an attribute if needed.
      *
      * @param attr attribute name
      * @throws DBException
      */
-    public void createAttributeIfNeeded(String attr) throws DBException;
+    void createAttributeIfNeeded(String attr) throws DBException;
 
     /**
-     * Get a map of attributes for a card
+     * Get a map of attributes for a card.
      *
      * @param name card's name
      * @return map of attributes for a card
      * @throws DBException
      */
-    public Map<String, String> getAttributesForCard(String name) throws DBException;
+    Map<String, String> getAttributesForCard(String name) throws DBException;
 
     /**
-     * Get a map of attributes for a card
+     * Get a map of attributes for a card.
      *
      * @param card Card
      * @return map of attributes for a card
      */
-    public Map<String, String> getAttributesForCard(ICard card);
+    Map<String, String> getAttributesForCard(ICard card);
 
     /**
      * Set data base connection properties.
      *
      * @param dataBaseProperties the DataBase Properties to set
      */
-    public void setDataBaseProperties(Map<String, String> dataBaseProperties);
+    void setDataBaseProperties(Map<String, String> dataBaseProperties);
 
     /**
-     * Check if card type exists
+     * Check if card type exists.
      *
      * @param name type name
      * @return true if it exists, false otherwise
      */
-    public boolean cardTypeExists(String name);
+    boolean cardTypeExists(String name);
 
     /**
      * Get the card's attribute value.
@@ -269,106 +279,106 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param name Attribute name
      * @return Value or null if not found
      */
-    public String getCardAttribute(ICard card, String name);
+    String getCardAttribute(ICard card, String name);
 
     /**
-     * Create a game in the database
+     * Create a game in the database.
      *
      * @param name game name
      * @return created game
      * @throws DBException
      */
-    public IGame createGame(String name) throws DBException;
+    IGame createGame(String name) throws DBException;
 
     /**
-     * Initialize the database
+     * Initialize the database.
      *
      * @throws DBException
      */
-    public void initialize() throws DBException;
+    void initialize() throws DBException;
 
     /**
-     * Check if set exists
+     * Check if set exists.
      *
      * @param name set name
      * @return true if exists
      */
-    public boolean cardSetExists(String name);
+    boolean cardSetExists(String name);
 
     /**
-     * Check if card exists
+     * Check if card exists.
      *
      * @param name card name
      * @return true if exists
      */
-    public boolean cardExists(String name);
+    boolean cardExists(String name);
 
     /**
-     * Check if game exists
+     * Check if game exists.
      *
      * @param name game name
      * @return true if exists
      */
-    public boolean gameExists(String name);
+    boolean gameExists(String name);
 
     /**
-     * Get the cards for the current game
+     * Get the cards for the current game.
      *
      * @param set
      * @return List of cards
      */
-    public List<ICard> getCardsForSet(ICardSet set);
+    List<ICard> getCardsForSet(ICardSet set);
 
     /**
-     * Get all games
+     * Get all games.
      *
      * @return List of games
      */
-    public List<IGame> getGames();
+    List<IGame> getGames();
 
     /**
-     * Get sets for game
+     * Get sets for game.
      *
      * @param game game to get sets for
      * @return list of sets
      */
-    public List<ICardSet> getSetsForGame(IGame game);
+    List<ICardSet> getSetsForGame(IGame game);
 
     /**
-     * Get cards for game
+     * Get cards for game.
      *
      * @param game game to get cards for
      * @return list of cards
      */
-    public List<ICard> getCardsForGame(IGame game);
+    List<ICard> getCardsForGame(IGame game);
 
     /**
-     * Check if card is already in set
+     * Check if card is already in set.
      *
      * @param set Set to check on
      * @param card Card to check
      * @return true if already part of set.
      */
-    public boolean setHasCard(ICardSet set, ICard card);
+    boolean setHasCard(ICardSet set, ICard card);
 
     /**
-     * Add a DataBaseStateListener
+     * Add a DataBaseStateListener.
      *
      * @param listener DataBaseStateListener
      */
-    public void addDataBaseStateListener(DataBaseStateListener listener);
+    void addDataBaseStateListener(DataBaseStateListener listener);
 
     /**
-     * Remove a DataBaseStateListener
+     * Remove a DataBaseStateListener.
      *
      * @param listener DataBaseStateListener
      */
-    public void removeDataBaseStateListener(DataBaseStateListener listener);
+    void removeDataBaseStateListener(DataBaseStateListener listener);
 
     /**
-     * Get the required information to connect to the database
+     * Get the required information to connect to the database.
      *
      * @return required information to connect to the database
      */
-    public Map<String, String> getConnectionSettings();
+    Map<String, String> getConnectionSettings();
 }

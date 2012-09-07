@@ -10,7 +10,8 @@ public class DBException extends SQLException {
 
     /**
      * New Database Exception
-     * @param s
+     *
+     * @param s exception description
      */
     public DBException(String s) {
         super(s);

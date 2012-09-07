@@ -1,8 +1,8 @@
 package com.reflexit.magiccards.core.cache;
 
+import org.junit.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.*;
 
 /**
  *
@@ -11,22 +11,6 @@ import org.junit.*;
 public class AbstractCardCacheTest {
     
     public AbstractCardCacheTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
     }
 
     /**

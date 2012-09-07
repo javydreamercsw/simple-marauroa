@@ -13,11 +13,17 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = ICacheData.class)
 public class CacheData implements ICacheData {
 
+    /**
+     * List of cached cards
+     */
     private List<ICard> cachedCards = new ArrayList<ICard>();
+    /**
+     * Cards pending caching
+     */
     private List<ICard> cardsToCache = new ArrayList<ICard>();
 
     @Override
-    public void add(ICard card) {
+    public final void add(final ICard card) {
         synchronized (this) {
             if (!cachedCards.contains(card)) {
                 cardsToCache.add(card);
@@ -31,11 +37,11 @@ public class CacheData implements ICacheData {
      * @return
      */
     @Override
-    public ICard next() {
-        if (cardsToCache.isEmpty()) {
-            return null;
-        }
+    public final ICard next() {
         synchronized (this) {
+            if (cardsToCache.isEmpty()) {
+                return null;
+            }
             // Need to check again if size has changed
             if (cardsToCache.size() > 0) {
                 ICard card = cardsToCache.get(0);
@@ -48,14 +54,14 @@ public class CacheData implements ICacheData {
     }
 
     @Override
-    public int toCacheAmount() {
+    public final int toCacheAmount() {
         synchronized (this) {
             return cardsToCache.size();
         }
     }
 
     @Override
-    public int cachedAmount() {
+    public final int cachedAmount() {
         synchronized (this) {
             return cachedCards.size();
         }

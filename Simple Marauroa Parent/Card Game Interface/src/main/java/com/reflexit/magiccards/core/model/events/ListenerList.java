@@ -49,8 +49,9 @@ public class ListenerList {
      */
     private final boolean identity;
     /**
-     * The list of listeners. Initialy empty but initialized to an array of
-     * size capacity the first time a listener is added. Maintains invariant:
+     * The list of listeners. 
+     * Initially empty but initialized to an array of size
+     * capacity the first time a listener is added. Maintains invariant:
      * listeners != null
      */
     private volatile Object[] listeners = EmptyArray;
@@ -121,8 +122,7 @@ public class ListenerList {
     /**
      * Returns whether this listener list is empty.
      *
-     * @return <code>true</code> if there are no registered listeners,
-     * and <code>false</code> otherwise
+     * @return <code>true</code> if there are no registered listeners,      * and <code>false</code> otherwise
      */
     public boolean isEmpty() {
         return listeners.length == 0;

@@ -18,43 +18,46 @@ import java.net.URL;
 public interface ICardCache {
 
     /**
-     * Get the game this cache is for
+     * Get the game this cache is for.
      *
      * @return Game name
      */
     String getGameName();
 
     /**
-     * Create the URL to retrieve the image of the card
+     * Create the URL to retrieve the image of the card.
      *
      * @param card Card
      * @param set Set
-     * @return URL
+     * @return URL Remote image's URL
      * @throws MalformedURLException
      * @throws CannotDetermineSetAbbriviation
      */
-    URL createRemoteImageURL(ICard card, Editions.Edition set) throws MalformedURLException, CannotDetermineSetAbbriviation;
+    URL createRemoteImageURL(ICard card, Editions.Edition set)
+            throws MalformedURLException, CannotDetermineSetAbbriviation;
 
     /**
-     * Create the URL to retrieve the image of the set
+     * Create the URL to retrieve the image of the set.
      *
-     * @param editionAbbr
-     * @param rarity
-     * @return URL
+     * @param editionAbbr Edition abbreviation
+     * @param rarity Rarity
+     * @return URL Set image URL
      * @throws MalformedURLException
      */
-    URL createSetImageRemoteURL(String editionAbbr, String rarity) throws MalformedURLException;
+    URL createSetImageRemoteURL(String editionAbbr, String rarity)
+            throws MalformedURLException;
 
     /**
-     * Create the URL to retrieve the image of the card for this set
+     * Create the URL to retrieve the image of the card for this set.
      *
-     * @param card
-     * @param editionAbbr
-     * @param upload
+     * @param card Card to create set image for
+     * @param editionAbbr Edition abbreviation
+     * @param remote Return local (false) or remote URL (true)
      * @return
      * @throws IOException
      */
-    URL createSetImageURL(ICard card, String editionAbbr, boolean upload) throws IOException;
+    URL createSetImageURL(ICard card, String editionAbbr, boolean remote)
+            throws IOException;
 
     /**
      * Get card image or schedule a loading job if image not found. This image
@@ -69,18 +72,19 @@ public interface ICardCache {
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
-    public boolean loadCardImageOffline(ICard card, Editions.Edition set,
-            boolean forceUpdate) throws IOException, CannotDetermineSetAbbriviation;
+    boolean loadCardImageOffline(ICard card, Editions.Edition set,
+            boolean forceUpdate) throws IOException,
+            CannotDetermineSetAbbriviation;
 
     /**
-     * Get the task to update the cache
+     * Get the task to update the cache.
      *
      * @return
      */
-    public Runnable getCacheTask();
+    Runnable getCacheTask();
 
     /**
-     * Load card image offline
+     * Load card image offline.
      *
      * @param card Card to load
      * @param set Set to load the card for
@@ -89,23 +93,25 @@ public interface ICardCache {
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
-    public boolean loadCardImageOffline(ICard card, ICardSet set, boolean forceUpdate) throws IOException, CannotDetermineSetAbbriviation;
+    boolean loadCardImageOffline(ICard card, ICardSet set,
+            boolean forceUpdate) throws IOException,
+            CannotDetermineSetAbbriviation;
 
     /**
-     * Get current cache directory
+     * Get current cache directory.
      *
      * @return
      */
-    public File getCacheLocationFile();
+    File getCacheLocationFile();
 
     /**
-     * Get icon for set
+     * Get icon for set.
      *
      * @param set Set to look icon for
      * @return Icon or null if none
      * @throws IOException
      */
-    public Image getSetIcon(ICardSet set) throws IOException;
+    Image getSetIcon(ICardSet set) throws IOException;
 
     /**
      * Get path to a set's icon.
@@ -113,43 +119,44 @@ public interface ICardCache {
      * @param set Set to get the path for
      * @return path to a set's icon
      */
-    public String getSetIconPath(ICardSet set);
+    String getSetIconPath(ICardSet set);
 
     /**
-     * Get the icon for the game
+     * Get the icon for the game.
      *
      * @param game Game to get the icon for
      * @return Icon or null if none
      * @throws IOException
      */
-    public Image getGameIcon(ICardGame game) throws IOException;
+    Image getGameIcon(ICardGame game) throws IOException;
 
     /**
      * Get path to a game's icon.
      *
      * @return path to a game's icon
      */
-    public String getGameIconPath();
-    
+    String getGameIconPath();
+
     /**
      * Get path to a game's folder.
      *
      * @return path to a game's folder
      */
-    public String getGamePath();
+    String getGamePath();
 
     /**
-     * Get path to card image
+     * Get path to card image.
      *
      * @param card Card to get image of
      * @param set Card's set
      * @return Path to the file
      * @throws CannotDetermineSetAbbriviation
      */
-    public String createLocalImageFilePath(ICard card, ICardSet set) throws CannotDetermineSetAbbriviation;
+    String createLocalImageFilePath(ICard card, ICardSet set)
+            throws CannotDetermineSetAbbriviation;
 
     /**
-     * Get the image of a card (it is downloaded if not there)
+     * Get the image of a card (it is downloaded if not there).
      *
      * @param card Card to get image of
      * @param set Card's set
@@ -160,5 +167,7 @@ public interface ICardCache {
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
-    public File getCardImage(ICard card, ICardSet set, URL url, boolean remote, boolean forceRemote) throws IOException, CannotDetermineSetAbbriviation;
+    File getCardImage(ICard card, ICardSet set, URL url,
+            boolean remote, boolean forceRemote) throws IOException,
+            CannotDetermineSetAbbriviation;
 }

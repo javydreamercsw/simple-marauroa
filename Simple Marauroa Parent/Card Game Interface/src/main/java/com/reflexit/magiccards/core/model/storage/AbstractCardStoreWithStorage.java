@@ -30,7 +30,8 @@ public abstract class AbstractCardStoreWithStorage<T>
      * @param storage
      * @param wrapped
      */
-    public AbstractCardStoreWithStorage(final IStorage<T> storage, boolean wrapped) {
+    public AbstractCardStoreWithStorage(final IStorage<T> storage,
+            boolean wrapped) {
         super();
         this.storage = storage;
         this.wrapped = wrapped;
@@ -111,12 +112,12 @@ public abstract class AbstractCardStoreWithStorage<T>
     public boolean contains(T card) {
         return storage.contains(card);
     }
-    
+
     @Override
     public boolean remove(T o) {
         return storage.remove(o);
     }
-    
+
     @Override
     public boolean add(T card) {
         return storage.add(card);

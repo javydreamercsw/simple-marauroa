@@ -5,19 +5,60 @@ public interface IStorageInfo {
     public static final String DECK_TYPE = "deck";
     public static final String COLLECTION_TYPE = "collection";
 
-    public String getComment();
+    /**
+     * Get comment.
+     *
+     * @return comment
+     */
+    String getComment();
 
-    public String getProperty(String key);
+    /**
+     * Get property.
+     *
+     * @param key property key
+     * @return value
+     */
+    String getProperty(String key);
 
-    public String getType();
+    /**
+     * Get type.
+     *
+     * @return type
+     */
+    String getType();
 
-    public void setComment(String text);
+    /**
+     * Set comment.
+     *
+     * @param text comment to set
+     */
+    void setComment(String text);
 
-    public void setType(String string);
+    /**
+     * Set type.
+     *
+     * @param string type to set
+     */
+    void setType(String string);
 
-    public void setVirtual(boolean value);
+    /**
+     * Set virtual.
+     *
+     * @param value value
+     */
+    void setVirtual(boolean value);
 
-    public boolean isVirtual();
+    /**
+     * Is virtual?
+     *
+     * @return true if virtual.
+     */
+    boolean isVirtual();
 
-    public String getName();
+    /**
+     * Get name.
+     *
+     * @return name
+     */
+    String getName();
 }

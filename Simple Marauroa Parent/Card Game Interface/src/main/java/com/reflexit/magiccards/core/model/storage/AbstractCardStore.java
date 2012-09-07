@@ -7,7 +7,8 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class AbstractCardStore<T> extends EventManager implements ICardStore<T> {
+public abstract class AbstractCardStore<T> extends EventManager
+        implements ICardStore<T> {
 
     protected transient boolean initialized = false;
     protected boolean mergeOnAdd = true;
@@ -17,7 +18,8 @@ public abstract class AbstractCardStore<T> extends EventManager implements ICard
             try {
                 doInitialize();
             } catch (Exception ex) {
-                Logger.getLogger(AbstractCardStore.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AbstractCardStore.class.getName())
+                        .log(Level.SEVERE, null, ex);
             } finally {
                 setInitialized(true);
             }
@@ -186,7 +188,8 @@ public abstract class AbstractCardStore<T> extends EventManager implements ICard
             try {
                 lis.handleEvent(event);
             } catch (final Throwable ex) {
-                Logger.getLogger(AbstractCardStore.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AbstractCardStore.class.getName())
+                        .log(Level.SEVERE, null, ex);
             }
         }
     }

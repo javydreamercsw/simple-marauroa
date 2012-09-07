@@ -9,21 +9,21 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
         ICardEventManager<T>, IStorageContainer<T> {
 
     /**
-     * Get comments
+     * Get comments.
      *
      * @return comments
      */
     public String getComment();
 
     /**
-     * Virtual vs. physical
+     * Virtual vs. physical.
      *
      * @return true if virtual
      */
     public boolean isVirtual();
 
     /**
-     * Get Card
+     * Get Card.
      *
      * @param id card id
      * @return card with specified id
@@ -31,7 +31,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
     public T getCard(int id);
 
     /**
-     * Get cards for specified id
+     * Get cards for specified id.
      *
      * @param id card id
      * @return cards with specified id
@@ -39,7 +39,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
     public Collection<T> getCards(int id);
 
     /**
-     * Add a collection of cards
+     * Add a collection of cards.
      *
      * @param cards cards to add
      * @return true if successful
@@ -47,7 +47,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
     public boolean addAll(Collection<? extends T> cards);
 
     /**
-     * Add card
+     * Add card.
      *
      * @param card card to add
      * @return true if successful
@@ -55,7 +55,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
     public boolean add(T card);
 
     /**
-     * Remove card
+     * Remove card.
      *
      * @param o card to remove
      * @return true if successful
@@ -63,7 +63,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
     public boolean remove(T o);
 
     /**
-     * Remove cards
+     * Remove cards.
      *
      * @param list cards to remove
      * @return true if successful
@@ -71,21 +71,21 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
     public boolean removeAll(Collection<? extends T> list);
 
     /**
-     * Remove all cards
+     * Remove all cards.
      *
      * @return true if successful
      */
     public boolean removeAll();
 
     /**
-     * Sore size
+     * Store size.
      *
      * @return size
      */
     public int size();
 
     /**
-     * Contains card
+     * Contains card.
      *
      * @param o card to check
      * @return true if contained
