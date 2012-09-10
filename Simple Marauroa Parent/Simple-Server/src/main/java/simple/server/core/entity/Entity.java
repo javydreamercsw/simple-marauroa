@@ -46,7 +46,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             RPClass entity = new RPClass(RPCLASS_NAME);
 
             // Some things may have a textual description
-            entity.addAttribute("description", Type.LONG_STRING, Definition.HIDDEN);
+            entity.addAttribute("description", Type.LONG_STRING, 
+                    Definition.HIDDEN);
             //TODO: refactor to D20 system extension
             entity.addAttribute("type", Type.STRING);
             entity.addAttribute("class", Type.STRING);
@@ -57,9 +58,12 @@ public class Entity extends RPObject implements RPEntityInterface {
              */
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            for (Iterator<? extends MarauroaServerExtension> it = 
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.debug("Processing extension to modify root class definition: " + extension.getClass().getSimpleName());
+                logger.debug("Processing extension to modify root class "
+                        + "definition: " + extension.getClass().getSimpleName());
                 extension.modifyRootRPClassDefinition(entity);
             }
             if (logger.isDebugEnabled()) {
@@ -76,11 +80,8 @@ public class Entity extends RPObject implements RPEntityInterface {
      * @return description from the players point of view
      */
     public String describe() {
-        if (hasDescription()) {
-            return getDescription();
-        }
-
-        return "You see " + getDescriptionName(false) + ".";
+        return hasDescription() ? getDescription()
+                : "You see " + getDescriptionName(false) + ".";
     }
 
     /**
@@ -184,7 +185,8 @@ public class Entity extends RPObject implements RPEntityInterface {
         // Use onAdded()/onRemoved() to grab a copy
         // of the zone and save as a local variable.
         if (zone == null) {
-            zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(get("zoneid"));
+            zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
+                    .getRPZone(get("zoneid"));
         }
         return zone;
     }
@@ -199,7 +201,8 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (this.zone != null) {
             //Make sure its not in the old zone
             if (this.zone.has(getID())) {
-                logger.error("Entity added while in another zone: " + this + " in zone " + zone.getID());
+                logger.error("Entity added while in another zone: " + 
+                        this + " in zone " + zone.getID());
                 this.zone.remove(getID());
             }
         }
@@ -247,9 +250,12 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public void update() {
-        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+        for (Iterator<? extends MarauroaServerExtension> it = 
+                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                .iterator(); it.hasNext();) {
             MarauroaServerExtension extension = it.next();
-            logger.debug("Processing extension to update root class definition: " + extension.getClass().getSimpleName());
+            logger.debug("Processing extension to update root class "
+                    + "definition: " + extension.getClass().getSimpleName());
             extension.rootRPClassUpdate(this);
         }
     }

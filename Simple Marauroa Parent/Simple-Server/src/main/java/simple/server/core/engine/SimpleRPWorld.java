@@ -42,7 +42,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      */
     public static final int MILLISECONDS_PER_TURN = 300;
 
-    @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
+    @SuppressWarnings({"OverridableMethodCallInConstructor", 
+        "LeakingThisInConstructor"})
     public SimpleRPWorld() {
         super();
         initialize();
@@ -63,7 +64,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void deleteIfEmpty(String zone) {
         SimpleRPZone sZone = (SimpleRPZone) getRPZone(zone);
-        if (sZone != null && sZone.isDeleteWhenEmpty() && sZone.getPlayers().isEmpty()) {
+        if (sZone != null && sZone.isDeleteWhenEmpty() 
+                && sZone.getPlayers().isEmpty()) {
             try {
                 logger.debug("Removing empty zone: " + sZone.getName());
                 removeRPZone(sZone.getID());
@@ -92,20 +94,29 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void onInit() {
         try {
-            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            logger.info("Loading extensions...");
+            for (Iterator<? extends MarauroaServerExtension> it = 
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.debug("Loading extension: " + extension.getClass().getSimpleName());
+                logger.debug("Loading extension: " + extension.getClass()
+                        .getSimpleName());
                 extension.updateDatabase();
             }
-            for (Iterator<? extends IRPEvent> it = Lookup.getDefault().lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
+            logger.info("Done!");
+            logger.info("Loading events...");
+            for (Iterator<? extends IRPEvent> it = Lookup.getDefault()
+                    .lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
                 IRPEvent event = it.next();
-                logger.debug("Registering event: " + event.getClass().getSimpleName()
+                logger.debug("Registering event: " + event.getClass()
+                        .getSimpleName()
                         + ": " + event.getRPClassName());
                 event.generateRPClass();
             }
             logger.info("Done!");
-            logger.info("Creating RPClasses.");
-            for (RPEntityInterface entity : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
+            logger.info("Creating RPClasses...");
+            for (RPEntityInterface entity : Lookup.getDefault()
+                    .lookupAll(RPEntityInterface.class)) {
                 logger.debug(entity.getClass().getSimpleName());
                 entity.generateRPClass();
             }
@@ -113,29 +124,37 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
             //Make sure the system account exists. This will be the owner of NPC's
             if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
-                    Configuration.getConfiguration().get("system_account_name"))) {
+                    Configuration.getConfiguration()
+                    .get("system_account_name"))) {
                 logger.info("Creating system account...");
                 //Must be the one with id 1
                 DAORegister.get().get(AccountDAO.class).addPlayer(
-                        Configuration.getConfiguration().get("system_account_name"),
-                        Hash.hash(Configuration.getConfiguration().get("system_password")),
+                        Configuration.getConfiguration()
+                        .get("system_account_name"),
+                        Hash.hash(Configuration.getConfiguration()
+                        .get("system_password")),
                         Configuration.getConfiguration().get("system_email"));
                 logger.info("Done!");
             } else {
                 logger.info("Updating system account...");
                 //Account exists, make sure the password is up to date
                 DAORegister.get().get(AccountDAO.class).changePassword(
-                        Configuration.getConfiguration().get("system_account_name"),
-                        Configuration.getConfiguration().get("system_password"));
+                        Configuration.getConfiguration()
+                        .get("system_account_name"),
+                        Configuration.getConfiguration()
+                        .get("system_password"));
                 logger.info("Done!");
             }
             //Empty right now but just in case
             super.onInit();
             boolean needDefault = true;
-            //If none defined a lobby zone is created by default.
-            for (IDefaultZoneProvider provider : Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)) {
-                for (Iterator<IRPZone> it = provider.getDefaultZones().iterator(); it.hasNext();) {
-                    IRPZone zone = it.next();
+            for (Iterator<? extends IDefaultZoneProvider> it = 
+                    Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)
+                    .iterator(); it.hasNext();) {
+                IDefaultZoneProvider provider = it.next();
+                for (Iterator<IRPZone> it2 = provider.getDefaultZones()
+                        .iterator(); it2.hasNext();) {
+                    IRPZone zone = it2.next();
                     if (needDefault) {
                         setDefaultZone(zone);
                         needDefault = false;
@@ -143,7 +162,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     addRPZone(zone);
                 }
             }
-            for (Iterator<? extends MarauroaServerExtension> it2 = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it2.hasNext();) {
+            for (Iterator<? extends MarauroaServerExtension> it2 = 
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .iterator(); it2.hasNext();) {
                 MarauroaServerExtension extension = it2.next();
                 extension.afterWorldInit();
             }
@@ -183,11 +204,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         SimpleRPZone simpleZone;
         if (!(zone instanceof SimpleRPZone)) {
             simpleZone = new SimpleRPZone(zone.getID().getID());
-        }else{
-            simpleZone=(SimpleRPZone) zone;
+        } else {
+            simpleZone = (SimpleRPZone) zone;
         }
         super.addRPZone(simpleZone);
-        for (Iterator<? extends MarauroaServerExtension> it2 = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it2.hasNext();) {
+        for (Iterator<? extends MarauroaServerExtension> it2 = 
+                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                .iterator(); it2.hasNext();) {
             MarauroaServerExtension extension = it2.next();
             extension.onAddRPZone(simpleZone);
         }
@@ -228,8 +251,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      *
      * @param id The zone's id
      *
-     * @return The matching zone, or
-     * <code>null</code> if not found.
+     * @return The matching zone, or <code>null</code> if not found.
      */
     @Override
     public SimpleRPZone getZone(final String id) {
@@ -254,6 +276,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPrivateEvent(String target, RPEvent event, int delay) {
+        boolean result = false;
         for (SimpleRPZone z : getZones()) {
             //Only if zone is not empty
             if (!z.getPlayers().isEmpty() && z.getPlayer(target) != null) {
@@ -262,11 +285,14 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 ClientObject targetCO = ((ClientObject) z.getPlayer(target));
                 targetCO.addEvent(event);
                 targetCO.notifyWorldAboutChanges();
-                return true;
+                result = true;
+                break;
             }
         }
-        logger.debug("Unable to find player:" + target + "!");
-        return false;
+        if (!result) {
+            logger.debug("Unable to find player:" + target + "!");
+        }
+        return result;
     }
 
     @Override
@@ -293,7 +319,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 logger.debug("Applying public event:" + event + " to: " + z);
                 z.applyPublicEvent(event, delay);
             } else {
-                logger.debug("Zone:" + z.getName() + " ignored because is empty (no players)");
+                logger.debug("Zone:" + z.getName() + 
+                        " ignored because is empty (no players)");
             }
         }
         return true;
@@ -317,18 +344,23 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean addPlayer(RPObject object) {
-        for (IRPZone zone : this) {
-            if (zone.getID().toString().equals(object.get("zoneid"))) {
-                add(object);
-                object.put("type", "player");
-                logger.debug("Object added");
-                showWorld();
-                return true;
+        boolean result = false;
+        if (object instanceof ClientObjectInterface) {
+            for (IRPZone zone : this) {
+                if (zone.getID().toString().equals(object.get("zoneid"))) {
+                    add(object);
+                    object.put("type", "player");
+                    logger.debug("Object added");
+                    showWorld();
+                    result = true;
+                    break;
+                }
             }
+        } else {
+            logger.debug("addPlayer Zone " + object.get("zoneid")
+                    + "not found for Player " + object.get("name"));
         }
-        logger.debug("addPlayer Zone " + object.get("zoneid")
-                + "not found for Player " + object.get("name"));
-        return false;
+        return result;
     }
 
     @Override
@@ -364,11 +396,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public IRPZone removeRPZone(IRPZone zone) {
+        IRPZone result;
         try {
-            return removeRPZone(zone.getID());
+            result = removeRPZone(zone.getID());
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(SimpleRPWorld.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+            result = null;
         }
+        return result;
     }
 }

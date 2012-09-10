@@ -45,11 +45,12 @@ public interface MarauroaServerExtension {
      *
      * @param object Object to potentially modify the perception
      * @param type
+     * @param p Perception
      */
     public void getPerception(RPObject object, byte type, Perception p);
 
     /**
-     * Plug into the definition of the client class
+     * Plug into the definition of the client class.
      *
      * @param client
      */
@@ -68,7 +69,7 @@ public interface MarauroaServerExtension {
 
     /**
      * Action to perform after the world is initialized (all classes are
-     * defined)
+     * defined).
      */
     public void afterWorldInit();
 
@@ -82,6 +83,8 @@ public interface MarauroaServerExtension {
      * object. This is called after the normal perceptions are sent.
      *
      * @param object Object to potentially modify the perception
+     * @param perception Perception
+     * @return true if updated
      */
     public boolean updateMonitor(RPObject object, Perception perception);
 
@@ -103,13 +106,19 @@ public interface MarauroaServerExtension {
      * Client object update. This initializes attributes on the object. Useful
      * when adding new attributes to existing objects so they get populated with
      * valid initial values.
+     *
+     * @param client Client object
+     * @throws SimpleException on any error
      */
-    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException;
+    public void clientObjectUpdate(ClientObjectInterface client)
+            throws SimpleException;
 
     /**
      * Root RPClass object update. This initializes attributes on the object.
      * Useful when adding new attributes to existing objects so they get
      * populated with valid initial values.
+     *
+     * @param entity
      */
     public void rootRPClassUpdate(RPObject entity);
 
