@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
@@ -64,7 +63,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
         try {
             config = Configuration.getConfiguration();
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(SimpleRPRuleProcessor.class.getSimpleName()).log(Level.SEVERE, null, ex);
+            logger.error(ex, ex);
         }
         onlinePlayers = new PlayerList();
         entityToKill = new LinkedList<Pair<RPEntity, Entity>>();
@@ -106,12 +105,14 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
     }
 
     public static SimpleRPRuleProcessor get() {
-        return (SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class);
+        return (SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class);
     }
 
-    public void addGameEvent(String source, String event, String... params) {
+    public final void addGameEvent(String source, String event, String... params) {
         try {
-            DAORegister.get().get(GameEventDAO.class).addGameEvent(source, event, params);
+            DAORegister.get().get(GameEventDAO.class).addGameEvent(
+                    source, event, params);
         } catch (Exception e) {
             logger.warn("Can't store game event", e);
         }
@@ -124,7 +125,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
                 /*
                  * Print version information.
                  */
-                logger.info("Running " + getGAMENAME() + " Server version '" + getVERSION() + "'");
+                logger.info("Running " + getGAMENAME() + " Server version '"
+                        + getVERSION() + "'");
                 SimpleRPRuleProcessor.rpman = rpman;
                 SimpleRPAction.initialize(rpman);
             } catch (Exception e) {
@@ -136,8 +138,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
 
     @Override
     public boolean checkGameVersion(String game, String version) {
-        logger.debug("Comparing " + game + " (client) with " + getGAMENAME() + " (server)");
-        logger.debug("Comparing " + version + " (client) with " + getVERSION() + " (server)");
+        logger.debug("Comparing " + game + " (client) with " + getGAMENAME()
+                + " (server)");
+        logger.debug("Comparing " + version + " (client) with " + getVERSION()
+                + " (server)");
         return game.equals(getGAMENAME()) && version.equals(getVERSION());
     }
 
@@ -168,11 +172,12 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
      * online.
      */
     public ClientObjectInterface getPlayer(String name) {
-        return onlinePlayers.getOnlinePlayer(name);
+        return getOnlinePlayers().getOnlinePlayer(name);
     }
 
     @Override
-    public boolean onActionAdd(RPObject caster, RPAction action, List<RPAction> actionList) {
+    public boolean onActionAdd(RPObject caster, RPAction action,
+            List<RPAction> actionList) {
         return true;
     }
 
@@ -200,7 +205,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
 
     protected void logNumberOfPlayersOnline() {
         // We keep the number of players logged.
-        Statistics.getStatistics().set("Players logged", getOnlinePlayers().size());
+        Statistics.getStatistics().set("Players logged",
+                getOnlinePlayers().size());
     }
 
     private void debugOutput() {
@@ -216,8 +222,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
             }
 
             StringBuilder os = new StringBuilder();
-            os.append("entityToKill: ").append(entityToKill.size()).append("\n");
-            os.append("players: ").append(getOnlinePlayers().size()).append("\n");
+            os.append("entityToKill: ").append(entityToKill.size())
+                    .append("\n");
+            os.append("players: ").append(getOnlinePlayers().size())
+                    .append("\n");
             os.append("objects: ").append(objects).append("\n");
             logger.info(os);
         }
@@ -334,7 +342,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
      * @param message Message to tell all players
      */
     public void tellAllPlayers(final String message) {
-        onlinePlayers.tellAllOnlinePlayers(message);
+        getOnlinePlayers().tellAllOnlinePlayers(message);
     }
 
     /**
@@ -343,7 +351,9 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
      * @param message Support message
      */
     public static void sendMessageToSupporters(final String message) {
-        ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forFilteredPlayersExecute(
+        ((SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
+                .forFilteredPlayersExecute(
                 new Task<ClientObjectInterface>() {
                     @Override
                     public void execute(ClientObjectInterface player) {
@@ -354,8 +364,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
                 new FilterCriteria<ClientObjectInterface>() {
                     @Override
                     public boolean passes(ClientObjectInterface p) {
-                        return p.getAdminLevel() >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
-
+                        return p.getAdminLevel()
+                                >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
                     }
                 });
 
@@ -367,18 +377,22 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
      * @param source a player or script name
      * @param message Support message
      */
-    public static void sendMessageToSupporters(final String source, final String message) {
+    public static void sendMessageToSupporters(final String source,
+            final String message) {
         final String text = source + " asks for support to ADMIN: " + message;
         sendMessageToSupporters(text);
     }
 
     public static int getAmountOfOnlinePlayers() {
-        return ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).onlinePlayers.size();
+        return ((SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class)).getOnlinePlayers().size();
     }
 
     public static void notifyOnlineStatus(boolean isOnline, final String name) {
         if (isOnline) {
-            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
+            ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
+                    .forAllPlayersExecute(new Task<ClientObjectInterface>() {
                 @Override
                 public void execute(ClientObjectInterface player) {
                     player.notifyOnline(name);
@@ -386,7 +400,9 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
             });
 
         } else {
-            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getOnlinePlayers().forAllPlayersExecute(new Task<ClientObjectInterface>() {
+            ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
+                    .forAllPlayersExecute(new Task<ClientObjectInterface>() {
                 @Override
                 public void execute(ClientObjectInterface player) {
                     player.notifyOffline(name);
