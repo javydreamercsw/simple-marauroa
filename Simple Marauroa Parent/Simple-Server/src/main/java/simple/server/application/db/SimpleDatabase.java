@@ -1,5 +1,6 @@
 package simple.server.application.db;
 
+import java.sql.SQLException;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.server.game.db.DatabaseFactory;
@@ -24,7 +25,7 @@ public class SimpleDatabase {
         return instance;
     }
 
-    public void initialize() {
+    public void initialize() throws SQLException{
         //Initialization made in JPADatabaseAdapter
         registerDAOs();
     }

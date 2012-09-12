@@ -80,7 +80,7 @@
             <groupId>org.codeartisans.thirdparties.swing</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
             <version>8.3.1</version>
-        </dependency> 
+        </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
