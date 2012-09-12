@@ -42,7 +42,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      */
     public static final int MILLISECONDS_PER_TURN = 300;
 
-    @SuppressWarnings({"OverridableMethodCallInConstructor", 
+    @SuppressWarnings({"OverridableMethodCallInConstructor",
         "LeakingThisInConstructor"})
     public SimpleRPWorld() {
         super();
@@ -64,7 +64,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void deleteIfEmpty(String zone) {
         SimpleRPZone sZone = (SimpleRPZone) getRPZone(zone);
-        if (sZone != null && sZone.isDeleteWhenEmpty() 
+        if (sZone != null && sZone.isDeleteWhenEmpty()
                 && sZone.getPlayers().isEmpty()) {
             try {
                 logger.debug("Removing empty zone: " + sZone.getName());
@@ -95,7 +95,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public void onInit() {
         try {
             logger.info("Loading extensions...");
-            for (Iterator<? extends MarauroaServerExtension> it = 
+            for (Iterator<? extends MarauroaServerExtension> it =
                     Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                     .iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
@@ -148,7 +148,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             //Empty right now but just in case
             super.onInit();
             boolean needDefault = true;
-            for (Iterator<? extends IDefaultZoneProvider> it = 
+            for (Iterator<? extends IDefaultZoneProvider> it =
                     Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)
                     .iterator(); it.hasNext();) {
                 IDefaultZoneProvider provider = it.next();
@@ -162,7 +162,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     addRPZone(zone);
                 }
             }
-            for (Iterator<? extends MarauroaServerExtension> it2 = 
+            for (Iterator<? extends MarauroaServerExtension> it2 =
                     Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                     .iterator(); it2.hasNext();) {
                 MarauroaServerExtension extension = it2.next();
@@ -208,7 +208,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             simpleZone = (SimpleRPZone) zone;
         }
         super.addRPZone(simpleZone);
-        for (Iterator<? extends MarauroaServerExtension> it2 = 
+        for (Iterator<? extends MarauroaServerExtension> it2 =
                 Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                 .iterator(); it2.hasNext();) {
             MarauroaServerExtension extension = it2.next();
@@ -319,8 +319,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 logger.debug("Applying public event:" + event + " to: " + z);
                 z.applyPublicEvent(event, delay);
             } else {
-                logger.debug("Zone:" + z.getName() + 
-                        " ignored because is empty (no players)");
+                logger.debug("Zone:" + z.getName()
+                        + " ignored because is empty (no players)");
             }
         }
         return true;
@@ -356,7 +356,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     break;
                 }
             }
-        } else {
+        } else if (object != null) {
             logger.debug("addPlayer Zone " + object.get("zoneid")
                     + "not found for Player " + object.get("name"));
         }
