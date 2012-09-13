@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.UUID;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
-import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
@@ -130,7 +129,8 @@ public class RPCard extends RPEntity implements ICard {
 
     @Override
     public int compareTo(Object o) {
-        if (!(o instanceof RPCard) || o.getClass() != getClass()) {
+        if (o != null && (!(o instanceof RPCard) 
+                || o.getClass() != getClass())) {
             return -1;
         }
         if (equals(o)) {
