@@ -13,10 +13,11 @@ import simple.server.core.event.api.IRPEvent;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IRPEvent.class)
-public class ChallengeEvent extends RPEvent implements IRPEvent{
+public class ChallengeEvent extends RPEvent implements IRPEvent {
 
     public static final String RPCLASS_NAME = "challenge_event";
-    public static final String CHALLENGER = "challenger", ACTION = "action", CHALLENGED = "challenged";
+    public static final String CHALLENGER = "challenger", ACTION = "action", 
+            CHALLENGED = "challenged";
     public static final int CHALLENGE = 1, ACCEPT = 2, REJECT = 3, CANCEL = 4;
 
     /**
@@ -24,10 +25,12 @@ public class ChallengeEvent extends RPEvent implements IRPEvent{
      */
     @Override
     public void generateRPClass() {
-        RPClass rpclass = new RPClass(RPCLASS_NAME);
-        rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGER, Type.STRING);
-        rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGED, Type.STRING);
-        rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+            RPClass rpclass = new RPClass(RPCLASS_NAME);
+            rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGER, Type.STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGED, Type.STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+        }
     }
 
     @Override
