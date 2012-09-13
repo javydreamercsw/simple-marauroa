@@ -7,7 +7,6 @@ import marauroa.common.game.Definition;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
-import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
@@ -46,7 +45,7 @@ public class Entity extends RPObject implements RPEntityInterface {
             RPClass entity = new RPClass(RPCLASS_NAME);
 
             // Some things may have a textual description
-            entity.addAttribute("description", Type.LONG_STRING, 
+            entity.addAttribute("description", Type.LONG_STRING,
                     Definition.HIDDEN);
             //TODO: refactor to D20 system extension
             entity.addAttribute("type", Type.STRING);
@@ -58,7 +57,7 @@ public class Entity extends RPObject implements RPEntityInterface {
              */
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-            for (Iterator<? extends MarauroaServerExtension> it = 
+            for (Iterator<? extends MarauroaServerExtension> it =
                     Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                     .iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
@@ -94,12 +93,13 @@ public class Entity extends RPObject implements RPEntityInterface {
      */
     public String getDescriptionName(boolean definite) {
         String name = getName();
+        String result;
         if (name != null) {
-            return name;
+            result = name;
         } else if (has("subclass")) {
-            return Grammar.article_noun(get("subclass"), definite);
+            result = Grammar.article_noun(get("subclass"), definite);
         } else if (has("class")) {
-            return Grammar.article_noun(get("class"), definite);
+            result = Grammar.article_noun(get("class"), definite);
         } else {
             String ret = "something indescribably strange";
             if (has("type")) {
@@ -111,8 +111,9 @@ public class Entity extends RPObject implements RPEntityInterface {
             if (has("zone")) {
                 ret += " in zone " + get("zone");
             }
-            return ret;
+            result = ret;
         }
+        return result;
     }
 
     public boolean hasDescription() {
@@ -160,19 +161,21 @@ public class Entity extends RPObject implements RPEntityInterface {
      * @return The title, or <code>null</code> if unknown.
      */
     public String getTitle() {
+        String result;
         if (has("title")) {
-            return get("title");
+            result = get("title");
         } else if (has("name")) {
-            return get("name").replace('_', ' ');
+            result = get("name").replace('_', ' ');
         } else if (has("subclass")) {
-            return get("subclass").replace('_', ' ');
+            result = get("subclass").replace('_', ' ');
         } else if (has("class")) {
-            return get("class").replace('_', ' ');
+            result = get("class").replace('_', ' ');
         } else if (has("type")) {
-            return get("type").replace('_', ' ');
+            result = get("type").replace('_', ' ');
         } else {
-            return null;
+            result = null;
         }
+        return result;
     }
 
     /**
@@ -201,8 +204,8 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (this.zone != null) {
             //Make sure its not in the old zone
             if (this.zone.has(getID())) {
-                logger.error("Entity added while in another zone: " + 
-                        this + " in zone " + zone.getID());
+                logger.error("Entity added while in another zone: "
+                        + this + " in zone " + zone.getID());
                 this.zone.remove(getID());
             }
         }
@@ -228,7 +231,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      */
     public void notifyWorldAboutChanges() {
         logger.debug("Object zone: " + get("zoneid"));
-        RPWorld.get().modify(this);
+        Lookup.getDefault().lookup(IRPWorld.class).modify(this);
     }
 
     /**
@@ -250,7 +253,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public void update() {
-        for (Iterator<? extends MarauroaServerExtension> it = 
+        for (Iterator<? extends MarauroaServerExtension> it =
                 Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                 .iterator(); it.hasNext();) {
             MarauroaServerExtension extension = it.next();

@@ -254,55 +254,61 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
      * @param player
      */
     public static void transferContent(final ClientObjectInterface player) {
-        if (rpman != null) {
-            final SimpleRPZone zone = player.getZone();
-            rpman.transferContent((RPObject) player, zone.getContents());
-        } else {
-            logger.warn("RPmanager not found");
-        }
+        final SimpleRPZone zone = player.getZone();
+        rpman.transferContent((RPObject) player, zone.getContents());
     }
 
     @Override
     public synchronized boolean onInit(RPObject object) {
-        super.onInit(object);
-        try {
-            final PlayerEntry entry = PlayerEntryContainer.getContainer().get(object);
-            final ClientObjectInterface player =
-                    Lookup.getDefault().lookup(IRPObjectFactory.class).createClientObject(object);
-            entry.object = (RPObject) player;
+        boolean result = true;
+        if (object instanceof ClientObjectInterface) {
+            try {
+                final PlayerEntry entry = 
+                        PlayerEntryContainer.getContainer().get(object);
+                final ClientObjectInterface player =
+                        Lookup.getDefault().lookup(IRPObjectFactory.class)
+                        .createClientObject(object);
+                entry.object = (RPObject) player;
 
-            addGameEvent(player.getName(), "login");
-            for (ILoginNotifier ln : Lookup.getDefault().lookupAll(ILoginNotifier.class)) {
-                ln.onPlayerLoggedIn(player);
-            }
-            TutorialNotifier.login(player);
+                addGameEvent(player.getName(), "login");
+                for (ILoginNotifier ln : Lookup.getDefault()
+                        .lookupAll(ILoginNotifier.class)) {
+                    ln.onPlayerLoggedIn(player);
+                }
+                TutorialNotifier.login(player);
 
-            getOnlinePlayers().add(player);
-            if (!player.isGhost()) {
-                notifyOnlineStatus(true, player.getName());
+                getOnlinePlayers().add(player);
+                if (!player.isGhost()) {
+                    notifyOnlineStatus(true, player.getName());
+                }
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .addPlayer((RPObject) player);
+            } catch (Exception e) {
+                logger.error("There has been a severe problem loading player "
+                        + object.get("#db_id"), e);
+                result = false;
             }
-            Lookup.getDefault().lookup(IRPWorld.class).addPlayer((RPObject) player);
-            return true;
-        } catch (Exception e) {
-            logger.error("There has been a severe problem loading player "
-                    + object.get("#db_id"), e);
-            return false;
         }
+        return result && super.onInit(object);
     }
 
     @Override
     public synchronized boolean onExit(RPObject object) {
         super.onExit(object);
         try {
-            ClientObjectInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(object.get("name"));
+            ClientObjectInterface player = ((SimpleRPRuleProcessor) 
+                    Lookup.getDefault().lookup(IRPRuleProcessor.class))
+                    .getPlayer(object.get("name"));
             if (player != null) {
                 if (wasKilled((RPEntity) player)) {
-                    logger.info("Logged out shortly before death: Killing it now :)");
+                    logger.info("Logged out shortly before death: "
+                            + "Killing it now :)");
                 }
                 if (!player.isGhost()) {
                     notifyOnlineStatus(false, player.getName());
                 }
-                Lookup.getDefault().lookup(IRPObjectFactory.class).destroyClientObject(player);
+                Lookup.getDefault().lookup(IRPObjectFactory.class)
+                        .destroyClientObject(player);
                 getOnlinePlayers().remove(player);
 
                 //Player is still somewhere else?
@@ -310,7 +316,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
                 while (it.hasNext()) {
                     SimpleRPZone zone = (SimpleRPZone) it.next();
                     if (zone.has(((RPObject) player).getID())
-                            && !zone.getName().equals(player.getZone().getName())) {
+                            && !zone.getName().equals(
+                            player.getZone().getName())) {
                         logger.warn("Another instance of the player found in "
                                 + zone.getName());
                         zone.remove(((RPObject) player).getID());

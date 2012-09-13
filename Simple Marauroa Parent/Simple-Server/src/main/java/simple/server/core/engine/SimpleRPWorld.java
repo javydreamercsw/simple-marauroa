@@ -41,12 +41,19 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      * A common place for milliseconds per turn.
      */
     public static final int MILLISECONDS_PER_TURN = 300;
+    /*
+     * Holds the initialization state of the world
+     */
+    private static boolean initialized = false;
 
     @SuppressWarnings({"OverridableMethodCallInConstructor",
         "LeakingThisInConstructor"})
     public SimpleRPWorld() {
         super();
-        initialize();
+        if (!initialized) {
+            initialize();
+            initialized = true;
+        }
     }
 
     @Override
@@ -158,8 +165,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     if (needDefault) {
                         setDefaultZone(zone);
                         needDefault = false;
+                    } else {
+                        //setDefaultZone adds the zone
+                        addRPZone(zone);
                     }
-                    addRPZone(zone);
                 }
             }
             for (Iterator<? extends MarauroaServerExtension> it2 =
@@ -346,12 +355,19 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public boolean addPlayer(RPObject object) {
         boolean result = false;
         if (object instanceof ClientObjectInterface) {
-            for (IRPZone zone : this) {
-                if (zone.getID().toString().equals(object.get("zoneid"))) {
+            ClientObjectInterface player = (ClientObjectInterface) object;
+            for (Iterator<IRPZone> it = this.iterator(); it.hasNext();) {
+                IRPZone zone = it.next();
+                if (zone.getID().getID().equals(object.get("zoneid"))) {
                     add(object);
-                    object.put("type", "player");
                     logger.debug("Object added");
                     showWorld();
+                    //Add it to the RuleProcessor as well
+                    if (SimpleRPRuleProcessor.get().getOnlinePlayers()
+                            .getOnlinePlayer(player.getName()) == null) {
+                        SimpleRPRuleProcessor.get().getOnlinePlayers()
+                                .add(player);
+                    }
                     result = true;
                     break;
                 }
