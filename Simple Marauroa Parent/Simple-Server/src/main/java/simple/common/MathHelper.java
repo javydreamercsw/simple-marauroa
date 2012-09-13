@@ -47,4 +47,7 @@ public class MathHelper {
     public static int parseInt(String s) {
         return parseIntDefault(s, 0);
     }
+
+    private MathHelper() {
+    }
 }

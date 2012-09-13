@@ -46,6 +46,11 @@ public class CardCellRenderer extends JLabel implements ListCellRenderer {
     }
     //Set the font and text when no image was found.
 
+    /**
+     *
+     * @param uhOhText
+     * @param normalFont
+     */
     protected void setUhOhText(String uhOhText, Font normalFont) {
         if (uhOhFont == null) { //lazily create this font
             uhOhFont = normalFont.deriveFont(Font.ITALIC);

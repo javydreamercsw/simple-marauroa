@@ -159,4 +159,7 @@ public class XMLUtil {
                     "DOM parser configuration error: " + ex.getMessage());
         }
     }
+
+    private XMLUtil() {
+    }
 }

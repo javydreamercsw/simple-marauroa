@@ -15,7 +15,14 @@ import simple.common.game.ClientObjectInterface;
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class CardGameExtension extends SimpleServerExtension {
 
-    public static final String DECK = "decks", COLLECTION = "page_collection";
+    /**
+     *
+     */
+    public static final String DECK = "decks",
+    /**
+     *
+     */
+    COLLECTION = "page_collection";
 
     @Override
     public void modifyClientObjectDefinition(RPClass player) {

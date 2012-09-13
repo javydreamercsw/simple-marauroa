@@ -219,4 +219,7 @@ public class TimeUtil {
             sbuf.append(Grammar.plnoun(count, "second"));
         }
     }
+
+    private TimeUtil() {
+    }
 }

@@ -22,4 +22,7 @@ public class ItemTools {
         }
         return name;
     }
+
+    private ItemTools() {
+    }
 }

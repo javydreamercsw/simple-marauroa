@@ -20,11 +20,6 @@ public class DefaultDeckTest {
     private static RPDeck instance;
     private static int deckSize = 100, ditchCount = 0, drawCount = 0,
             interfaceCounter = 0, interfaceIndex = -1;
-    private IMarauroaCard card;
-    private List<ICard> list;
-
-    public DefaultDeckTest() {
-    }
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -45,14 +40,32 @@ public class DefaultDeckTest {
         }
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
+    private IMarauroaCard card;
+    private List<ICard> list;
 
+    /**
+     *
+     */
+    public DefaultDeckTest() {
+    }
+
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
