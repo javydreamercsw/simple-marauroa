@@ -20,13 +20,17 @@ public class ClientGameConfiguration {
         // Singleton pattern, hide constructor
         try {
             Properties temp = new Properties();
-            InputStream is = relativeTo == null ? ClientGameConfiguration.class.getResourceAsStream("game-default.properties")
+            InputStream is = relativeTo == null
+                    ? ClientGameConfiguration.class.getResourceAsStream(
+                    "game-default.properties")
                     : relativeTo.getResourceAsStream("game-default.properties");
             temp.load(is);
             is.close();
 
             gameConfig = new Properties(temp);
-            is = relativeTo == null ? ClientGameConfiguration.class.getResourceAsStream("game.properties")
+            is = relativeTo == null
+                    ? ClientGameConfiguration.class.getResourceAsStream(
+                    "game.properties")
                     : relativeTo.getResourceAsStream("game.properties");
             if (is != null) {
                 gameConfig.load(is);

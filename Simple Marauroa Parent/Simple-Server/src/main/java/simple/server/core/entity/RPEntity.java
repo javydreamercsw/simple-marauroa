@@ -54,7 +54,8 @@ public class RPEntity extends Entity {
                 entity.addAttribute("risk", Type.BYTE, Definition.VOLATILE);
                 entity.addAttribute("damage", Type.INT, Definition.VOLATILE);
                 entity.addAttribute("heal", Type.INT, Definition.VOLATILE);
-                entity.addAttribute("title_type", Type.STRING, Definition.VOLATILE);
+                entity.addAttribute("title_type", Type.STRING, 
+                        Definition.VOLATILE);
 
                 entity.addRPSlot("head", 1, Definition.PRIVATE);
                 entity.addRPSlot("rhand", 1, Definition.PRIVATE);
@@ -86,10 +87,7 @@ public class RPEntity extends Entity {
      */
     @Override
     public Outfit getOutfit() {
-        if (has("outfit")) {
-            return new Outfit(getInt("outfit"));
-        }
-        return null;
+        return has("outfit") ? new Outfit(getInt("outfit")) : null;
     }
 
     @Override

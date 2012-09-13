@@ -43,7 +43,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     private boolean visited = false;
     private String password = "";
 
-    public SimpleRPZone(String name) {
+    public SimpleRPZone(final String name) {
         super(name);
         contents = new LinkedList<TransferContent>();
         players = new HashMap<String, ClientObjectInterface>();
@@ -60,7 +60,7 @@ public class SimpleRPZone extends MarauroaRPZone {
      * @param name
      * @param byteContents
      */
-    protected void addToContent(String name, byte[] byteContents) {
+    protected void addToContent(final String name, final byte[] byteContents) {
         TransferContent content = new TransferContent();
         content.name = name;
         content.cacheable = true;
@@ -76,7 +76,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     }
 
     @Override
-    public void add(RPObject object) {
+    public void add(final RPObject object) {
         add(object, null);
     }
 
@@ -96,7 +96,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     }
 
     @Override
-    public RPObject remove(RPObject.ID id) {
+    public RPObject remove(final RPObject.ID id) {
         return remove(objects.get(id));
     }
 
@@ -106,52 +106,56 @@ public class SimpleRPZone extends MarauroaRPZone {
      * @param object
      * @return the removed object
      */
-    public RPObject remove(RPObject object) {
-        for (Iterator<? extends MarauroaServerExtension> it =
-                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                .iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
-            extension.onRPObjectRemoveFromZone(object);
-        }
-
-        if (object instanceof ClientObjectInterface) {
-            ClientObjectInterface player = (ClientObjectInterface) object;
-            players.remove(player.getName());
-            try {
-                //Make sure that the correct onRemoved method is called
-                Configuration conf = Configuration.getConfiguration();
-                Class<?> clientObjectClass = Class.forName(
-                        conf.get("client_object",
-                        ClientObject.class.getCanonicalName()));
-                Class[] types = new Class[]{IRPZone.class};
-                java.lang.reflect.Method localSingleton = clientObjectClass
-                        .getDeclaredMethod("onRemoved", types);
-                localSingleton.invoke(clientObjectClass.cast(object), this);
-            } catch (IllegalAccessException ex) {
-                logger.error(ex, ex);
-            } catch (IllegalArgumentException ex) {
-                logger.error(ex, ex);
-            } catch (InvocationTargetException ex) {
-                logger.error(ex, ex);
-            } catch (NoSuchMethodException ex) {
-                logger.error(ex, ex);
-            } catch (SecurityException ex) {
-                logger.error(ex, ex);
-            } catch (ClassNotFoundException ex) {
-                logger.error(ex, ex);
-            } catch (IOException ex) {
-                logger.error(ex, ex);
+    public RPObject remove(final RPObject object) {
+        if (object != null) {
+            for (Iterator<? extends MarauroaServerExtension> it =
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .iterator(); it.hasNext();) {
+                MarauroaServerExtension extension = it.next();
+                extension.onRPObjectRemoveFromZone(object);
             }
-            //Let everyone else know
-            applyPublicEvent(new PrivateTextEvent(
-                    NotificationType.INFORMATION, player.getName()
-                    + " left " + getName()));
-        } else if (object instanceof Entity) {
-            ((Entity) object).onRemoved(this);
+
+            if (object instanceof ClientObjectInterface) {
+                ClientObjectInterface player = (ClientObjectInterface) object;
+                players.remove(player.getName());
+                try {
+                    //Make sure that the correct onRemoved method is called
+                    Configuration conf = Configuration.getConfiguration();
+                    Class<?> clientObjectClass = Class.forName(
+                            conf.get("client_object",
+                            ClientObject.class.getCanonicalName()));
+                    Class[] types = new Class[]{IRPZone.class};
+                    java.lang.reflect.Method localSingleton = clientObjectClass
+                            .getDeclaredMethod("onRemoved", types);
+                    localSingleton.invoke(clientObjectClass.cast(object), this);
+                } catch (IllegalAccessException ex) {
+                    logger.error(ex, ex);
+                } catch (IllegalArgumentException ex) {
+                    logger.error(ex, ex);
+                } catch (InvocationTargetException ex) {
+                    logger.error(ex, ex);
+                } catch (NoSuchMethodException ex) {
+                    logger.error(ex, ex);
+                } catch (SecurityException ex) {
+                    logger.error(ex, ex);
+                } catch (ClassNotFoundException ex) {
+                    logger.error(ex, ex);
+                } catch (IOException ex) {
+                    logger.error(ex, ex);
+                }
+                //Let everyone else know
+                applyPublicEvent(new PrivateTextEvent(
+                        NotificationType.INFORMATION, player.getName()
+                        + " left " + getName()));
+            } else if (object instanceof Entity) {
+                ((Entity) object).onRemoved(this);
+            }
+            Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
+                    getID().toString());
+            return super.remove(object.getID());
+        } else {
+            throw new RuntimeException("Trying to remove null RPObject!");
         }
-        Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
-                getID().toString());
-        return super.remove(object.getID());
     }
 
     /**
@@ -184,7 +188,7 @@ public class SimpleRPZone extends MarauroaRPZone {
      * @param separator Character to separate the names in the list.
      * @return A list of all players.
      */
-    public String getPlayersInString(String separator) {
+    public String getPlayersInString(final String separator) {
         StringBuilder playerList = new StringBuilder();
         Iterator i = players.values().iterator();
         while (i.hasNext()) {
@@ -213,11 +217,11 @@ public class SimpleRPZone extends MarauroaRPZone {
         return contentList;
     }
 
-    public ClientObjectInterface getPlayer(String name) {
+    public ClientObjectInterface getPlayer(final String name) {
         return players.get(name);
     }
 
-    public void add(RPObject object, final ClientObjectInterface player) {
+    public void add(final RPObject object, final ClientObjectInterface player) {
         synchronized (this) {
             /*
              * Assign [zone relative] ID info.
@@ -239,7 +243,8 @@ public class SimpleRPZone extends MarauroaRPZone {
                     //Make sure that the correct onAdded method is called
                     Configuration conf = Configuration.getConfiguration();
                     Class<?> clientObjectClass =
-                            Class.forName(conf.get("client_object"));
+                            Class.forName(conf.get("client_object",
+                            ClientObject.class.getCanonicalName()));
                     Class[] types = new Class[]{IRPZone.class};
                     java.lang.reflect.Method localSingleton =
                             clientObjectClass.getDeclaredMethod("onAdded",
@@ -302,7 +307,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     }
 
     @Override
-    public Perception getPerception(RPObject player, byte type) {
+    public Perception getPerception(final RPObject player, final byte type) {
         Perception p = super.getPerception(player, type);
         if (logger.isDebugEnabled() && p.size() > 0) {
             showZone();
@@ -336,7 +341,7 @@ public class SimpleRPZone extends MarauroaRPZone {
      *
      * @param player ClientObjectInterface
      */
-    protected static void welcome(ClientObjectInterface player) {
+    protected static void welcome(final ClientObjectInterface player) {
         String msg = "";
         try {
             Configuration config = Configuration.getConfiguration();
@@ -401,10 +406,8 @@ public class SimpleRPZone extends MarauroaRPZone {
         applyPublicEvent(event, 0);
     }
 
-    public void applyPublicEvent(RPEvent event, int delay) {
-        Iterator playerList = getPlayers().iterator();
-        while (playerList.hasNext()) {
-            ClientObjectInterface p = (ClientObjectInterface) playerList.next();
+    public void applyPublicEvent(final RPEvent event, final int delay) {
+        for (ClientObjectInterface p : getPlayers()) {
             logger.debug("Adding event to: " + p + ", " + ((RPObject) p).getID()
                     + ", " + p.getZone());
             if (delay <= 0) {
@@ -447,14 +450,15 @@ public class SimpleRPZone extends MarauroaRPZone {
         this.deleteWhenEmpty = deleteWhenEmpty;
     }
 
-    public void setPassword(String pass) throws IOException {
+    public void setPassword(final String pass) throws IOException {
         /**
          * encrypt password with private key. This way encryption is unique per
          * server. (Assuming that the server.ini file was generated and not
          * copied)
          */
         if (pass != null && !pass.isEmpty()) {
-            password = Tool.encrypt(pass, Configuration.getConfiguration().get("d"));
+            password = Tool.encrypt(pass,
+                    Configuration.getConfiguration().get("d"));
         }
     }
 
@@ -478,7 +482,7 @@ public class SimpleRPZone extends MarauroaRPZone {
         }
     }
 
-    public boolean isPassword(String pass) {
+    public boolean isPassword(final String pass) {
         boolean result;
         try {
             result = Tool.encrypt(pass,
