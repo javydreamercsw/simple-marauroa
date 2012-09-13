@@ -115,4 +115,7 @@ public class EntityHelper {
 
         return null;
     }
+
+    private EntityHelper() {
+    }
 }

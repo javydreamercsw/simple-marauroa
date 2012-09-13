@@ -54,4 +54,7 @@ public class CRC {
 
         return (short) work;
     }
+
+    private CRC() {
+    }
 }

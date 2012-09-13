@@ -18,10 +18,45 @@ import simple.server.core.entity.RPEntityInterface;
 @ServiceProvider(service = RPEntityInterface.class, position = 1002)
 public class RPDeck extends RPEntity implements IDeck {
 
+    /**
+     *
+     */
     public static final String PAGES = "pages",
-            HAND = "hand", WINS = "wins", LOSES = "loses", DRAWS = "draws",
-            VERSION = "version", RECORD = "record", CLASS_NAME = "deck",
+            /**
+             *
+             */
+            HAND = "hand",
+    /**
+     *
+     */
+    WINS = "wins",
+    /**
+     *
+     */
+    LOSES = "loses",
+    /**
+     *
+     */
+    DRAWS = "draws",
+            /**
+             *
+             */
+            VERSION = "version",
+    /**
+     *
+     */
+    RECORD = "record",
+    /**
+     *
+     */
+    CLASS_NAME = "deck",
+            /**
+             *
+             */
             DISCARD_PILE = "discard";
+    /**
+     *
+     */
     protected Random rand = new Random();
 
     public RPDeck() {
@@ -94,21 +129,21 @@ public class RPDeck extends RPEntity implements IDeck {
     /**
      * Add a loss to the record. Added to the current version.
      */
-    public final void addLoss() {
+    public void addLoss() {
         increaseRecord(LOSES);
     }
 
     /**
      * Add a win to the record. Added to the current version.
      */
-    public final void addWin() {
+    public void addWin() {
         increaseRecord(WINS);
     }
 
     /**
      * Add a draw to the record. Added to the current version.
      */
-    public final void addDraw() {
+    public void addDraw() {
         increaseRecord(DRAWS);
     }
 
@@ -117,7 +152,7 @@ public class RPDeck extends RPEntity implements IDeck {
      *
      * @return wins
      */
-    public final int getWins() {
+    public int getWins() {
         return Integer.valueOf(get(RECORD, WINS));
     }
 
@@ -126,7 +161,7 @@ public class RPDeck extends RPEntity implements IDeck {
      *
      * @return loses
      */
-    public final int getLoses() {
+    public int getLoses() {
         return Integer.valueOf(get(RECORD, LOSES));
     }
 
@@ -135,7 +170,7 @@ public class RPDeck extends RPEntity implements IDeck {
      *
      * @return draws
      */
-    public final int getDraws() {
+    public int getDraws() {
         return Integer.valueOf(get(RECORD, DRAWS));
     }
 
@@ -143,7 +178,7 @@ public class RPDeck extends RPEntity implements IDeck {
         put(VERSION, getVersion() + 1);
     }
 
-    public final int getVersion() {
+    public int getVersion() {
         return getInt(VERSION);
     }
 
@@ -181,11 +216,11 @@ public class RPDeck extends RPEntity implements IDeck {
         }
     }
 
-    public final void addToHand(final RPCard card) {
+    public void addToHand(final RPCard card) {
         getSlot(HAND).add(card);
     }
 
-    public final void addToDeck(final RPCard card) {
+    public void addToDeck(final RPCard card) {
         getSlot(PAGES).add(card);
     }
 
@@ -313,6 +348,9 @@ public class RPDeck extends RPEntity implements IDeck {
         getSlot(DISCARD_PILE).add(ditched);
     }
 
+    /**
+     *
+     */
     public void ditchFromHand() {
         ditch(HAND, true);
     }
@@ -452,10 +490,17 @@ public class RPDeck extends RPEntity implements IDeck {
         return getSlot(DISCARD_PILE).size();
     }
 
+    /**
+     *
+     */
     public void sortHand() {
         sortHand(null);
     }
 
+    /**
+     *
+     * @param comp
+     */
     public void sortHand(final Comparator comp) {
         List<ICard> handCards = getHand();
         if (comp == null) {

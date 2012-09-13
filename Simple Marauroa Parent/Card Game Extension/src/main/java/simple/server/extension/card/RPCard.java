@@ -20,19 +20,50 @@ import simple.server.core.entity.RPEntityInterface;
 @ServiceProvider(service = RPEntityInterface.class, position = 1001)
 public class RPCard extends RPEntity implements ICard {
 
+    /**
+     *
+     */
     public final static String CLASS = "class",
-            CARD_ID = "card_id", CREATION_DATE = "creation_date",
-            TIMES_TRADED = "times_traded", TRADABLE = "tradable",
-            CLASS_NAME = "card", SET = "set";
+            /**
+             *
+             */
+            CARD_ID = "card_id",
+    /**
+     *
+     */
+    CREATION_DATE = "creation_date",
+            /**
+             *
+             */
+            TIMES_TRADED = "times_traded",
+    /**
+     *
+     */
+    TRADABLE = "tradable",
+            /**
+             *
+             */
+            CLASS_NAME = "card",
+    /**
+     *
+     */
+    SET = "set";
     private InstanceContent content = new InstanceContent();
     /**
      * Lookup instance
      */
     private Lookup lookup = new AbstractLookup(content);
 
+    /**
+     *
+     */
     public RPCard() {
     }
 
+    /**
+     *
+     * @param class0
+     */
     public RPCard(Class class0) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
@@ -41,6 +72,9 @@ public class RPCard extends RPEntity implements ICard {
         update();
     }
 
+    /**
+     *
+     */
     @Override
     public void update() {
         super.update();
@@ -62,6 +96,10 @@ public class RPCard extends RPEntity implements ICard {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getTimesTraded() {
         return getInt(TIMES_TRADED);
     }
@@ -99,6 +137,9 @@ public class RPCard extends RPEntity implements ICard {
         }
     }
 
+    /**
+     *
+     */
     public void increaseTimesTraded() {
         if (getBool(TRADABLE)) {
             put(TIMES_TRADED, getTimesTraded() + 1);
@@ -141,11 +182,19 @@ public class RPCard extends RPEntity implements ICard {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Lookup getLookup() {
         return lookup;
     }
 
+    /**
+     *
+     * @param entity
+     */
     public void addToLookup(Object entity) {
         content.add(entity);
     }

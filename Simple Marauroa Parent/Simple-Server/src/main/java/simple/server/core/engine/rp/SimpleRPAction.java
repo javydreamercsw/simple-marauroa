@@ -116,4 +116,7 @@ public class SimpleRPAction {
             logger.warn("rpmanager not found");
         }
     }
+
+    private SimpleRPAction() {
+    }
 }

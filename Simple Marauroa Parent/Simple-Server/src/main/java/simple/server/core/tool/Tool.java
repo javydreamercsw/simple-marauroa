@@ -57,4 +57,7 @@ public class Tool {
         LOGGER.debug("to " + result);
         return result;
     }
+
+    public Tool() {
+    }
 }

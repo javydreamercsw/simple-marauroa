@@ -832,4 +832,7 @@ public class Grammar {
             return null;
         }
     }
+
+    private Grammar() {
+    }
 }

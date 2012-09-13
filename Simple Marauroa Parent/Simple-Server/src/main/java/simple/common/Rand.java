@@ -163,4 +163,7 @@ public class Rand {
     public static int rand(int mean, int sd) {
         return (int) (rand.nextGaussian() * sd + mean);
     }
+
+    private Rand() {
+    }
 }

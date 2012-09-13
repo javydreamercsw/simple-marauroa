@@ -93,4 +93,7 @@ public class TutorialNotifier {
      */
     public static void newrelease(ClientObjectInterface player) {
     }
+
+    private TutorialNotifier() {
+    }
 }

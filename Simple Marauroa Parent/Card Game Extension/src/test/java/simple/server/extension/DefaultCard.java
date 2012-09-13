@@ -18,6 +18,9 @@ public class DefaultCard extends RPCard implements IMarauroaCard, DefaultType {
     private InstanceContent dynamicContent = new InstanceContent();
     private Lookup myLookup = new AbstractLookup(dynamicContent);
 
+    /**
+     *
+     */
     public DefaultCard() {
         dynamicContent.add(new DefaultType() {
             @Override
@@ -32,6 +35,10 @@ public class DefaultCard extends RPCard implements IMarauroaCard, DefaultType {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Lookup getLookup() {
         return myLookup;

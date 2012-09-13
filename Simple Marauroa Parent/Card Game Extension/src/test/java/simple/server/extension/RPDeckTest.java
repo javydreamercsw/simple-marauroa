@@ -22,11 +22,6 @@ import simple.server.extension.card.RPDeck;
  */
 public class RPDeckTest {
 
-    private DummyObject test;
-
-    public RPDeckTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws Exception {
         Log4J.init("simple/server/log4j.properties");
@@ -36,14 +31,32 @@ public class RPDeckTest {
         }
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
 
+    private DummyObject test;
+
+    /**
+     *
+     */
+    public RPDeckTest() {
+    }
+
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -127,7 +140,7 @@ public class RPDeckTest {
 
     private class DummyObject extends ClientObject {
 
-        public DummyObject() {
+        DummyObject() {
             update();
         }
 

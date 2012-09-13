@@ -18,4 +18,7 @@ public class ItemTestHelper {
         item.setQuantity(quantity);
         return item;
     }
+
+    private ItemTestHelper() {
+    }
 }

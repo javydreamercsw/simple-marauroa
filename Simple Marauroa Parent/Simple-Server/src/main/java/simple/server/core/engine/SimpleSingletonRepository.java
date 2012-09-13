@@ -8,7 +8,7 @@ public class SimpleSingletonRepository {
 
     private static EntityManager entityManager = null;
 
-    protected SimpleSingletonRepository() {
+    private SimpleSingletonRepository() {
     }
 
     public static EntityManager getEntityManager() {

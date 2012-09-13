@@ -20,4 +20,7 @@ public abstract class SimpleServerT {
             entity.generateRPClass();
         }
     }
+
+    public SimpleServerT() {
+    }
 }
