@@ -8,7 +8,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
@@ -90,7 +89,8 @@ public class SimpleRPZone extends MarauroaRPZone {
         Iterator i = getPlayers().iterator();
         while (i.hasNext()) {
             Lookup.getDefault().lookup(IRPWorld.class).changeZone(
-                    Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID(),
+                    Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
+                    .getID().getID(),
                     (ClientObject) i.next());
         }
     }
@@ -107,7 +107,9 @@ public class SimpleRPZone extends MarauroaRPZone {
      * @return the removed object
      */
     public RPObject remove(RPObject object) {
-        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+        for (Iterator<? extends MarauroaServerExtension> it =
+                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                .iterator(); it.hasNext();) {
             MarauroaServerExtension extension = it.next();
             extension.onRPObjectRemoveFromZone(object);
         }
@@ -118,24 +120,27 @@ public class SimpleRPZone extends MarauroaRPZone {
             try {
                 //Make sure that the correct onRemoved method is called
                 Configuration conf = Configuration.getConfiguration();
-                Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
+                Class<?> clientObjectClass = Class.forName(
+                        conf.get("client_object",
+                        ClientObject.class.getCanonicalName()));
                 Class[] types = new Class[]{IRPZone.class};
-                java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("onRemoved", types);
+                java.lang.reflect.Method localSingleton = clientObjectClass
+                        .getDeclaredMethod("onRemoved", types);
                 localSingleton.invoke(clientObjectClass.cast(object), this);
             } catch (IllegalAccessException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             } catch (IllegalArgumentException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             } catch (InvocationTargetException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             } catch (NoSuchMethodException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             } catch (SecurityException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             } catch (ClassNotFoundException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             } catch (IOException ex) {
-                java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                logger.error(ex, ex);
             }
             //Let everyone else know
             applyPublicEvent(new PrivateTextEvent(
@@ -144,7 +149,8 @@ public class SimpleRPZone extends MarauroaRPZone {
         } else if (object instanceof Entity) {
             ((Entity) object).onRemoved(this);
         }
-        Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(getID().toString());
+        Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
+                getID().toString());
         return super.remove(object.getID());
     }
 
@@ -218,9 +224,12 @@ public class SimpleRPZone extends MarauroaRPZone {
              */
             assignRPObjectID(object);
 
-            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            for (Iterator<? extends MarauroaServerExtension> it =
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.debug("Processing extension: " + extension.getClass().getSimpleName());
+                logger.debug("Processing extension: "
+                        + extension.getClass().getSimpleName());
                 extension.onRPObjectAddToZone(object);
             }
 
@@ -229,34 +238,40 @@ public class SimpleRPZone extends MarauroaRPZone {
                 try {
                     //Make sure that the correct onAdded method is called
                     Configuration conf = Configuration.getConfiguration();
-                    Class<?> clientObjectClass = Class.forName(conf.get("client_object"));
+                    Class<?> clientObjectClass =
+                            Class.forName(conf.get("client_object"));
                     Class[] types = new Class[]{IRPZone.class};
-                    java.lang.reflect.Method localSingleton = clientObjectClass.getDeclaredMethod("onAdded", types);
+                    java.lang.reflect.Method localSingleton =
+                            clientObjectClass.getDeclaredMethod("onAdded",
+                            types);
                     localSingleton.invoke(clientObjectClass.cast(object), this);
-                    final ClientObjectInterface p = ((ClientObjectInterface) object);
+                    final ClientObjectInterface p =
+                            ((ClientObjectInterface) object);
                     players.put(p.getName(), p);
-                    logger.debug("Object zone: " + ((RPObject) p).get("zoneid"));
+                    logger.debug("Object zone: "
+                            + ((RPObject) p).get("zoneid"));
                     welcome(p);
                     //Let everyone else know
                     applyPublicEvent(new PrivateTextEvent(
-                            NotificationType.INFORMATION, p.getName() + " joined " + getName()));
+                            NotificationType.INFORMATION, p.getName()
+                            + " joined " + getName()));
                 } catch (IllegalAccessException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.error(ex, ex);
                 } catch (IllegalArgumentException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.error(ex, ex);
                 } catch (InvocationTargetException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.error(ex, ex);
                 } catch (NoSuchMethodException ex) {
                     /**
                      * Method not implemented,fallback
                      */
                     ((ClientObjectInterface) object).onAdded(this);
                 } catch (SecurityException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.error(ex, ex);
                 } catch (ClassNotFoundException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.error(ex, ex);
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(SimpleRPZone.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                    logger.error(ex, ex);
                 }
             } else if (object instanceof RPEntityInterface) {
                 logger.debug("Processing RPEntityInterface");
@@ -266,7 +281,8 @@ public class SimpleRPZone extends MarauroaRPZone {
             Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
             if (player != null) {
                 //Notify the player that created it
-                player.sendPrivateText(NotificationType.RESPONSE, object + " successfully created!");
+                player.sendPrivateText(NotificationType.RESPONSE, object
+                        + " successfully created!");
             }
             super.add(object);
         }
@@ -278,7 +294,8 @@ public class SimpleRPZone extends MarauroaRPZone {
         for (ClientObjectInterface co : getPlayers()) {
             logger.debug(co);
         }
-        logger.debug("Objects: " + (objects.entrySet().isEmpty() ? "Empty" : ""));
+        logger.debug("Objects: " + (objects.entrySet().isEmpty()
+                ? "Empty" : ""));
         for (Entry co : objects.entrySet()) {
             logger.debug(co);
         }
@@ -296,9 +313,12 @@ public class SimpleRPZone extends MarauroaRPZone {
             logger.debug(p.toString());
             visited = true;
             //Modify the perception
-            for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
+            for (Iterator<? extends MarauroaServerExtension> it =
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.debug("Processing extension: " + extension.getClass().getSimpleName());
+                logger.debug("Processing extension: "
+                        + extension.getClass().getSimpleName());
                 extension.updateMonitor(player, p);
             }
             logger.debug("Modification Done!");
@@ -325,7 +345,8 @@ public class SimpleRPZone extends MarauroaRPZone {
                 if (msg.startsWith("http://")) {
                     URL url = new URL(msg);
                     HttpURLConnection.setFollowRedirects(false);
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    HttpURLConnection connection =
+                            (HttpURLConnection) url.openConnection();
                     BufferedReader br = new BufferedReader(
                             new InputStreamReader(connection.getInputStream()));
                     msg = br.readLine();
@@ -365,7 +386,8 @@ public class SimpleRPZone extends MarauroaRPZone {
      */
     public boolean containsPlayer() {
         boolean result = false;
-        for (Iterator<RPObject> it = objects.values().iterator(); it.hasNext();) {
+        for (Iterator<RPObject> it = objects.values().iterator();
+                it.hasNext();) {
             RPObject obj = it.next();
             if (obj instanceof ClientObjectInterface) {
                 result = true;
@@ -383,13 +405,15 @@ public class SimpleRPZone extends MarauroaRPZone {
         Iterator playerList = getPlayers().iterator();
         while (playerList.hasNext()) {
             ClientObjectInterface p = (ClientObjectInterface) playerList.next();
-            logger.debug("Adding event to: " + p + ", " + ((RPObject) p).getID() + ", " + p.getZone());
+            logger.debug("Adding event to: " + p + ", " + ((RPObject) p).getID()
+                    + ", " + p.getZone());
             if (delay <= 0) {
                 ((RPObject) p).addEvent(event);
                 p.notifyWorldAboutChanges();
             } else {
                 logger.debug("With a delay of " + delay + " turns");
-                Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(delay,
+                Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
+                        delay,
                         new DelayedPlayerEventSender(event, p));
             }
         }
@@ -455,11 +479,14 @@ public class SimpleRPZone extends MarauroaRPZone {
     }
 
     public boolean isPassword(String pass) {
+        boolean result;
         try {
-            return Tool.encrypt(pass, Configuration.getConfiguration().get("d")).equals(password);
+            result = Tool.encrypt(pass,
+                    Configuration.getConfiguration().get("d")).equals(password);
         } catch (IOException ex) {
             logger.error(ex);
-            return false;
+            result = false;
         }
+        return result;
     }
 }
