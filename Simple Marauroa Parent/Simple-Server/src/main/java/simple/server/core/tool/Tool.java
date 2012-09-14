@@ -1,9 +1,12 @@
 package simple.server.core.tool;
 
+import java.io.File;
+import java.util.Locale;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 
 /**
+ * General use tools.
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
@@ -11,6 +14,13 @@ public class Tool {
 
     private static final Logger LOGGER = Log4J.getLogger(Tool.class);
 
+    /**
+     * Encrypt string with provided key.
+     *
+     * @param str string to encrypt
+     * @param key key to encrypt with
+     * @return encrypted string
+     */
     public static String encrypt(final String str, final String key) {
         StringBuilder sb = new StringBuilder(str);
 
@@ -29,6 +39,13 @@ public class Tool {
         return sb.toString();
     }
 
+    /**
+     * Decrypt string with provided key.
+     *
+     * @param str string to decrypt
+     * @param key key to decrypt with
+     * @return decrypted string
+     */
     public static String decrypt(final String str, final String key) {
         /**
          * To 'decrypt' the string, simply apply the same technique. Is safe to
@@ -37,7 +54,13 @@ public class Tool {
         return encrypt(str, key);
     }
 
-    public static String removeUnderscores(String value) {
+    /**
+     * Replacing underscores.
+     *
+     * @param value String to replace
+     * @return modified string
+     */
+    public static String removeUnderscores(final String value) {
         String result = value;
         while (result.contains("_")) {
             LOGGER.debug("Changing value from " + value + "...");
@@ -50,12 +73,47 @@ public class Tool {
         return result;
     }
 
-    public static String changeToUpperCase(String value, final int index) {
+    /**
+     * Change letter to upper case
+     *
+     * @param value String
+     * @param index index to change
+     * @return modified string
+     */
+    public static String changeToUpperCase(final String value,
+            final int index) {
         LOGGER.debug("Changing value from " + value + "...");
-        String result = value.substring(0, index) + value.substring(index, index + 1).toUpperCase()
+        String result = value.substring(0, index)
+                + value.substring(index, index + 1)
+                .toUpperCase(Locale.getDefault())
                 + value.substring(index + 1);
         LOGGER.debug("to " + result);
         return result;
+    }
+
+    /**
+     * Delete folder and contents.
+     *
+     * @param folder folder to delete
+     * @param onlyIfEmpty true to delete only if empty, false otherwise
+     */
+    public static void deleteFolder(final File folder,
+            final boolean onlyIfEmpty) {
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) { //some JVMs return null for empty dirs
+                if (files.length > 0 && !onlyIfEmpty || files.length == 0) {
+                    for (File f : files) {
+                        if (f.isDirectory()) {
+                            deleteFolder(f, onlyIfEmpty);
+                        } else {
+                            f.delete();
+                        }
+                    }
+                    folder.delete();
+                }
+            }
+        }
     }
 
     public Tool() {
