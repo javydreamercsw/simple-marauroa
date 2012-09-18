@@ -76,10 +76,15 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>org.codeartisans.thirdparties.swing</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
             <version>8.3.1</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-util-lookup</artifactId>
+            <version>RELEASE72</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -98,6 +103,11 @@
             <id>project.local</id>
             <name>project</name>
             <url>file:${project.basedir}/../repo</url>
+        </repository>
+        <repository>
+            <id>netbeans</id>
+            <name>NetBeans</name>
+            <url>http://bits.netbeans.org/maven2/</url>
         </repository>
         <repository>
             <id>sonatype-repo</id>
