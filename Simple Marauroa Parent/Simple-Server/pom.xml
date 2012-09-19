@@ -76,11 +76,6 @@
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>org.codeartisans.thirdparties.swing</groupId>
-            <artifactId>org-openide-util-lookup</artifactId>
-            <version>8.3.1</version>
-        </dependency>-->
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
