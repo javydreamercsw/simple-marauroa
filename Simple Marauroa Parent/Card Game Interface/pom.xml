@@ -26,22 +26,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codeartisans.thirdparties.swing</groupId>
+            <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>8.3.1</version>
-        </dependency> 
+            <version>RELEASE72</version>
+        </dependency>
     </dependencies>
-  
-    <repositories>
-        <repository>
-            <id>sonatype-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>
