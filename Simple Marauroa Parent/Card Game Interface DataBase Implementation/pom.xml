@@ -26,10 +26,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codeartisans.thirdparties.swing</groupId>
+            <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>8.3.1</version>
-        </dependency> 
+            <version>RELEASE72</version>
+            <type>jar</type>
+        </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
