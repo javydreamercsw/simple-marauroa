@@ -5,14 +5,12 @@
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
         <version>0.02.06-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>Card-Game-Extension</artifactId>
     <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Card-Game-Extension</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,7 +26,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE72</version>
+            <version>${netbeans.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
