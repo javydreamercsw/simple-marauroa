@@ -28,26 +28,26 @@ public class RPCard extends RPEntity implements ICard {
              *
              */
             CARD_ID = "card_id",
-    /**
-     *
-     */
-    CREATION_DATE = "creation_date",
+            /**
+             *
+             */
+            CREATION_DATE = "creation_date",
             /**
              *
              */
             TIMES_TRADED = "times_traded",
-    /**
-     *
-     */
-    TRADABLE = "tradable",
+            /**
+             *
+             */
+            TRADABLE = "tradable",
             /**
              *
              */
             CLASS_NAME = "card",
-    /**
-     *
-     */
-    SET = "set";
+            /**
+             *
+             */
+            SET = "set";
     private InstanceContent content = new InstanceContent();
     /**
      * Lookup instance
@@ -170,7 +170,7 @@ public class RPCard extends RPEntity implements ICard {
 
     @Override
     public int compareTo(Object o) {
-        if (o != null && (!(o instanceof RPCard) 
+        if (o != null && (!(o instanceof RPCard)
                 || o.getClass() != getClass())) {
             return -1;
         }
