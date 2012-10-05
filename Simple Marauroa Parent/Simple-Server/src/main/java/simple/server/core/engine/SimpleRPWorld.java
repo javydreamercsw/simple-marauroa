@@ -130,12 +130,11 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             logger.info("Creating RPClasses...");
             Collection<? extends RPEntityInterface> classes =
                     Lookup.getDefault().lookupAll(RPEntityInterface.class);
-            logger.info("Found Entity? " + (Lookup.getDefault().lookup(Entity.class) == null ? "No" : "Yes"));
             logger.debug("Found " + classes.size() + " Entities to register!");
             for (Iterator<? extends RPEntityInterface> it =
                     classes.iterator(); it.hasNext();) {
                 RPEntityInterface entity = it.next();
-                logger.info(entity.getClass().getSimpleName());
+                logger.debug(entity.getClass().getSimpleName());
                 entity.generateRPClass();
             }
             logger.info("Done!");
