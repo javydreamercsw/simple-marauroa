@@ -3,6 +3,7 @@ package simple.server.core.engine;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,6 +23,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
@@ -102,9 +104,11 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public void onInit() {
         try {
             logger.info("Loading extensions...");
+            Collection<? extends MarauroaServerExtension> ext =
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
+            logger.debug("Found " + ext.size() + " extensions to register!");
             for (Iterator<? extends MarauroaServerExtension> it =
-                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                    .iterator(); it.hasNext();) {
+                    ext.iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
                 logger.debug("Loading extension: " + extension.getClass()
                         .getSimpleName());
@@ -112,8 +116,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             }
             logger.info("Done!");
             logger.info("Loading events...");
-            for (Iterator<? extends IRPEvent> it = Lookup.getDefault()
-                    .lookupAll(IRPEvent.class).iterator(); it.hasNext();) {
+            Collection<? extends IRPEvent> events =
+                    Lookup.getDefault().lookupAll(IRPEvent.class);
+            logger.debug("Found " + events.size() + " events to register!");
+            for (Iterator<? extends IRPEvent> it = events.iterator(); it.hasNext();) {
                 IRPEvent event = it.next();
                 logger.debug("Registering event: " + event.getClass()
                         .getSimpleName()
@@ -122,9 +128,14 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             }
             logger.info("Done!");
             logger.info("Creating RPClasses...");
-            for (RPEntityInterface entity : Lookup.getDefault()
-                    .lookupAll(RPEntityInterface.class)) {
-                logger.debug(entity.getClass().getSimpleName());
+            Collection<? extends RPEntityInterface> classes =
+                    Lookup.getDefault().lookupAll(RPEntityInterface.class);
+            logger.info("Found Entity? " + (Lookup.getDefault().lookup(Entity.class) == null ? "No" : "Yes"));
+            logger.debug("Found " + classes.size() + " Entities to register!");
+            for (Iterator<? extends RPEntityInterface> it =
+                    classes.iterator(); it.hasNext();) {
+                RPEntityInterface entity = it.next();
+                logger.info(entity.getClass().getSimpleName());
                 entity.generateRPClass();
             }
             logger.info("Done!");
