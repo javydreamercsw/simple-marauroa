@@ -534,8 +534,7 @@ public class RPDeck extends RPEntity implements IDeck {
         boolean result = false;
         if (obj != null && getClass() == obj.getClass() && obj instanceof RPDeck) {
             RPDeck rpDeck = (RPDeck) obj;
-            result = ((RPObject) obj).equals((RPObject) this)
-                    && rpDeck.getCards().equals(getCards())
+            result = rpDeck.getCards().equals(getCards())
                     && rpDeck.getDeck().equals(getDeck())
                     && rpDeck.getDiscardPile().equals(getDiscardPile())
                     && rpDeck.getDraws() == getDraws()
