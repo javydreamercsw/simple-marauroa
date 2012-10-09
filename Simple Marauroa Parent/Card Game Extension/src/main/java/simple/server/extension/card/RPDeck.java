@@ -4,6 +4,8 @@ import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardType;
 import com.reflexit.magiccards.core.model.IDeck;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
@@ -19,45 +21,47 @@ import simple.server.core.entity.RPEntityInterface;
 public class RPDeck extends RPEntity implements IDeck {
 
     /**
-     *
+     * Pages in deck
      */
-    public static final String PAGES = "pages",
-            /**
-             *
-             */
-            HAND = "hand",
+    public static final String PAGES = "pages";
     /**
-     *
+     * Pages in hand
      */
-    WINS = "wins",
+    public static final String HAND = "hand";
     /**
-     *
+     * Amount of wins
      */
-    LOSES = "loses",
+    public static final String WINS = "wins";
     /**
-     *
+     * Amount of loses
      */
-    DRAWS = "draws",
-            /**
-             *
-             */
-            VERSION = "version",
+    public static final String LOSES = "loses";
     /**
-     *
+     * Amount of draws
      */
-    RECORD = "record",
+    public static final String DRAWS = "draws";
     /**
-     *
+     * Deck version
      */
-    CLASS_NAME = "deck",
-            /**
-             *
-             */
-            DISCARD_PILE = "discard";
+    public static final String VERSION = "version";
     /**
-     *
+     * Deck record
+     */
+    public static final String RECORD = "record";
+    /**
+     * Class name
+     */
+    public static final String CLASS_NAME = "deck";
+    /**
+     * Discard pile
+     */
+    public static final String DISCARD_PILE = "discard";
+    /**
+     * For randomization purposes
      */
     protected Random rand = new Random();
+    private static final Logger LOG =
+            Logger.getLogger(RPDeck.class.getSimpleName());
 
     public RPDeck() {
     }
@@ -69,7 +73,8 @@ public class RPDeck extends RPEntity implements IDeck {
         update();
     }
 
-    public RPDeck(final String name, final List<RPCard> cards, final List<RPCard> hand) {
+    public RPDeck(final String name, final List<RPCard> cards,
+            final List<RPCard> hand) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
         put("name", name);
@@ -83,7 +88,7 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     @Override
-    public void update() {
+    public final void update() {
         super.update();
         if (!has(VERSION)) {
             put(VERSION, 1);
@@ -216,11 +221,11 @@ public class RPDeck extends RPEntity implements IDeck {
         }
     }
 
-    public void addToHand(final RPCard card) {
+    public final void addToHand(final RPCard card) {
         getSlot(HAND).add(card);
     }
 
-    public void addToDeck(final RPCard card) {
+    public final void addToDeck(final RPCard card) {
         getSlot(PAGES).add(card);
     }
 
@@ -263,13 +268,15 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     @Override
-    public List<ICard> ditch(final String slot, final Class<? extends ICardType> type, final boolean random, final int amount) {
+    public List<ICard> ditch(final String slot, 
+    final Class<? extends ICardType> type, final boolean random, 
+    final int amount) {
         ArrayList<ICard> ditched = new ArrayList<ICard>();
         if (random) {
             ArrayList<Integer> indices = new ArrayList<Integer>();
             //Build a list of indices of this type
             int index = 0;
-            for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
+            for (final Iterator it = getSlot(slot).iterator(); it.hasNext();) {
                 if (((IMarauroaCard) it).getLookup().lookup(type) != null) {
                     indices.add(index);
                 }
@@ -282,7 +289,7 @@ public class RPDeck extends RPEntity implements IDeck {
             int count = 0;
             for (int j = 0; j < remove; j++) {
                 int toRemove = indices.remove(rand.nextInt(indices.size()));
-                for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
+                for (final Iterator i = getSlot(slot).iterator(); i.hasNext();) {
                     IMarauroaCard next = (IMarauroaCard) i.next();
                     if (count == toRemove) {
                         ditched.add(next);
@@ -292,7 +299,7 @@ public class RPDeck extends RPEntity implements IDeck {
             }
         } else {
             for (int j = 0; j < amount; j++) {
-                for (final Iterator i = getSlot(PAGES).iterator(); i.hasNext();) {
+                for (final Iterator i = getSlot(slot).iterator(); i.hasNext();) {
                     IMarauroaCard next = (IMarauroaCard) i.next();
                     if (next.getLookup().lookup(type) != null) {
                         ditched.add(next);
@@ -310,11 +317,12 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public ICard ditch(final String slot, final Class<? extends ICardType> type) {
-        for (final Iterator it = getSlot(PAGES).iterator(); it.hasNext();) {
+        for (final Iterator it = getSlot(slot).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
-            System.out.println(card.getName());
+            LOG.info(card.getName());
+            //Look for classes in the lookup
             if (!card.getLookup().lookupAll(type).isEmpty()) {
-                System.out.println("Ditching: " + card.getName());
+                LOG.log(Level.INFO, "Ditching: {0}", card.getName());
                 ditchCard(slot, card);
                 return card;
             }
@@ -343,7 +351,7 @@ public class RPDeck extends RPEntity implements IDeck {
         return ditched;
     }
 
-    private void ditchCard(final String slot, final RPCard ditched) {
+    protected final void ditchCard(final String slot, final RPCard ditched) {
         getSlot(slot).remove(ditched.getID());
         getSlot(DISCARD_PILE).add(ditched);
     }
@@ -526,17 +534,15 @@ public class RPDeck extends RPEntity implements IDeck {
         boolean result = false;
         if (obj != null && getClass() == obj.getClass() && obj instanceof RPDeck) {
             RPDeck rpDeck = (RPDeck) obj;
-            result = ((RPObject) obj).equals((RPObject) this);
-            if (result) {
-                result = result && rpDeck.getCards().equals(getCards())
-                        && rpDeck.getDeck().equals(getDeck())
-                        && rpDeck.getDiscardPile().equals(getDiscardPile())
-                        && rpDeck.getDraws() == getDraws()
-                        && rpDeck.getHand().equals(getHand())
-                        && rpDeck.getLoses() == getLoses()
-                        && rpDeck.getVersion() == getVersion()
-                        && rpDeck.getWins() == getWins();
-            }
+            result = ((RPObject) obj).equals((RPObject) this)
+                    && rpDeck.getCards().equals(getCards())
+                    && rpDeck.getDeck().equals(getDeck())
+                    && rpDeck.getDiscardPile().equals(getDiscardPile())
+                    && rpDeck.getDraws() == getDraws()
+                    && rpDeck.getHand().equals(getHand())
+                    && rpDeck.getLoses() == getLoses()
+                    && rpDeck.getVersion() == getVersion()
+                    && rpDeck.getWins() == getWins();
         }
         return result;
     }
