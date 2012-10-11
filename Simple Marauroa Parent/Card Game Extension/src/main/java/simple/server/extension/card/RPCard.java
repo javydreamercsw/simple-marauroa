@@ -76,7 +76,7 @@ public class RPCard extends RPEntity implements ICard {
      *
      */
     @Override
-    public void update() {
+    public final void update() {
         super.update();
         //Unique id
         if (!has(CARD_ID)) {
@@ -207,16 +207,13 @@ public class RPCard extends RPEntity implements ICard {
 
     @Override
     public boolean equals(Object obj) {
+        boolean result =true;
         if (obj == null) {
-            return false;
+            result = false;
         }
         if (getClass() != obj.getClass()) {
-            return false;
+            result = false;
         }
-        final RPCard other = (RPCard) obj;
-        if (this.lookup != other.lookup && (this.lookup == null || !this.lookup.equals(other.lookup))) {
-            return false;
-        }
-        return true;
+        return result && super.equals(obj);
     }
 }
