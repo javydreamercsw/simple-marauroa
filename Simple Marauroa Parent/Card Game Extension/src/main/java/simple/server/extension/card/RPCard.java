@@ -214,9 +214,6 @@ public class RPCard extends RPEntity implements ICard {
             return false;
         }
         final RPCard other = (RPCard) obj;
-        if (this.content != other.content && (this.content == null || !this.content.equals(other.content))) {
-            return false;
-        }
         if (this.lookup != other.lookup && (this.lookup == null || !this.lookup.equals(other.lookup))) {
             return false;
         }
