@@ -14,7 +14,7 @@ public class CardFileUtils {
      * @param out destination
      * @throws IOException if any IO operation fails
      */
-    public static void copyFile(final File in, final File out) 
+    public static void copyFile(final File in, final File out)
             throws IOException {
         FileChannel inChannel = new FileInputStream(in).getChannel();
         FileChannel outChannel = new FileOutputStream(out).getChannel();
@@ -23,9 +23,7 @@ public class CardFileUtils {
         } catch (IOException e) {
             throw e;
         } finally {
-            if (inChannel != null) {
-                inChannel.close();
-            }
+            inChannel.close();
             if (outChannel != null) {
                 outChannel.close();
             }
@@ -39,9 +37,10 @@ public class CardFileUtils {
      * @param out destination
      * @throws IOException if any IO operation fails
      */
-    public static void saveStream(final InputStream in, final File out) 
+    public static void saveStream(final InputStream in, final File out)
             throws IOException {
-        if (out.getAbsoluteFile().getParentFile().mkdirs()) {
+        if (out.getAbsoluteFile().getParentFile().exists()
+                || out.getAbsoluteFile().getParentFile().mkdirs()) {
             FileOutputStream fos = new FileOutputStream(out);
             try {
                 byte[] buf = new byte[1024 * 4];
@@ -63,7 +62,7 @@ public class CardFileUtils {
      * @return
      * @throws IOException
      */
-    public static String readFileAsString(final BufferedReader reader) 
+    public static String readFileAsString(final BufferedReader reader)
             throws IOException {
         StringBuilder fileData = new StringBuilder(4096);
         char[] buf = new char[1024 * 4];
