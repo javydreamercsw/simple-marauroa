@@ -67,8 +67,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 } else {
                     LOG.fine("Provided the following configuration options:");
                     if (LOG.isLoggable(Level.FINE)) {
-                        for (Entry<String, String> entry :
-                                dataBaseProperties.entrySet()) {
+                        for (Entry<String, String> entry
+                                : dataBaseProperties.entrySet()) {
                             LOG.log(Level.FINE, "{0}: {1}",
                                     new Object[]{entry.getKey(),
                                         entry.getValue()});
@@ -77,9 +77,12 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                     emf = Persistence.createEntityManagerFactory(getPU(),
                             dataBaseProperties);
                 }
+                //This triggers the databaese creation
+                EntityManager temp = emf.createEntityManager();
+                temp.close();
             }
-            for (ICardGame game :
-                    Lookup.getDefault().lookupAll(ICardGame.class)) {
+            for (ICardGame game
+                    : Lookup.getDefault().lookupAll(ICardGame.class)) {
                 //Init should generate/update the database entries related 
                 //to this game, not the pages itself.
                 game.init();
@@ -543,8 +546,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 new CardCollectionTypeJpaController(getEntityManagerFactory());
         CardCollectionType cct = null;
         if (cardCollectionTypeExists(name)) {
-            for (CardCollectionType type :
-                    controller.findCardCollectionTypeEntities()) {
+            for (CardCollectionType type
+                    : controller.findCardCollectionTypeEntities()) {
                 if (type.getName().equals(name)) {
                     cct = type;
                     break;
@@ -569,8 +572,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                     new CardCollection(((CardCollectionType) type).getId(),
                     name);
             if (cardCollectionExists(name)) {
-                for (CardCollection collection :
-                        controller.findCardCollectionEntities()) {
+                for (CardCollection collection
+                        : controller.findCardCollectionEntities()) {
                     if (collection.getName().equals(name)) {
                         cc = collection;
                         break;

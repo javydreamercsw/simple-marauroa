@@ -34,7 +34,7 @@ public final class Editions implements ISearchableProperty {
 
         public void setReleaseDate(String date) throws ParseException {
             if (date == null || date.length() == 0 || date.equals("?")) {
-                release = null;
+                release = new Date();
             } else {
                 SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
                 release = formatter.parse(date);
@@ -42,7 +42,7 @@ public final class Editions implements ISearchableProperty {
         }
 
         public Date getReleaseDate() {
-            return (Date) release.clone();
+            return release == null ? new Date() : (Date) release.clone();
         }
 
         public boolean abbreviationOf(String abbr) {

@@ -4,6 +4,7 @@ import com.reflexit.magiccards.core.CachedImageNotFoundException;
 import com.reflexit.magiccards.core.CannotDetermineSetAbbriviation;
 import com.reflexit.magiccards.core.model.*;
 import com.reflexit.magiccards.core.model.Editions.Edition;
+import com.reflexit.magiccards.core.model.storage.db.DBException;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.awt.Image;
 import java.io.File;
@@ -92,8 +93,9 @@ public abstract class AbstractCardCache implements ICardCache {
      * Constructor
      *
      * @param name Cache name
+     * @throws DBException Error initializing Cache database 
      */
-    public AbstractCardCache(final String name) {
+    public AbstractCardCache(final String name) throws DBException {
         this.name = name;
         //Set default cache dir
         setCacheDir(new File(System.getProperty("user.dir")
@@ -103,6 +105,7 @@ public abstract class AbstractCardCache implements ICardCache {
                 + "cache"));
         setLoadingEnabled(true);
         setCachingEnabled(true);
+        Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
     }
 
     @Override
@@ -137,8 +140,8 @@ public abstract class AbstractCardCache implements ICardCache {
     }
 
     @Override
-    public String createLocalImageFilePath(final ICard card, 
-    final ICardSet<ICard> set)
+    public String createLocalImageFilePath(final ICard card,
+            final ICardSet<ICard> set)
             throws CannotDetermineSetAbbriviation {
         String editionName = set.getName();
         Editions editions = Editions.getInstance();
@@ -253,8 +256,8 @@ public abstract class AbstractCardCache implements ICardCache {
      * @throws CannotDetermineSetAbbriviation
      */
     @Override
-    public boolean loadCardImageOffline(final ICard card, 
-    final ICardSet<ICard> set,
+    public boolean loadCardImageOffline(final ICard card,
+            final ICardSet<ICard> set,
             final boolean forceUpdate) throws IOException,
             CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
@@ -299,7 +302,7 @@ public abstract class AbstractCardCache implements ICardCache {
      * @param aCacheDir the cacheDir to set
      */
     public static void setCacheDir(final File aCacheDir) {
-        if (!aCacheDir.mkdirs()) {
+        if (!aCacheDir.exists() && !aCacheDir.mkdirs()) {
             throw new RuntimeException("Unable to create cache dir at: "
                     + aCacheDir.getAbsolutePath());
         } else {
@@ -326,7 +329,7 @@ public abstract class AbstractCardCache implements ICardCache {
      * @return Downloaded image
      * @throws IOException
      */
-    protected synchronized Image downloadImageFromURL(final URL url, 
+    protected synchronized Image downloadImageFromURL(final URL url,
             final File dest,
             final boolean overwrite) throws IOException {
         InputStream st = null;
