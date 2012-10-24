@@ -14,7 +14,8 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
         implements Comparator {
 
     @Override
-    public final int compare(final Object o1, final Object o2) {
+    @SuppressWarnings("unchecked")
+    public int compare(final Object o1, final Object o2) {
         if (o1 == o2) {
             return 0; // this is only case it is 0
         }
@@ -51,14 +52,9 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
         return this;
     }
 
-    /**
-     * Sort based on field.
-     *
-     * @param sortField Field to sort on.
-     * @param ascending Sort ascending?
-     */
-    public abstract void setSortField(final ICardField sortField,
-            final boolean ascending);
+    public void push(ICardComparator elem) {
+        add(elem);
+    }
 
     /**
      * Has this sort field?
@@ -111,6 +107,14 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
         }
         ICardComparator elem = peek();
         return elem.isAccending();
+    }
+
+    public boolean isTop(ICardField sortField) {
+        if (size() == 0) {
+            return false;
+        }
+        ICardComparator elem = peek();
+        return elem.getField().equals(sortField);
     }
 
     private ICardComparator peek() {

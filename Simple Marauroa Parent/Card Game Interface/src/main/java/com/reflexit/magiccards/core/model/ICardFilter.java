@@ -29,9 +29,10 @@ public interface ICardFilter {
     void setOnlyLastSet(boolean onlyLastSet);
 
     /**
-     * sort field
+     * Sort field
      *
-     * @param sortField
+     * @param sortField field to sort
+     * @param accending true if ascending
      */
     void setSortField(ICardField sortField, boolean accending);
 
