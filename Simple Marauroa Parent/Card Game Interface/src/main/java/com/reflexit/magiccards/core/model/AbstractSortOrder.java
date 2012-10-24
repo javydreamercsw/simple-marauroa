@@ -52,6 +52,15 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
         return this;
     }
 
+    /**
+     * Sort based on field.
+     *
+     * @param sortField Field to sort on.
+     * @param ascending Sort ascending?
+     */
+    public abstract void setSortField(final ICardField sortField,
+            final boolean ascending);
+
     public void push(ICardComparator elem) {
         add(elem);
     }
