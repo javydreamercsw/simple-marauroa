@@ -67,7 +67,10 @@ public abstract class DefaultCardGame implements ICardGame, DataBaseStateListene
     @Override
     public List<ICardCache> getCardCacheImplementations() {
         ArrayList<ICardCache> caches = new ArrayList<ICardCache>();
-        for (ICardCache cache : Lookup.getDefault().lookupAll(ICardCache.class)) {
+        for (Iterator<? extends ICardCache> it = 
+                Lookup.getDefault().lookupAll(ICardCache.class).iterator(); 
+                it.hasNext();) {
+            ICardCache cache = it.next();
             if (cache.getGameName().equals(getName())) {
                 caches.add(cache);
             }
@@ -117,6 +120,7 @@ public abstract class DefaultCardGame implements ICardGame, DataBaseStateListene
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<ICardSet> getGameCardSets() {
         try {
             HashMap parameters = new HashMap();
@@ -134,6 +138,7 @@ public abstract class DefaultCardGame implements ICardGame, DataBaseStateListene
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<String> getColumns() {
         ArrayList<String> columns = new ArrayList<String>();
         try {
