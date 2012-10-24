@@ -93,7 +93,7 @@ public interface ICardCache {
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
-    boolean loadCardImageOffline(ICard card, ICardSet set,
+    boolean loadCardImageOffline(ICard card, ICardSet<ICard> set,
             boolean forceUpdate) throws IOException,
             CannotDetermineSetAbbriviation;
 
@@ -111,7 +111,7 @@ public interface ICardCache {
      * @return Icon or null if none
      * @throws IOException
      */
-    Image getSetIcon(ICardSet set) throws IOException;
+    Image getSetIcon(ICardSet<ICard> set) throws IOException;
 
     /**
      * Get path to a set's icon.
@@ -119,7 +119,7 @@ public interface ICardCache {
      * @param set Set to get the path for
      * @return path to a set's icon
      */
-    String getSetIconPath(ICardSet set);
+    String getSetIconPath(ICardSet<ICard> set);
 
     /**
      * Get the icon for the game.
@@ -152,7 +152,7 @@ public interface ICardCache {
      * @return Path to the file
      * @throws CannotDetermineSetAbbriviation
      */
-    String createLocalImageFilePath(ICard card, ICardSet set)
+    String createLocalImageFilePath(ICard card, ICardSet<ICard> set)
             throws CannotDetermineSetAbbriviation;
 
     /**
@@ -167,7 +167,7 @@ public interface ICardCache {
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
-    File getCardImage(ICard card, ICardSet set, URL url,
+    File getCardImage(ICard card, ICardSet<ICard> set, URL url,
             boolean remote, boolean forceRemote) throws IOException,
             CannotDetermineSetAbbriviation;
 }
