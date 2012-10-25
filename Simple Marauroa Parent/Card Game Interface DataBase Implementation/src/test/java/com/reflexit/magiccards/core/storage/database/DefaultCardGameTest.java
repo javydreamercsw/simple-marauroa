@@ -25,25 +25,13 @@ public class DefaultCardGameTest {
     private static final Logger LOG = Logger.getLogger(DefaultCardGameTest.class.getName());
     private static Game game;
 
-    public DefaultCardGameTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() throws Exception {
         Lookup.getDefault().lookup(IDataBaseCardStorage.class).setPU("Card_Game_Interface_TestPU");
         Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
     }
 
-    @AfterClass
-    public static void tearDownClass() throws Exception {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
+    public DefaultCardGameTest() {
     }
     
     /**
@@ -61,12 +49,26 @@ public class DefaultCardGameTest {
 
     public static class DefaultCardGameImpl extends DefaultCardGame implements DataBaseStateListener {
 
+        static {
+            attribs.add("rarity");
+            attribs.add("creature");
+
+            attribs.add("power");
+            attribs.add("toughness");
+
+            collectionTypes.add("Deck");
+            collectionTypes.add("Collection");
+
+            collections.put("Collection", "My Pages");
+        }
+
         @Override
         public String getName() {
             return "Test Game";
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public void initialized() {
             try {
                 HashMap parameters = new HashMap();
@@ -169,19 +171,6 @@ public class DefaultCardGameTest {
                 LOG.log(Level.SEVERE, null, ex);
                 fail();
             }
-        }
-
-        static {
-            attribs.add("rarity");
-            attribs.add("creature");
-
-            attribs.add("power");
-            attribs.add("toughness");
-
-            collectionTypes.add("Deck");
-            collectionTypes.add("Collection");
-
-            collections.put("Collection", "My Pages");
         }
 
         @Override
