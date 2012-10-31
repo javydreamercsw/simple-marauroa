@@ -49,7 +49,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <netbeans.version>RELEASE721</netbeans.version>
+        <netbeans.version>RELEASE73-BETA</netbeans.version>
     </properties>
     <modules>
         <module>Card Game Interface</module>
