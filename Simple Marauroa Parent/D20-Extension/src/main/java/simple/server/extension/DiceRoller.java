@@ -37,10 +37,10 @@ public class DiceRoller implements IDiceRoller {
             } else {
                 //It should be an integer
                 float toAdd = Float.valueOf(nextToken);
-                if (operator.equals("+")) {
+                if (operator != null && operator.equals("+")) {
                     logger.log(level, "Adding {0} to the result...", toAdd);
                     result += toAdd;
-                } else if (operator.equals("-")) {
+                } else if (operator != null && operator.equals("-")) {
                     logger.log(level, "Substracting {0} to the result...", toAdd);
                     result -= toAdd;
                 }
