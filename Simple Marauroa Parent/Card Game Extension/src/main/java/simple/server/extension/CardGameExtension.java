@@ -18,16 +18,16 @@ public class CardGameExtension extends SimpleServerExtension {
     /**
      *
      */
-    public static final String DECK = "decks",
+    public static final String DECKS = "decks",
     /**
-     *
+     * Page collection
      */
     COLLECTION = "page_collection";
 
     @Override
     public void modifyClientObjectDefinition(RPClass player) {
         //Add decks to the player
-        player.addRPSlot(DECK, -1, Definition.PRIVATE);
+        player.addRPSlot(DECKS, -1, Definition.PRIVATE);
         //Add page collection
         player.addRPSlot(COLLECTION, -1, Definition.PRIVATE);
     }
@@ -36,8 +36,8 @@ public class CardGameExtension extends SimpleServerExtension {
     public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
         if (client instanceof RPObject) {
             RPObject rpObject = (RPObject) client;
-            if (!rpObject.hasSlot(DECK)) {
-                rpObject.addSlot(DECK);
+            if (!rpObject.hasSlot(DECKS)) {
+                rpObject.addSlot(DECKS);
             }
             if (!rpObject.hasSlot(COLLECTION)) {
                 rpObject.addSlot(COLLECTION);

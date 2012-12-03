@@ -23,7 +23,7 @@ public class D20Extension extends SimpleServerExtension {
             DEITIES = "Desties", DOMAIN = "Domain",
             KNOWN_SPELLS = "Known Spells", PREP_SPELLS = "Prepared Spells",
             LEVEL="level", HP="hp", BASE_HP="base_hp";
-    private static String pluginsDir = System.getProperty("user.dir") + "/plugins";
+//    private static String pluginsDir = System.getProperty("user.dir") + "/plugins";
 //    private static PropertyContextFactory configFactory;
 
     public D20Extension() {
@@ -34,10 +34,6 @@ public class D20Extension extends SimpleServerExtension {
 //        executor.addPCGenTask(new GameModeFileLoader());
 //        executor.addPCGenTask(new CampaignFileLoader());
 //        executor.execute();
-    }
-
-    public static void main(String[] args) {
-        D20Extension test = new D20Extension();
     }
 
     @Override
@@ -104,6 +100,7 @@ public class D20Extension extends SimpleServerExtension {
 //        PropertyContextFactory.getDefaultFactory().savePropertyContexts();
     }
 
+    @Override
     public String getName() {
         return "D20 Extension";
     }

@@ -131,9 +131,9 @@ public class RPDeckTest {
         assertTrue(deck.getVersion() == 1);
         deck.increaseVersion();
         assertTrue(deck.getVersion() == 2);
-        assertTrue(test.hasSlot(CardGameExtension.DECK));
-        test.getSlot(CardGameExtension.DECK).add(deck);
-        assertTrue(test.getSlot(CardGameExtension.DECK).has(deck.getID()));
+        assertTrue(test.hasSlot(CardGameExtension.DECKS));
+        test.getSlot(CardGameExtension.DECKS).add(deck);
+        assertTrue(test.getSlot(CardGameExtension.DECKS).has(deck.getID()));
         //Test deck operations
         
     }
@@ -149,7 +149,7 @@ public class RPDeckTest {
             RPClass entity = new RPClass("test_client_object");
             entity.isA("client_object");
             extendClass(entity);
-            assertTrue(entity.hasDefinition(Definition.DefinitionClass.RPSLOT, CardGameExtension.DECK));
+            assertTrue(entity.hasDefinition(Definition.DefinitionClass.RPSLOT, CardGameExtension.DECKS));
         }
     }
 }
