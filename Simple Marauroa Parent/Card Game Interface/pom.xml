@@ -12,17 +12,12 @@
     <packaging>jar</packaging>
 
     <name>Card-Game-Interface</name>
-    <url>http://maven.apache.org</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -38,7 +33,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
                 <configuration>
                     <!-- Disable annotation processors during normal compilation--> 
                     <compilerArgument>-proc:none</compilerArgument>
@@ -48,7 +42,6 @@
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
-                <version>2.0.8</version>
                 <executions>
                     <!-- Run annotation processors on src/main/java sources -->
                     <execution>

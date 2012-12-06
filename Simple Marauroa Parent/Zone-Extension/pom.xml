@@ -9,15 +9,12 @@
     <artifactId>Zone-Extension</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>Zone-Extension</name>
-    <url>http://maven.apache.org</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -26,12 +23,4 @@
             <version>0.02.06-SNAPSHOT</version>
         </dependency>
     </dependencies>
-  
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/../repo</url>
-        </repository>
-    </repositories>
 </project>
