@@ -12,15 +12,11 @@
 
     <name>Card-Game-Extension</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -29,7 +25,7 @@
             <version>1.2.17</version>
         </dependency>
         <dependency>
-            <groupId>marauroa</groupId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>marauroa</artifactId>
             <version>3.9.2</version>
         </dependency>
@@ -44,22 +40,4 @@
             <version>1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
-  
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/../repo</url>
-        </repository>
-        <repository>
-            <id>sonatype-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>

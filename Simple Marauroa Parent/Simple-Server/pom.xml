@@ -11,21 +11,17 @@
     <packaging>jar</packaging>
 
     <name>Marauroa-Simple-Server</name>
-    <url>http://maven.apache.org</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.3.168</version>
+            <version>1.3.170</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -39,17 +35,9 @@
             <version>1.2.17</version>
         </dependency>
         <dependency>
-            <groupId>marauroa</groupId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>marauroa</artifactId>
             <version>3.9.2</version>
         </dependency>
     </dependencies>
-  
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/../repo</url>
-        </repository>
-    </repositories>
 </project>
