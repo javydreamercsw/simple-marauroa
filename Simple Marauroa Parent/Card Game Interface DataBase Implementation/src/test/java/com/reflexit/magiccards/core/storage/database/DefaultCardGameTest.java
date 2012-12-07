@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import org.junit.*;
 import org.openide.util.Lookup;
 
