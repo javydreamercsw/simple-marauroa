@@ -1,0 +1,15 @@
+syntax: glob
+**/build/*
+**/dist/*
+**/private/*
+**/*.db
+*server_stats.xml
+D20 Extension/*
+*.orig
+**/pmd.xml
+Simple-Client/log/*
+lib/marauroa.jar
+Marauroa Monitor Extension/*cobertura*
+**/target/*
+**/keystore
+**/nbactions-release-sign-artifacts.xml

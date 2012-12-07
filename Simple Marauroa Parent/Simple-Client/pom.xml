@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>net.sourceforge.javydreamercsw</groupId>
+        <artifactId>Simple-Marauroa</artifactId>
+        <version>0.02.06-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>Marauroa-Simple-Client</artifactId>
+    <version>0.02.06-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Marauroa-Simple-Client</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>marauroa</artifactId>
+            <version>3.9.2</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jnlp</artifactId>
+                    <groupId>javax.jnlp</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Simple-Server</artifactId>
+            <version>0.02.06-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <!-- Disable annotation processors during normal compilation -->
+                    <compilerArgument>-proc:none</compilerArgument>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <executions>
+                    <!-- Run annotation processors on src/main/java sources -->
+                    <execution>
+                        <id>process</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                    </execution>
+                    <!-- Run annotation processors on src/test/java sources -->
+                    <execution>
+                        <id>process-test</id>
+                        <goals>
+                            <goal>process-test</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

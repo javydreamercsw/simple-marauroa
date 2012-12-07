@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.sourceforge.javydreamercsw</groupId>
+        <artifactId>Simple-Marauroa</artifactId>
+        <version>0.02.06-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Challenge-Extension</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <name>Challenge-Extension</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>marauroa</artifactId>
+            <version>3.9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Simple-Client</artifactId>
+            <version>0.02.06-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Card-Game-Interface</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
