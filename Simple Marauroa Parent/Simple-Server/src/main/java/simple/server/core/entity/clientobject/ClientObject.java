@@ -599,9 +599,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     } catch (Exception e) {
                         logger.error("Error loading admin names from: " + adminFilename, e);
                     } finally {
-                        if (in != null) {
-                            in.close();
-                        }
+                        in.close();
                     }
                 }
             } catch (Exception e) {
@@ -971,10 +969,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         object.setID(RPObject.INVALID_ID);
         object.put("type", "client_object");
         object.put("name", characterName);
-        object.put("base_hp", 100);
-        object.put("hp", 100);
-        object.put("xp", 0);
-
         object.update();
         return object;
     }
@@ -983,9 +977,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         ClientObject object = new ClientObject(template);
         object.setID(RPObject.INVALID_ID);
         object.put("type", "client_object");
-        object.put("base_hp", 100);
-        object.put("hp", 100);
-        object.put("xp", 0);
 
         object.update();
         return object;
