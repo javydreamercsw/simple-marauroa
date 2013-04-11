@@ -547,7 +547,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 //        if (player.has(ATTR_GRUMPY)) {
 //            player.remove(ATTR_GRUMPY);
 //        }
-        
+
         readAdminsFromFile(player);
         //TODO: Move this to an extension
 //        loadItemsIntoSlots(player);
@@ -660,7 +660,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
             //TODO: move to an extension
-//        player.addRPSlot("!quests", 1, Definition.HIDDEN);
+            player.addRPSlot("!quests", 1, Definition.HIDDEN);
             player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
 
             player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);

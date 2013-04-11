@@ -105,11 +105,11 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             logger.info("Loading extensions...");
             Collection<? extends MarauroaServerExtension> ext =
                     Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
-            logger.debug("Found " + ext.size() + " extensions to register!");
+            logger.info("Found " + ext.size() + " extensions to register!");
             for (Iterator<? extends MarauroaServerExtension> it =
                     ext.iterator(); it.hasNext();) {
                 MarauroaServerExtension extension = it.next();
-                logger.debug("Loading extension: " + extension.getClass()
+                logger.info("Loading extension: " + extension.getClass()
                         .getSimpleName());
                 extension.updateDatabase();
             }
@@ -117,10 +117,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             logger.info("Loading events...");
             Collection<? extends IRPEvent> events =
                     Lookup.getDefault().lookupAll(IRPEvent.class);
-            logger.debug("Found " + events.size() + " events to register!");
+            logger.info("Found " + events.size() + " events to register!");
             for (Iterator<? extends IRPEvent> it = events.iterator(); it.hasNext();) {
                 IRPEvent event = it.next();
-                logger.debug("Registering event: " + event.getClass()
+                logger.info("Registering event: " + event.getClass()
                         .getSimpleName()
                         + ": " + event.getRPClassName());
                 event.generateRPClass();
@@ -129,11 +129,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             logger.info("Creating RPClasses...");
             Collection<? extends RPEntityInterface> classes =
                     Lookup.getDefault().lookupAll(RPEntityInterface.class);
-            logger.debug("Found " + classes.size() + " Entities to register!");
+            logger.info("Found " + classes.size() + " Entities to register!");
             for (Iterator<? extends RPEntityInterface> it =
                     classes.iterator(); it.hasNext();) {
                 RPEntityInterface entity = it.next();
-                logger.debug(entity.getClass().getSimpleName());
+                logger.info("Registering entity: " 
+                        + entity.getClass().getSimpleName());
                 entity.generateRPClass();
             }
             logger.info("Done!");

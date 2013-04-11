@@ -10,7 +10,7 @@
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>D20-Extension</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>D20-Extension</name>
+    <name>D20 Extension</name>
     <url>http://maven.apache.org</url>
     <build>
         <plugins>
@@ -32,13 +32,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>marauroa</groupId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>marauroa</artifactId>
-            <version>3.9.2</version>
+            <version>3.9.2.1</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
@@ -56,16 +56,11 @@
             <artifactId>org-openide-util-lookup</artifactId>
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
-            <version>RELEASE73-BETA2</version>
+            <version>${netbeans.version}</version>
         </dependency>
     </dependencies>
   
     <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>project</name>
-            <url>file:${project.basedir}/../repo</url>
-        </repository>
         <repository>
             <id>sonatype-repo</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
