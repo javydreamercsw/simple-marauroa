@@ -38,6 +38,7 @@ public class D20Extension extends SimpleServerExtension {
 
     @Override
     public void modifyRootRPClassDefinition(RPClass entity) {
+        //Class stuff
         entity.addAttribute(TYPE, Definition.Type.STRING);
         entity.addAttribute(CLASS, Definition.Type.STRING);
         entity.addAttribute(TITLE, Definition.Type.STRING);
@@ -51,6 +52,9 @@ public class D20Extension extends SimpleServerExtension {
         entity.addAttribute(STR, Definition.Type.INT);
         entity.addAttribute(WIS, Definition.Type.INT);
         entity.addAttribute(CHA, Definition.Type.INT);
+        entity.addAttribute(LEVEL, Definition.Type.SHORT);
+        entity.addAttribute(BASE_HP, Definition.Type.SHORT);
+        entity.addAttribute(HP, Definition.Type.SHORT);
         //Other attributes
         entity.addRPSlot(SUBCLASS, -1);
         entity.addRPSlot(EQUIPMENT, -1);
@@ -62,9 +66,6 @@ public class D20Extension extends SimpleServerExtension {
         entity.addRPSlot(DOMAIN, -1);
         entity.addRPSlot(KNOWN_SPELLS, -1);
         entity.addRPSlot(PREP_SPELLS, -1);
-        entity.addAttribute(LEVEL, Definition.Type.SHORT);
-        entity.addAttribute(BASE_HP, Definition.Type.SHORT);
-        entity.addAttribute(HP, Definition.Type.SHORT);
     }
 
     @Override
@@ -92,6 +93,9 @@ public class D20Extension extends SimpleServerExtension {
         }
         if (!client.has(AC)) {
             client.put(AC, 0);
+        }
+        if (!client.has(HP)) {
+            client.put(HP, 0);
         }
     }
 
