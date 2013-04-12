@@ -1,0 +1,13 @@
+#
+# Current Ver: $Revision: 19507 $
+# Last Editor: $Author: amaitland $
+# Last Edited: $Date: 2013-02-20 05:30:36 -0600 (Wed, 20 Feb 2013) $
+#
+# Stat definitions for Killshot mode
+#
+STATNAME:Body		ABB:BDY	DEFINE:TrainingPool|0		DEFINE:AdditionalTrainingCost|0	
+STATNAME:Sense		ABB:SEN
+STATNAME:Mind		ABB:MND
+
+
+#ALIGNMENTNAME:None		ABB:NONE		VALIDFORDEITY:Y		VALIDFORFOLLOWER:Y

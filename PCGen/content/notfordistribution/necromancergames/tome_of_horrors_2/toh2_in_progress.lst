@@ -1,0 +1,3299 @@
+SOURCELONG:Tome of Horrors II	SOURCESHORT:ToH2	SOURCEDATE:2007-03
+# Original Entry by: Andrew Maitland
+# Entry Date: 2013-01
+
+
+Aberrant 6
+ABERRANT
+Large Giant
+Hit Dice: 8d8+24 (60 hp)
+Initiative: -1
+Speed: 20 ft. (4 squares)
+Armor Class: 18 (-1 size, -1 Dex, +7 natural, +3
+hide), touch 8, flat-footed 18
+Base Attack/Grapple: +6/+16
+Attack: Greatclub +12 (2d8+9)
+Full Attack: Greatclub +12/+7 melee (2d8+9)
+Special Attacks: -
+Special Qualities: Low-light vision, oversized weapon
+Space/Reach: 10 ft./10 ft.
+Saves: Fort +9, Ref +1, Will +4
+Abilities: Str 23, Dex 8, Con 17, Int 10, Wis 14,
+Cha 10
+Skills: Climb +13, Listen +8, Move Silently
++4, Spot +7
+Feats: Cleave, Power Attack, Weapon Focus
+(greatclub)
+Environment: Temperate mountains
+Organization: Solitary, gang (2-5), band (6-9 plus
+35% noncombatants), hunting/raiding/
+trading party (6-9), or tribe
+(21-30 plus 35% noncombatants plus
+1 adept, cleric, or sorcerer of 3rd or
+4th level)
+Challenge Rating: 5
+Treasure: Standard
+Alignment: Usually neutral evil
+Advancement: By character class
+Level Adjustment: +4
+
+#Abyssal Wolf 7
+ABYSSAL WOLF
+Large Magical Beast (Chaotic, Evil, Extraplanar)
+Hit Dice: 7d10+35 (73 hp)
+Initiative: +3
+Speed: 50 ft. (10 squares)
+Armor Class: 20 (-1 size, +3 Dex, +8 natural), touch
+12, flat-footed 17
+Base Attack/Grapple: +7/+16
+Attack: Bite +11 melee (1d8+7)
+Full Attack: Bite +11 melee (1d8+7)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Paralyzing gaze, trip
+Special Qualities: Damage reduction 10/cold iron,
+darkvision 60 ft., favored prey, keen
+scent, know alignment, low-light vision,
+SR 18
+Saves: Fort +10, Ref +8, Will +6
+Abilities: Str 20, Dex 17, Con 20, Int 8, Wis 14,
+Cha 17
+Skills: Hide +0, Jump +15, Listen +3 (+5
+against non-evil half-fiends or
+tieflings), Move Silently +5, Sense
+Motive +3 (+5 against non-evil halffiends
+or tieflings), Spot +4 (+6
+against non-evil half-fiends or
+tieflings), Survival +3 (+7 tracking
+by scent, +9 tracking non-evil halffiends
+or tieflings)
+Feats: Iron Will, Power Attack, Track
+Environment: Abyss
+Organization: Solitary, pair, or pack (4-11)
+Challenge Rating: 7
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 8-21 HD (Large)
+Level Adjustment: -
+
+#Ahlinni (Cackle Bird) 9
+Ahlinni (Cackle Bird)
+Medium Magical Beast
+Hit Dice: 4d10+8 (30 hp)
+Initiative: +1
+Speed: 40 ft. (6 squares), climb 20 ft.
+Armor Class: 17 (+1 Dex, +6 natural), touch 11, flatfooted
+16
+Base Attack/Grapple: +4/+6
+Attack: Bite +7 melee (1d8+2)
+Full Attack: Bite +7 melee (1d8+2) and 2 claws +1
+melee (1d4+1)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Breath weapon 14, impale 2d8+4
+Special Qualities: Birdsong, darkvision 60 ft., fast healing 2,
+resistance to sonic 10, low-light vision
+Saves: Fort +6, Ref +5, Will +1
+Abilities: Str 15, Dex 13, Con 14, Int 6, Wis 10, Cha 10
+Skills: Climb +10, Hide +3*, Jump +4, Listen +2,
+Move Silently +4, Spot +2
+Feats: Alertness, Weapon Focus (bite)
+Environment: Temperate or cold forests and marshes
+Organization: Solitary, pair, or flock (4-7)
+Challenge Rating: 4
+Treasure: No coins; standard goods (gems only); no
+items
+Alignment: Usually chaotic neutral
+Advancement: 5-8 HD (Medium); 9-12 HD (Large)
+Level Adjustment: -
+
+#Angel, Empyreal 10
+ANGEL, EMPYREAL
+Large Outsider (Extraplanar, Good)
+Hit Dice: 13d8+65 (123 hp)
+Initiative: +8
+Speed: 40 ft. (8 squares), fly 70 ft. (good)
+Armor Class: 27 (-1 size, +4 Dex, +14 natural), touch 13,
+flat-footed 23
+Base Attack/Grapple: +13/+24
+Attack: +3 brilliant energy longsword +23 melee
+(2d6+10)
+Full Attack: +3 brilliant energy longsword +23/+18/+13
+melee (2d6+10)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Radiant blast, spell-like abilities, spells
+Special Qualities: Angel traits, aura of goodness, damage reduction
+10/evil, darkvision 60 ft., outsider
+traits, protective aura, SR 26, tongues
+Saves: Fort +13, Ref +12, Will +11
+Abilities: Str 24, Dex 18, Con 20, Int 17, Wis 17, Cha
+18
+Skills: Balance +12, Concentration +21, Diplomacy
++20, Escape Artist +15, Intimidate +17, Jump
++19, Knowledge (any one) +15, Knowledge
+(religion) +19, Knowledge (the planes) +19,
+Listen +19, Move Silently +20, Sense Motive
++15, Spot +19
+Feats: Blind-Fight, Cleave, Improved Initiative,
+Power Attack, Weapon Focus (longsword)
+Environment: Any good-aligned plane
+Organization: Solitary or group (2-5)
+Challenge Rating: 13
+Treasure: Standard
+Alignment: Always good (any)
+Advancement: 14-39 HD (Large)
+
+#Arcanoplasm 11
+ARCANOPLASM
+Large Aberration
+Hit Dice: 7d8+42 (73 hp)
+Initiative: +4
+Speed: 30 ft. (6 squares), climb 10 ft.
+Armor Class: 16 (-1 size, +7 natural), touch 9, flatfooted
+16
+Base Attack/Grapple: +5/+11
+Attack: Slam +7 melee (2d4+3 plus 1d6 acid)
+Full Attack: Slam +7 melee (2d4+3 plus 1d6 acid)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Constrict 2d4+3 plus 1d6 acid, improved
+grab, arcane spell mimicry
+Special Qualities: Absorb arcane magic, amorphous,
+arcanesense 100 ft., blindsight 60 ft., immunities
+Saves: Fort +8, Ref +2, Will +7
+Abilities: Str 15, Dex 11, Con 22, Int 10, Wis 14, Cha
+14
+Skills: Climb +18, Hide +2, Move Silently +6
+Feats: Combat Casting, Improved Initiative,
+Weapon Focus (slam)
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 7
+Treasure: None
+Alignment: Always neutral
+Advancement: 8-15 HD (Large);
+16-21 HD (Huge)
+
+#Asrai 12
+ASRAI
+Tiny Fey (Aquatic)
+Hit Dice: 1d6+1 (4 hp)
+Initiative: +4
+Speed: 20 ft. (4 squares), swim 50 ft.
+Armor Class: 18 (+2 size, +4 Dex, +2 natural), touch 16,
+flat-footed 14
+Base Attack/Grapple: +0/-15
+Attack: Touch +6 melee touch (1d4 cold)
+Full Attack: Touch +6 melee touch (1d4 cold)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Cold, spells, spell-like abilities
+Special Qualities: Damage reduction 5/cold iron, SR 17, water
+dependent
+Saves: Fort +1, Ref +6, Will +3
+Abilities: Str 5, Dex 18, Con 13, Int 10, Wis 13, Cha 14
+Skills: Concentration +5, Hide +16, Knowledge
+(arcana) +2, Knowledge (nature) +2, Listen
++3, Sense Motive +5, Spellcraft +4,
+Spot +3, Swim +12
+Feats: Weapon Finesse
+Environment: Cold and temperate aquatic
+Organization: Solitary or colony (2-12)
+Challenge Rating: 5
+Treasure: None
+Alignment: Always chaotic neutral
+Advancement: 2-3 HD (Tiny)
+Level Adjustment: +3
+
+#Barbegazi (Ice Gnome) 13
+Barbegazi (Ice Gnome)
+Small Humanoid (Cold, Gnome)
+Hit Dice: 2d8+2 (11 hp)
+Initiative: +1
+Speed: 20 ft. (4 squares), burrow 20 ft.
+Armor Class: 14 (+1 size, +1 Dex, +2 natural), touch 12,
+flat-footed 13
+Base Attack/Grapple: +1/-3
+Attack: Short sword +3 melee (1d4, 19-20/x2) or
+dagger +3 melee (1d4, 19-20/x2)
+Full Attack: Short sword +3 melee (1d4, 19-20/x2) or
+dagger +3 melee (1d4, 19-20/x2)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Spell-like abilities
+Special Qualities: Cold subtype, low-light vision, snow move
+Saves: Fort +4, Ref +1, Will +0
+Abilities: Str 10, Dex 13, Con 13, Int 11, Wis 11, Cha 8
+Skills: Craft (trapmaking) +4, Hide +9*, Listen +2,
+Spot +2, Survival +4
+Feats: Weapon Finesse
+Environment: Cold hills and mountains
+Organization: Solitary, hunting party (2-5 and 1 winter
+wolf), band (20-50 plus 50% noncombatants
+plus 1 3rd-level sergeant per 20 adults
+and 1 leader of 4th-6th level and 2-4 winter
+wolves), or clan (50-100 plus 1 3rd-level
+sergeant per 20 adults, 1-2 lieutenants of
+4th-5th level, 1 leader of 6th-8th level, and
+5-7 winter wolves)
+Challenge Rating: 1
+Treasure: Standard
+Alignment: Often neutral (evil tendencies)
+Advancement: By character class
+Level Adjustment: +2
+
+#Bedlam 14
+BEDLAM
+Large Aberration (Chaotic)
+Hit Dice: 13d8+26 (84 hp)
+Initiative: +12
+Speed: Fly 50 ft. (perfect) (10 squares)
+Armor Class: 25 (-1 size, +8 Dex, +8 natural), touch 17,
+flat-footed 17
+Base Attack/Grapple: +9/+16
+Attack: Slam +11 melee (2d4+3)
+Full Attack: 2 slams +11 melee (2d4+3)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Chaos burst, chaotic resonance
+Special Qualities: Damage reduction 10/lawful, darkvision 60
+ft., detect law, immunity to chaos, immunity
+to transformation, resistance to law spells
+Saves: Fort +8, Ref +12, Will +10
+Abilities: Str 17, Dex 26, Con 15, Int 15, Wis 15, Cha 12
+Skills: Hide +15*, Listen +14, Move Silently +21,
+Search +10, Spot +14
+Feats: Alertness, Blind-Fight, Dodge, Great Fortitude,
+Improved Initiative
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 9
+Treasure: Standard
+Alignment: Always chaotic neutral
+Advancement: 14-39 HD (Large)
+
+#Beetle, Giant Blister 16
+#Beetle, Giant Saw-tooth 16
+#Beetle, Giant Water 16
+#MAnual ENTRY Required
+
+#Bloodsuckle 18
+BLOODSUCKLE
+Large Plant
+Hit Dice: 8d8+32 (68 hp)
+Initiative: +0
+Speed: 0 ft. (immobile)
+Armor Class: 17 (-1 size, +8 natural), touch 9, flat-footed 17
+Base Attack/Grapple: +6/+13
+Attack: Tendril +9 melee (1d4+3 plus create host) or
+limb rake +8 melee (1d6+3)
+Full Attack: 2 tendrils +9 melee (1d4+3 plus create host) or
+4 limb rakes +8 melee (1d6+3)
+Space/Reach: 10 ft./10 ft. (30 ft. with tendril)
+Special Attacks: Blood drain, create host, improved grab, seed,
+summon host
+Special Qualities: Blindsight 30 ft. host sense, plant traits
+Saves: Fort +10, Ref +4, Will +4
+Abilities: Str 16, Dex 10, Con 18, Int 6, Wis 11, Cha 11
+Skills: Listen +6, Spot +5
+Feats: Iron Will, Lightning Reflexes, Weapon Focus
+(tendril)
+Environment: Temperate forests
+Organization: Solitary or cadre (bloodsuckle plus 4-7 hosts)
+Challenge Rating: 6
+Treasure: 50% standard
+Alignment: Always neutral
+Advancement: 9-16 HD (Large); 17-24 HD (Huge)
+
+#Bog Creeper 19
+BOG CREEPER
+Medium Plant
+Hit Dice: 10d8+50 (95 hp)
+Speed: 10 ft. (2 squares), swim 20 ft.
+Armor Class: 15 (+5 natural), touch 10, flat-footed 15
+Base Attack/Grapple: +7/+11
+Attack: Slam +11 melee (1d6+4) or tendril +6 melee
+(1d4+4)
+Full Attack: Slam +11 melee (1d6+4) and 4 tendrils +6 melee
+(1d4+2) or bite +11 melee (2d4+4)
+Space/Reach: 5 ft./5 ft. (10 ft. with tendril)
+Special Attacks: Constrict 1d4+4, improved grab, spit acid
+Special Qualities: Camouflage, low-light vision, marsh move,
+marshsense, plant traits
+Abilities: Str 18, Dex 10, Con 20, Int 3, Wis 14, Cha 6
+Skills: Listen +17, Spot +4, Swim +12
+Feats: Alertness, Diehard, Endurance, Improved Initiative
+Challenge Rating: 8
+Alignment: Always neutral
+Advancement: 11-20 HD (Large); 21-30 HD (Huge)
+
+#Brass Man 20
+BRASS MAN
+Large Construct (Extraplanar, Fire)
+Hit Dice: 10d10+30 (85 hp)
+Speed: 30 ft. (6 squares)
+Armor Class: 23 (-1 size, +14 natural), touch 9, flat-footed
+23
+Attack: Slam +12 melee (2d8+6) or greatsword +12
+melee (3d6+9, 19-20/x2)
+Full Attack: 2 slams +12 melee (2d8+6) or greatsword
++12/+7 melee (3d6+9, 19-20/x2)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Spit molten brass
+Special Qualities: Construct traits, damage reduction 10/adamantine,
+darkvision 60 ft., fire subtype,
+immunity to magic, low-light vision
+Abilities: Str 23, Dex 10, Con -, Int -, Wis 11, Cha 1
+Challenge Rating: 7
+Alignment: Always neutral
+Advancement: 11-18 HD (Large); 19-30 HD (Huge)
+
+#Burning Dervish 21
+BURNING DERVISH
+Medium Outsider (Extraplanar)
+Hit Dice: 9d8+9 (49 hp)
+Speed: 30 ft. (6 squares), fly 20 ft. (perfect)
+Armor Class: 16 (+3 Dex, +3 natural), touch 13, flat-footed
+13
+Attack: Falchion +13/+8 melee (2d4+6) or slam +13
+melee (1d6+4 plus 1d6 fire) (flame form)
+Full Attack: Falchion +13/+8 melee (2d4+6) or 2 slams
++13 melee (1d6+4 plus 1d6 fire) (flame form)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Flame form, spell-like abilities
+Special Qualities: Darkvision 60 ft., elemental endurance, resistance
+to fire 15, outsider traits, plane
+shift
+Abilities: Str 18, Dex 16, Con 13, Int 13, Wis 15, Cha 15
+Skills: Bluff +13, Concentration +12, Escape Artist
++14, Knowledge (the planes) +12, Listen
++13, Move Silently +14, Search +10, Sense
+Motive +13, Spot +13, Survival +13 (+15 on
+other planes, +15 following tracks)
+Feats: Combat Expertise, Dodge (b), Mobility,
+Spring Attack, Whirlwind Attack
+Challenge Rating: 7
+Alignment: Usually lawful evil
+Advancement: 10-15 HD (Medium); 16-27 HD (Large)
+Level Adjustment: +5
+
+#Cadaver 22
+CADAVER
+Medium Undead
+Hit Dice: 2d12 (13 hp)
+Speed: 30 ft. (6 squares)
+Armor Class: 13 (+1 Dex, +2 natural), touch 11, flatfooted
+12
+Attack: Claw +2 melee (1d4+1 plus disease)
+Full Attack: 2 claws +2 melee (1d4+1 plus disease) and
+bite -3 (1d6 plus disease)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Disease
+Special Qualities: Damage reduction 5/bludgeoning,
+darkvision 60 ft., immunity to cold, reanimation,
+undead traits
+Saves: Fort +0, Ref +1, Will +3
+Abilities: Str 13, Dex 13, Con -, Int -, Wis 10, Cha 10
+Feats: Improved Initiative (b)
+Challenge Rating: 2
+Alignment: Always chaotic evil
+Advancement: 3-6 HD (Medium)
+
+#Caterprism 23
+CATERPRISM
+Large Elemental (Earth, Extraplanar)
+Hit Dice: 6d8+24 (51 hp)
+Speed: 30 ft. (6 squares)
+Armor Class: 20 (-1 size, +1 Dex, +10 natural), touch 10,
+flat-footed 19
+Attack: Bite +9 melee (1d6+5) or leg +9 melee
+(1d8+5)
+Full Attack: Bite +9 melee (1d6+5) or 4 legs +9 melee
+(1d8+5)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Crystal silk 2d6, crystalline mandibles
+Special Qualities: Darkvision 60 ft., elemental traits, SR 18
+Saves: Fort +9, Ref +3, Will +5
+Abilities: Str 20, Dex 12, Con 18, Int 4, Wis 13, Cha
+11
+Skills: Listen +8, Spot +7
+Feats: Alertness, Iron Will, Weapon Focus (bite)
+Challenge Rating: 6
+Alignment: Always neutral
+Advancement: 7-12 HD (Large); 13-18 HD (Huge)
+
+#Cave Leech 24
+CAVE LEECH
+Medium Magical Beast
+Hit Dice: 8d10+30 (74 hp)
+Speed: 40 ft. (8 squares), swim 30 ft.
+Armor Class: 16 (+6 natural), touch 10, flat-footed 16
+Attack: Tentacle +10 melee (1d4+2) or bite +10
+melee (1d6+2)
+Full Attack: 8 tentacles +10 melee (1d4+2) or bite +10
+melee (1d6+2)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Blood drain, constrict 1d4+2, improved
+grab
+Special Qualities: Damage reduction 10/piercing or slashing,
+darkvision 60 ft., low-light vision, tentacles,
+tremorsense 60 ft.
+Abilities: Str 15, Dex 11, Con 17, Int 3, Wis 12, Cha 6
+Skills: Hide +12, Listen +3, Spot +3, Swim +12
+Feats: Improved Initiative, Toughness (x2)
+Challenge Rating: 6
+Alignment: Always neutral
+Advancement: 9-15 HD (Medium); 16-24 HD (Large)
+
+#Cerebral Stalker 25
+CEREBRAL STALKER
+Medium Aberration
+Hit Dice: 9d8+18 (58 hp)
+Speed: 30 ft. (6 squares), burrow 20 ft.
+Armor Class: 19 (+2 Dex, +7 natural), touch 12, flatfooted
+17
+Attack: Claw +10 melee (1d6+3)
+Full Attack: 2 claws +10 melee (1d6+3) or bite +9
+melee (1d8+3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Consume brain, create zombie, fear gaze,
+improved grab, web
+Special Qualities: Darkvision 60 ft., earth glide, sink,
+tremorsense 90 ft.
+Abilities: Str 16, Dex 15, Con 15, Int 11, Wis 15, Cha
+15
+Skills: Hide +13, Listen +7, Move Silently +13,
+Spot +7
+Feats: Alertness, Improved Initiative, Stealthy,
+Weapon Focus (claw)
+Challenge Rating: 8
+Alignment: Always chaotic evil
+Advancement: 10-27 HD (Medium)
+
+#Church Grim 26
+CHURCH GRIM
+Small Magical Beast (Incorporeal)
+Hit Dice: 5d10+10 (37 hp)
+Initiative: +2
+Speed: 40 ft. (8 squares)
+Armor Class: 15 (+1 size, +2 Dex, +2 deflection), touch
+15, flat-footed 13
+Base Attack/Grapple: +5/-
+Attack: Incorporeal bite +7 melee (1d6 holy plus
+1d4 Wis)
+Full Attack: Incorporeal bite +7 melee (1d6 holy plus
+1d4 Wis)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Howl, Wisdom damage
+Special Qualities: Damage reduction 10/evil, darkvision
+60 ft., incorporeal traits, know alignment,
+limited domain, low-light vision,
+rejuvenation, soul defender
+Saves: Fort +6, Ref +6, Will +5
+Abilities: Str -, Dex 15, Con 15, Int 12, Wis 15,
+Cha 14
+Skills: Hide +6, Knowledge (religion) +5,
+Listen +9, Sense Motive +8, Spot +9
+Feats: Alertness, Iron Will
+Environment: Any land (graveyards and cemeteries)
+Organization: Solitary
+Challenge Rating: 5
+Treasure: None
+Alignment: Always lawful good
+Advancement: 6-15 HD (Small)
+
+#Cinder Ghoul 27
+CINDER GHOUL
+Large Undead (Fire)
+Hit Dice: 8d12 (52 hp)
+Initiative: +9
+Speed: Fly 40 ft. (perfect) (8 squares)
+Armor Class: 20 (-1 size, +5 Dex, +6 natural), touch 14,
+flat-footed 15
+Base Attack/Grapple: +4/+11
+Attack: Slam +8 (1d8+4 plus 1d6 fire and energy
+drain)
+Full Attack: Slam +8 (1d8+4 plus 1d6 fire and energy
+drain)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Energy drain, fire, smoke inhalation
+Special Qualities: Damage reduction 10/magic, darkvision
+60 ft., fire subtype, +2 turn resistance,
+smoke form, undead traits
+Saves: Fort +2, Ref +9, Will +7
+Abilities: Str 16, Dex 20, Con-, Int 4, Wis 12, Cha
+19
+Skills: Spot +12
+Feats: Improved Initiative, Lightning Reflexes,
+Weapon Finesse
+Environment: Any
+Organization: Solitary, gang (2-5), or mob (6-11)
+Challenge Rating: 7
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 9-24 HD (Large)
+
+#Clamor 28
+CLAMOR
+Medium Aberration (Extraplanar, Incorporeal)
+Hit Dice: 4d8+12 (30 hp)
+Speed: Fly 50 ft. (perfect) (10 squares)
+Armor Class: 20 (+7 Dex, +3 deflection), touch
+20, flat-footed 13
+Base Attack/Grapple: +3/-
+Attack: Sonic ray +10 ranged touch (2d6
+sonic)
+Full Attack: Sonic ray +10 ranged touch (2d6
+sonic)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Sonic burst
+Special Qualities: Darkvision 60 f t . , incorporeal
+traits, natural invisibility, perfect
+mimic, speed of sound, vulnerabilities
+Abilities: Str -, Dex 25, Con 17, Int 5, Wis
+12, Cha 17
+Skills: Listen +3, Sense Motive +4, Spot
++3
+Feats: Improved Initiative, Lightning Reflexes
+Challenge Rating: 4
+Alignment: Always neutral
+Advancement: 5-12 HD (Medium)
+
+#Colossus, Jade 30
+COLOSSUS, JADE
+Colossal Construct
+Hit Dice: 32d10+80 (256 hp)
+Speed: 40 ft. (8 squares)
+Armor Class: 34 (-8 size, +32 natural), touch 2, flatfooted
+34
+Attack: Slam +35 melee (4d8+19)
+Full Attack: 2 slams +35 melee (4d8+19)
+Space/Reach: 30 ft./30 ft.
+Special Attacks: Breath weapon
+Special Qualities: Construct traits, damage reduction 15/adamantine,
+darkvision 60 ft., immunity to
+fire, immunity to magic, light reflection,
+low-light vision
+Abilities: Str 49, Dex 10, Con -, Int -, Wis 11, Cha
+1
+Challenge Rating: 16
+Alignment: Usually neutral
+Advancement: 33-96 (Colossal)
+
+#Corpse Rook 31
+CORPSE ROOK
+Large Magical Beast
+Hit Dice: 6d10+12 (45 hp)
+Speed: 10 ft. (2 squares), fly 80 ft. (average)
+Armor Class: 17 (-1 size, +3 Dex, +5 natural), touch 12,
+flat-footed 14
+Attack: Bite +10 melee (1d8+5)
+Full Attack: 3 bites +10 melee (1d8+5) and 2 claws +8
+melee (1d6+2)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Rend 2d8+7
+Special Qualities: All-around vision, darkvision 60 ft., lowlight
+vision, scent
+Abilities: Str 20, Dex 17, Con 15, Int 6, Wis 12, Cha
+11
+Skills: Hide +5, Listen +5, Search +4, Spot +10
+Feats: Alertness, Flyby Attack, Multiattack
+Challenge Rating: 5
+Alignment: Usually neutral (evil tendencies)
+Advancement: 7-12 HD (Large); 13-18 HD (Gargantuan)
+
+#Corpsespinner 32
+CORPSESPINNER
+Huge Magical Beast
+Hit Dice: 15d10+45 (127 hp)
+Speed: 40 ft. (8 squares), climb 20 ft.
+Armor Class: 25 (-2 size, +3 Dex, +14 natural), touch 11,
+flat-footed 22
+Attack: Bite +19 melee (2d8+7 plus poison)
+Full Attack: Bite +19 melee (2d8+7 plus poison)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Create corpsespun, poison, web
+Special Qualities: Astral jaunt, astralsense, darkvision 60
+ft., low-light vision
+Abilities: Str 20, Dex 17, Con 17, Int 7, Wis 15, Cha
+10
+Skills: Climb +13, Listen +10, Move
+Silently +12, Spot +10
+Feats: Ability Focus (poison),
+Alertness, Improved Initiative,
+Improved Natural
+Attack (bite), Power Attack,
+Skill Focus (Move
+Silently)
+Challenge Rating: 11
+Alignment: Always neutral
+Advancement: 16-25 HD (Huge); 26-45 HD (Gargantuan)
+
+#Crag Man 33
+CRAG MAN
+Medium Aberration (Earth)
+Hit Dice: 6d8+18 (45 hp)
+Speed: 30 ft. (6 squares)
+Armor Class: 19 (+1 Dex, +8 natural), touch 11, flatfooted
+18
+Attack: Slam +8 melee (1d6+3); or pierce +8 melee
+(1d8+3)
+Full Attack: 2 slams +8 melee (1d6+3); or 2 pierces +8
+melee (1d8+3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Pierce, piercer hellstorm
+Special Qualities: Damage reduction 5/-, darkvision 60
+ft., passwall, stalagmite form, tremorsense
+Abilities: Str 17, Dex 13, Con 17, Int 6, Wis 12, Cha 6
+Skills: Hide +2*, Listen +6, Move Silently +3,
+Spot +6
+Feats: Alertness (b), Power Attack, Weapon Focus
+(slam, pierce)
+Challenge Rating: 5
+Alignment: Always chaotic evil
+Advancement: 7-10 HD (Medium); 11-21 HD (Large)
+Level Adjustment: +3
+
+#Crucifixion Spirit 35
+CRUCIFIXION SPIRIT
+Medium Undead (Incorporeal)
+Hit Dice: 15d12 (97 hp)
+Initiative: +7
+Speed: 30 ft. (6 squares), fly 50 ft. (perfect)
+Armor Class: 18 (+3 Dex, +5 deflection), touch 18, flatfooted
+15
+Base Attack/Grapple: +7/-
+Attack: Incorporeal touch +10 melee (1d8 plus paralysis);
+or crucify soul +10 ranged touch (crucify
+soul)
+Full Attack: Incorporeal touch +10 melee (1d8 plus paralysis);
+or crucify soul +10 ranged touch (crucify
+soul)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Crucify soul, paralysis
+Special Qualities: Darkvision 60 ft., immunity to turning, incorporeal
+traits, SR 22, undead traits
+Saves: Fort +5, Ref +10, Will +15
+Abilities: Str -, Dex 17, Con -, Int 15, Wis 18, Cha 20
+Skills: Escape Artist +19, Hide +19, Intimidate +20,
+Listen +21, Search +17, Sense Motive +20, Spot
++21
+Feats: Alertness, Blind-Fight, Dodge, Improved Initiative,
+Iron Will, Lightning Reflexes
+Environment: Any
+Organization: Solitary
+Challenge Rating: 11
+Treasure: Standard
+Alignment: Always chaotic evil
+Advancement: 16-45 HD (Medium)
+
+#Demon, Caizel 36
+DEMON: CAIZEL
+Medium Outsider (Chaotic, Evil, Extraplanar)
+Hit Dice: 18d8+108 (189 hp)
+Initiative: +6
+Speed: 40 ft. (8 squares), fly 60 ft. (good)
+Armor Class: 36 (+6 Dex, +12 natural, +8 profane),
+touch 24, flat-footed 30
+Base Attack/Grapple: +18/+24
+Attack: Bonerazor +27 melee (2d4+8, 19-20/x2)
+or claw +25 melee (1d6+6, 19-20/x2)
+Full Attack: Bonerazor +27/+22/+17/+12 melee
+(2d4+8, 19-20/x2) or 2 claws +25 melee
+(1d6+6, 19-20/x2)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Poison, spell-like abilities, summon demons,
+touch of ecstasy
+Special Qualities: Damage reduction 15/cold iron and good,
+darkvision 60 ft., demon traits, outsider
+traits, SR 28
+Saves: Fort +17, Ref +17, Will +20
+Abilities: Str 23, Dex 22, Con 23, Int 25, Wis 25, Cha
+27
+Skills: Bluff +29, Concentration +22, Diplomacy
++33, Disguise +29 (+31 acting), Escape
+Artist +24, Gather Information +29, Hide
++21, Intimidate +25, Knowledge (the
+planes) +28, Listen +39, Move Silently
++27, Perform (act)+22, Perform (dance)
++20, Sense Motive +28, Spellcraft +28,
+Spot +39, Survival +22 (+24 on other
+planes)
+Feats: Alertness, Blind-Fight, Combat
+Reflexes, Iron Will, Quicken
+Spell-Like Ability (wall of
+fire), Weapon Focus (claw,
+dagger)
+Environment: Abyss
+Organization: Solitary or troupe (Caizel
+plus 2-5 succubi)
+Challenge Rating: 16
+Treasure: Standard
+Alignment: Always chaotic evil
+
+#Demon, Chaaor 37
+DEMON, CHAAOR
+Large Outsider (Chaotic, Evil, Extraplanar)
+Hit Dice: 11d8+66 (115 hp)
+Initiative: +3
+Speed: 30 ft. (6 squares)
+Armor Class: 26 (-1 size, +3 Dex, +14 natural), touch 12,
+flat-footed 23
+Base Attack/Grapple: +11/+23
+Attack: Claw +18 melee (1d8+8)
+Full Attack: 2 claws +18 melee (1d8+8) and bite +13
+melee (2d6+4)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Improved grab, rend 2d8+12, roar, spelllike
+abilities, summon demons
+Special Qualities: Damage reduction 10/good, darkvision 60
+ft., demon traits, outsider traits, SR 20
+Saves: Fort +13, Ref +10, Will +9
+Abilities: Str 26, Dex 17, Con 22, Int 8, Wis 14, Cha
+14
+Skills: Climb +22, Intimidate +16, Jump +22, Listen
++24, Move Silently +17, Search +13,
+Spot +24
+Feats: Blind-Fight, Cleave, Great Cleave, Power
+Attack
+Environment: Abyss
+Organization: Gang (2-5) or pack (6-11)
+Challenge Rating: 11
+Treasure: Standard
+Alignment: Always chaotic evil
+Advancement: 12-18 HD (Large); 19-33 HD (Huge)
+Chaaor speak Abyssal and Common.
+
+#Demon, Greruor 39
+DEMON, GRERUOR
+Large Outsider (Chaotic, Evil, Extraplanar)
+Hit Dice: 10d8+60 (105 hp)
+Initiative: +3
+Speed: 40 ft. (6 squares)
+Armor Class: 28 (-1 size, +3 Dex, +16 natural), touch 12, flatfooted
+25
+Base Attack/Grapple: +10/+21
+Attack: Bite +16 melee (2d6+7) or tongue +12 melee
+(grapple) or Huge ranseur +16 melee (2d6+10,
+crit x3)
+Full Attack: Bite +16 melee (2d6+7) and gore +11 melee
+(1d6+3) or tongue +12 ranged (grapple) or
+Huge ranseur +16/+11 melee (2d6+10, crit x3)
+Space/Reach: 10 ft./5 ft. (10 ft. with ranseur)
+Special Attacks: Acid and fire spittle, improved grab, spell-like
+abilities, summon demons
+Special Qualities: Damage reduction 10/good, darkvision 60 ft.,
+demon traits, leap, outsider traits, SR 20, true
+seeing
+Saves: Fort +13, Ref +10, Will +9
+Abilities: Str 24, Dex 17, Con 22, Int 14, Wis 14, Cha 16
+Skills: Escape Artist +16, Hide +12, Intimidate +16,
+Jump +40, Listen +25, Move Silently +16, Search
++13, Sense Motive +15, Spot +25, Survival +15
+(+17 following tracks)
+Feats: Alertness, Cleave, Improved Sunder, Power
+Attack
+Environment: Abyss
+Organization: Solitary, pair, or troupe (3-6)
+Challenge Rating: 10
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 11-16 HD (Large); 17-30 HD (Huge)
+
+#Demon, Mallor 40
+DEMON, MALLOR
+Large Outsider (Chaotic, Evil, Extraplanar)
+Hit Dice: 14d8+140 (203 hp)
+Initiative: +6
+Speed: 40 ft. (8 squares)
+Armor Class: 29 (-1 size, +2 Dex, +18 natural), touch 11,
+flat-footed 27
+Base Attack/Grapple: +14/+26
+Attack: Large +1 anarchic longspear +22 melee
+(2d6+12, crit x3) or claw +21 melee (1d6+8
+plus poison)
+Full Attack: Large +1 anarchic longspear +22/+17/+12
+melee (2d6+12, crit x3) or 2 claws +21
+melee (1d6+8 plus poison)
+Space/Reach: 10 ft./5 ft. (10 ft. with longspear)
+Special Attacks: Fear gaze, foul liquid, poison, spell-like
+abilities, summon demons, summon serpents
+Special Qualities: Demon traits, damage reduction 10/good,
+darkvision 60 ft., outsider traits, SR 25
+Saves: Fort +29, Ref +11, Will +12
+Abilities: Str 27, Dex 15, Con 30, Int 16, Wis 16, Cha
+20
+Skills: Climb +20, Diplomacy +19, Concentration
++27, Intimidate +21, Knowledge (the
+planes) +20, Listen +36, Move Silently
++15, Search +20, Sense Motive +18,
+Spellcraft +18, Spot +36, Survival +20
+(+22 on other planes, +22 following tracks)
+Feats: Blind-Fight, Cleave, Improved Initiative,
+Improved Sunder, Power Attack
+Environment: Abyss
+Organization: Solitary or gang (2-4)
+Challenge Rating: 14
+Treasure: Standard plus Large +1 anarchic longspear
+Alignment: Always chaotic evil
+Advancement: 15-25 HD (Large); 26-42 HD (Huge)
+Mallors speak Abyssal, Common, and at least three
+other languages.
+
+#Demon, Ooze (greater) 42
+
+
+#Demon, Ooze (lesser) 42
+
+
+#Demon, Shrroth 44
+DEMON, SHRROTH
+Huge Outsider (Aquatic, Chaotic, Evil, Extraplanar)
+Hit Dice: 12d8+96 (150 hp)
+Initiative: +4
+Speed: 20 ft. (4 squares), swim 60 ft.
+Armor Class: 24 (-2 size, +16 natural), touch 8,
+flat-footed 26
+Base Attack/Grapple: +12/+29
+Attack: Tentacle +19 melee (2d6+9)
+Full Attack: 6 tentacles +19 melee (2d6+9) and 2
+claws +14 melee (1d6+4) and bite
++14 melee (1d8+4) and Huge trident
++14 melee (3d6+4)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Constrict 2d6+9, improved grab,
+sickness cloud, spell-like abilities,
+summon demons
+Special Qualities: Amphibious, damage reduction 10/
+good, darkvision 60 ft., demon traits,
+jet, outsider traits, SR 23
+Saves: Fort +16, Ref +13, Will +11
+Abilities: Str 28, Dex 10, Con 27, Int 14, Wis
+16, Cha 18
+Skills: Bluff +19, Concentration +23, Hide
++7, Intimidate +19, Knowledge (the
+planes) +17, Listen +26, Search +17,
+Sense Motive +18, Spot +26,
+Swim +32
+Feats: Blind-Fight,
+Cleave,
+Improved
+Initiative,
+Lightning
+Reflexes, Power
+Attack
+Environment: Abyss
+Organization: Solitary or gang
+(2-5)
+Challenge Rating: 12
+Treasure: Standard
+Alignment: Always chaotic
+evil
+Advancement: 13-21 HD
+(Huge); 22-36
+HD (Gargantuan)
+
+#Demon, Vepar (Duke) 45
+Large Outsider (Aquatic, Chaotic, Evil, Extraplanar)
+Hit Dice: 22d8+242 (341 hp)
+Initiative: +12
+Speed: 10 ft. (2 squares), swim 50 ft.
+Armor Class: 42 (-1 size, +8 Dex, +16 natural, +9 profane),
+touch 26, flat-footed 34
+Base Attack/Grapple: +22/+37
+Attack: Demonbrand +35 melee (2d6+13, 19-20/
+x2) or claw +33 melee (1d8+11 plus hypothermic
+touch)
+Full Attack: Demonbrand +35/+30/+25/+20 melee
+(2d6+13, 19-20/x2) or 2 claws +33 melee
+(1d8+11 plus hypothermic touch)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Spell-like abilities, hypothermic touch,
+summon demons
+Special Qualities: Amphibious, damage reduction 15/cold iron
+and good, darkvision 60 ft., demon traits,
+outsider traits, SR 30
+Saves: Fort +24, Ref +21, Will +21
+Abilities: Str 33, Dex 26, Con 33, Int 27, Wis 27, Cha
+29
+Skills: Bluff +34, Concentration +36, Diplomacy
++38, Disguise +34 (+36 acting), Escape
+Artist +33, Intimidate +36, Knowledge
+(arcana) +33, Knowledge (religion) +33,
+Knowledge (the planes) +33, Listen +41,
+Search +33, Sense Motive +33, Spellcraft
++35 (+37 scrolls), Spot +41, Survival +33
+(+35 on other planes, +35 following tracks),
+Swim +44, Use Magic Device +33 (+35
+scrolls)
+Feats: Cleave, Great Cleave, Improved Critical
+(trident), Improved Initiative, Power Attack,
+Quicken Spell-Like Ability (ice
+storm), Weapon Focus (trident, claw)
+Environment: Abyss
+Organization: Solitary or troupe (Vepar and 2-5 shrroths)
+Challenge Rating: 21
+Treasure: Double standard plus Demonbrand
+Alignment: Always chaotic evil
+
+
+#Devil, Blood Reaver 47
+Medium Outsider (Evil, Extraplanar, Lawful)
+Hit Dice: 9d8+45 (85 hp)
+Initiative: +2
+Speed: 40 ft. (8 squares)
+Armor Class: 24 (+2 Dex, +12 natural), touch 12, flat-footed
+22
+Base Attack/Grapple: +9/+15
+Attack: Dual-headed barbed flail +15 melee (1d10+6
+plus stun, 19-20/x2) or claw +15 melee (2d6+6)
+Full Attack: Dual-headed barbed flail +15/+10 melee (1d10+6
+plus stun, 19-20/x2) or 2 claws +15 melee
+(2d6+6)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Siphoning aura, stun, spell-like abilities, summon
+devils
+Special Qualities: Damage reduction 10/good, darkvision 60ft.,
+devil traits, regeneration 5, SR 20
+Saves: Fort +11, Ref +8, Will +8
+Abilities: Str 23, Dex 15, Con 21, Int 14, Wis 14, Cha 14
+Skills: Climb +17, Bluff +10, Diplomacy +12, Hide +14,
+Intimidate +14, Knowledge (any one) +12, Listen
++14, Move Silently +14, Search +12, Sense
+Motive +9, Spot +14, Survival +12 (+14 following
+tracks)
+Feats: Cleave, Great Cleave, Improved Critical (barbed
+flail), Power Attack
+Environment: Nine Hells
+Organization: Solitary, team (2-4), or squad (4- 9)
+Challenge Rating: 8
+Treasure: Standard
+Alignment: Always lawful evil
+Advancement: 10-16 HD (Medium); 17-27 HD (Large)
+
+#Devil, Caasimolar 48
+Medium Outsider (Evil, Extraplanar, Lawful)
+Hit Dice: 27d8+243 (364 hp)
+Initiative: +12
+Speed: 50 ft. (10 squares)
+Armor Class: 46 (+8 Dex, +18 natural, +10 profane),
+touch 28, flat-footed 38
+Base Attack/Grapple: +27/+35
+Attack: Caasimolar's rod +39 melee (1d6+8 plus
+2d8+10, see text)
+Full Attack: Caasimolar's rod +39/+34/+29/+24 melee
+(1d6+8 plus 2d8+10, see text)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Fear, spell-like abilities, summon devils
+Special Qualities: Darkvision 60 ft., damage reduction 15/
+good and silver, devil traits, outsider traits,
+regeneration 7, SR 36
+Saves: Fort +24, Ref +25, Will +26
+Abilities: Str 27, Dex 26, Con 29, Int 29, Wis 29,
+Cha 30
+Skills: Balance +28, Bluff +40, Climb +18, Concentration
++39, Craft (alchemy) +29,
+Diplomacy +40 (+42 acting), Disguise +40,
+Escape Artist +28, Forgery +28, Gather
+Information +40, Intimidate +30, Knowledge
+(arcana) +39, Knowledge (history)
++39, Knowledge (the planes) +39, Knowledge
+(religion) +29, Listen +39, Move
+Silently +28, Search +29, Sense Motive
++29, Spot +39, Survival +29 (+31 on other
+planes, +31 when tracking)
+Feats: Combat Reflexes, Combat Casting, Craft
+Wondrous Item, Improved Initiative, Iron
+Will, Lightning Reflexes, Maximize Spell-
+Like Ability (cone of cold), Quicken
+Spell-Like Ability (cone of cold), Scribe
+Scroll, Weapon Focus (iron rod)
+Environment: Infernus
+Organization: Solitary or troupe (Cassimolar plus 1 pit
+fiends or 2-5 bearded devils)
+Challenge Rating: 23
+Treasure: Double standard plus Caasimolar's rod
+Alignment: Always lawful evil
+
+#Devil, Demoriel 49
+DEVIL: DEMORIEL
+Medium Outsider (Evil, Extraplanar, Lawful)
+Hit Dice: 20d8+100 (190 hp)
+Initiative: +9
+Speed: 40 ft. (8 squares), fly 60 ft. (average)
+Armor Class: 40 (+5 Dex, +15 natural, +10 profane) touch
+25, flat-footed 35
+Base Attack/Grapple: +20/+26
+Attack: Reaver +30 melee (1d6+9, 19-20/x2) or
+claw +26 melee (1d6+6)
+Full Attack: Reaver +30/+25/+20/+15 melee (1d6+9,
+19-20/x2) or 2 claws +26 melee (1d6+6)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Enrapture, spell-like abilities, summon devils
+Special Qualities: Devil traits, damage reduction 15/good and
+silver, darkvision 60 ft., outsider traits,
+regeneration 7, resistant to good magic, SR
+30
+Saves: Fort +17, Ref +17, Will +20
+Abilities: Str 23, Dex 21, Con 20, Int 23, Wis 23, Cha
+31
+Skills: Bluff +38, Concentration +25, Diplomacy +38
+(+40 acting), Forgery +25, Gather Information
++38, Hide +16, Intimidate +30, Knowledge
+(arcana) +26, Knowledge (the planes) +26,
+Knowledge (religion) +26, Move Silently +16,
+Listen +26, Search +26, Sense Motive +26,
+Sleight of Hand +25, Spot +26, Survival +26
+(+28 on other planes, +28 when tracking)
+Feats: Align Spell-Like Ability (evil, meteor
+swarm), Cleave, Improved Initiative, Iron
+Will, Maximize Spell-Like Ability (fireball),
+Power Attack, Weapon Focus (short sword)
+Environment: Infernus
+Organization: Solitary or troupe (Demoriel plus 1-4 horned
+devils)
+Challenge Rating: 19
+Treasure: Double standard plus Reaver
+Alignment: Always lawful evil
+
+#Devil, Flayer 51
+Large Outsider (Evil, Extraplanar, Lawful)
+Hit Dice: 12d8+108 (162 hp)
+Initiative: +2
+Speed: 40 ft. (8 squares)
+Armor Class: 27 (-1 size, +2 Dex, +16 natural), touch 11,
+flat-footed 25
+Base Attack/Grapple: +12/+25
+Attack: Claw +21 melee (1d6+9, 19-20/x2)
+Full Attack: 2 claws +21 melee (1d6+9, 19-20/x2) and
+bite +16 melee (1d8+4)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Flensing, spell-like abilities, summon devils,
+unholy burst
+Special Qualities: Damage reduction 10/silver and good,
+darkvision 60 ft., devil traits, outsider
+traits, regeneration 5, SR 24
+Saves: Fort +17, Ref +10, Will +10
+Abilities: Str 29, Dex 15, Con 29, Int 14, Wis 14, Cha
+14
+Skills: Climb +24, Escape Artist +17, Hide +13,
+Intimidate +17, Jump +28, Listen +17, Move
+Silently +17, Search +10, Sense Motive +9,
+Spot +17, Survival +17 (+19 following
+tracks)
+Feats: Align Spell-Like Ability (evil, scorching
+ray), Cleave, Improved Critical (claw),
+Power Attack, Weapon Focus (bite, claw)
+Environment: Nine Hells or Infernus
+Organization: Gang (2-4) or pack (6-11)
+Challenge Rating: 11
+Treasure: Standard
+Alignment: Always lawful evil
+Advancement: 13-24 HD (Large); 25-36 HD (Huge)
+Flayer devils speak Infernal, Common, and at least one
+other language.
+
+#Devil, Hellstoker 52
+Medium Outsider (Evil, Extraplanar, Lawful)
+Hit Dice: 5d8+10 (32 hp)
+Initiative: +1
+Speed: 30 ft. (6 squares)
+Armor Class: 19 (+1 Dex, +8 natural), touch 11, flatfooted
+18
+Base Attack/Grapple: +5/+7
+Attack: Longspear +7 melee (1d8+3, crit x3)
+or bellows +6 ranged touch (1d8 fire)
+or claw +7 melee (1d4+2)
+Full Attack: Longspear +7 melee (1d8+3, crit x3)
+or bellows +6 ranged touch (1d8 fire)
+or 2 claws +7 melee (1d4+2)
+Space/Reach: 5 ft./5 ft. (10 ft. with longspear)
+Special Attacks: Bellows, fiery body, spell-like abilities,
+summon devils
+Special Qualities: Damage reduction 5/silver or good,
+darkvision 60 ft., devil traits, oily
+hide, outsider traits, SR 16
+Saves: Fort +6, Ref +5, Will +4
+Abilities: Str 15, Dex 13, Con 15, Int 6, Wis 10,
+Cha 10
+Skills: Balance +4, Climb +7, Escape Artist
++17, Hide +7, Intimidate +4, Listen
++6, Move Silently +7, Search +1, Spot
++6, Survival +3
+Feats: Align Spell-Like Ability (evil, burning
+hands ), Power Attack
+Environment: Nine Hells or Infernus
+Organization: Solitary, team (4-7), or retinue (8-
+13)
+Challenge Rating: 5
+Treasure: Standard
+Alignment: Always lawful evil
+Advancement: 6-9 HD (Medium);
+10-15 HD (Large)
+Hellstokers speak Infernal.
+
+#Devil, Xaphan (Duke) 53
+Large Outsider (Evil, Extraplanar, Lawful)
+Hit Dice: 35d8+350 (507 hp)
+Initiative: +12
+Speed: 40 ft. (8 squares), fly 60 ft. (average)
+Armor Class: 46 (-1 size, +8 Dex, +19 natural, +10 profane);
+touch 27, flat-footed 38
+Base Attack/Grapple: +35/+52
+Attack: Hellstorm +52 melee (2d6+23 and 1d6 fire
+[1d10 on crit], 18-20/x2)
+Full Attack: Hellstorm +52/+47/+42/+37 melee
+(2d6+23 and 1d6 fire [1d10 on crit], 18-
+20/x2)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Fiery aura, fiery gaze, spells, spell-like
+abilities, summon devils
+Special Qualities: Damage reduction 20/good and silver,
+darkvision 60 ft., devil traits, outsider
+traits, regeneration 10, SR 38
+Saves: Fort +29, Ref +27, Will +30
+Abilities: Str 37, Dex 27, Con 30, Int 28, Wis 28,
+Cha 30
+Skills: Balance +31, Bluff +48, Concentration +48,
+Craft (weaponsmithing) +44, Diplomacy
++50, Gather Information +48, Hide +42,
+Intimidate +43, Jump +34, Knowledge
+(arcana) +47, Knowledge (the planes) +47,
+Knowledge (religion) +47, Listen +47,
+Move Silently +46, Search +47, Spellcraft
++49, Spot +47, Survival +47 (+49 on
+other planes, +49 following tracks)
+Feats: Cleave, Combat Casting, Craft Wondrous
+Item, Empower Spell, Great Cleave, Improved
+Initiative, Iron Will, Power Attack,
+Quicken Spell, Quicken Spell-Like Ability
+(fireball), Weapon Focus (falchion), Widen
+Spell
+Environment: Infernus
+Organization: Solitary or troupe (Xaphan plus 1-2 pit
+fiends)
+Challenge Rating: 26
+Treasure: Double standard, plus Large +4 unholy
+flaming falchion
+Alignment: Always lawful evil
+
+#Draconid 55
+DRACONID
+Huge Aberration
+Hit Dice: 15d8+60 (127 hp)
+Initiative: +6
+Speed: 40 ft. (8 squares), climb 20 ft.
+Armor Class: 23 (-2 size, +2 Dex, +13 natural), touch 10,
+flat-footed 21
+Base Attack/Grapple: +11/+26
+Attack: Bite +16 melee (2d6+7 plus poison)
+Full Attack: 2 bites +16 melee (2d6+7 plus poison)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Breath weapon, poison, web
+Special Qualities: Damage reduction 10/magic, darkvision
+60 ft., resistance to fire 5
+Saves: Fort +9, Ref +7, Will +11
+Abilities: Str 24, Dex 14, Con 19, Int 6, Wis 14, Cha
+11
+Skills: Climb +15, Listen +13, Spot +13
+Feats: Alertness, Improved Initiative, Improved
+Poison, Power Attack, Shape Breath
+Weapon, Weapon Focus (bite)
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 9
+Treasure: Standard coins, double goods (gems only);
+standard items
+Alignment: Always neutral (evil tendencies)
+Advancement: 16-25 HD (Huge); 26-45 HD (Gargantuan)
+
+#Dragon, Dungeon 56
+Large Dragon (Shapechanger)
+Hit Dice: 10d12+30 (95 hp)
+Initiative: +0
+Speed: 30 ft. (6 squares), 60 ft. fly (poor)
+Armor Class: 21 (-1 size, +12 natural), touch 9, flatfooted
+21
+Base Attack/Grapple: +10/+21
+Attack: Bite +16 melee (2d6+7)
+Full Attack: Bite +16 melee (2d6+7) and 2 claws +11
+melee (1d8+3)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Breath weapon, dominate monster
+Special Qualities: Change shape, craft crystal ball, damage
+reduction 10/magic, darkvision 120 ft.,
+dragon traits, low-light vision, scent
+Saves: Fort +10, Ref +7, Will +10
+Abilities: Str 25, Dex 11, Con 16, Int 16, Wis 16, Cha
+14
+Skills: Bluff +15, Craft (trapmaking) +16, Diplomacy
++15, Gather Information +15,
+Knowledge (architecture) +19, Knowledge
+(dungeoneering) +16, Listen +22, Search
++16, Spot +22
+Feats: Alertness, Flyby Attack, Power Attack,
+Skill Focus (Knowledge [architecture])
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 9
+Treasure: Triple standard, plus crystal ball
+Alignment: Usually neutral
+Advancement: 11-20 HD (Large); 21-30 HD (Huge)
+Dungeon dragons speak Draconic, Common, and at least two
+other languages.
+
+#Dragon, Smoke 57
+DRAGON, SMOKE (DRACO FUMO)
+Small Dragon (Air)
+Hit Dice: 3d12+3 (16 hp)
+Initiative: +1
+Speed: 15 ft. (3 squares), fly 60 ft. (good)
+Armor Class: 17 (+1 size, +1 Dex, +5 natural), touch 11,
+flat-footed 16
+Base Attack/Grapple: +3/-1
+Attack: Bite +5 melee (1d4)
+Full Attack: Bite +5 melee (1d4) and 2 claws +0 melee
+(1d3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Breath weapon
+Special Qualities: Darkvision 60 ft., dragon traits, low-light
+vision, smoke form, SR 10
+Saves: Fort +4, Ref +4, Will +3
+Abilities: Str 11, Dex 12, Con 13, Int 10, Wis 12, Cha
+10
+Skills: Bluff +6, Escape Artist +7, Hide +11*,
+Move Silently +4, Listen +9, Search +3,
+Spot +9
+Feats: Alertness, Weapon Finesse
+Environment: Temperate forests and marshes
+Organization: Solitary or wing (2-5)
+Challenge Rating: 2
+Treasure: None
+Alignment: Usually neutral
+Advancement: 4-5 HD (Small); 6 HD (Medium)
+Smoke dragons speak Draconic and Common.
+
+#Dragonship 58
+DRAGONSHIP
+Gargantuan Construct
+Hit Dice: 20d10+60 (170 hp)
+Initiative: -3
+Speed: Swim 40 ft. (8 squares)
+Armor Class: 23 (-4 size, -3 Dex, +20 natural),
+touch 3, flat-footed 23
+Base Attack: +15/+36
+Attack: Bite +20 melee (1d8+9)
+Full Attack: Bite +20 melee (1d8+9) and 4 slams
++15 melee (2d6+4)
+Space/Reach: 20 ft./15 ft.
+Special Attacks: Breath weapon
+Special Qualities: Construct traits, damage reduction
+15/adamantine, darkvision 60 ft., fire
+vulnerability, navigate, winds
+Saves: Fort +6 Ref +1, Will +6
+Abilities: Str 28, Dex 4, Con -, Int -, Wis
+10, Cha 10
+Skills: Swim +17
+Feats: -
+Environment: Any aquatic
+Organization: Solitary
+Challenge Rating: 10
+Treasure: None
+Alignment: Always neutral
+
+#Elusa Hound 60
+ELUSA HOUND
+Medium Magical Beast
+Hit Dice: 4d10+8 (30 hp)
+Initiative: +2
+Speed: 50 ft. (10 squares)
+Armor Class: 15 (+2 Dex, +3 natural), touch 12, flatfooted
+13
+Base Attack/Grapple: +4/+6
+Attack: Bite +6 melee (1d6+3)
+Full Attack: Bite +6 melee (1d6+3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Trip
+Special Qualities: Aura tracking, detect magic, darkvision
+60 ft., low-light vision, scent, SR 12
+Saves: Fort +6, Ref +6, Will +2
+Abilities: Str 15, Dex 15, Con 15, Int 6, Wis 12, Cha
+8
+Skills: Listen +5, Spot +5, Survival +4 (+8 when
+tracking by scent)
+Feats: Alertness, Track
+Environment: Temperate forests and plains
+Organization: Solitary, pair, or pack (4-7)
+Challenge Rating: 3
+Treasure: None
+Alignment: Always neutral
+Advancement: 3-9 HD (Medium); 10-12 HD (Large)
+
+#Encephalon Gorger 61
+Medium Aberration (Extraplanar)
+Hit Dice: 10d8+20 (65 hp)
+Initiative: +7
+Speed: 30 ft. (6 squares)
+Armor Class: 19 (+3 Dex, +6 natural), touch 13, flatfooted
+16
+Base Attack/Grapple: +7/+9
+Attack: Claw +10 melee (1d6+1)
+Full Attack: 2 claws +10 melee (1d6+1)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Improved grab, mindfeed
+Special Qualities: Adrenal surge, darkvision 60 ft., fast healing
+5, mindsense, mind screen, resistance
+to cold 10
+Saves: Fort +5, Ref +6, Will +9
+Abilities: Str 12, Dex 16, Con 14, Int 21, Wis 15, Cha
+15
+Skills: Bluff +8, Diplomacy +13, Escape Artist
++9, Intimidate +15, Knowledge (anatomy)
++18, Listen +12, Search +18, Spot +12,
+Survival +15 (+17 following tracks)
+Feats: Alertness, Improved Initiative, Power Attack,
+Weapon Finesse
+Environment: Any land
+Organization: Solitary, crowd (2-5), or array (4-7)
+Challenge Rating: 8
+Treasure: Standard
+Alignment: Usually chaotic evil
+Advancement: By character class
+Level Adjustment: +7
+An encephalon gorger speaks it own alien
+tongue, Common, and at least four other languages.
+
+#Fear Guard 63
+FEAR GUARD
+Medium Undead (Incorporeal)
+Hit Dice: 6d12 (39 hp)
+Initiative: +6
+Speed: Fly 30 ft. (good) (6 squares)
+Armor Class: 15 (+2 Dex, +3 deflection), touch 15, flatfooted
+13
+Base Attack/Grapple: +3/-
+Attack: Incorporeal touch +6 melee (1d4 Wis)
+Full Attack: Incorporeal touch +6 melee (1d4 Wis)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Fear aura, spell-like abilities, Wisdom
+damage, create spawn
+Special Qualities: Darkvision 60 ft., daylight weakness, incorporeal
+traits, see in darkness, +2 turn
+resistance, undead traits
+Saves: Fort +1, Ref +3, Will +5
+Abilities: Str -, Dex 15, Con -, Int 10, Wis 12,
+Cha 16
+Skills: Hide +8*, Listen +7, Spot +7
+Feats: Blind-Fight, Improved Initiative, Weapon
+Focus (incorporeal touch)
+Environment: Underground
+Organization: Solitary or group (2-5)
+Challenge Rating: 5
+Treasure: Standard
+Alignment: Always chaotic evil
+Advancement: 7-9 HD (Medium); 10-18 HD (Large)
+
+#Fire Crab (lesser) 64
+
+
+#Fire Crab (greater) 64
+
+
+#Fire Phantom 65
+FIRE PHANTOM
+Medium Undead (Extraplanar, Fire)
+Hit Dice: 6d12 (39 hp)
+Initiative: +6
+Speed: 30 ft. (6 squares)
+Armor Class: 16 (+2 Dex, +6 natural, -2 rage), touch
+10, flat-footed 14
+Base Attack/Grapple: +3/+7
+Attack: Slam +8 melee (1d4+6 plus 1d6 fire) or
+fire blast +5 ranged touch (2d6 fire)
+Full Attack: Slam +8 melee (1d4+6 plus 1d6 fire) or
+fire blast +5 ranged touch (2d6 fire)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Fire, fire blast, immolation, rage
+Special Qualities: Darkvision 60 ft., fire subtype, turn immunity,
+undead traits
+Saves: Fort +2, Ref +4, Will +6
+Abilities: Str 18, Dex 14, Con -, Int 4, Wis 12, Cha
+14
+Skills: Intimidate +11, Listen +12, Spot +12
+Feats: Alertness, Improved Initiative, Weapon
+Focus (slam)
+Environment: Elemental Plane of Fire
+Organization: Solitary
+Challenge Rating: 5
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 7-18 HD (Medium)
+
+#Fire Whale (Burning Leviathan) 66
+Huge Magical Beast (Extraplanar, Fire)
+Hit Dice: 12d10+75 (139 hp)
+Initiative: +1
+Speed: Swim 40 ft. (8 squares)
+Armor Class: 19 (-2 size, +1 Dex, +10 natural), touch 9,
+flat-footed 18
+Base Attack/Grapple: +12/+32
+Attack: Bite +22 melee (3d6+12)
+Full Attack: Bite +22 melee (3d6+12) and tail slap +17
+melee (1d8+6)
+Space/Reach: 15 ft./10 ft.
+Special Attacks: Scalding blast
+Special Qualliittiieess:: Blindsight 120 ft., fire subtype, hold breath
+Saves: Fort +14, Ref +11, Will +9
+Abilities: Str 35, Dex 13, Con 23, Int 2, Wis 12, Cha
+6
+Skills: Listen +8, Spot +8, Swim +21
+Feats: Alertness, Diehard, Endurance, Iron Will,
+Toughness
+Environment: Sea of Fire (Elemental Plane of Fire or
+Plane of Molten Skies)
+Organization: Solitary or pod (4-9)
+Challenge Rating: 10
+Treasure: None
+Alignment: Always neutral
+Advancement: 13-20 HD (Huge); 21-36 HD (Gargantuan)
+
+#Flea, Giant 68
+FLEA, GIANT
+Tiny Vermin
+Hit Dice: 1d8+1 (5 hp)
+Initiative: +4
+Speed: 20 ft. (4 squares)
+Armor Class: 17 (+2 size, +4 Dex, +1 natural), touch 16,
+flat-footed 13
+Base Attack/Grapple: +0/-10 (+2 when attached)
+Attack: Touch +6 melee (1d2-2 plus blood drain)
+Full Attack: Touch +6 melee (1d2-2 plus blood drain)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Attach, drain blood, disease
+Special Qualities: Crowd, darkvision 60 ft., leap, vermin
+traits
+Saves: Fort +3, Ref +4, Will +0
+Abilities: Str 6, Dex 18, Con 12, Int -, Wis 11, Cha
+2
+Skills: Jump +24
+Feats: Weapon Finesse (b)
+Environment: Any temperate and warm and underground
+Organization: Cluster (6-10) or swarm (20-40)
+Challenge Rating: 1/2
+Treasure: None
+Alignment: Always neutral
+Advancement: 2 HD (Tiny); 3 HD (Small)
+
+#Fulgurate Mushroom 69 - (CR 4 HAZARD)
+
+
+#Fungoid 69
+FUNGOID
+Medium Plant
+Hit Dice: 5d8+15 (37 hp)
+Initiative: +1
+Speed: 30 ft. (6 squares)
+Armor Class: 18 (+1 Dex, +7 natural), touch 11, flatfooted
+17
+Base Attack/Grapple: +3/+7
+Attack: Slam +8 melee (1d8+4)
+Full Attack: 2 slams +8 melee (1d8+4)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: -
+Special Qualities: Darkvision 60 ft., low-light vision,
+plant traits, resistance to electricity
+10
+Saves: Fort +7, Ref +2, Will +1
+Abilities: Str 19, Dex 12, Con 17, Int 4, Wis 11,
+Cha 6
+Skills: Hide +1*, Listen +8, Spot +8
+Feats: Power Attack, Weapon Focus (slam)
+Environment: Temperate and warm marshes
+Organization: Gang (2-4) or cluster (6-10)
+Challenge Rating: 3
+Treasure: None
+Alignment: Always neutral (evil tendencies)
+Advancement: 6-9 HD (Medium); 10-15 HD (Large)
+
+#Fyr 70
+FYR
+Small Fey
+Hit Dice: 2d6+2 (9 hp)
+Initiative: +1
+Speed: 30 ft. (6 squares)
+Armor Class: 15 (+1 size, +1 Dex, +3 natural), touch 12, flatfooted
+14
+Base Attack/Grapple: +1/-3
+Attack: Butt +3 melee (1d4+1) or Small longsword +4
+melee (1d6+1)
+Full Attack: Butt +3 melee (1d4+1) or Small longsword +4
+melee (1d6+1)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Spell-like abilities
+Special Qualities: Damage reduction 5/cold iron,
+low-light vision, speak with animals,
+SR 15, weapon
+attunement
+Saves: Fort +1, Ref +4, Will +4
+Abilities: Str 13, Dex 13, Con 12, Int 12, Wis
+13, Cha 13
+Skills: Appraise +4, Bluff +4, Craft
+(jewelrymaking) +6, Handle Animal
++8, Hide +6*, Knowledge (nature) +6,
+Listen +4, Sense Motive +3, Spot +4,
+Survival +4 (+6 in aboveground natural
+environments)
+Feats: Alertness
+Environment: Temperate forests and mountains
+Organization: Solitary, pack (1 dire goat or 1 brown bear
+or 1d2 sheep or 1 ram or 1d4 badgers or 1
+dire badger), band (2-5 plus 1d3 dire
+badgers), or troop (6-11 fyrs plus 1d4 dire
+goats or 1d6 black bears or 2d6 sheep or
+1d6 rams or 2d4 deer)
+Challenge Rating: 2
+Treasure: 50% coins; double goods (jewelry only);
+50% items
+Alignment: Usually neutral
+Advancement: 3-6 HD (Small)
+Level Adjustment: +2
+Fyrs speak their own language and Common or
+Sylvan (50% chance for either).
+
+#Gallows Tree 71
+GALLOWS TREE
+Huge Plant
+Hit Dice: 16d8+96 (168 hp)
+Initiative: +1
+Speed: 20 ft. (4 squares)
+Armor Class: 24 (-2 size, +1 Dex, +15 natural), touch 9,
+flat-footed 23
+Base Attack/Grapple: +12/+30
+Attack: Slam +20 melee (2d6+10, 19-20/x2)
+Full Attack: 6 slams +20 melee (2d6+10, 19-20/x2)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Create gallows tree zombie, gallows tree
+zombies, improved grab
+Special Qualities: Damage reduction 10/magic and slashing,
+low-light vision, plant traits, resistance to
+fire 10, tremorsense 60 ft.
+Saves: Fort +16, Ref +6, Will +7
+Abilities: Str 30, Dex 12, Con 23, Int 10, Wis 14, Cha
+6
+Skills: Listen +18, Move Silently +17
+Feats: Cleave, Great Cleave, Improved Critical
+(slam), Improved Initiative, Power Attack,
+Weapon Focus (slam)
+Environment: Temperate and warm forest, hill, marsh,
+and plains
+Organization: Grove (1 gallows tree, plus 6-11 gallows tree
+zombies)
+Challenge Rating: 13
+Treasure: 50% standard
+Alignment: Always neutral
+Advancement: 17-24 HD (Huge); 25-48 HD (Gargantuan)
+
+#Gallows Tree Zombie 73
+Medium Plant
+Hit Dice: 6d8+6 (33 hp)
+Initiative: +6
+Speed: 30 ft. (6 squares)
+Armor Class: 17 (+2 Dex, +5 natural), touch 12, flatfooted
+15
+Base Attack/Grapple: +4/+8
+Attack: Slam +8 melee (1d6+4)
+Full Attack: 2 slams +8 melee (1d6+4)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Spore cloud
+Special Qualities: Darkvision 60 ft., fast healing 5, lowlight
+vision, plant traits, tether-vine,
+tremorsense 60 ft.
+Saves: Fort +6, Ref +4, Will +2
+Abilities: Str 19, Dex 15, Con 13, Int 4, Wis 10, Cha
+1
+Skills: Hide +5, Listen +5, Move Silently +5,
+Spot +2
+Feats: Alertness, Improved Initiative, Power
+Attack
+Environment: Temperate and warm forest, hill, marsh,
+and plains
+Organization: Grove (6-11 plus 1 gallows tree)
+Challenge Rating: 4
+Treasure: None
+Alignment: Always neutral
+Advancement: 7-12 HD (Medium); 13- 18 HD (Large)
+
+#Gelid Beetle (lesser) 74
+
+
+#Gelid Beetle (greater) 74
+
+
+#Geon 75
+GEON
+Large Elemental (Earth, Extraplanar)
+Hit Dice: 8d8+48 (84 hp)
+Initiative: -1
+Speed: 20 ft. (4 squares)
+Armor Class: 22 (-1 size, -1 Dex, +14 natural), touch 8,
+flat-footed 22
+Base Attack/Grapple: +6/+17
+Attack: Slam +13 melee (2d8+7)
+Full Attack: 2 slams +13 melee (2d8+7)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Animate boulders, spell-like abilities
+Special Qualities: Damage reduction 5/-, darkvision 60 ft.,
+elemental traits, freeze, immunity to electricity,
+resistance to fire 5, SR 15,
+vulnerability to cold
+Saves: Fort +12, Ref +1, Will +3
+Abilities: Str 25, Dex 8, Con 22, Int 12, Wis 12, Cha 12
+Skills: Hide +6*, Listen +13, Spot +13
+Feats: Alertness, Power Attack, Weapon Focus
+(slam)
+Environment: Elemental Plane of Earth
+Organization: Solitary, gang (2-5), or colony (5-8)
+Challenge Rating: 9
+Treasure: Standard
+Alignment: Always neutral
+Advancement: 9-11 HD (Large); 12-24 HD (Huge)
+Geons speak Terran and Common.
+
+#Giant, Cave 76
+GIANT, CAVE
+Huge Giant
+Hit Dice: 12d8+72 (126 hp)
+Initiative: +1
+Speed: 30 ft. (6 squares)
+Armor Class: 19 (-2 size, +1 Dex, +10 natural), touch 9,
+flat-footed 18
+Base Attack/Grapple: +9/+25
+Attack: Gargantuan greatclub +16 melee (3d6+12);
+or slam +15 melee (1d6+8)
+Full Attack: Gargantuan greatclub +16/+11 melee
+(3d6+12); or slam +15 melee (1d6+8)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Improved grab, pound, trample 2d6+12
+Special Qualities: Low-light vision, oversized weapon
+Saves: Fort +14, Ref +5, Will +6
+Abilities: Str 26, Dex 12, Con 23, Int 4, Wis 11, Cha
+10
+Skills: Climb +15, Listen +4, Spot +4
+Feats: Diehard, Endurance, Iron Will, Power Attack,
+Weapon Focus (greatclub)
+Environment: Any hills or mountains
+Organization: Gang (2-5) or clan (6-9 adults plus 35%
+noncombatants)
+Challenge Rating: 9
+Treasure: 50% standard
+Alignment: Usually chaotic evil
+Advancement: By character class
+Level Adjustment: +4
+The typical cave giant speaks Giant and no other
+languages.
+
+#Giant, Ferrous 77
+GIANT, FERROUS
+Huge Giant
+Hit Dice: 25d8+250 (362 hp)
+Initiative: +0
+Speed: 50 ft. (10 squares)
+Armor Class: 31 (-2 size, +18 natural, +5 breastplate),
+touch 8, flat-footed 31
+Base Attack/Grapple: +18/+41
+Attack: Greataxe (or greatsword) +31 melee
+(4d6+22, 19-20/x3 greataxe or 17-20/
+x2 greatsword); or slam +31 melee
+(1d6+15)
+Full Attack: Greataxe (or greatsword) +31/+26/+21/
++16 melee (4d6+22, 19-20/x3 greataxe
+or 17-20/x2 greatsword); or 2 slams +31
+melee (1d6+15)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Improved grab, pound, spell-like abilities,
+trample 2d6+22
+Special Qualities: Damage reduction 15/cold iron, ferrous
+mind, immunity to fire, low-light vision,
+oversized weapon
+Saves: Fort +24, Ref +8, Will +12
+Abilities: Str 40, Dex 10, Con 30, Int 14, Wis 14,
+Cha 14
+Skills: Concentration +32, Craft
+(weaponsmithing) +32, Craft (any one)
++28, Listen +22, Spot +22
+Feats: Alertness, Awesome Blow, Cleave, Improved
+Bull Rush, Improved Critical
+(greatsword or greataxe), Iron Will,
+Mighty Blow, Power Attack, Skill Focus
+(Craft [weaponsmithing])
+Environment: Temperate and warm hill and mountains
+Organization: Solitary or family (2-4 plus 35% noncombatants
+plus 1 cleric or druid of 9th-12th
+level)
+Challenge Rating: 17
+Treasure: Standard
+Alignment: Usually neutral
+Advancement: By character class
+Level Adjustment: +6
+The typical ferrous giant speaks Giant, Common,
+and at least two other languages.
+
+#Giant, Volcano 79
+GIANT, VOLCANO
+Huge Giant (Earth, Fire)
+Hit Dice: 17d8+102 (178 hp)
+Initiative: +1
+Speed: 40 ft. (8 squares)
+Armor Class: 23 (-2 size, +1 Dex, +12 natural, +2
+leather), touch 9, flat-footed 22
+Base Attack/Grapple: +12/+31
+Attack: Gargantuan longspear +21 melee (4d6+16,
+crit x3); or rock +12 ranged (2d8+11 plus
+1d6 fire)
+Full Attack: Gargantuan longspear +21/+16/+11 melee
+(4d6+16, crit x3); or rock +12 ranged
+(2d8+11 plus 1d6 fire)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Breath weapon, rock throwing, trample
+2d6+16
+Special Qualities: Fire subtype, low-light vision, oversized
+weapon, rock catching, stone shape
+Saves: Fort +16, Ref +6, Will +7
+Abilities: Str 32, Dex 12, Con 22, Int 10, Wis 11, Cha
+11
+Skills: Climb +19, Intimidate +7, Jump +21,
+Knowledge (volcanism) +10, Spot +5
+Feats: Awesome Blow, Cleave, Improved Sunder,
+Iron Will, Power Attack, Thump
+Environment: Warm mountains
+Organization: Solitary, gang (2-5) or band (6-9 plus
+35% noncombatants plus 1 adept or cleric
+of 1st or 2nd level), hunting/raiding party
+(6-9 plus 1 adept or sorcerer of 3-5th
+level plus 3-8 fire lizards); or tribe (21-
+30 plus 1 adept, cleric, or sorcerer of 6th
+or 7th level plus 12-30 fire lizards)
+Challenge Rating: 14
+Treasure: Standard
+Alignment: Often chaotic neutral
+Advancement: By character class
+Level Adjustment: +6
+The typical volcano giant speaks Giant and Ignan.
+
+#Gloom Crawler 81
+GLOOM CRAWLER
+Huge Magical Beast
+Hit Dice: 10d10+30 (85 hp)
+Initiative: +6
+Speed: 20 ft. (4 squares)
+Armor Class: 18 (-2 size, +2 Dex, +8 natural), touch 10,
+flat-footed 16
+Base Attack/Grapple: +10/+25
+Attack: Tentacle +16 melee (1d6+7)
+Full Attack: 10 tentacles +16 melee (1d6+7) and bite
++11 melee (2d8+3)
+Space/Reach: 15 ft./15 ft. (30 ft. with tentacle)
+Special Attacks: Constrict 1d6+7, improved grab
+Special Qualities: All-around vision, darkvision 60 ft., lowlight
+vision, tremorsense 60 ft.,
+vulnerability to sunlight
+Saves: Fort +10, Ref +9, Will +4
+Abilities: Str 24, Dex 14, Con 16, Int 4, Wis 12, Cha
+2
+Skills: Listen +10, Search +1, Spot +13
+Feats: Alertness, Improved Initiative, Weapon
+Focus (tentacle, bite)
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 8
+Treasure: Standard
+Alignment: Always neutral
+Advancement: 11-20 HD (Huge); 21-30 HD (Gargantuan)
+
+#Golem, Furnace 82
+GOLEM, FURNACE
+Huge Construct
+Hit Dice: 24d10+40 (172 hp)
+Initiative: -1
+Speed: 20 ft. (4 squares)
+Armor Class: 32 (-2 size, -1 Dex, +25 natural), touch 7,
+flat-footed 32
+Base Attack/Grapple: +18/+41
+Attack: Slam +31 melee (4d8+15 plus 2d6 fire)
+Full Attack: 2 slams +31 melee (4d8+15 plus 2d6 fire)
+Space/Reach: 15 ft./15 ft.
+Special Attacks: Breath weapon, heat, improved grab, furnace-
+interior
+Special Qualities: Construct traits, damage reduction 15/
+adamantine, darkvision 60 ft., immunity
+to fire, immunity to magic, low-light vision,
+resistance to cold 20, rustproof
+Saves: Fort +8, Ref +7, Will +8
+Abilities: Str 41, Dex 9, Con -, Int -, Wis 11, Cha
+1
+Skills: -
+Feats: -
+Environment: Any
+Organization: Solitary
+Challenge Rating: 14
+Treasure: None
+Alignment: Always neutral
+Advancement: 22-26 HD (Huge); 27-63 HD (Gargantuan)
+
+#Golem, Iron Maiden 83
+Large Construct
+Hit Dice: 12d10+30 (96 hp)
+Initiative: +0
+Speed: 20 ft. (4 squares)
+Armor Class: 28 (-1 size, -1 Dex, +20 natural), touch 8,
+flat-footed 28
+Base Attack/Grapple: +9/+21
+Attack: Slam +16 melee (2d10+8)
+Full Attack: 2 slams +16 melee (2d10+8)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Animated host, bladed lid, steal essence
+Special Qualities: Construct traits, damage reduction 15/
+adamantine, darkvision 60 ft., immunity
+to magic, low-light vision, rust vulnerability
+Saves: Fort +4, Ref +3, Will +4
+Abilities: Str 27, Dex 10, Con -, Int -, Wis 11,
+Cha 1
+Skills: (see text below)
+Feats: (see text below)
+Environment: Any
+Organization: Solitary
+Challenge Rating: 9
+Treasure: None
+Alignment: Always neutral
+Advancement: 13-24 HD (Large); 25-36 HD (Huge)
+
+#Golem, Magnesium 85
+GOLEM, MAGNESIUM
+Medium Construct
+Hit Dice: 7d10+20 (58 hp)
+Initiative: +1
+Speed: 30 ft. (6 squares)
+Armor Class: 18 (+1 Dex, +7 natural), touch 11, flatfooted
+17
+Base Attack/Grapple: +5/+7
+Attack: Slam +7 melee (1d6+2 plus 1d4 Dex)
+Full Attack: 2 slams +7 melee (1d6+2 plus 1d4 Dex)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Aura of sickness, Dexterity damage
+Special Qualities: Construct traits, damage reduction
+10/adamantine, darkvision 60 ft., immunity
+to magic, low-light vision, rust
+vulnerability
+Saves: Fort +2, Ref +3, Will +2
+Abilities: Str 15, Dex 13, Con -, Int -, Wis 11, Cha
+1
+Skills: -
+Feats: -
+Environment: Any
+Organization: Solitary
+Challenge Rating: 6
+Treasure: None
+Alignment: Always neutral
+Advancement: 8-14 HD (Medium); 15-21 HD (Large)
+
+#Golem, Ooze 86
+GOLEM, OOZE
+Large Construct
+Hit Dice: 11d10+30 (90 hp)
+Initiative: -2
+Speed: 20 ft. (4 squares)
+Armor Class: 15 (-1 size, -2 Dex, +8 natural), touch 7,
+flat-footed 15
+Base Attack/Grapple: +8/+18
+Attack: Slam +13 melee (2d8+6 plus 1d6 acid)
+Full Attack: 2 slams +13 melee (2d8+6 plus 1d6 acid)
+Space/Reach: 10 ft./10 ft.
+Special Attacks: Acid, death throes
+Special Qualities: Amorphous, construct traits, damage reduction
+10/bludgeoning, darkvision 60
+ft., fast healing 5, low-light vision
+Saves: Fort +3, Ref +1, Will +3
+Abilities: Str 22, Dex 6, Con -, Int -, Wis 11, Cha
+1
+Skills: -
+Feats: -
+Environment: Any
+Organization: Solitary or crew (2-5)
+Challenge Rating: 8
+Treasure: None
+Alignment: Always neutral
+Advancement: 12-18 HD (Large); 19-33 HD (Huge)
+
+#Golem, Rope 87
+GOLEM, ROPE
+Medium Construct
+Hit Dice: 6d10+20 (53 hp)
+Initiative: +0
+Speed: 30 ft. (6 squares)
+Armor Class: 17 (+7 natural), touch 10, flat-footed 17
+Base Attack/Grapple: +4/+7
+Attack: Slam +7 melee (1d8+3)
+Full Attack: 2 slams +7 melee (1d8+3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Improved grab, strangulation 1d8+2
+Special Qualittiieess:: Construct traits, damage reduction 5/adamantine
+and slashing, darkvision 60 ft.,
+fire vulnerability, immunity to magic, lowlight
+vision
+Saves: Fort +2, Ref +2, Will +2
+Abilities: Str 17, Dex 10, Con -, Int -, Wis 11, Cha
+1
+Skills: -
+Feats: -
+Environment: Any
+Organization: Solitary
+Challenge Rating: 5
+Treasure: None
+Alignment: Always neutral
+Advancement: 7-10 HD (Medium); 11-18 HD (Large)
+
+#Grave Risen 88
+GRAVE RISEN
+Medium Undead
+Hit Dice: 5d12+3 (35 hp)
+Initiative: +2
+Speed: 30 ft. (6 squares)
+Armor Class: 15 (+2 Dex, +3 natural), touch 12, flat-footed
+13
+Base Attack/Grapple: +2/+4
+Attack: Claw +5 melee (1d4+2 plus blood poisoning)
+Full Attack: 2 claws +5 melee (1d4+2 plus blood poisoning)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Animate dead, blood poisoning
+Special Qualities: Darkvision 60 ft., +2 turn resistance, undead
+traits
+Saves: Fort +1, Ref +3, Will +6
+Abilities: Str 14, Dex 15, Con -, Int 13, Wis 14, Cha
+16
+Skills: Climb +7, Escape Artist +5, Hide +8, Jump
++5, Listen +8, Move Silently +8, Search +6,
+Spot +8
+Feats: Toughness, Weapon Focus (claw)
+Environment: Any
+Organization: Solitary or troupe (1 grave risen plus 2-5
+Medium-size zombies)
+Challenge Rating: 4
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 6-12 HD (Medium); 13-15 HD (Large)
+
+#Grimstalker (Banaan) 89
+Medium Fey
+Hit Dice: 6d6+6 (27 hp)
+Initiative: +5
+Speed: 40 ft. (squares), climb 20 ft.
+Armor Class: 20 (+5 Dex, +3 natural, +2 leaf armor),
+touch 15, flat-footed 15
+Base Attack/Grapple: +3/+4
+Attack: Claw +4 melee (1d4+1 plus poison) or spiked
+quarterstaff +4 (1d6+1 plus poison) or
+longbow +8 ranged (1d8 plus poison, crit x3,
+range 100 ft.)
+Full Attack: 2 claws +4 melee (1d4+1 plus poison) or
+spiked quarterstaff +4 (1d6+1 plus poison)
+or longbow +8 ranged (1d8 plus poison, crit
+x3, range 100 ft.)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Poison, sneak attack +3d6
+Special Qualities: Damage reduction 5/cold iron, low-light
+vision, spell-like abilities
+Saves: Fort +3, Ref +10, Will +6
+Abilities: Str 12, Dex 20, Con 13, Int 14, Wis 13, Cha 16
+Skills: Climb +15, Hide +18*, Intimidate +8, Jump
++8, Knowledge (nature) +6, Listen +7, Move
+Silently +15, Search +7, Spot +7, Survival +7
+(+9 in natural environments, +9 following
+tracks), Swim +5, Tumble +12
+Feats: Combat Reflexes, Stealthy, Track
+Environment: Any forest
+Organization: Solitary or troupe (2-5)
+Challenge Rating: 5
+Treasure: Standard
+Alignment: Usually neutral evil
+Advancement: By character class
+Grimstalkers speak Sylvan,
+Elven, and Common.
+
+#Gutslug 90
+GUTSLUG
+Medium Aberration
+Hit Dice: 3d8+6 (19 hp)
+Initiative: +4
+Speed: 30 ft. (6 squares), fly 50 ft. (perfect)
+Armor Class: 17 (+4 Dex, +3 natural), touch 14, flat-footed 13
+Base Attack/Grapple: +2/+4
+Attack: Bite +6 melee (1d4+3 plus blood drain)
+Full Attack: Bite +6 melee (1d4+3 plus blood drain)
+Space/Reach: 5 ft. (coiled)/5 ft.
+Special Attacks: Blood drain, improved grab, sneak attack +2d6
+Special Qualities: Blindsight 30 ft., vulnerabilities
+Saves: Fort +3, Ref +5, Will +3
+Abilities: Str 15, Dex 19, Con 15, Int 1, Wis 11, Cha 3
+Skills: Listen +4, Move Silently +6, Spot +4
+Feats: Alertness, Weapon Finesse
+Environment: Underground
+Organization: Solitary or gang (2-5)
+Challenge Rating: 3
+Treasure: None
+Alignment: Always neutral
+Advancement: 4-6 HD (Medium); 7-9 HD (Large)
+
+#Hanged Man 91
+HANGED MAN
+Medium Undead
+Hit Dice: 4d12 (26 hp)
+Initiative: +5
+Speed: 30 ft. (6 squares)
+Armor Class: 15 (+1 Dex, +4 natural), touch 11, flat-footed
+14
+Base Attack/Grapple: +2/+4
+Attack: Rope +4 ranged touch (drag) or claw +4
+melee (1d4+2)
+Full Attack: Rope +4 ranged touch (drag) or 2 claws +4
+melee (1d4+2)
+Space/Reach: 5 ft./5 ft. (20 ft. with rope)
+Special Attacks: Drag, rope
+Special Qualities: Darkvision 60 ft., undead traits
+Saves: Fort +1, Ref +2, Will +4
+Abilities: Str 15, Dex 13, Con -, Int 9, Wis 11, Cha 13
+Skills: Climb +7* (+2 when climbing ropes), Hide
++6, Move Silently +6, Use Rope +13
+Feats: Improved Initiative, Weapon Focus (rope)
+Environment: Any
+Organization: Solitary
+Challenge Rating: 3
+Treasure: 50% standard
+Alignment: Always chaotic evil
+Advancement: 5-12 HD (Medium)
+
+#Helix Moth (larva) 92
+
+
+#Helix Moth (adult) 92
+
+
+#Hoar Spirit 94
+HOAR SPIRIT
+Medium Undead (Cold)
+Hit Dice: 5d12 (32 hp)
+Initiative: +2
+Speed: 30 ft. (6 squares)
+Armor Class: 17 (+2 Dex, +5 natural), touch 12, flatfooted
+15
+Base Attack/Grapple: +2/+5
+Attack: Claw +6 melee (1d4+3 plus 1d3 cold and
+glaciate)
+Full Attack: 2 claws +6 melee (1d4+3 plus 1d3 cold and
+glaciate)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Cold, cone of cold, glaciation
+Special Qualities: Cold subtype, darkvision 60 ft., sense heat,
+undead traits
+Saves: Fort +1, Ref +3, Will +6
+Abilities: Str 17, Dex 15, Con -, Int 10, Wis 15, Cha
+15
+Skills: Balance +7, Climb +7, Hide +8, Listen +10,
+Move Silently +7, Spot +10
+Feats: Alertness, Weapon Focus (claw)
+Environment: Any cold land
+Organization: Pack (2-5) or gang (6-11)
+Challenge Rating: 3
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 6-10 HD (Medium)
+
+#Hornet, Giant 95
+HORNET, GIANT
+Large Vermin
+Hit Dice: 7d8+14 (45 hp)
+Initiative: +1
+Speed: 20 ft. (4 squares), fly 60 ft. (good)
+Armor Class: 15 (-1 size, +1 Dex, +5 natural), touch 10,
+flat-footed 14
+Base Attack/Grapple: +5/+14
+Attack: Bite +9 melee (1d3+5) or sting +9 melee
+(1d4+5 plus poison)
+Full Attack: Bite +9 melee (1d3+5) or sting +9 melee
+(1d4+5 plus poison)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Poison
+Special Qualities: Darkvision 60 ft., pheromone, vermin traits
+Saves: Fort +7, Ref +3, Will +3
+Abilities: Str 20, Dex 12, Con 15, Int -, Wis 13,
+Cha 11
+Skills: Spot +9, Survival +1*
+Feats: -
+Environment: Temperate and warm land
+Organization: Solitary, cluster (2-5), or nest (11-20)
+Challenge Rating: 5
+Treasure: None
+Alignment: Always neutral
+Advancement: 8-15 HD (Large); 16-21 HD (Huge)
+
+#Huggermugger 96
+HUGGERMUGGER
+Small Humanoid (Huggermugger)
+Hit Dice: 2d8 (9 hp)
+Initiative: +1
+Speed: 30 ft. (6 squares)
+Armor Class: 15 (+1 size, +3 Dex, +1 natural), touch 14,
+flat-footed - (natural cunning prevents
+them from being caught flat-footed)
+Base Attack/Grapple: +1/-3
+Attack: Hook-blade +5 melee (1d4)
+Full Attack: Hook-blade +5 melee (1d4)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Confusion aura
+Special Qualities: Darkvision 60 ft., low-light vision, natural
+cunning
+Saves: Fort +0, Ref +6, Will +1
+Abilities: Str 11, Dex 16, Con 10, Int 11, Wis 13, Cha 12
+Skills: Hide +13, Listen +3, Move Silently +9, Sleight
+of Hand +9, Spot +3
+Feats: Weapon Finesse
+Environment: Underground
+Organization: Band (4-9) or swarm (10-20)
+Challenge Rating: 1
+Treasure: Standard
+Alignment: Always chaotic neutral
+Advancement: By character class
+Level Adjustment: +2
+Automatic Languages: Huggermugger (gibberish).
+Bonus Languages: Common, Draconic, Elven, Goblin,
+Orc.
+
+#Inphidian, Cobra-Back 98
+Medium Monstrous Humanoid (Reptilian)
+Hit Dice: 5d8+10 (32 hp)
+Initiative: +3
+Speed: 30 ft. (6 squares)
+Armor Class: 18 (+3 Dex, +5 natural), touch 13, flatfooted
+15
+Base Attack/Grapple: +5/+8
+Attack: Snake-hand bite +8 melee (1d4+3 plus poison)
+Full Attack: 2 snake-hand bites +8 melee (1d4+3 plus
+poison)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Poison, spit poison
+Special Qualities: Darkvision 60 ft.
+Saves: Fort +3, Ref +7, Will +5
+Abilities: Str 16, Dex 16, Con 15, Int 12, Wis 12, Cha 12
+Skills: Jump +9, Listen +9, Move Silently +6, Search
++4, Spot +9
+Feats: Alertness, Weapon Focus (snake-hand)
+Environment: Warm forests and plains
+Organization: Solitary or troupe (1 cobra-back plus 3-5
+common inphidians)
+Challenge Rating: 3
+Treasure: Standard
+Alignment: Usually neutral evil
+Advancement: By character class
+Level Adjustment: +2
+
+#Inphidian, Common 99
+Medium Monstrous Humanoid (Reptilian)
+Hit Dice: 4d8+12 (30 hp)
+Initiative: +7
+Speed: 30 ft. (6 squares)
+Armor Class: 17 (+3 Dex, +4 natural), touch 13, flatfooted
+14
+Base Attack/Grapple: +4/+6
+Attack: Snake-hand bite +6 melee (1d4+2 plus poison)
+Full Attack: 2 snake-hand bites +6 melee (1d4+2 plus
+poison)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Blinding spray, poison
+Special Qualities: Darkvision 60 ft.
+Saves: Fort +3, Ref +4, Will +5
+Abilities: Str 14, Dex 16, Con 15, Int 12, Wis 12, Cha 12
+Skills: Craft (poisonmaking) +8, Hide +6, Listen
++6, Move Silently +6, Search +3, Spot +6
+Feats: Alertness, Improved Initiative
+Environment: Warm forests and plains
+Organization: Solitary, pair, hunting party (2-
+5), band (10-20 plus 50%
+noncombatants plus 1 4th-level
+sergeant per 10 adults and 1 leader
+of 5th-7th level), or tribe (50-
+100 plus 1 3rd-level sergeant per
+10 adults, 1 or 2 lieutenants of 5th
+or 6th level, and 1 leader of 7th-
+10th level)
+Challenge Rating: 3
+Treasure: Standard
+Alignment: Usually neutral evil
+Advancement: By character class
+Level Adjustment: +2
+
+#Inphidian, Dancer 100
+Medium Monstrous Humanoid (Reptilian)
+Hit Dice: 4d8+8 (26 hp)
+Initiative: +3
+Speed: 30 ft. (6 squares)
+Armor Class: 17 (+3 Dex, +4 natural), touch 13, flatfooted
+14
+Base Attack/Grapple: +4/+5
+Attack: Snake-hand bite +5 melee (1d4+1 plus poison)
+Full Attack: 2 snake-hand bites +5 melee (1d4+1 plus
+poison)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Entrancing dance, poison
+Special Qualities: Darkvision 60 ft.
+Saves: Fort +3, Ref +7, Will +5
+Abilities: Str 12, Dex 16, Con 14, Int 12, Wis 12, Cha 15
+Skills: Bluff +6, Hide +5, Listen +6, Move Silently
++5, Perform (dance) +12, Spot +6
+Feats: Alertness, Skill Focus (Perform [dance])
+Environment: Warm forests and plains
+Organization: Solitary or troupe (1 dancer plus 2-4 common
+inphidians)
+Challenge Rating: 3
+Treasure: Standard
+Alignment: Usually neutral evil
+Advancement: By character class
+Level Adjustment: +2
+
+#Kathlin 101	(Mount/ Paladin Mount 6th level)
+KATHLIN
+Large Magical Beast
+Hit Dice: 4d10+12 (34 hp)
+Initiative: +2
+Speed: 50 ft. (10 squares)
+Armor Class: 15 (-1 size, +2 Dex, +4 natural), touch 11,
+flat-footed 13
+Base Attack/Grapple: +4/+12
+Attack: Hoof +7 melee
+Full Attack: 2 hooves +7 melee (1d6+4) and bite +2
+melee (1d4+2)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: -
+Special Qualities: Darkvision 60 ft., great endurance,
+low-light vision, scent
+Saves: Fort +7, Ref +6, Will +2
+Abilities: Str 18, Dex 15, Con 17, Int 5, Wis 13,
+Cha 8
+Skills: Listen +5, Spot +4
+Feats: Endurance, Run
+Environment: Temperate plains
+Organization: Solitary or herd (4-13)
+Challenge Rating: 3
+Treasure: None
+Alignment: Always neutral good
+Advancement: 5-12 HD (Large)
+
+#Lizard, Cavern 102	(Mount?)
+LIZARD, CAVERN
+Large Magical Beast
+Hit Dice: 5d10+15 (42 hp)
+Initiative: +2
+Speed: 30 ft. (6 squares), climb 20 ft.
+Armor Class: 16 (-1 size, +2 Dex, +5 natural), touch 11,
+flat-footed 14
+Base Attack/Grapple: +5/+14
+Attack: Bite +10 melee (2d6+7)
+Full Attack: Bite +10 melee (2d6+7)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Improved grab
+Special Qualities: Darkvision 60 ft., low-light vision, scent
+Saves: Fort +7, Ref +6, Will +2
+Abilities: Str 21, Dex 15, Con 17, Int 3, Wis 12, Cha 2
+Skills: Climb +14, Hide +4*, Listen +5, Move Silently
++7, Spot +5
+Feats: Alertness, Weapon Focus (bite)
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 4
+Treasure: 50% standard
+Alignment: Always neutral
+Advancement: 6-8 HD (Large); 9-15 HD (Huge)
+
+#Magmoid 103
+MAGMOID
+Large Elemental (Earth, Extraplanar, Fire)
+Hit Dice: 10d8+20 (65 hp)
+Initiative: +7
+Speed: 40 ft. (8 squares)
+Armor Class: 21 (-1 size, +3 Dex, +9 natural), touch 12,
+flat-footed 18
+Base Attack/Grapple: +7/+13
+Attack: Slam +9 melee (2d6+3 plus 2d6 fire)
+Full Attack: Slam +9 melee (2d6+3 plus 2d6 fire)
+Space/Reach: 10 ft./0 ft.
+Special Attacks: Burn, fiery aura, magma blast
+Special Qualities: Blindsight 60 ft., Damage reduction 10/
+piercing, elemental traits, fire subtype, melt
+weapons
+Saves: Fort +5, Ref +10, Will +3
+Abilities: Str 15, Dex 17, Con 15, Int 4, Wis 11, Cha 11
+Skills: Listen +13
+Feats: Dodge, Improved Initiative, Improved Overrun,
+Power Attack, Weapon Finesse (b)
+Environment: Elemental Plane of Fire
+Organization: Solitary
+Challenge Rating: 7
+Treasure: None
+Alignment: Always neutral
+Advancement: 11-20 HD (Large); 21-30 HD (Huge)
+
+#Mawler 104
+MAWLER
+Tiny Aberration (Shapechanger)
+Hit Dice: 6d8+12 (39 hp)
+Initiative: +3
+Speed: 20 ft. (4 squares)
+Armor Class: 16 (+2 size, +4 natural), touch 12, flatfooted
+16
+Base Attack/Grapple: +4/+5 (+9 when being worn)
+Attack: Bite +9 melee (1d4+1)
+Full Attack: Bite +9 melee (1d4+1)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Improved grab, constrict 1d4+1, vorpal bite
+Special Qualities: Darkvision 60 ft., magic aura, mimic shape
+Saves: Fort +4, Ref +5, Will +7
+Abilities: Str 13, Dex 16, Con 14, Int 5, Wis 11, Cha 11
+Skills: Disguise +14, Hide +14, Listen +2, Spot +2
+Feats: Alertness, Iron Will, Weapon Finesse
+Environment: Any
+Organization: Solitary or pair
+Challenge Rating: 4
+Treasure: None
+Alignment: Any evil
+Advancement: 7-10 HD (Tiny); 11-12 HD (Small)
+
+#Mimi 105
+MIMI
+Tiny Fey (Cold)
+Hit Dice: 1/2d6+1 (2 hp)
+Initiative: +4
+Speed: 20 ft. (4 squares), fly 50 ft. (average)
+Armor Class: 18 (+2 size, +4 Dex, +2 natural), touch 16,
+flat-footed 14
+Base Attack/Grapple: +0/-11
+Attack: Short sword +6 melee (1d3-3, 19-20/x2)
+Full Attack: Short sword +6 melee (1d3-3, 19-20/x2)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Spell-like abilities
+Special Qualities: Cold subtype, damage reduction 5/cold iron,
+lower temperature, SR 15
+Saves: Fort +2, Ref +6, Will +3
+Abilities: Str 4, Dex 18, Con 14, Int 14, Wis 13, Cha 14
+Skills: Bluff +4, Craft (any one) +4, Escape Artist
++6, Hide +16, Listen +7, Move Silently +8,
+Perform (limericks) +4, Perform (sing) +4,
+Search +4, Sense Motive +3, Spot +7, Survival
++3
+Feats: Dodge (b), Weapon Finesse
+Environment: Cold forest and plains
+Organization: Gang (2-4), band (6-11), or tribe (20-80)
+Challenge Rating: 1
+Treasure: No coins; 50% goods; 50% items (no scrolls)
+Alignment: Always neutral (good tendencies)
+Advancement: 1-3 HD (Tiny)
+Level Adjustment: +3
+
+#Murder-born 106
+MURDER-BORN
+Tiny Undead (Incorporeal)
+Hit Dice: 6d12 (39 hp)
+Initiative: +6
+Speed: Fly 40 ft. (good) (8 squares)
+Armor Class: 17 (+2 size, +2 Dex, +3 deflection), touch 17,
+flat-footed 15
+Base Attack/Grapple: +3/-
+Attack: Incorporeal touch +7 melee (1d4 Cha drain)
+Full Attack: Incorporeal touch +7 melee (1d4 Cha drain)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Charisma damage, despondent wail
+Special Qualities: Darkvision 60 ft., incorporeal traits, sense
+living, undead traits, unnatural aura
+Saves: Fort +2, Ref +4, Will +7
+Abilities: Str -, Dex 15, Con -, Int 14, Wis 14, Cha
+16
+Skills: Hide +12, Intimidate +12, Listen +11, Search
++11, Sense Motive +11, Spot +11
+Feats: Combat Reflexes, Improved Initiative,
+Strength of the Grave
+Environment: Any
+Organization: Solitary or (very rarely) pair
+Challenge Rating: 6
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 7-12 HD (Small)
+
+#Niln (Vapor Horror) 107
+Medium Elemental (Air, Water, Extraplanar)
+Hit Dice: 5d8+10 (32 hp)
+Initiative: +8
+Speed: Fly 60 ft. (perfect) (12 squares)
+Armor Class: 15 (+4 Dex, +1 natural), touch 14, flat-footed
+11
+Base Attack/Grapple: +3/+4
+Attack: Slam +7 melee (2d6+1)
+Full Attack: Slam +7 melee (2d6+1)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Drench, drowning fog
+Special Qualities: Damage reduction 10/magic, darkvision 60
+ft., elemental traits, vapor form
+Saves: Fort +3, Ref +8, Will +2
+Abilities: Str 12, Dex 19, Con 14, Int 6, Wis 13, Cha 11
+Skills: Hide +8, Listen +3, Spot +3
+Feats: Improved Initiative, Weapon Finesse
+Environment: Quasi-Plane of Vapor
+Organization: Solitary or gang (2-4)
+Challenge Rating: 5
+Treasure: None
+Alignment: Usually neutral (evil tendencies)
+Advancement: 5-9 HD (Medium); 10-12 HD (Large)
+
+#Nuckalavee 108
+NUCKALAVEE
+Large Aberration
+Hit Dice: 11d8+55 (104 hp)
+Initiative: +2
+Speed: 50 ft. (10 squares)
+Armor Class: 22 (-1 size, +2 Dex, +11 natural), touch 11,
+flat-footed 20
+Base Attack/Grapple: +8/+17
+Attack: Hoof +13 melee (1d6+5, 19-20/x3)
+Full Attack: 2 hooves +13 melee (1d6+5, 19-20/x3) and
+bite +11 melee (1d6+2, 19-20/x3) and
+greataxe +10 melee (3d6+2, crit x3)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Augmented critical, breath weapon, horrific
+appearance, trample 1d6+7
+Special Qualities: Damage reduction 10/cold iron, darkvision
+60 ft., SR 20
+Saves: Fort +8, Ref +5, Will +9
+Abilities: Str 20, Dex 14, Con 20, Int 8, Wis 14, Cha 14
+Skills: Listen +11, Spot +11
+Feats: Alertness, Multiattack, Weapon Focus (hoof,
+bite)
+Environment: Temperate forests
+Organization: Solitary or pack (2-5)
+Challenge Rating: 9
+Treasure: Standard
+Alignment: Always chaotic evil
+Advancement: 12-33 HD (Large)
+Level Adjustment: +5 (cohort)
+
+#Oakman 109
+OAKMAN
+Small Fey
+Hit Dice: 3d6+6 (16 hp)
+Initiative: +1
+Speed: 20 ft. (4 squares), climb 30 ft.
+Armor Class: 17 (+1 size, +2 Dex, +5 natural), touch 12,
+flat-footed 15
+Base Attack/Grapple: +1/-2
+Attack: +1 club +5 melee (1d8+2)
+Full Attack: +1 club +5 melee (1d8+2)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Shillelagh
+Special Qualities: Damage reduction 5/cold iron, moss, tree
+dependent, tree stride
+Saves: Fort +3, Ref +4, Will +5
+Abilities: Str 12, Dex 12, Con 14, Int 10, Wis 14, Cha 14
+Skills: Climb +15, Hide +11, Move Silently +7, Knowledge
+(nature) +6, Knowledge (herbalism)
++9, Spot +8
+Feats: Skill Focus (Knowledge [herbalism]),
+Weapon Focus (club)
+Environment: Temperate forest
+Organization: Solitary or troupe (2-12)
+Challenge Rating: 3
+Treasure: Standard
+Alignment: Usually chaotic neutral
+Advancement: 4-9 HD (Small)
+Level Adjustment: +3
+
+#Ogren 110
+OGREN
+Medium Humanoid (Ogre)
+Hit Dice: 2d8+4 (13 hp)
+Initiative: +0
+Speed: 30 ft. (6 squares)
+Armor Class: 12 (+2 natural), touch 10, flat-footed 12
+Base Attack/Grapple: +1/+4
+Attack: Longspear +5 melee (1d8+4, crit x3); or
+spear +1 ranged (1d8+3, crit x3)
+Full Attack: Longspear +5 melee (1d8+4, crit x3); or
+spear +1 ranged (1d8+3, crit x3)
+Space/Reach: 5 ft./5 ft. (10 ft. with longspear)
+Special Qualities: Darkvision 30 ft., ogre blood
+Saves: Fort +5, Ref +0, Will +0
+Abilities: Str 16, Dex 10, Con 14, Int 10, Wis 10, Cha 8
+Skills: Listen +3, Move Silently +6, Spot +3
+Feats: Weapon Focus (longspear)
+Environment: Temperate hills and plains
+Organization: Solitary, band (5-8), raiding party (6-11
+and one leader of 5th-7th level), or clan
+(10-24, plus 100% noncombatants, one shaman
+of 5th-7th level, one leader of 7th-9th
+level, 2-4 ogres, and 5-8 hobgoblins)
+Challenge Rating: 1
+Treasure: Standard
+Alignment: Usually neutral evil
+Advancement: By character class
+Level Adjustment: +2
+Ogrens speak either Goblin or Giant (50% chance
+of either) and Common.
+
+#Oil Shark 112
+OIL SHARK
+Huge Magical Beast (Aquatic, Extraplanar, Fire)
+Hit Dice: 10d10+30 (85 hp)
+Initiative: +6
+Speed: Swim 60 ft. (12 squares)
+Armor Class: 19 (-2 size, +2 Dex, +9 natural), touch 10,
+flat-footed 19
+Base Attack/Grapple: +10/+24
+Attack: Bite +14 melee (2d6+9)
+Full Attack: Bite +14 melee (2d6+9)
+Space/Reach: 15 ft./10 ft.
+Special Qualities: Blindsense 30 ft., damage reduction 5/-,
+fire subtype, keen scent
+Saves: Fort +10, Ref +9, Will +6
+Abilities: Str 23, Dex 15, Con 17, Int 1, Wis 12, Cha 2
+Skills: Escape Artist +12, Listen +12, Spot +8,
+Swim +17*
+Feats: Alertness, Improved Initiative, Iron Will,
+Power Attack
+Environment: Sea of Fire (Elemental Plane of Fire and
+Plane of Molten Skies)
+Organization: Solitary, school (2-5), or pack (6-11)
+Challenge Rating: 7
+Treasure: None
+Alignment: Always neutral
+Advancement: 11-17 HD (Huge); 18-30 HD (Gargantuan)
+
+#Phantasm 113
+PHANTASM
+Medium Undead (Incorporeal)
+Hit Dice: 9d12 (58 hp)
+Initiative: +9
+Speed: 30 ft. (6 squares), fly 60 ft. (perfect)
+Armor Class: 18 (+5 Dex, +3 deflection), touch 18, flatfooted
+13
+Base Attack/Grapple: +4/-
+Attack: Incorporeal touch +9 melee (1d6+1 plus energy
+drain)
+Full Attack: Incorporeal touch +9 melee (1d6+1 plus energy
+drain)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Energy drain, possession
+Special Qualities: Aura of desecration, darkvision 60 ft., incorporeal
+traits, undead traits
+Saves: Fort +5, Ref +8, Will +8
+Abilities: Str -, Dex 20, Con -, Int 15, Wis 15, Cha 16
+Skills: Bluff +12, Hide +16, Intimidate +14, Listen +13,
+Search +8, Sense Motive +13, Spot +13
+Feats: Alertness (b), Blind-Fight, Great Fortitude,
+Improved Initiative, Strength of the Grave
+Environment: Any
+Organization: Solitary or gang (2-5)
+Challenge Rating: 8
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 10-27 HD (Medium)
+
+#Phlogiston 114
+PHLOGISTON
+Medium Plant
+Hit Dice: 4d8+8 (26 hp)
+Initiative: +1
+Speed: 0 ft. (immobile)
+Armor Class: 16 (+1 Dex, +5 natural), touch 11, flat-footed 15
+Base Attack/Grapple: +3/+6
+Attack: Tendril +6 melee (1d6+3)
+Full Attack: 4 tendrils +6 melee (1d6+3)
+Space/Reach: 5 ft./5 ft. (10 ft. with tendril)
+Special Attacks: Constrict 1d6+3, fire bolt, improved grab
+Special Qualities: Blindsight 60 ft., death throes, resistance to
+fire 10, plant traits
+Saves: Fort +6, Ref +2, Will +2
+Abilities: Str 17, Dex 13, Con 14, Int -, Wis 12, Cha 2
+Environment: Temperate forests
+Organization: Solitary
+Challenge Rating: 3
+Treasure: None
+Alignment: Always neutral
+Advancement: 5-8 HD (Medium); 9-12 HD (Large)
+
+#Piercer 33
+
+
+#Proscriber 115
+PROSCRIBER
+Medium Outsider (Extraplanar)
+Hit Dice: 15d8+75 (142 hp)
+Initiative: +7
+Speed: 40 ft. (8 squares)
+Armor Class: 27 (+3 Dex, +10 +2 full plate, +4 +2 heavy
+steel shield), touch 13, flat-footed 24
+Base Attack/Grapple: +15/+22
+Attack: +2 longsword +24 melee (1d8+9)
+Full Attack: +2 longsword +24/+19/+14 melee (1d8+9)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Condemn, spell-like abilities, spells
+Special Qualities: Damage reduction 10/magic and silver,
+darkvision 60 ft., immunity to poison, resistance
+to cold 10, resistance to fire 10,
+resistance to electricity 10, outsider traits,
+SR 27
+Saves: Fort +14, Ref +12, Will +14
+Abilities: Str 25, Dex 17, Con 20, Int 20, Wis 20, Cha
+18
+Skills: Concentration +20, Craft (any one) +20,
+Diplomacy +21, Escape Artist +18, Intimidate
++19, Knowledge (any one) +23,
+Knowledge (the planes) +23, Knowledge
+(religion) +23, Listen +20, Move Silently
++18, Search +20, Sense Motive +20,
+Spellcraft +20, Spot +20, Survival +20
+(+22 on other planes, +22 following tracks)
+Feats: Cleave, Great Cleave, Improved Initiative,
+Improved Sunder, Power Attack, Track
+Environment: Any
+Organization: Solitary
+Challenge Rating: 15
+Treasure: None
+Alignment: Any
+Advancement: 16-45 HD (Medium)
+
+#Pudding, Blood 117
+PUDDING, BLOOD
+Medium Ooze
+Hit Dice: 5d10+25 (52 hp)
+Initiative: +0
+Speed: 30 ft. (6 squares)
+Armor Class: 10, touch 10, flat-footed 10
+Base Attack/Grapple: +3/+8
+Attack: Slam +4 melee (2d4+1)
+Full Attack: Slam +4 melee (2d4+1)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Disgorge, improved grab, infuse
+Special Qualities: Amorphous, blindsight 60 ft., ooze traits,
+resistance to fire 10, vulnerabilities
+Saves: Fort +6, Ref +1, Will +1
+Abilities: Str 12, Dex 10, Con 20, Int -, Wis 10, Cha
+8
+Skills: -
+Feats: -
+Environment: Temperate marshes and underground
+Organization: Solitary
+Challenge Rating: 5
+Treasure: None
+Alignment: Always neutral
+Advancement: 6-12 HD (Medium); 13-15 HD (Large)
+
+#Pudding, Stone 118
+PUDDING, STONE
+Huge Ooze
+Hit Dice: 11d10+66 (126 hp)
+Initiative: -5
+Speed: 20 ft. (4 squares), climb 20 ft.
+Armor Class: 3 (-2 size, -5 Dex), touch 3, flat-footed 3
+Base Attack/Grapple: +8/+19
+Attack: Slam +9 melee (2d6+4 plus 1d6 acid and
+petrification)
+Full Attack: Slam +9 melee (2d6+4 plus 1d6 acid and
+petrification)
+Space/Reach: 15 ft./10 ft.
+Special Attacks: Acid, petrification
+Special Qualities: Blindsight 60 ft., camouflage, ooze traits,
+vulnerability
+Saves: Fort +7, Ref -2, Will -2
+Abilities: Str 17, Dex 1, Con 22, Int -, Wis 1, Cha 1
+Skills: Climb +11, Hide -13*
+Feats: -
+Environment: Underground
+Organization: Solitary
+Challenge Rating: 9
+Treasure: None
+Alignment: Always neutral
+Advancement: 12-17 HD (Huge); 18-33 HD (Gargantuan)
+
+#Quasi-Elemental, Acid 119
+
+
+#Quasi-Elemental, Obsidian 122
+
+
+#Rakklethorn Toad 124
+RAKKLETHORN TOAD
+Small Magical Beast
+Hit Dice: 2d10+2 (13 hp)
+Initiative: +2
+Speed: 20 ft. (4 squares)
+Armor Class: 15 (+1 size, +2 Dex, +2 natural), touch 13, flatfooted
+13
+Base Attack/Grapple: +2/-2
+Attack: Thorn volley +5 ranged (1d6 plus poison) or
+bite +3 melee (1d4)
+Full Attack: Thorn volley +5 ranged (1d6 plus poison) or
+bite +3 melee (1d4)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Poison, thorns
+Special Qualities: Darkvision 60 ft., low-light vision, scent
+Saves: Fort +4, Ref +5, Will +0
+Abilities: Str 10, Dex 15, Con 12, Int 2, Wis 10, Cha 6
+Skills: Hide +8*, Spot +3
+Feats: Dodge
+Environment: Warm marshes
+Organization: Pack (2-5) or mating swarm (6-36)
+Challenge Rating: 1
+Treasure: None
+Alignment: Always neutral
+Advancement: 3-5 HD (Small); 6 HD (Medium)
+
+#Rat, Barrow 125
+RAT, BARROW
+Tiny Magical Beast
+Hit Dice: 1d10 (5 hp)
+Initiative: +2
+Speed: 15 ft. (3 squares), climb 15 ft., burrow 15 ft.
+Armor Class: 15 (+2 size, +2 Dex, +1 natural), touch 14, flatfooted
+13
+Base Attack/Grapple: +1/-10
+Attack: Bite +5 melee (1d3-3)
+Full Attack: Bite +5 melee (1d3-3)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: -
+Special Qualities: Darkvision 60 ft., low-light vision, scent, stone
+skin, swarm
+Saves: Fort +2, Ref +4, Will +1
+Abilities: Str 4, Dex 15, Con 10, Int 2, Wis 12, Cha 2
+Skills: Balance +8, Climb +10, Hide +14, Move Silently
++6
+Feats: Weapon Finesse
+Environment: Underground
+Organization: Pack (4-9), swarm (11-20), or nest (10-40
+plus 100% noncombatant young)
+Challenge Rating: 1/4
+Treasure: None
+Alignment: Always neutral
+Advancement: 2-3 HD (Tiny)
+
+#Red Jester 126
+RED JESTER
+Medium Undead
+Hit Dice: 15d12 (97 hp)
+Initiative: +8
+Speed: 30 ft. (6 squares)
+Armor Class: 24 (+4 Dex, +10 natural), touch 14, flat-footed
+20
+Base Attack/Grapple: +7/+9
+Attack: +2 light mace of merriment +13 melee (1d6+4)
+or slam +11 melee (1d4+2) or jester's deck +11
+ranged touch (see below)
+Full Attack: +2 light mace of merriment +13 melee (1d6+4)
+or 2 slams +11 melee (1d4+2) or jester's deck +11
+ranged touch (see below)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Fear cackle, jester's deck, merriment
+Special Qualities: Damage reduction 10/magic, darkvision 60 ft.,
+SR 21, unassailable mind, turn immunity, undead
+traits
+Saves: Fort +5, Ref +9, Will +11
+Abilities: Str 15, Dex 18, Con -, Int 14, Wis 14, Cha 16
+Skills: Balance +16, Hide +10, Listen +16, Move Silently
++16, Perform (act) +21, Perform (comedy)
++25, Perform (oratory) +21, Spot +16
+Feats: Ability Focus (fear cackle), Alertness, Dodge,
+Improved Initiative, Mobility, Weapon Finesse
+Environment: Any
+Organization: Solitary
+Challenge Rating: 10
+Treasure: Standard
+Alignment: Always chaotic neutral
+Advancement: 16-45 HD (Medium)
+
+#Redcap 127
+REDCAP
+Tiny Fey
+Hit Dice: 1d6+1 (4 hp)
+Initiative: +8
+Speed: 20 ft. (4 squares)
+Armor Class: 17 (+2 size, +4 Dex, +1 natural), touch 16, flatfooted
+13
+Base Attack/Grapple: +0/-10
+Attack: Short sword +6 melee (1d3-2 plus poison) or
+tiny dagger +6 ranged (1d2-2 plus poison) or
+claw +6 melee (1d2-2)
+Full Attack: Short sword +6 melee (1d3-2 plus poison) or
+tiny dagger +6 ranged (1d2-2 plus poison) or 2
+claws +6 melee (1d2-2)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Poison, spell-like abilities
+Special Qualities: Damage reduction 5/cold iron, SR 16, low-light
+vision
+Saves: Fort +1, Ref +6, Will +4
+Abilities: Str 7, Dex 18, Con 12, Int 14, Wis 14, Cha 14
+Skills: Bluff +7, Craft (poisonmaking) +6, Craft (any
+one) +4, Escape Artist +8, Hide +14*, Listen
++8, Move Silently +8, Search +6, Spot +8
+Feats: Dodge (b), Improved Initiative (b), Weapon
+Finesse
+Environment: Temperate and warm forest and underground
+Organization: Gang (2-4) or band (5-12)
+Challenge Rating: 2
+Treasure: No coins; 50% goods; 50% items
+Alignment: Always chaotic evil
+Advancement: 2-3 HD (Tiny)
+Level Adjustment: +2
+
+#Renzer (Devilfin) 128
+RENZER (DEVILFIN)
+Large Magical Beast (Aquatic)
+Hit Dice: 8d10+16 (60 hp)
+Initiative: +2
+Speed: Swim 60 ft. (12 squares)
+Armor Class: 19 (-1 size, +2 Dex, +8 natural), touch 11, flatfooted
+17
+Base Attack/Grapple: +8/+15
+Attack: Bite +10 melee (1d8+3)
+Full Attack: Bite +10 melee (1d8+3) and 2 claws +6 melee
+(1d6+1)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Improved grab, spell-like abilities
+Special Qualities: Command fish, darkvision 60 ft., keen scent,
+low-light vision, SR 17
+Saves: Fort +8, Ref +8, Will +6
+Abilities: Str 17, Dex 15, Con 14, Int 10, Wis 15, Cha 15
+Skills: Intimidate +10, Listen +10, Spot +10, Swim +13
+Feats: Alertness, Iron Will, Power Attack
+Environment: Temperate and warm aquatic
+Organization: Solitary
+Challenge Rating: 6
+Treasure: None
+Alignment: Always chaotic evil
+Advancement: 9-15 HD (Large); 16-24 HD (Huge)
+Renzers speak Common and Aquan but very rarely communicate
+with other races.
+
+#Retch Hound 129
+RETCH HOUND
+Medium Magical Beast
+Hit Dice: 3d10+6 (22 hp)
+Initiative: +2
+Speed: 40 ft. (8 squares)
+Armor Class: 17 (+2 Dex, +5 natural), touch 12, flatfooted
+15
+Base Attack/Grapple: +3/+5
+Attack: Bite +5 melee (1d6+3)
+Full Attack: Bite +5 melee (1d6+3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Breath weapon, stench, trip
+Special Qualities: Darkvision 60 ft., scent
+Saves: Fort +5, Ref +5, Will +2
+Abilities: Str 15, Dex 15, Con 15, Int 5, Wis 12, Cha 6
+Skills: Listen +4, Search +3, Spot +8, Survival +3
+(+7 when tracking by scent)
+Feats: Alertness, Track
+Environment: Temperate forests and marshes
+Organization: Solitary, pair, or pack (3-6)
+Challenge Rating: 3
+Treasure: None
+Alignment: Usually neutral (evil tendencies)
+Advancement: 4-7 HD (Medium); 8-9 HD (Large)
+
+#Riptide Horror 130
+RIPTIDE HORROR
+Medium Magical Beast (Aquatic)
+Hit Dice: 6d10+30 (63 hp)
+Initiative: +6
+Speed: 20 ft. (4 squares), swim 40 ft.
+Armor Class: 20 (+2 Dex, +8 natural), touch 12, flat-footed
+18
+Base Attack/Grapple: +6/+7
+Attack: Tentacle +7 melee (1d4+1 plus poison)
+Full Attack: 6 tentacles +7 melee (1d4+1 plus poison) and 6
+bites +7 melee (1d6)
+Space/Reach: 5 ft./5 ft. (10 ft. with tentacle)
+Special Attacks: Improved grab, poison
+Special Qualities: Amphibious, blindsight 30 ft., damage reduction
+10/piercing or slashing, spider climb,
+vulnerability to electricity
+Saves: Fort +10, Ref +6, Will +3
+Abilities: Str 13, Dex 15, Con 20, Int 8, Wis 8, Cha 8
+Skills: Hide +7*, Listen +3, Swim +9
+Feats: Improved Initiative, Iron Will, Power Attack
+Environment: Temperate marshes
+Organization: Solitary, pair, or colony (2-8)
+Challenge Rating: 8
+Treasure: None
+Alignment: Usually lawful evil
+Advancement: 7-12 HD (Medium); 13-18 HD (Large)
+
+#Ronus 131
+RONUS
+Medium Magical Beast
+Hit Dice: 3d10+6 (22 hp)
+Initiative: +4
+Speed: 60 ft. (12 squares)
+Armor Class: 17 (+4 Dex, +3 natural), touch 14, flat-footed 13
+Base Attack/Grapple: +3/+6
+Attack: Bite +7 melee (1d6+4)
+Full Attack: Bite +7 melee (1d6+4)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: -
+Special Qualities: Darkvision 60 ft., low-light vision, scent
+Saves: Fort +5, Ref +7, Will +3
+Abilities: Str 16, Dex 18, Con 15, Int 4, Wis 14, Cha 6
+Skills: Hide +5, Jump +16, Listen +6, Move Silently +9,
+Spot +9
+Feats: Alertness, Weapon Focus (bite)
+Environment: Temperate forests
+Organization: Pack (4-9) or lair (6-11)
+Challenge Rating: 2
+Treasure: None
+Alignment: Always neutral
+Advancement: 4-9 HD (Medium)
+
+#Ryven 132
+RYVEN
+Medium Monstrous Humanoid
+Hit Dice: 3d8+9 (22 hp)
+Initiative: +3
+Speed: 30 ft. (6 squares)
+Armor Class: 14 (+3 Dex, +1 natural), touch 13, flatfooted
+11
+Base Attack/Grapple: +3/+5
+Attack: Claw +6 melee (1d4+2) or short sword +6
+melee (1d6+2, 19-20/x2) or light crossbow
++6 ranged (1d8, 19-20/x2, range 80
+ft.)
+Full Attack: 2 claws +6 melee (1d4+2) and bite +1
+melee (1d6+1) or short sword +6 melee
+(1d6+2, 19-20/x2) or light crossbow +6
+ranged (1d8, 19-20/x2, range 80 ft.)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: -
+Special Qualities: Darkvision 60 ft., low-light vision, rage,
+scent
+Saves: Fort +4, Ref +6, Will +4
+Abilities: Str 14, Dex 17, Con 17, Int 6, Wis 12, Cha 10
+Skills: Escape Artist +9, Listen +5, Spot +5
+Feats: Alertness, Track (b), Weapon Finesse
+Environment: Temperate forests
+Organization: Solitary, pair, gang (2-5), raiding party
+(4-7 plus 1 leader of 3rd-4th level), or
+tribe (10-20 plus 50% noncombatants plus
+two 3rd-level sergeants, one 5th-level
+lieutenant, one 4th-level shaman, 1 leader
+of 5th-8th level, and 3-4 dire badgers)
+Challenge Rating: 2
+Treasure: Standard
+Alignment: Usually neutral (evil tendencies)
+Advancement: By character class
+Level Adjustment: +2
+
+#Sabrewing 134
+SABREWING
+Medium Outsider (Evil, Extraplanar)
+Hit Dice: 6d8+30 (57 hp)
+Initiative: +6
+Speed: 30 ft. (6 squares), fly 60 ft. (good)
+Armor Class: 19 (+2 Dex, +7 natural), touch 12,
+flat-footed 17
+Base Attack/Grapple: +11/+16
+Attack: Wing slash +16 melee (1d6+5, 19-
+20/x3)
+Full Attack: 2 wing slashes +16 melee (1d6+5, 19-
+20/x3)
+Space/Reach: 5 ft./5 ft.
+Special Attacks: Augmented critical, lasting wound,
+spell-like abilities
+Special Qualities: Damage reduction 5/silver or good,
+darkvision 60 ft., outsider traits, see
+invisible
+Saves: Fort +10, Ref +7, Will +7
+Abilities: Str 20, Dex 15, Con 20, Int 12, Wis
+14, Cha 14
+Skills: Escape Artist +11, Hide +11, Intimidate
++11, Knowledge (the planes) +6,
+Listen +13, Move Silently +11, Search
++10, Sense Motive +6, Spot +13, Survival
++11 (+13 when on other planes
+or following tracks)
+Feats: Alertness (b), Flyby Attack, Improved
+Initiative, Power Attack
+Environment: Outer Planes
+Organization: Solitary, pair, or wing (5-8)
+Challenge Rating: 6
+Treasure: Standard
+Alignment: Always neutral evil
+Advancement: 7-13 HD (Medium); 14-18 HD (Large)
+
+#Sand Kraken 136
+SAND KRAKEN
+Large Aberration
+Hit Dice: 8d10+56 (100 hp)
+Initiative: -5
+Speed: 0 ft. (immobile)
+Armor Class: 17 (-1 size, +8 natural), touch 9, flat-footed 17
+Base Attack/Grapple: +6/+19
+Attack: Tentacle +11 melee (1d6+5)
+Full Attack: 10 tentacles +11 melee (1d6+5), bite +6 melee
+(2d6+2)
+Space/Reach: 10 ft./10 ft. (30 ft. with tentacle)
+Special Attacks: Constrict 1d6+5, improved grab, tentacles
+Special Qualities: Camouflage, tremorsense 60 ft.
+Saves: Fort +9, Ref -, Will +6
+Abilities: Str 20, Dex -, Con 25, Int 2, Wis 10, Cha 1
+Skills: Listen +11
+Feats: Improve Initiative, Power Attack, Weapon
+Focus (tentacle)
+Environment: Warm deserts
+Organization: Solitary
+Challenge Rating: 8
+Treasure: None
+Alignment: Always neutral
+Advancement: 9-12 HD (Large); 13-24 HD (Huge)
+
+#Sand Stalker 137
+SAND STALKER
+Large Magical Beast
+Hit Dice: 6d10+12 (45 hp)
+Initiative: +7
+Speed: 50 ft. (10 squares), burrow 30 ft.
+Armor Class: 16 (-1 size, +3 Dex, +4 natural), touch 12, flatfooted
+13
+Base Attack/Grapple: +6/+13
+Attack: Bite +9 melee (1d8+6 plus poison)
+Full Attack: Bite +9 melee (1d8+6 plus poison)
+Space/Reach: 10 ft./5 ft.
+Special Attacks: Attraction, poison
+Special Qualities: Darkvision 60 ft., low-light vision, tremorsense
+60 ft.
+Saves: Fort +7, Ref +8, Will +3
+Abilities: Str 19, Dex 17, Con 15, Int 4, Wis 12, Cha 2
+Skills: Hide +10*, Jump +21, Listen +3, Spot +13
+Feats: Alertness, Improved Initiative, Skill Focus (Hide)
+Environment: Warm deserts
+Organization: Solitary or colony (2-5)
+Challenge Rating: 5
+Treasure: 1/10 coins; 50% goods; 50% items
+Alignment: Always neutral
+Advancement: 7-12 HD (Large)
+
+#Screaming Skull (Cacophony Golem) 138
+Tiny Construct
+Hit Dice: 6d10 (33 hp)
+Initiative: -5
+Speed: 0 ft. (immobile)
+Armor Class: 13 (+2 size, -5 Dex, +6 natural), touch 7, flatfooted
+13
+Base Attack/Grapple: +3/-5
+Attack: None (see text)
+Full Attack: None (see text)
+Space/Reach: 2-1/2 ft./0 ft.
+Special Attacks: Cacophony, insanity, magic missile
+Special Qualities: Construct traits, damage reduction 5/adamantine,
+darkvision 60 ft., low-light vision
+Saves: Fort +2, Ref -, Will +2
+Abilities: Str 10, Dex -, Con -, Int -, Wis 11, Cha 1
+Skills: -
+Feats: -
+Environment: Any
+Organization: Solitary
+Challenge Rating: 4
+Treasure: Two gemstone eyes (200 gp+ each)
+Alignment: Always neutral
+Advancement: 7-10 HD (Tiny); 11-18 HD (Small)
+
+#Scythe Horn 139
+
+
+#Sea Slug, Giant 140
+
+
+#Sea Wasp, Monstrous 141
+
+
+#Sepia Snake 144
+
+
+#Silid 145
+
+
+#Skeleton, Black 146
+
+
+#Slaughterford 147
+
+
+#Sleeping Willow 148
+
+
+#Slime Mold 149
+
+
+#Slorath 150
+
+
+#Sloth Viper 151
+
+
+#Stygian Leviathan 152
+
+
+#Swarm, Grig 153
+
+
+#Swarm, Piranha 154
+
+
+#Swarm, Poisonous Frog 155
+
+
+#Swarm, Velvet Ant 156
+
+
+#Swarm, Warden Jack 157
+
+
+#Tangtal 158
+
+
+#Tazelwurm 159
+
+
+#Temporal Crawler 160
+
+
+#Tentacled Horror 161
+
+
+#Thundershrike 162
+
+
+#Time Flayer 163
+
+
+#Troblin 164
+
+
+#Turtle, Giant Bog 166
+
+
+#Vapor Dire Rat 167
+
+
+#Vapor Wasp 167
+
+
+#Weird, Blood 169
+
+
+#Weird, Lava 170
+
+
+#Weird, Lightning 172
+
+
+#Winterbloom 173
+
+
+#Witch Grass 174
+
+
+#Witch Tree 174
+
+
+#Yellowjacket, Giant 176
+
+
+#Appendix One: Animals
+
+
+#Archerfish, Giant 178
+
+
+#Cave Lion 179
+
+
+#Chameleon, Giant 180
+
+
+#Chameleon, Giant (Horned) 181
+
+
+#Chameleon, Giant (Rock) 181
+
+
+#Falcon, Giant 181
+
+
+#Hyaenodon 182
+
+
+#Jaguar 183
+
+
+#Leopard, Snow 184
+
+
+#Lynx 185
+
+
+#Lynx (Caracal) 185
+
+
+#Mammoth 186
+
+
+#Mastodon 187
+
+
+#Mountain Lion 188
+
+
+#Pike, Giant 189
+
+
+#Rhinoceros, Woolly 190
+
+
+#Rhinoceros, Woolly (Elasmotherium) 190
+
+
+#Seahorse, Giant 191
+
+
+#Smilodon (Saber-toothed Cat) 192
+
+
+#Smilodon (Homotherium) 192
+
+
+#Stingray 193
+
+
+#Appendix Two: Templates
+
+
+#Amphisbaena 196
+
+
+#Cheitan 198
+
+
+#Corpsespun Creature 102
+
+
+#Debased Fey 205
+
+
+#Landwalker 206
+
+
+#Phase Creature 208
+
+
+#Ravenous (Eater of Flesh) 210
+
+
+#Spellgorged Zombie 212
+
+
+#Undead Lord 214

@@ -1,0 +1,19 @@
+# CVS $Revision: $ $Author: $ -- Thu Aug  2 19:19:21 2012 -- reformated by prettylst.pl v1.39 (build )
+SOURCELONG:Advanced Race Guide	SOURCESHORT:PFARG	SOURCEWEB:http://paizo.com/products/btpy8rv2?Pathfinder-Roleplaying-Game-Advanced-Race-Guide	SOURCEDATE:2012-06
+# ORIGINAL ENTRY: none
+# ORIGINAL ENTRY DATE: none
+
+###Block: Modified Feats for Sorcerer Bloodlines
+# Feat Name				Type
+Diehard.MOD				TYPE:ImperiousBloodline
+Endurance.MOD			TYPE:ImperiousBloodline
+Heroic Defiance.MOD		TYPE:ImperiousBloodline
+Heroic Recovery.MOD		TYPE:ImperiousBloodline
+Improved Initiative.MOD		TYPE:ImperiousBloodline
+Lingering Spell.MOD		TYPE:ImperiousBloodline
+Magical Aptitude.MOD		TYPE:ImperiousBloodline
+Persuasive.MOD			TYPE:ImperiousBloodline
+
+#
+# End
+#

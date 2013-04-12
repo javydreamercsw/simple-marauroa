@@ -1,0 +1,535 @@
+/*
+ * KitGear.java
+ * Copyright 2001 (C) Greg Bingleman <byngl@hotmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * Created on September 23, 2002, 8:58 PM
+ *
+ * $Id: KitGear.java 19185 2013-01-18 03:39:25Z thpr $
+ */
+package pcgen.core.kit;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import pcgen.base.formula.Formula;
+import pcgen.base.util.NamedFormula;
+import pcgen.cdom.base.CDOMReference;
+import pcgen.cdom.base.Constants;
+import pcgen.cdom.enumeration.ObjectKey;
+import pcgen.cdom.helper.EqModRef;
+import pcgen.core.Equipment;
+import pcgen.core.EquipmentModifier;
+import pcgen.core.Globals;
+import pcgen.core.Kit;
+import pcgen.core.PlayerCharacter;
+import pcgen.core.SizeAdjustment;
+import pcgen.core.character.EquipSet;
+
+/**
+ * <code>KitGear</code>.
+ *
+ * @author Greg Bingleman <byngl@hotmail.com>
+ * @version $Revision: 19185 $
+ */
+public final class KitGear extends BaseKit
+{
+	private Formula quantity;
+	private Integer maxCost;
+	private CDOMReference<Equipment> equip;
+	private List<EqModRef> mods;
+	private String theLocationStr = null;
+	private Boolean sizeToPC;
+	private SizeAdjustment size;
+
+	// These members store the state of an instance of this class.  They are
+	// not cloned.
+	private transient Formula actingQuantity;
+	private transient Integer actingCost;
+	private transient List<EqModRef> actingMods;
+	private transient String actingLocation;
+	private transient SizeAdjustment actingSize;
+
+	private transient Equipment theEquipment = null;
+	private transient int theQty = 0;
+	private transient String theLocation = "";
+	private transient BigDecimal theCost = BigDecimal.ZERO;
+
+	/**
+	 * Set the location of the gear
+	 * @param aLocation
+	 */
+	public void setLocation(final String aLocation)
+	{
+		theLocationStr = aLocation;
+	}
+
+	/**
+	 * Get the location of the gear
+	 * @return location of the gear
+	 */
+	public String getLocation()
+	{
+		return theLocationStr;
+	}
+
+	@Override
+	public String toString()
+	{
+		final StringBuilder info = new StringBuilder(100);
+
+		if (quantity != null)
+		{
+			info.append(quantity).append('x');
+		}
+
+		info.append(equip == null ? "null" : equip.getLSTformat(false));
+
+		if (mods != null)
+		{
+			info.append(" (");
+			boolean needsSlash = false;
+			for (EqModRef modRef : mods)
+			{
+				if (needsSlash)
+				{
+					info.append('/');
+				}
+				needsSlash = true;
+				info.append(modRef.getRef().getLSTformat(false));
+				for (String s : modRef.getChoices())
+				{
+					info.append(Constants.PIPE).append(s);
+				}
+			}
+			info.append(')');
+		}
+
+		return info.toString();
+	}
+
+	private void processLookups(Kit aKit, PlayerCharacter aPC)
+	{
+		Collection<NamedFormula> lookups = getLookups();
+		if (lookups == null)
+		{
+			return;
+		}
+		for (NamedFormula lookup : lookups)
+		{
+			KitTable kt = aKit.getTable(lookup.getName());
+			KitGear gear =
+					kt.getEntry(aPC, lookup.getFormula().resolve(aPC, "")
+						.intValue());
+			gear.processLookups(aKit, aPC);
+			overlayGear(gear);
+		}
+	}
+
+	private void overlayGear(KitGear gear)
+	{
+		if (gear.quantity != null)
+		{
+			actingQuantity = gear.quantity;
+		}
+		if (gear.maxCost != null)
+		{
+			actingCost = gear.maxCost;
+		}
+		if (gear.mods != null)
+		{
+			actingMods.addAll(gear.mods);
+		}
+		if (gear.theLocationStr != null)
+		{
+			actingLocation = gear.theLocationStr;
+		}
+		if (gear.size != null)
+		{
+			actingSize = gear.size;
+		}
+	}
+
+	@Override
+	public boolean testApply(Kit aKit, PlayerCharacter aPC,
+		List<String> warnings)
+	{
+		actingQuantity = quantity;
+		actingCost = maxCost;
+		actingMods = mods == null ? null : new ArrayList<EqModRef>(mods);
+		actingLocation = theLocationStr;
+		actingSize = size;
+
+		theEquipment = null;
+		theQty = 0;
+		theLocation = "";
+		theCost = BigDecimal.ZERO;
+
+		processLookups(aKit, aPC);
+
+		int aBuyRate = aKit.getBuyRate(aPC);
+		final BigDecimal pcGold = aPC.getGold();
+
+		List<Equipment> eqList =
+				new ArrayList<Equipment>(equip.getContainedObjects());
+		if (actingCost != null)
+		{
+			final BigDecimal bdMaxCost =
+					new BigDecimal(Integer.toString(actingCost));
+			for (Iterator<Equipment> i = eqList.iterator(); i.hasNext();)
+			{
+				if (i.next().getCost(aPC).compareTo(bdMaxCost) > 0)
+				{
+					i.remove();
+				}
+			}
+		}
+		if (eqList.size() == 1)
+		{
+			theEquipment = eqList.get(0);
+		}
+		else
+		{
+			List<Equipment> selected = new ArrayList<Equipment>(1);
+			selected = Globals.getChoiceFromList("Choose equipment", eqList, selected, 1, aPC);
+			if (selected.size() == 1)
+			{
+				theEquipment = selected.get(0);
+			}
+		}
+
+		//
+		// TODO: Check to see if the user has selected an item that
+		// requires modification (MOD:R)
+
+		theEquipment = theEquipment.clone();
+
+		//
+		// Resize item for character--never resize weapons or ammo, unless it's a
+		// natural (weapon)
+		boolean tryResize = false;
+
+		SizeAdjustment sizeToSet = aPC.getSizeAdjustment();
+
+		if (actingSize == null)
+		{
+			if (theEquipment.isType("Natural") || (sizeToPC != null && sizeToPC)
+				|| (!theEquipment.isWeapon() && !theEquipment.isAmmunition()))
+			{
+				tryResize =
+						Globals.canResizeHaveEffect(aPC, theEquipment, null);
+			}
+		}
+		else
+		{
+			if (sizeToPC != null && sizeToPC)
+			{
+				tryResize =
+						Globals.canResizeHaveEffect(aPC, theEquipment, null);
+			}
+			else
+			{
+				sizeToSet = actingSize;
+				tryResize = true;
+			}
+		}
+
+		if (tryResize)
+		{
+			theEquipment.resizeItem(aPC, sizeToSet);
+		}
+		else
+		{
+			// We need setBase() called.  The only way to do that is to resize.
+			// We will set the size to itself.
+			theEquipment.resizeItem(aPC, theEquipment.getSafe(ObjectKey.SIZE));
+		}
+
+		//
+		// Find and add any equipment modifiers
+		//
+		if (actingMods != null)
+		{
+			for (EqModRef modref : actingMods)
+			{
+				/*
+				 * Going to do this the long way for now to avoid ugly entanglements
+				 */
+				StringBuilder sb = new StringBuilder();
+				EquipmentModifier eqMod = modref.getRef().resolvesTo();
+				sb.append(eqMod.getKeyName());
+				for (String assoc : modref.getChoices())
+				{
+					sb.append(Constants.PIPE).append(eval(aPC, assoc));
+				}
+				theEquipment.addEqModifiers(sb.toString(), true);
+			}
+		}
+
+		if (tryResize || (actingMods != null))
+		{
+			theEquipment.nameItemFromModifiers(aPC);
+		}
+
+		if (actingQuantity == null)
+		{
+			theQty = 1;
+		}
+		else
+		{
+			theQty = actingQuantity.resolve(aPC, "").intValue();
+		}
+		int origQty = theQty;
+		final BigDecimal eqCost = theEquipment.getCost(aPC);
+		if (aBuyRate != 0)
+		{
+			final BigDecimal bdBuyRate =
+					new BigDecimal(Integer.toString(aBuyRate))
+						.multiply(new BigDecimal("0.01"));
+
+			// Check to see if the PC can afford to buy this equipment. If
+			// not, then decrement the quantity and try again.
+			theCost =
+					eqCost.multiply(new BigDecimal(Integer.toString(theQty)))
+						.multiply(bdBuyRate);
+
+			while (theQty > 0)
+			{
+				if (theCost.compareTo(pcGold) <= 0) // PC has enough?
+				{
+					break;
+				}
+
+				theCost =
+						eqCost.multiply(
+							new BigDecimal(Integer.toString(--theQty)))
+							.multiply(bdBuyRate);
+			}
+
+			aPC.setGold(aPC.getGold().subtract(theCost).toString());
+		}
+
+		boolean outOfFunds = false;
+		if (theQty != origQty)
+		{
+			outOfFunds = true;
+		}
+
+		if (outOfFunds)
+		{
+			warnings.add("GEAR: Could not purchase " + (origQty - theQty) + " "
+				+ theEquipment.getName() + ". Not enough funds.");
+		}
+
+		//
+		// Can't buy none
+		//
+		if (theQty == 0)
+		{
+			return false;
+		}
+
+		Equipment testApplyEquipment = theEquipment.clone();
+		// Temporarily add the equipment so we can see if we can equip it.
+		testApplyEquipment.setQty(new Float(theQty));
+		aPC.addEquipment(testApplyEquipment);
+		Equipment theTarget = null;
+		if (actingLocation != null)
+		{
+			theLocation = actingLocation;
+			if (!theLocation.equalsIgnoreCase("DEFAULT")
+					&& !theLocation.equalsIgnoreCase("Equipped"))
+			{
+				theTarget = aPC.getEquipmentNamed(theLocation);
+			}
+			else if (theLocation.equalsIgnoreCase("DEFAULT"))
+			{
+				theLocation = "";
+			}
+
+			EquipSet eSet = null;
+			if (theTarget != null)
+			{
+				eSet = aPC.getEquipSetForItem(aPC.getEquipSetByIdPath("0.1"),
+						theTarget);
+			}
+			if (eSet == null)
+			{
+				eSet = aPC.getEquipSetByIdPath("0.1");
+			}
+			if (eSet == null)
+			{
+				warnings.add("GEAR: Could not find location " + theLocation
+					+ " for gear " + testApplyEquipment.getName() + ".");
+				return false;
+			}
+			else
+			{
+				EquipSet eqSet = aPC.addEquipToTarget(eSet, theTarget, theLocation,
+						testApplyEquipment, new Float(-1.0f));
+				if (eqSet == null)
+				{
+					warnings.add("GEAR: Could not equip " + testApplyEquipment.getName()
+						+ " to " + theLocation);
+				}
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void apply(PlayerCharacter aPC)
+	{
+		final Equipment existing =
+				aPC.getEquipmentNamed(theEquipment.getName());
+
+		if (existing == null)
+		{
+			theEquipment.setQty(new Float(theQty));
+
+			aPC.addEquipment(theEquipment);
+			Globals.getContext().ref.importObject(theEquipment);
+		}
+		else
+		{
+			existing.setQty(existing.qty() + theQty);
+		}
+
+		// If the target is null, try and grab it incase it is there now
+		Equipment theTarget = null;
+		EquipSet eSet;
+		if (theLocation.length() != 0
+				&& !theLocation.equalsIgnoreCase("Equipped"))
+		{
+			theTarget = aPC.getEquipmentNamed(theLocation);
+			//TODO (JD 7Nov07) Resized items get missed by the above call as their name has changed 
+		}
+		if (theTarget == null)
+		{
+			eSet = aPC.getEquipSetByIdPath("0.1");
+		}
+		else
+		{
+			eSet =
+				aPC.getEquipSetForItem(aPC.getEquipSetByIdPath("0.1"),
+					theTarget);
+		}
+
+		//
+		// Equip the item to the default EquipSet.
+		//
+		aPC.addEquipToTarget(eSet, theTarget, theLocation, theEquipment,
+			new Float(theQty));
+
+		aPC.setGold(aPC.getGold().subtract(theCost).toString());
+	}
+
+	@Override
+	public String getObjectName()
+	{
+		return "Gear";
+	}
+
+	public void setQuantity(Formula formula)
+	{
+		quantity = formula;
+	}
+
+	public Formula getQuantity()
+	{
+		return quantity;
+	}
+
+	public void setMaxCost(Integer quan)
+	{
+		maxCost = quan;
+	}
+
+	public Integer getMaxCost()
+	{
+		return maxCost;
+	}
+
+	public void setEquipment(CDOMReference<Equipment> reference)
+	{
+		equip = reference;
+	}
+
+	public CDOMReference<Equipment> getEquipment()
+	{
+		return equip;
+	}
+
+	public void setSizeToPC(Boolean b)
+	{
+		sizeToPC = b;
+	}
+
+	public Boolean getSizeToPC()
+	{
+		return sizeToPC;
+	}
+
+	public void setSize(SizeAdjustment sa)
+	{
+		size = sa;
+	}
+
+	public SizeAdjustment getSize()
+	{
+		return size;
+	}
+
+	private List<NamedFormula> lookupList;
+
+	public void loadLookup(String tableEntry, Formula f)
+	{
+		if (lookupList == null)
+		{
+			lookupList = new LinkedList<NamedFormula>();
+		}
+		lookupList.add(new NamedFormula(tableEntry, f));
+	}
+
+	public Collection<NamedFormula> getLookups()
+	{
+		return lookupList;
+	}
+
+	public void addModRef(EqModRef modRef)
+	{
+		if (mods == null)
+		{
+			mods = new LinkedList<EqModRef>();
+		}
+		mods.add(modRef);
+	}
+
+	public boolean hasEqMods()
+	{
+		return mods != null && !mods.isEmpty();
+	}
+
+	public List<EqModRef> getEqMods()
+	{
+		return Collections.unmodifiableList(mods);
+	}
+}

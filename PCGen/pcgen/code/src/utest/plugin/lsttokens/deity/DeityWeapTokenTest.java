@@ -1,0 +1,180 @@
+/*
+ * Copyright (c) 2007 Tom Parker <thpr@users.sourceforge.net>
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+package plugin.lsttokens.deity;
+
+import org.junit.Test;
+
+import pcgen.cdom.enumeration.ListKey;
+import pcgen.cdom.reference.CDOMDirectSingleRef;
+import pcgen.core.Deity;
+import pcgen.core.WeaponProf;
+import pcgen.persistence.PersistenceLayerException;
+import pcgen.rules.context.LoadContext;
+import pcgen.rules.persistence.CDOMLoader;
+import pcgen.rules.persistence.token.CDOMPrimaryToken;
+import plugin.lsttokens.testsupport.AbstractListTokenTestCase;
+import plugin.lsttokens.testsupport.CDOMTokenLoader;
+
+public class DeityWeapTokenTest extends
+		AbstractListTokenTestCase<Deity, WeaponProf>
+{
+	static DeityweapToken token = new DeityweapToken();
+	static CDOMTokenLoader<Deity> loader = new CDOMTokenLoader<Deity>(
+			Deity.class);
+
+	@Override
+	public char getJoinCharacter()
+	{
+		return '|';
+	}
+
+	@Override
+	public Class<WeaponProf> getTargetClass()
+	{
+		return WeaponProf.class;
+	}
+
+	@Override
+	public boolean isTypeLegal()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isAllLegal()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isClearDotLegal()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isClearLegal()
+	{
+		return false;
+	}
+
+	@Override
+	public Class<Deity> getCDOMClass()
+	{
+		return Deity.class;
+	}
+
+	@Override
+	public CDOMLoader<Deity> getLoader()
+	{
+		return loader;
+	}
+
+	@Override
+	public CDOMPrimaryToken<Deity> getToken()
+	{
+		return token;
+	}
+
+	@Override
+	protected WeaponProf construct(LoadContext loadContext, String one)
+	{
+		return loadContext.ref.constructCDOMObject(WeaponProf.class, one);
+	}
+
+	@Test
+	public void dummyTest()
+	{
+		// Just to get Eclipse to recognize this as a JUnit 4.0 Test Case
+	}
+
+	@Override
+	public boolean allowDups()
+	{
+		return false;
+	}
+
+	@Override
+	protected String getAllString()
+	{
+		return "ANY";
+	}
+
+	@Test
+	public void testUnparseNull() throws PersistenceLayerException
+	{
+		primaryProf.removeListFor(ListKey.DEITYWEAPON);
+		assertNull(getToken().unparse(primaryContext, primaryProf));
+	}
+
+	@Test
+	public void testUnparseSingle() throws PersistenceLayerException
+	{
+		WeaponProf wp1 = construct(primaryContext, "TestWP1");
+		primaryProf.addToListFor(ListKey.DEITYWEAPON, CDOMDirectSingleRef
+				.getRef(wp1));
+		String[] unparsed = getToken().unparse(primaryContext, primaryProf);
+		expectSingle(unparsed, getLegalValue());
+	}
+
+	@Test
+	public void testUnparseNullInList() throws PersistenceLayerException
+	{
+		primaryProf.addToListFor(ListKey.DEITYWEAPON, null);
+		try
+		{
+			getToken().unparse(primaryContext, primaryProf);
+			fail();
+		}
+		catch (NullPointerException e)
+		{
+			// Yep!
+		}
+	}
+
+	@Test
+	public void testUnparseMultiple() throws PersistenceLayerException
+	{
+		WeaponProf wp1 = construct(primaryContext, getLegalValue());
+		primaryProf.addToListFor(ListKey.DEITYWEAPON, CDOMDirectSingleRef
+				.getRef(wp1));
+		WeaponProf wp2 = construct(primaryContext, getAlternateLegalValue());
+		primaryProf.addToListFor(ListKey.DEITYWEAPON, CDOMDirectSingleRef
+				.getRef(wp2));
+		String[] unparsed = getToken().unparse(primaryContext, primaryProf);
+		expectSingle(unparsed, getLegalValue() + getJoinCharacter()
+				+ getAlternateLegalValue());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testUnparseGenericsFail() throws PersistenceLayerException
+	{
+		ListKey objectKey = ListKey.DEITYWEAPON;
+		primaryProf.addToListFor(objectKey, new Object());
+		try
+		{
+			getToken().unparse(primaryContext, primaryProf);
+			fail();
+		}
+		catch (ClassCastException e)
+		{
+			// Yep!
+		}
+	}
+}

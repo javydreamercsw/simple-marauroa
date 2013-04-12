@@ -1,0 +1,123 @@
+/*
+ * LogoToken.java
+ * Copyright 2008 (C) James Dempsey <jdempsey@users.sourceforge.net>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * Created on 30/01/2008
+ *
+ * $Id: LogoToken.java 18181 2012-11-06 19:50:30Z javydreamercsw $
+ */
+package plugin.lsttokens.campaign;
+
+import java.net.URI;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
+
+import pcgen.cdom.enumeration.ListKey;
+import pcgen.core.Campaign;
+import pcgen.persistence.lst.CampaignSourceEntry;
+import pcgen.persistence.lst.InstallLstToken;
+import pcgen.rules.context.Changes;
+import pcgen.rules.context.LoadContext;
+import pcgen.rules.persistence.token.AbstractTokenWithSeparator;
+import pcgen.rules.persistence.token.CDOMPrimaryToken;
+import pcgen.rules.persistence.token.ParseResult;
+
+/**
+ * <code>LogoToken</code> parses the LOGO Token.
+ *
+ * Last Editor: $Author: javydreamercsw $
+ * Last Edited: $Date: 2012-11-06 13:50:30 -0600 (Tue, 06 Nov 2012) $
+ *
+ * @author James Dempsey <jdempsey@users.sourceforge.net>
+ * @version $Revision: 18181 $
+ */
+public class LogoToken extends AbstractTokenWithSeparator<Campaign> implements
+		CDOMPrimaryToken<Campaign>, InstallLstToken
+{
+
+	/* (non-Javadoc)
+	 * @see pcgen.persistence.lst.LstToken#getTokenName()
+	 */
+	@Override
+	public String getTokenName()
+	{
+		return "LOGO";
+	}
+
+    @Override
+	public boolean parse(Campaign campaign, String value, URI sourceUri)
+	{
+		campaign.addToListFor(ListKey.FILE_LOGO, CampaignSourceEntry.getNewCSE(campaign,
+				sourceUri, value));
+		return true;
+	}
+	@Override
+	protected char separator()
+	{
+		return '|';
+	}
+
+	@Override
+	protected ParseResult parseTokenWithSeparator(LoadContext context,
+		Campaign campaign, String value)
+	{
+		CampaignSourceEntry cse = context.getCampaignSourceEntry(campaign, value);
+		if (cse == null)
+		{
+			//Error
+			return ParseResult.INTERNAL_ERROR;
+		}
+		if (!cse.getIncludeItems().isEmpty())
+		{
+			return new ParseResult.Fail(getTokenName() + " does not allow INCLUDE: "
+				+ value, context);
+		}
+		if (!cse.getExcludeItems().isEmpty())
+		{
+			return new ParseResult.Fail(getTokenName() + " does not allow EXCLUDE: "
+				+ value, context);
+		}
+		context.obj.addToList(campaign, ListKey.FILE_LOGO, cse);
+		return ParseResult.SUCCESS;
+	}
+
+    @Override
+	public String[] unparse(LoadContext context, Campaign campaign)
+	{
+		Changes<CampaignSourceEntry> cseChanges =
+				context.obj.getListChanges(campaign, ListKey.FILE_LOGO);
+		Collection<CampaignSourceEntry> added = cseChanges.getAdded();
+		if (added == null)
+		{
+			//empty indicates no token
+			return null;
+		}
+		Set<String> set = new TreeSet<String>();
+		for (CampaignSourceEntry cse : added)
+		{
+			set.add(cse.getLSTformat());
+		}
+		return set.toArray(new String[set.size()]);
+	}
+
+    @Override
+	public Class<Campaign> getTokenClass()
+	{
+		return Campaign.class;
+	}
+}

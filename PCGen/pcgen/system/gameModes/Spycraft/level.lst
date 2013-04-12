@@ -1,0 +1,13 @@
+# This file determines level based benefits.
+#
+# Complies with standard RPG progression
+#
+# Equation used to calculate XP:
+# xp = 500 * level * (level - 1)
+#
+# $Id: level.lst 17671 2012-10-07 23:18:21Z amaitland $ 
+#
+LEVEL:LEVEL	MINXP:(LEVEL*LEVEL-LEVEL)*500		CSKILLMAX:var("MaxRank")	CCSKILLMAX:(LEVEL+3)/2
+#
+# end
+#
