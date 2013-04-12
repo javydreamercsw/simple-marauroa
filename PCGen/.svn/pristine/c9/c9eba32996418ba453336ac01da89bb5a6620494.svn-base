@@ -1,0 +1,258 @@
+/*
+ * Copyright (c) 2007 Tom Parker <thpr@users.sourceforge.net>
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+ */
+package plugin.lsttokens;
+
+import java.net.URISyntaxException;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import pcgen.cdom.base.CDOMObject;
+import pcgen.cdom.enumeration.Type;
+import pcgen.cdom.list.ClassSpellList;
+import pcgen.cdom.list.DomainSpellList;
+import pcgen.core.PCTemplate;
+import pcgen.core.spell.Spell;
+import pcgen.persistence.PersistenceLayerException;
+import pcgen.rules.persistence.CDOMLoader;
+import pcgen.rules.persistence.token.CDOMPrimaryToken;
+import plugin.lsttokens.testsupport.AbstractGlobalTokenTestCase;
+import plugin.lsttokens.testsupport.CDOMTokenLoader;
+import plugin.lsttokens.testsupport.ConsolidationRule;
+import plugin.lsttokens.testsupport.TokenRegistration;
+import plugin.pretokens.parser.PreClassParser;
+import plugin.pretokens.parser.PreRaceParser;
+import plugin.pretokens.writer.PreClassWriter;
+import plugin.pretokens.writer.PreRaceWriter;
+
+public class SpellLevelLstTest extends AbstractGlobalTokenTestCase
+{
+	static CDOMPrimaryToken<CDOMObject> token = new SpelllevelLst();
+	static CDOMTokenLoader<PCTemplate> loader = new CDOMTokenLoader<PCTemplate>(
+			PCTemplate.class);
+
+	@Override
+	public CDOMLoader<PCTemplate> getLoader()
+	{
+		return loader;
+	}
+
+	@Override
+	public Class<PCTemplate> getCDOMClass()
+	{
+		return PCTemplate.class;
+	}
+
+	@Override
+	public CDOMPrimaryToken<CDOMObject> getToken()
+	{
+		return token;
+	}
+
+	PreClassParser preclass = new PreClassParser();
+	PreClassWriter preclasswriter = new PreClassWriter();
+	PreRaceParser prerace = new PreRaceParser();
+	PreRaceWriter preracewriter = new PreRaceWriter();
+
+	@Override
+	@Before
+	public void setUp() throws PersistenceLayerException, URISyntaxException
+	{
+		super.setUp();
+		TokenRegistration.register(preclass);
+		TokenRegistration.register(prerace);
+		TokenRegistration.register(preclasswriter);
+		TokenRegistration.register(preracewriter);
+	}
+
+	@Test
+	public void testRoundRobinSingleSpell() throws PersistenceLayerException
+	{
+		primaryContext.ref.constructCDOMObject(Spell.class, "Bless");
+		secondaryContext.ref.constructCDOMObject(Spell.class, "Bless");
+		primaryContext.ref.constructCDOMObject(ClassSpellList.class, "Wizard");
+		secondaryContext.ref
+				.constructCDOMObject(ClassSpellList.class, "Wizard");
+		runRoundRobin("CLASS|Wizard=3|Bless");
+	}
+
+	@Test
+	public void testInvalidDoublePipe() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS||Cleric=1|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidNoSpell() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric=1"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidNoLevel() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric=|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidClassOnly() throws PersistenceLayerException
+	{
+		assertFalse(parse("DOMAIN|Cleric|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidPrefix() throws PersistenceLayerException
+	{
+		assertFalse(parse("SKILL|Cleric=2|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidNoPrefix() throws PersistenceLayerException
+	{
+		assertFalse(parse("|Cleric=2|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidNoClass() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|=2|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidOnlyPre1() throws PersistenceLayerException
+	{
+		assertFalse(parse("PRECLASS:1,Fighter"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidOnlyPre2() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|PRECLASS:1,Fighter"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidOnlyPre3() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric=2|PRECLASS:1,Fighter"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidBadCasterComma1() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|,Cleric=2|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidBadCasterComma2() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric,=2|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidBadCasterComma3() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric,,Druid=2|Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidBadComma1() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric=2|,Fireball"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidBadComma2() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric=2|Fireball,"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testInvalidBadComma3() throws PersistenceLayerException
+	{
+		assertFalse(parse("CLASS|Cleric=2|Fireball,,Lightning Bolt"));
+		assertNoSideEffects();
+	}
+
+	@Test
+	public void testRoundRobinClass() throws PersistenceLayerException
+	{
+		primaryContext.ref.constructCDOMObject(Spell.class, "Fireball");
+		secondaryContext.ref.constructCDOMObject(Spell.class, "Fireball");
+		primaryContext.ref.constructCDOMObject(ClassSpellList.class, "Cleric");
+		secondaryContext.ref
+				.constructCDOMObject(ClassSpellList.class, "Cleric");
+		runRoundRobin("CLASS|Cleric=2|Fireball|PRECLASS:1,Fighter=2");
+	}
+
+	@Test
+	public void testRoundRobinSpellCaster() throws PersistenceLayerException
+	{
+		ClassSpellList a = primaryContext.ref.constructCDOMObject(ClassSpellList.class, "Wizard");
+		a.addType(Type.getConstant("Arcane"));
+		ClassSpellList b = secondaryContext.ref.constructCDOMObject(ClassSpellList.class, "Wizard");
+		b.addType(Type.getConstant("Arcane"));
+		primaryContext.ref.constructCDOMObject(Spell.class, "Fireball");
+		secondaryContext.ref.constructCDOMObject(Spell.class, "Fireball");
+		runRoundRobin("CLASS|SPELLCASTER.Arcane=2|Fireball|PRECLASS:1,Fighter=2");
+	}
+
+	@Test
+	public void testRoundRobinDomain() throws PersistenceLayerException
+	{
+		primaryContext.ref.constructCDOMObject(Spell.class, "Fireball");
+		secondaryContext.ref.constructCDOMObject(Spell.class, "Fireball");
+		primaryContext.ref.constructCDOMObject(Spell.class, "Lightning Bolt");
+		secondaryContext.ref.constructCDOMObject(Spell.class, "Lightning Bolt");
+		primaryContext.ref.constructCDOMObject(DomainSpellList.class, "Fire");
+		secondaryContext.ref.constructCDOMObject(DomainSpellList.class, "Fire");
+		runRoundRobin("DOMAIN|Fire=2|Fireball,Lightning Bolt|PRECLASS:1,Fighter=2");
+	}
+
+	@Override
+	protected String getLegalValue()
+	{
+		return "CLASS|SPELLCASTER.Arcane=2|Fireball|PRECLASS:1,Fighter=2";
+	}
+
+	@Override
+	protected String getAlternateLegalValue()
+	{
+		return "DOMAIN|Fire=2|Fireball,Lightning Bolt|PRECLASS:1,Fighter=2";
+	}
+
+	@Override
+	protected ConsolidationRule getConsolidationRule()
+	{
+		return ConsolidationRule.SEPARATE;
+	}
+}

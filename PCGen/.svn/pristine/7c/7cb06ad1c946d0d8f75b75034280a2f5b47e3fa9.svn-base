@@ -1,0 +1,134 @@
+/*
+ * PreLangTest.java
+ *
+ * Copyright 2006 (C) Aaron Divinsky <boomer70@yahoo.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	   See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ *
+ */
+package pcgen.core.prereq;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+import pcgen.AbstractCharacterTestCase;
+import pcgen.cdom.enumeration.ListKey;
+import pcgen.cdom.enumeration.StringKey;
+import pcgen.cdom.enumeration.Type;
+import pcgen.core.Globals;
+import pcgen.core.Language;
+import pcgen.core.PlayerCharacter;
+import pcgen.persistence.lst.prereq.PreParserFactory;
+import pcgen.util.TestHelper;
+
+/**
+ * <code>PreLangTest</code> tests that the PRELANG tag is
+ * working correctly.
+ *
+ * Last Editor: $Author: $
+ * Last Edited: $Date$
+ *
+ * @author Aaron Divinsky <boomer70@yahoo.com>
+ * @version $Revision$
+ */
+public class PreLangTest extends AbstractCharacterTestCase
+{
+	final Language elven = new Language();
+	final Language dwarven = new Language();
+	final Language halfling = new Language();
+
+	public static void main(final String[] args)
+	{
+		TestRunner.run(PreLangTest.class);
+	}
+
+	/**
+	 * @return Test
+	 */
+	public static Test suite()
+	{
+		return new TestSuite(PreLangTest.class);
+	}
+
+	/**
+	 * Test the PRELANG code
+	 * @throws Exception
+	 */
+	public void testLang() throws Exception
+	{
+		final PlayerCharacter character = getCharacter();
+		character.addFreeLanguage(elven, elven);
+
+		Prerequisite prereq;
+
+		final PreParserFactory factory = PreParserFactory.getInstance();
+		prereq = factory.parse("PRELANG:1,KEY_Elven");
+
+		assertTrue("Character should have elven", PrereqHandler.passes(prereq,
+			character, null));
+
+		prereq = factory.parse("PRELANG:1,KEY_Elven,KEY_Dwarven");
+
+		assertTrue("Character should have elven", PrereqHandler.passes(prereq,
+			character, null));
+
+		prereq = factory.parse("PRELANG:2,KEY_Elven,KEY_Dwarven");
+
+		assertFalse("Character doesn't have Dwarven", PrereqHandler.passes(
+			prereq, character, null));
+
+		character.addFreeLanguage(dwarven, dwarven);
+
+		assertTrue("Character has Elven and Dwarven", PrereqHandler.passes(
+			prereq, character, null));
+
+		prereq = factory.parse("PRELANG:3,ANY");
+
+		assertFalse("Character doesn't have 3 langs", PrereqHandler.passes(
+			prereq, character, null));
+
+		character.addFreeLanguage(halfling, halfling);
+
+		assertTrue("Character has Elven, Dwarven, and Halfling", PrereqHandler
+			.passes(prereq, character, null));
+
+		prereq = factory.parse("PRELANG:3,Elven");
+
+		assertFalse("PRE test should look at keys", PrereqHandler.passes(
+			prereq, character, null));
+	}
+
+    @Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+
+		elven.setName("Elven");
+		elven.put(StringKey.KEY_NAME, "KEY_Elven");
+		TestHelper.addType(elven, "Spoken.Written");
+		Globals.getContext().ref.importObject(elven);
+
+		dwarven.setName("Dwarven");
+		dwarven.put(StringKey.KEY_NAME, "KEY_Dwarven");
+		TestHelper.addType(dwarven, "Spoken.Written");
+		Globals.getContext().ref.importObject(dwarven);
+
+		halfling.setName("Halfling");
+		halfling.put(StringKey.KEY_NAME, "KEY_Halfling");
+		halfling.addToListFor(ListKey.TYPE, Type.getConstant("Spoken"));
+		Globals.getContext().ref.importObject(halfling);
+	}
+}

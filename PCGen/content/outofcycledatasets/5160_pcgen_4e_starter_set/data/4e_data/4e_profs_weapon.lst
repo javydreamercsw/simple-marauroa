@@ -1,0 +1,19 @@
+# CVS $Revision: 10005 $ $Author: nylanfs $ -- Mon Sep 22 13:04:41 2008 -- reformated by prettylst.pl v1.38 (build 7302)
+SOURCELONG:Starter Set for 4th Ed fun	SOURCESHORT:4e_SK	
+# Original Entry by: Andrew Maitland
+
+
+#SIMPLE MONKEY WEAPONS
+#One-Handed
+Club						TYPE:Weapon.Melee.Simple Melee.OneHanded.OneHandedMelee.Club.Monkey
+Banana					TYPE:Weapon.Melee.Simple Melee.OneHanded.OneHandedMelee.Banana.Bananas.Monkey.Simplistic
+War Hammer					TYPE:Weapon.Melee.Simple Malee.OneHanded
+
+Monkey Bite					TYPE:Weapon.Melee.Simple Melee
+Monkey Claws				TYPE:Weapon.Melee.Simple Melee
+Monkey Fists				TYPE:Weapon.Melee.Simple Melee
+
+###COMMENT: Add more weapon proficiencies here.
+
+
+

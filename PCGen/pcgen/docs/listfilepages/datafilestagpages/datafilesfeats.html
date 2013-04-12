@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+	<!--
+		PCGen Documentation Project
+
+		$Author: otiendikil $
+		$Date: 2013-04-10 14:37:27 -0500 (Wed, 10 Apr 2013) $
+		$Revision: 19893 $
+
+		Contributors:
+		Shane Molnar - shaneATcliftonmotelDOTcomDOTau
+		Eddy Anthony - eddybaATmindspringDOTcom
+		Terry FitzSimons - fitzsimonsATmintelDOTnet
+		Eric C. Smith - mareduddATblackrootDOTcom
+
+		Description:
+		Provides information on the content of PCGen Feat Files.
+	-->
+<head>
+	<title>Feat Files</title>
+	<link rel="stylesheet" type="text/css" href="../../pcgen.css" >
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+
+	<h1>Feat Files</h1>
+	<p>Each feat takes one line and the first field must be the feat's name.</p>
+
+<hr>
+	<h2><a name="FeatBuilding">Building Feats</a></h2>
+
+	<p class="indent0"><strong>Naming Feats</strong></p>
+	<p class="indent1">When naming feats you should only use parentheses at the end
+  		of the name if the name is not duplicated elsewhere. This is because of how
+  		PCGen names feats which can be taken multiple times. For example, the Feat Weapon
+  		Focus when taken will display as Weapon Focus(Dagger). Another example is Armor
+  		Proficiency (Light), there is no feat named Armor Proficiency so this name is
+  		fine. What is happening is when PCGen finds a feat with parentheses that duplicates
+  		the name of another feat it assumes that feat is an instance of the one without
+  		parentheses and does not display the one with parentheses.</p>
+	<p></p>
+	<p class="indent2"><code>Improved Critical</code></p>
+	<p class="indent3">The feat named &quot;Improved Critical&quot; is to be created.</p>
+	<p class="indent2"><code>Acrobatic.MOD</code></p>
+	<p class="indent3">The feat named &quot;Acrobatic&quot; is to be modified.</p>
+	<p class="indent2"><code>Occupation (Emergency Services).FORGET</code></p>
+	<p class="indent3">The feat named &quot;Occupation (Emergency Services)&quot; is to be forgotten.</p>
+	<p></p>
+	<p class="indent1">When the <code>POINTPOOLNAME</code> trigger tag is present in the <span class="lstfile">miscinfo.lst</span> 
+		file, the <strong>Summary Tab</strong> Will display total points/points remaining (i.e. Development Points 160/135)
+		on the same line as the stat total and stat mod total</p>
+	<p></p>
+	<p class="indent1">Skills Tab - Instead of skill points by class/level requirement to spend
+		skill points, it's just a pool this is also populated by the classes
+		STARTSKILLPTS and miscinfo SKILLMULTIPLIER</p>
+	<p></p>
+	<p class="indent1">Feats Tab - Will show total point pool as reported on the skills tab</p>
+	<p></p>
+
+<hr>
+
+	<h2><a name="TagList">Feat Tag List</a></h2>
+
+<hr>
+
+	<p class="new"><a name="ADDSPELLLEVEL">*** Updated 5.16.0</a></p>
+	<p class="indent0"><strong>Tag Name:</strong> ADDSPELLLEVEL:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Number (Increase in spell slot level)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<p class="indent2"> This tag is used in metamagic feats to denote how much higher the spell level slot requires.</p>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>ADDSPELLLEVEL:2</code></p>
+	<p class="indent3">A spell with this metamagic feat applied to it takes up a slot two levels higher than the normal spell.</p>
+	<p></p>
+
+<hr>
+
+		<p class="new"><a name="ASPECT">*** New 5.15.2</a></p>
+		<p class="indent0"><strong>Tag Name:</strong> ASPECT:x|y|z|z</p>
+		<p class="indent1"><strong>Variables Used (x):</strong> Text (Name of Aspect)</p>
+		<p class="indent1"><strong>Variables Used (y):</strong> Text (Value of Aspect)</p>
+		<p class="indent1"><strong>Variables Used (z):</strong> Number or Formula (Optional. Used for substitutions in y)</p>
+		<p class="indent1"><strong>What it does:</strong></p>
+		<ul class="indent2">
+			<li>Identifies an &quot;aspect&quot; (see examples below) that a feat has and sets it's value.</li> 
+			<li>This tag can be used multiple times within a feat but each time it must identify a new aspect.</li>
+			<li>The text in the y variable can use %z for replacing numerical values set by the z variable, %1 
+				is replaced by the first z, %2 is replaced by the second z, etc..</li>
+			<li>The y text can also use other special variables, also usable in the <code>DESC</code> tag:
+				<ul>
+					<li><code>%CHOICE</code> - Will replace the first associated choice in the object.</li>
+					<li><code>%LIST</code> - Will substitute all choices comma separated into that parameter.</li>
+					<li><code>%NAME</code> - The <code>OUTPUTNAME</code> or name of the object this <code>DESC</code> 
+						tag is in.</li>
+				</ul>
+			</li>
+			<li><code>ASPECT</code> tags can be modified by .MODing the feat and inserting a new <code>ASPECT</code> 
+				tag. Since each aspect name can hold only one value per featm .MODing a new <code>ASPECT</code> tag will 
+				overwrite the only value of the aspect by that name in the feat</li>
+		</ul>
+		<p class="indent1"><strong>Example:</strong></p>
+		<p class="indent2"><code>ASPECT:Action Type|Standard Action</code></p>
+		<p class="indent3">Identifies the &quot;Action Type&quot; of an action performed as part of the associated feat 
+			as a &quot;Standard Action&quot;.</p>
+		<p class="indent2"><code>ASPECT:Attack Type|Melee weapon</code></p>
+		<p class="indent3">Identifies the &quot;Attack Type&quot; of an attack performed as part of the associated feat 
+			as a &quot;Melee weapon&quot; attack.</p>
+		<p class="indent2"><code>ASPECT:Target|One creature</code></p>
+		<p class="indent3">Identifies the &quot;Target&quot; of an action performed as part of the associated feat 
+			as &quot;One creature&quot;.</p>
+		<p class="indent2"><code>ASPECT:Attack|Strength vs. AC</code></p>
+		<p class="indent3">Identifies an &quot;Attack&quot; performed as part of the associated feat 
+			as &quot;Strength vs. AC&quot;.</p>
+		<p class="indent2"><code>ASPECT:Attack Type|Ranged %1|PowerRange</code></p>
+		<p class="indent3">Identifies the &quot;Attack Type&quot; of an attack performed as part of the associated feat 
+			as a &quot;Ranged&quot; attack with a range equivalent to the &quot;PowerRange&quot; variable.</p>
+		<p class="indent2"><code>ASPECT:Effect|Double damage to %CHOICE creatures</code></p>
+		<p class="indent3">Identifies the &quot;Effect&quot; of an action performed as part of the associated feat 
+			as &quot;Double damage&quot; to the creature chosen by the associated chooser.</p>
+		<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="BENEFIT">Tag Name:</a></strong> BENEFIT:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Text (feat benefit text)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<p class="indent2">This is the benefit text of the feat from the source material.
+  		This text will be displayed in the feat description field if the
+		<a href="../../menupages/tools/preferences/preferencesappearanceoptions.html">&quot;Display Feat Description&quot;</a>
+		checkbox in the Appearance/Display Options Preference window is unchecked.
+		Otherwise the text from the <a href="../../listfilepages/globalfilestagpages/globalfilesother.html#DESC">DESC</a> tag will be displayed.</p>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>BENEFIT:This is sample text for the example purposes</code></p>
+	<p class="indent3">Adds feat benefit.</p>
+	<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="COST">Tag Name:</a></strong> COST:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Number (feat point cost)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<p class="indent2">This is how many feat points the feat costs. A decimal value,
+		as the example below, would mean that it only costs 1/2 a feat point.</p>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>COST:1</code></p>
+	<p class="indent3">Feat costs one feat point.</p>
+	<p class="indent2"><code>COST:.5</code></p>
+	<p class="indent3">Feat costs half a feat point.</p>
+	<p class="indent1"><strong>Default Value:</strong></p>
+	<p class="indent2"><code>1</code></p>
+	<p></p>
+
+<hr>
+
+	<p class="status"><a name="MODIFYFEATCHOICE">*** New 5.11.x</a></p>
+	<p class="indent0"><strong>Tag Name:</strong> MODIFYFEATCHOICE:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong>Text (feat name)</p>
+	<p class="indent1"><strong>Variables Used (x):</strong>TYPE=Text (feat type)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<ul class="indent2">
+		<li>This tag allows for a previous feat choice to be replaced by a new one.</li>
+		<li>The feat called must allow choices to be a valid ability.</li>
+	</ul>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>MODIFYFEATCHOICE:TYPE=NinjaMonkeySchool</code></p>
+	<p class="indent3">Allows the selection of a new school from a list of schools
+		of type 'NinjaMonkeySchool' to replace a previously selected one.</p>
+	<p class="indent2"><code>MODIFYFEATCHOICE:Ninja Monkey Primary Weapon Reselection</code></p>
+	<p class="indent3">Allows a ninja monkey to select a new primary weapon, replacing
+		an earlier selected primary weapon.</p>
+	<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="MULT">Tag Name:</a></strong> MULT:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Boolean (YES/NO)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<p class="indent2">This determines if a feat can be taken multiple times. If the
+		value is set to YES, then you <strong>MUST</strong> also use a CHOOSE tag.</p>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>MULT:YES</code></p>
+	<p class="indent3">This Feat can be taken multiple times.</p>
+	<p class="indent1"><strong>Default Value:</strong></p>
+	<p class="indent2"><code>NO</code></p>
+	<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="STACK">Tag Name:</a></strong> STACK:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Boolean (YES/NO)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<p class="indent2">This tells PCGen if the feat benefits may be stacked on one another.</p>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>STACK:YES</code></p>
+	<p class="indent3">This Feat may be stack on itself.</p>
+	<p class="indent1"><strong>Default Value:</strong></p>
+	<p class="indent2"><code>NO</code></p>
+	<p></p>
+
+<hr>
+
+	<p class="new"><a name="TEMPLATE">*** Updated 5.17.x</a></p>
+	<p class="indent0"><strong>Tag Name:</strong> TEMPLATE:x|x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Text (Name of template)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<ul class="indent2">
+		<li>This is a pipe-delimited (|) list of templates that are granted by the feat.</li>
+		<li>Supports <code>%LIST</code> in conjunction with a <code>CHOOSE</code> tag.</li>
+	</ul>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>TEMPLATE:Celestial</code></p>
+	<p class="indent3">Adds the &quot;Celestial&quot; template to the character.</p>
+	<p class="indent2"><code>TEMPLATE:Half Dragon (Red)|Zombie</code></p>
+	<p class="indent3">Adds the templates &quot;Half Dragon (Red)&quot; and &quot;Zombie&quot; to the character.</p>
+	<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="TEMPLATEADDCHOICE">Tag Name:</a></strong> TEMPLATE:ADDCHOICE:x|x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Text (Template Name)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<ul class="indent2">
+		<li>This is a pipe-delimited list of template choices that are added to the list
+			presented by the original <code>TEMPLATE:CHOOSE</code> tag.</li>
+		<li>When using the <code>TEMPLATE:ADDCOICE</code> tag as part of a <code>.MOD</code> of a 
+			Feat that containes multiple <code>TEMPLATE:CHOOSE</code> tags, all instances 
+			of the <code>TEMPLATE:CHOOSE</code> tag will be modified.</li>
+	</ul>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>TEMPLATE:ADDCHOICE:Demihuman|Beast</code></p>
+	<p class="indent3">The feat allows the selection of previously defined templates plus the
+		&quot;Demihuman&quot; or &quot;Beast&quot; templates.</p>
+	<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="TEMPLATECHOOSE">Tag Name:</a></strong> TEMPLATE:CHOOSE:x|x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> Text (Template Name)</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<ul class="indent2">
+		<li>Will present a popup window of the choices provided in the pipe-delimited (|) list, allowing 
+			the user to pick ONE from the list.</li>
+		<li>Multiple <code>TEMPLATE:CHOOSE</code> tags can be used in the same LST object 
+			but doing so can cause unintended results.</li>
+	</ul>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>TEMPLATE:CHOOSE:Celestial|Outsider</code></p>
+	<p class="indent3">The feat allows the selections of either the &quot;Celestial&quot; or &quot;Outsider&quot;
+		template.</p>
+	<p></p>
+
+<hr>
+
+	<p class="indent0"><strong><a name="VISIBLE">Tag Name:</a></strong> VISIBLE:x</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> YES (Default)</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> NO</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> DISPLAY</p>
+	<p class="indent1"><strong>Variables Used (x):</strong> EXPORT</p>
+	<p class="indent1"><strong>What it does:</strong></p>
+	<ul class="indent2">
+		<li><code>YES</code> - Shows the feat name in PCGen and on export to a character sheet.</li>
+		<li><code>NO</code> - Hides the feat name in PCGen and on export to a character sheet.</li>
+		<li><code>DISPLAY</code> - Displays the feat name in PCGen but not on the character sheet.</li>
+		<li><code>EXPORT</code> - Hides the feat name from PCGen but displays it on the character sheet.</li>
+	</ul>
+	<p class="indent1"><strong>Example:</strong></p>
+	<p class="indent2"><code>VISIBLE:YES</code></p>
+	<p class="indent3">Shows the feat name in PCGen and on the Output sheet.</p>
+
+<hr>
+
+	<p>
+	<a href="http://validator.w3.org/check?uri=referer"><img
+       	src="../../images/system/valid-html401.png"
+       	alt="Valid HTML 4.01 Strict" height="31" width="88"></a>
+	</p>
+</body>
+
+</html>

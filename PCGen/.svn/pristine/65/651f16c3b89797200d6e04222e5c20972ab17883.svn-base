@@ -1,0 +1,290 @@
+/*
+ * EquipmentModifier.java
+ * Copyright 2001 (C) Greg Bingleman <byngl@hotmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * Created on November 19, 2001, 4:28 PM
+ *
+ * Current Ver: $Revision$
+ * Last Editor: $Author$
+ * Last Edited: $Date$
+ *
+ */
+package pcgen.core;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import pcgen.base.formula.Formula;
+import pcgen.cdom.base.CDOMObject;
+import pcgen.cdom.base.Constants;
+import pcgen.cdom.base.FormulaFactory;
+import pcgen.cdom.content.SpellResistance;
+import pcgen.cdom.enumeration.ListKey;
+import pcgen.cdom.enumeration.ObjectKey;
+import pcgen.core.analysis.BonusCalc;
+import pcgen.core.bonus.Bonus;
+import pcgen.core.bonus.BonusObj;
+import pcgen.core.prereq.PrereqHandler;
+import pcgen.core.prereq.Prerequisite;
+import pcgen.core.utils.MessageType;
+import pcgen.core.utils.ShowMessageDelegate;
+import pcgen.util.Delta;
+
+/**
+ * Definition and games rules for an equipment modifier.
+ *
+ * @author   Greg Bingleman <byngl@hotmail.com>
+ * @version  $Revision$
+ */
+public final class EquipmentModifier extends PObject implements Comparable<Object>
+{
+	private static final String PERCENT_CHOICE_PATTERN = Pattern
+								.quote(Constants.LST_PERCENT_CHOICE);
+	private static final Formula CHOICE_FORMULA = FormulaFactory.getFormulaFor("%CHOICE");
+
+	/**
+	 * returns all BonusObjs that are "active", for example, ones that pass all
+	 * prerequisite tests and should be applied.
+	 *
+	 * @param   caller  The object that will be used to test prerequisites
+	 *                  against to determine if a bonus should be applied.
+	 * @param   aPC     The PC that the prerequisites will be applied against to
+	 *                  determine if a bonus is active
+	 *
+	 * @return  returns all BonusObjs that are "active"
+	 */
+	public List<BonusObj> getActiveBonuses(final Equipment caller, final PlayerCharacter aPC)
+	{
+		final List<BonusObj> aList = new ArrayList<BonusObj>();
+
+		for (BonusObj bonus : getBonusList(caller))
+		{
+			if (PrereqHandler.passesAll(bonus.getPrerequisiteList(), caller,
+					aPC))
+			{
+				aPC.setApplied(bonus, true);
+				aList.add(bonus);
+			}
+		}
+
+		return aList;
+	}
+
+	/**
+	 * This method assumes that there can only be one bonus in any given
+	 * Equipment modifier that uses %CHOICE.  It retrieves the list of bonuses
+	 * using the super classes getBonusList() and then examines each of them in
+	 * turn.  If it finds that one of the bonuses contains %CHOICE, it replaces
+	 * it with a one new bonus object for every entry in "associated".
+	 *
+	 * @param as a PObject that has the associated bonuses
+	 *
+	 * @return  a complete list of bonus objects with %CHOICE expanded to
+	 *          include one entry for each associated choice.
+	 */
+	@Override
+	public List<BonusObj> getBonusList(AssociationStore as)
+	{
+		final List<BonusObj> myBonusList = new ArrayList<BonusObj>(super.getBonusList(as));
+
+		for (int i = myBonusList.size() - 1; i > -1; i--)
+		{
+			final BonusObj aBonus  = myBonusList.get(i);
+			final String   aString = aBonus.toString();
+
+			final int idx = aString.indexOf("%CHOICE");
+
+			if (idx >= 0)
+			{
+				// Add an entry for each of the associated list entries
+				for (String assoc : as.getAssociationList(this))
+				{
+					final BonusObj newBonus = Bonus.newBonus(Globals.getContext(), aString
+							.replaceAll(PERCENT_CHOICE_PATTERN, assoc));
+
+					if (aBonus.hasPrerequisites())
+					{
+						newBonus.clearPrerequisiteList();
+						for (Prerequisite prereq : aBonus.getPrerequisiteList())
+						{
+							try
+							{
+								newBonus.addPrerequisite(prereq.specify(assoc));
+							}
+							catch (CloneNotSupportedException e)
+							{
+								// TODO Handle this?
+							}
+						}
+					}
+
+					myBonusList.add(newBonus);
+				}
+
+				myBonusList.remove(aBonus);
+			}
+		}
+
+		return myBonusList;
+	}
+
+	/**
+	 * Does this Equipment Modifier add aType to the equipment it is applied
+	 * to? If aType begins with an &#34; (Exclamation Mark) the &#34; will
+	 * be removed before checking the type.
+	 *
+	 * @param aType the type string to check for.
+	 * @return Whether the item is of this type
+	 */
+	public boolean isIType(final String aType)
+	{
+		for (String s : getSafeListFor(ListKey.ITEM_TYPES))
+		{
+			if (aType.equalsIgnoreCase(s))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * A list of Special properties tailored to the PC and the piece of
+	 * equipment passed as arguments.
+	 *
+	 * @param   caller  The Equipment this modifier is applied to.
+	 * @param   pc      The Pc that the Special Property will be tailored for
+	 *
+	 * @return  a list of strings representing Special properties to be
+	 * applied to the Equipment
+	 */
+	public List<String> getSpecialProperties(final Equipment caller, final PlayerCharacter pc)
+	{
+		final List<String> retList = new ArrayList<String>();
+		for (SpecialProperty sp : getSafeListFor(ListKey.SPECIAL_PROPERTIES))
+		{
+			String propName = sp.getParsedText(pc, caller, this);
+
+			// TODO WTF is this loop doing? how many times does it expect "%CHOICE" to
+			// appear in the special property?
+
+			for (String assoc : caller.getAssociationList(this))
+			{
+				propName = propName.replaceFirst("%CHOICE", assoc);
+			}
+
+			if ((propName != null) && !propName.equals(""))
+			{
+				retList.add(propName);
+			}
+		}
+
+		return retList;
+	}
+
+	/**
+	 * Get the bonus to
+	 * @param aPC a Player Character object
+	 * @param aType
+	 * @param aName
+	 * @param obj
+	 * @return bonus
+	 */
+	public double bonusTo(
+		final PlayerCharacter  aPC,
+		final String           aType,
+		final String           aName,
+		final AssociationStore obj)
+	{
+		return BonusCalc.bonusTo(this, aType, aName, obj, getBonusList(obj), aPC);
+	}
+
+	/**
+	 * Clone an EquipmentModifier
+	 *
+	 * @return  a clone of the EquipmentModifier
+	 */
+	@Override
+	public EquipmentModifier clone()
+	{
+		EquipmentModifier aObj = null;
+
+		try
+		{
+			aObj = (EquipmentModifier) super.clone();
+		}
+		catch (CloneNotSupportedException exc)
+		{
+			ShowMessageDelegate.showMessageDialog(
+				exc.getMessage(),
+				Constants.APPLICATION_NAME,
+				MessageType.ERROR);
+		}
+
+		return aObj;
+	}
+
+	/* TODO: This needs to call getEquipNamePortion until after 5.10, when it can
+	 * be changed to a programmer useful string as per normal.
+	 */
+
+	/**
+	 * Return a string representation of the EquipmentModifier.
+	 *
+	 * @return  a String representation of the EquipmentModifier
+	 */
+	@Override
+	public String toString()
+	{
+		return getKeyName();
+	}
+
+	public int getSR(Equipment parent, PlayerCharacter aPC)
+	{
+		SpellResistance sr = get(ObjectKey.SR);
+		if (sr == null)
+		{
+			return 0;
+		}
+
+		if (sr.getReduction().equals(CHOICE_FORMULA)&& parent.hasAssociations(this))
+		{
+			return Delta.parseInt(parent.getFirstAssociation(this));
+		}
+
+		return sr.getReduction().resolve(parent, true, aPC, getQualifiedKey()).intValue();
+	}
+
+	/**
+	 * lets this object compare to others.
+	 *
+	 * @param   o  The object to compare to
+	 *
+	 * @return  -1, 0 or 1 as per Comparator
+	 */
+	@Override
+	public int compareTo(final Object o)
+	{
+		if (o instanceof EquipmentModifier)
+		{
+			return getKeyName().compareTo(((CDOMObject) o).getKeyName());
+		}
+
+		return getKeyName().compareTo(o.toString());
+	}
+}

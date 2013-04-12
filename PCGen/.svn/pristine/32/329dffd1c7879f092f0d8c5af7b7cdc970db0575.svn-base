@@ -1,0 +1,163 @@
+/*
+ * WeaponhToken.java
+ * Copyright 2003 (C) Devon Jones <soulcatcher@evilsoft.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * Created on December 15, 2003, 12:21 PM
+ *
+ * Current Ver: $Revision$
+ * Last Editor: $Author$
+ * Last Edited: $Date$
+ *
+ */
+package pcgen.io.exporttoken;
+
+import java.math.BigDecimal;
+import java.util.StringTokenizer;
+
+import pcgen.cdom.enumeration.EqModControl;
+import pcgen.cdom.enumeration.IntegerKey;
+import pcgen.cdom.enumeration.ListKey;
+import pcgen.cdom.enumeration.ObjectKey;
+import pcgen.cdom.enumeration.StringKey;
+import pcgen.cdom.enumeration.Type;
+import pcgen.cdom.inst.EquipmentHead;
+import pcgen.cdom.reference.CDOMDirectSingleRef;
+import pcgen.core.Equipment;
+import pcgen.core.Globals;
+import pcgen.core.PlayerCharacter;
+import pcgen.core.SizeAdjustment;
+import pcgen.core.WeaponProf;
+import pcgen.core.character.WieldCategory;
+import pcgen.core.display.CharacterDisplay;
+import pcgen.io.ExportHandler;
+import pcgen.system.LanguageBundle;
+
+/**
+ * <code>WeaponhToken</code>.
+ *
+ * @author	binkley
+ * @version	$Revision$
+ */
+public class WeaponhToken extends WeaponToken
+{
+	/** Weaponh token */
+	public static final String TOKEN_NAME = "WEAPONH";
+
+	/**
+	 * Gets the token name
+	 *
+	 * @return The token name.
+	 * @see	pcgen.io.exporttoken.Token#getTokenName()
+	 */
+	@Override
+	public String getTokenName()
+	{
+		return TOKEN_NAME;
+	}
+
+	/**
+	 * Get the value of the supplied output token.
+	 *
+	 * @param tokenSource The full source of the token
+	 * @param pc The character to retrieve the value for.
+	 * @param eh The ExportHandler that is managing the export
+	 * 						(may be null for a once off conversion).
+	 * @return The value of the token.
+	 * @see pcgen.io.exporttoken.Token#getToken(java.lang.String, pcgen.core.PlayerCharacter, pcgen.io.ExportHandler)
+	 */
+	@Override
+	public String getToken(String tokenSource, PlayerCharacter pc,
+		ExportHandler eh)
+	{
+		StringTokenizer aTok = new StringTokenizer(tokenSource, ".", false);
+		//Weapono Token
+		aTok.nextToken();
+
+		Equipment eq = getWeaponEquipment(pc.getDisplay());
+
+		if (eq != null)
+		{
+			return getWeaponToken(pc, eq, aTok);
+		}
+		else if (eh != null && eh.getExistsOnly())
+		{
+			eh.setNoMoreItems(true);
+			if (eh.getCheckBefore())
+			{
+				eh.setCanWrite(false);
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * Create a fake Unarmed Strike equipment so we don't need it in the .lst files anymore
+	 *
+	 * @param pc The character used to generate the size.
+	 * @return The Unarmed Strike equipment.
+	 */
+	public static Equipment getWeaponEquipment(CharacterDisplay display)
+	{
+		// Creating a fake Unarmed Strike equipment so we
+		// don't need it in the .lst files anymore
+		WeaponProf wp = Globals.getContext().ref.silentlyGetConstructedCDOMObject(WeaponProf.class, "Unarmed Strike");
+		if (wp == null)
+		{
+			wp = new WeaponProf();
+			wp.setName(LanguageBundle.getString("Equipment.UnarmedStrike"));
+			wp.put(StringKey.KEY_NAME, "Unarmed Strike");
+			wp.addToListFor(ListKey.TYPE, Type.SIMPLE);
+			Globals.getContext().ref.importObject(wp);
+		}
+		Equipment eq = new Equipment();
+		eq.setName(LanguageBundle.getString("Equipment.UnarmedStrike"));
+		eq.put(StringKey.KEY_NAME, "KEY_Unarmed Strike");
+		eq.put(ObjectKey.WEAPON_PROF, new CDOMDirectSingleRef<WeaponProf>(wp));
+		eq.put(StringKey.OUTPUT_NAME, LanguageBundle.getString("Equipment.UnarmedStrike"));
+		eq.addType(Type.WEAPON);
+		eq.addType(Type.MELEE);
+		eq.addType(Type.SIMPLE);
+		eq.addType(Type.UNARMED);
+		eq.addType(Type.SUBDUAL);
+		eq.addType(Type.STANDARD);
+		eq.addType(Type.MONK);
+		eq.addType(Type.BLUDGEONING);
+		WieldCategory lightWC = Globals.getContext().ref
+				.silentlyGetConstructedCDOMObject(WieldCategory.class, "Light");
+		if (lightWC == null)
+		{
+			// Error?
+		}
+		else
+		{
+			eq.put(ObjectKey.WIELD, lightWC);
+		}
+		eq.put(ObjectKey.COST, BigDecimal.ZERO);
+		eq.put(ObjectKey.CURRENT_COST, BigDecimal.ZERO);
+		eq.put(ObjectKey.WEIGHT, BigDecimal.ZERO);
+		EquipmentHead head = eq.getEquipmentHead(1);
+		head.put(StringKey.DAMAGE, "1d1");
+		head.put(IntegerKey.CRIT_MULT, 2);
+		head.put(IntegerKey.CRIT_RANGE, 1);
+		eq.put(ObjectKey.MOD_CONTROL, EqModControl.NO);
+		SizeAdjustment sa = display.getSizeAdjustment();
+		eq.put(ObjectKey.SIZE, sa);
+		eq.put(ObjectKey.BASESIZE, sa);
+
+		return eq;
+	}
+}

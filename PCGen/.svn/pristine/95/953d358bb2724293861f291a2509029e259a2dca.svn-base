@@ -1,0 +1,1455 @@
+# Original Entry By: Andrew Maitland
+# Entry Date: Feb 2013
+
+
+#Adaro 7
+ADARO CR 3
+XP 800
+NE Medium monstrous humanoid (aquatic)
+Init +3; Senses blindsense 30 ft., darkvision 6o ft., low-light
+vision, keen scent; Perception +8
+DEFENSE
+AC 15, touch 13, flat-footed 12 (+3 Dex, +2 natural)
+hp 30 (4d10+8)
+Fort +3, Ref +7, Will +5
+OFFENSE
+Speed 10 ft., swim 50 ft.
+Melee spear +8 (1d8+4/x3 plus poison), bite +2 (1d6+3)
+Ranged spear +8 (1d8+3/x3)
+Special Attacks rain frenzy
+STATISTICS
+Str 16, Dex 17, Con 14, Int 10, Wis 13, Cha 13
+Base Atk +4; CMB +7; CMD 20
+Feats Deadly Aim, Weapon Focus (spear)
+Skills Intimidate +8, Perception +8, Stealth +10, Swim +18
+Languages Aquan, Common; speak with sharks
+SQ amphibious, poison use
+
+
+
+
+#Adherer 8
+ADHERER CR 3
+XP 800
+LE Medium monstrous humanoid
+Init +3; Senses darkvision 60 ft.; Perception +5
+DEFENSE
+AC 17, touch 13, flat-footed 14 (+3 Dex, +4 natural)
+hp 30 (4d10+8)
+Fort +3, Ref +7, Will +5
+DR 5/-; SR 14
+OFFENSE
+Speed 30 ft., climb 10 ft.
+Melee 2 slams +6 (1d6+2 plus grab)
+Special Attacks grab (Large)
+STATISTICS
+Str 14, Dex 16, Con 15, Int 4, Wis 13, Cha 11
+Base Atk +4; CMB +7 (+15 grapple); CMD 19
+Feats Agile Maneuvers, Combat Reflexes
+Skills Climb +10, Craft (cloth) +3, Craft (traps) +1,
+Perception +5, Stealth +11; Racial Modifiers +2 Craft
+(cloth), +4 Stealth
+Languages Aklo
+SQ adhesive
+
+#Adlet 9
+ADLET CR 10
+XP 9,600 each
+CN Medium humanoid (adlet, cold)
+Init +12; Senses low-light vision, scent; Perception +13
+DEFENSE
+AC 25, touch 20, flat-footed 15 (+8 Dex, +2 dodge, +5 natural)
+hp 127 each (15d8+60)
+Fort +9, Ref +17, Will +8
+Immune cold
+Weaknesses vulnerability to fire
+OFFENSE
+Speed 40 ft.
+Melee +1 spear +17/+12/+7 (1d8+7/?3), bite +10 (1d6+2 plus 1d6 cold)
+Special Attacks frozen breath
+Spell-Like Abilities (CL 10th; concentration +11)
+Constant-pass without trace, ray of frost
+3/day-fog cloud, sleet storm
+1/day-ice storm, wind walk (self only)
+STATISTICS
+Str 18, Dex 26, Con 18, Int 13, Wis 17, Cha 13
+Base Atk +11; CMB +15; CMD 35
+Feats Diehard, Dodge, Improved Initiative, Multiattack, Power
+Attack, Run, Self-Sufficient, Weapon Focus (spear)
+Skills Acrobatics +13 (+17 when jumping), Climb +12, Handle
+Animal +9, Heal +5, Perception +13, Stealth +13 (+21 in snow),
+Survival +20, Swim +9; Racial Modifiers +8 Stealth in snow
+Languages Common, Adlet
+SQ arctic stride
+
+#Ahuizotl 10
+AHUIZOTL CR 6
+XP 2,400
+NE Large magical beast (aquatic)
+Init +7; Senses darkvision 60 ft., low-light vision; Perception +2
+DEFENSE
+AC 19, touch 12, flat-footed 16 (+3 Dex, +7 natural, -1 size)
+hp 68 (8d10+24)
+Fort +9, Ref +9, Will +4
+OFFENSE
+Speed 30 ft., swim 50 ft.
+Melee bite +12 (2d6+5), claw +12 (1d8+5/19-20 plus grab)
+Space 10 ft.; Reach 5 ft. (10 ft. with tail)
+Special Attacks rake (2 claws +5, 1d4+5)
+STATISTICS
+Str 20, Dex 17, Con 17, Int 9, Wis 14, Cha 16
+Base Atk +8; CMB +14 (+18 grapple); CMD 27 (31 vs. trip)
+Feats Blinding CriticalB, Combat Reflexes, Improved Critical
+(claw)B, Improved Initiative, Skill Focus (Stealth), Stand Still
+Skills Bluff +9, Stealth +9, Swim +20; Racial Modifiers +6 Bluff
+Languages Common
+SQ amphibious, tenacious grapple, voice mimicry
+
+#Akhlut 11
+AKHLUT CR 13
+XP 25,600
+N Huge magical beast (cold, shapechanger)
+Init +6; Senses darkvision 60 ft., low-light vision, scent, snow
+vision; Perception +14
+DEFENSE
+AC 29, touch 11, flat-footed 26 (+2 Dex, +1 dodge, +19 natural,
+-2 size)
+hp 189 (18d10+90)
+Fort +16, Ref +13, Will +10
+DR 15/magic; Immune cold
+Weaknesses vulnerability to fire
+OFFENSE
+Speed 40 ft., swim 60 ft.
+Melee bite +27 (4d8+15/15-20 plus 4d6 cold and grab)
+Space 15 ft.; Reach 10 ft.
+Special Attacks savage bite, shore storming, swallow whole
+(2d8+15 bludgeoning damage plus 4d6 cold, AC 19, 18 hp)
+Spell-Like Abilities (CL 18th; concentration +16)
+1/day-control weather (windy or cold weather only)
+STATISTICS
+Str 31, Dex 15, Con 20, Int 4, Wis 15, Cha 6
+Base Atk +18; CMB +30 (+34 grapple); CMD 43 (47 vs. trip)
+Feats Dodge, Improved Critical (bite), Improved Initiative,
+Improved Vital Strike, Iron Will, Power Attack, Skill Focus
+(Stealth), Vital Strike, Weapon Focus (bite)
+Skills Acrobatics +8 (+12 when jumping), Perception +14,
+Stealth +16 (+28 in snow), Swim +18; Racial
+Modifiers +4 Perception, +12 Stealth in snow
+SQ change shape (orca; beast shape III), hold
+breath, snow walking
+Languages Aquan (cannot speak)
+
+#Allip 12
+ALLIP CR 3
+XP 800
+CE Medium undead (incorporeal)
+Init +5; Senses darkvision 60 ft.; Perception +7
+Aura babble (60 ft., DC 15)
+DEFENSE
+AC 14, touch 14, flat-footed 13 (+3 deflection, +1 Dex)
+hp 30 (4d8+12)
+Fort +4, Ref +4, Will +4
+Defensive Abilities channel resistance +2, incorporeal;
+Immune undead traits
+OFFENSE
+Speed fly 30 ft. (perfect)
+Melee incorporeal touch +4 (1d4 Wisdom damage)
+Special Attacks babble, touch of insanity
+STATISTICS
+Str -, Dex 12, Con -, Int 11, Wis 11, Cha 16
+Base Atk +3; CMB +4; CMD 17
+Feats Improved Initiative, Lightning Reflexes
+Skills Fly +16, Intimidate +10, Perception +7,
+Stealth +8
+Languages Aklo, Common
+SQ madness
+
+#Alraune 13
+ALRAUNE CR 13
+XP 25,600
+NE Large plant
+Init +5; Senses low-light vision; Perception +17
+Aura calming fragrance (60 ft., DC 24)
+DEFENSE
+AC 27, touch 10, flat-footed 26 (+1 Dex, +17 natural, -1 size)
+hp 199 (19d8+114)
+Fort +17, Ref +9, Will +11
+Immune plant traits; SR 24
+OFFENSE
+Speed 40 ft.
+Melee 4 vines +20 (1d10+7 plus grab and bleed)
+Space 10 ft.; Reach 10 ft.
+Special Attacks bleed (2d6), constrict (1d10+10), feed
+Spell-Like Abilities (CL 13th; concentration +18)
+At will-charm monster (DC 18), detect thoughts (DC 17),
+suggestion (DC 18)
+3/day-quickened glitterdust (DC 17), hold monster (DC 20)
+1/day-commune with nature, mind fog, wall of thorns
+STATISTICS
+Str 24, Dex 13, Con 22, Int 10, Wis 17, Cha 21
+Base Atk +14; CMB +22 (+26 grapple); CMD 33 (can't be tripped)
+Feats Alertness, Cleave, Deceitful, Great Cleave, Improved
+Initiative, Iron Will, Lightning Reflexes, Power Attack,
+Quicken Spell-Like Ability (glitterdust), Vital Strike
+Skills Bluff +16, Disguise +9, Knowledge (nature) +9,
+Perception +17, Sense Motive +14
+Languages Aklo, Common, Elven, Sylvan
+
+#Animal lord 14-15
+CAT LORD CR 11
+XP 12,800
+Human animal lord ranger 10
+NG Medium outsider (native, shapechanger)
+Init +7; Senses low-light vision, scent; Perception +17
+DEFENSE
+AC 25, touch 18, flat-footed 18 (+3 armor, +1 deflection, +6 Dex,
++1 dodge, +4 natural)
+hp 139 (10d10+80)
+Fort +13, Ref +14, Will +7
+Defensive Abilities evasion; DR 10/silver
+OFFENSE
+Speed 30 ft., climb 20 ft.; leap
+Melee bite +15 (1d6+5 plus grab), 2 claws +15 (1d3+5)
+Ranged +1 keen composite longbow +18/+13 (1d8+6/?3)
+Special Attacks favored enemy (evil outsiders +6, giants +2,
+undead +2), pounce, rake (2 claws +15, 1d3+5)
+Spell-Like Abilities (CL 10th; concentration +12)
+At will-charm animal (cats only, DC 13)
+Ranger Spells Prepared (CL 7th; concentration +11)
+3rd-greater magic fang
+2nd-cat's grace, hold animal (DC 16)
+1st-charm animal (DC 15), longstrider, pass without trace
+STATISTICS
+Str 20, Dex 24, Con 22, Int 12, Wis 18, Cha 14
+Base Atk +10; CMB +17 (+21 grapple); CMD 34
+Feats Agile Maneuvers, Deadly Aim, Dodge, Endurance, Point-
+Blank Shot, Precise Shot, Rapid Shot, Shot on the Run,
+Toughness, Vital Strike
+Skills Acrobatics +17 (+22 when jumping), Climb +26, Handle Animal
++15, Knowledge (nature) +14, Perception +17, Sense Motive +14,
+Stealth +20 (+24 in undergrowth), Survival +17; Racial Modifiers
++5 Acrobatics when jumping, +4 Stealth in undergrowth
+Languages Common, Sylvan; speak with animals (cats only)
+SQ change shape (leopard; shapechange), favored terrain
+(jungle +4, plains +2), hunter's bond (leopard), swift tracker,
+track +5, wild empathy +12, woodland stride
+
+#Annis hag 16
+ANNIS HAG CR 6
+XP 2,400
+CE Large monstrous humanoid
+Init +1; Senses darkvision 60 ft.; Perception +13
+DEFENSE
+AC 20, touch 10, flat-footed 19 (+1 Dex, +10 natural, -1 size)
+hp 66 (7d10+28)
+Fort +8, Ref +6, Will +6
+DR 5/bludgeoning; SR 17
+OFFENSE
+Speed 40 ft.
+Melee bite +13 (1d6+7), 2 claws +13 (1d6+7 plus grab)
+Space 10 ft.; Reach 10 ft.
+Special Attacks rend (2 claws, 2d6+10)
+Spell-Like Abilities (CL 7th; concentration +7)
+3/day-alter self, fog cloud
+STATISTICS
+Str 25, Dex 12, Con 18, Int 13, Wis 13, Cha 10
+Base Atk +7; CMB +15 (+19 grapple); CMD 26
+Feats Alertness, Blind-Fight, Great Fortitude, Intimidating Prowess
+Skills Bluff +7, Diplomacy +7, Intimidate +17, Perception +13,
+Sense Motive +3, Stealth +7
+Languages Common, Giant
+
+# Ant Lion, Giant
+GIANT ANT LION CR 5
+XP 1,600
+N Large vermin
+Init +0; Senses darkvision 60 ft., tremorsense 60 ft.; Perception +0
+DEFENSE
+AC 19, touch 9, flat-footed 19 (+10 natural, -1 size)
+hp 60 (8d8+24)
+Fort +9, Ref +2, Will +2
+Immune mind-affecting effects
+OFFENSE
+Speed 30 ft., burrow 10 ft.
+Melee bite +10 (2d8+7 plus grab)
+Space 10 ft.; Reach 5 ft.
+Special Attacks sand trap
+STATISTICS
+Str 20, Dex 11, Con 17, Int -, Wis 11, Cha 10
+Base Atk +6; CMB +12 (+16 grapple); CMD 22 (30 vs. trip)
+
+# Ant Lion, Giant Adult
+GIANT ADULT ANT LION CR 6
+XP 2,400
+N Huge vermin
+Init +3; Senses darkvision 60 ft.; Perception +0
+DEFENSE
+AC 19, touch 11, flat-footed 16 (+8 armor, +3 Dex, -2 size)
+hp 85 (10d8+40)
+Fort +11, Ref +6, Will +3
+Immune mind-affecting effects
+OFFENSE
+Speed 30 ft., fly 60 ft. (good)
+Melee bite +12 (2d8+10)
+Space 15 ft.; Reach 10 ft.
+STATISTICS
+Str 24, Dex 16, Con 19, Int -, Wis 11, Cha 10
+Base Atk +7; CMB +16; CMD 29 (37 vs. trip)
+Skills Fly +7
+
+#Archon 18
+HARBINGER ARCHON CR 2
+XP 600
+LG Tiny outsider (archon, extraplanar, good, lawful)
+Init +6; Senses darkvision 60 ft., detect evil, low-light vision;
+Perception +7
+DEFENSE
+AC 16, touch 15, flat-footed 13 (+2 Dex, +1 dodge, +1 natural,
++2 size)
+hp 16 (3d10)
+Fort +1, Ref +5, Will +4; +4 vs. poison
+DR 5/evil; Immune
+electricity, petrification
+OFFENSE
+Speed fly 50 ft. (perfect)
+Melee 3 blades +4 (1d4-1)
+Space 2-1/2 ft.; Reach 0 ft.
+Special Attacks wrath
+Spell-Like Abilities (CL 6th;
+concentration +7)
+Constant-detect evil
+At will-dancing lights (duration
+lasts until dismissed)
+3/day-cure light wounds,
+protection from evil
+1/week-commune (CL 12th, 6 questions)
+STATISTICS
+Str 6, Dex 15, Con 11, Int 10, Wis 13, Cha 12
+Base Atk +3; CMB +3; CMD 12
+Feats Dodge, Improved Initiative
+Skills Diplomacy +7, Fly +20, Knowledge (planes) +6,
+Knowledge (religion) +6, Perception +7, Sense Motive +7
+Languages Celestial, Draconic, Infernal; truespeech
+SQ disassemble, minor archon
+
+# Legion Archon 19
+LEGION ARCHON CR 7
+XP 3,200
+LG Medium outsider (archon, extraplanar, good, lawful)
+Init +1; Senses darkvision 60 ft. detect evil, low-light vision;
+Perception +13
+Aura aura of menace (DC 17)
+DEFENSE
+AC 23, touch 11, flat-footed 22 (+9 armor, +1 Dex, +3 natural;
++2 deflection vs. evil)
+hp 76 (8d10+32)
+Fort +10, Ref +3, Will +8; +4 vs. poison, +2 vs. evil
+DR 10/evil; Immune electricity, petrification; SR 18
+OFFENSE
+Speed 40 ft., fly 90 ft. (average)
+Melee +1 flaming burst greatsword +13/+8 (2d6+5/17-20 plus
+1d6 fire)
+Ranged +1 flaming javelin +10 (1d6+4 plus 1d6 fire)
+Special Attacks flames of faith
+Spell-Like Abilities (CL 8th; concentration +11)
+Constant-detect evil, magic circle
+against evil
+At will-aid, continual flame, greater teleport
+(self plus 50 lbs. of objects only), message
+3/day-align weapon, mirror image, versatile weapon*
+* See the Advanced Player's Guide.
+STATISTICS
+Str 16, Dex 12, Con 19, Int 10, Wis 15, Cha 17
+Base Atk +8; CMB +11; CMD 22
+Feats Improved Bull Rush, Improved Critical (greatsword)B,
+Power Attack, Vital Strike, Weapon Focus (greatsword),
+Whirlwind AttackB
+Skills Diplomacy +14, Fly +12, Intimidate +14, Knowledge
+(religion) +11, Perception +13, Sense Motive +9, Survival +9
+Languages Celestial, Draconic, Infernal; truespeech
+SQ second skin
+
+
+
+
+#Ascomoid 20
+ASCOMOID CR 5
+XP 1,600
+N Large plant
+Init +1; Senses tremorsense 60 ft.; Perception +0
+DEFENSE
+AC 17, touch 10, flat-footed 16 (+1 Dex, +7 natural, -1 size)
+hp 52 (7d8+21)
+Fort +8, Ref +3, Will +2
+DR 10/piercing; Immune plant traits; Resist electricity 10, fire 10
+OFFENSE
+Speed 40 ft.
+Melee slam +8 (2d8+6)
+Space 10 ft.; Reach 5 ft.
+Special Attacks poison, spores, trample (2d8+6, DC 17)
+STATISTICS
+Str 18, Dex 13, Con 17, Int -, Wis 11, Cha 1
+Base Atk +5; CMB +10; CMD 21 (can't be tripped)
+Feats Improved OverrunB
+
+
+
+#Adhukait (asura) 22
+ADHUKAIT CR 7
+XP 3,200
+LE Medium outsider (asura, evil, extraplanar, lawful)
+Init +3; Senses all-around vision, darkvision 60 ft.; Perception +19
+Aura elusive (30 ft.)
+DEFENSE
+AC 20, touch 14, flat-footed 16 (+3 Dex, +1 dodge, +6 natural)
+hp 76 (9d10+27); regeneration 5 (good weapons, good spells)
+Fort +6, Ref +11, Will +9; dual mind, +2 vs. enchantments
+DR 5/good; Immune curse effects, disease, flanking, poison;
+Resist acid 10, electricity 10; SR 18
+OFFENSE
+Speed 40 ft.
+Melee 2 mwk kukris +15/+10 (1d4+5/18-20), 2 claws +9 (1d4+2)
+Special Attacks dance of disaster
+Spell-Like Abilities (CL 6th; concentration +9)
+At will- feather fall, greater teleport (self plus 50 lbs. of
+objects only), spider climb
+3/day-blink, blur, mirror image, spike growth
+1/day-summon (level 4, 1 adhukait 35%)
+STATISTICS
+Str 20, Dex 17, Con 17, Int 13, Wis 16, Cha 16
+Base Atk +9; CMB +14; CMD 28
+Feats Combat Reflexes, Dodge, Lightning Reflexes, Mobility,
+Nimble Moves
+Skills Acrobatics +15 (+19 when jumping), Bluff +15, Escape Artist
++21, Intimidate +11, Knowledge (planes) +9, Perception +19,
+Perform (dance) +14, Stealth +15; Racial Modifiers Acrobatics
+(+4 when jumping), +6 Escape Artist, +4 Perception
+Languages Common, Infernal; telepathy 100 ft.
+
+#Aghasura (asura) 23
+AGHASURA CR 11
+XP 12,800
+LE Huge outsider (asura, evil, extraplanar, lawful)
+Init +3; Senses darkvision 60 ft., scent; Perception +19
+Aura attraction (50 ft.), elusive (75 ft.)
+DEFENSE
+AC 23, touch 11, flat-footed 20 (+6 armor, +3 Dex, +6 natural,
+-2 size)
+hp 161 (14d10+84); regeneration 5 (good weapons, good spells)
+Fort +15, Ref +9, Will +11; +2 vs. enchantment spells
+DR 10/good; Immune curse effects, disease, poison; Resist
+acid 10, electricity 10; SR 22
+OFFENSE
+Speed 35 ft., swim 20 ft.
+Melee 2 mwk scimitars +26 (2d6+12/15-20 plus poison), bite
++19 (2d8+6 plus grab and poison)
+Space 15 ft.; Reach 15 ft.
+Special Attacks dual wielder, infused weapons, swallow whole
+(2d6+12 acid damage, AC 13, 16 hp)
+Spell-Like Abilities (CL 11th; concentration +15)
+At will-greater teleport (self plus 50 lbs. of objects only)
+3/day-deeper darkness
+1/day-cloudkill (DC 19), summon (level 4, 1d4+1 adhukaits,
+45%, or 1 aghasura, 20%)
+STATISTICS
+Str 34, Dex 17, Con 23, Int 11, Wis 14, Cha 18
+Base Atk +14; CMB +28 (+32 grapple); CMD 41 (can't
+be tripped)
+Feats Cleave, Critical Focus, Great Cleave,
+Improved Critical (scimitar), Lightning Reflexes,
+Power Attack, Weapon Focus (scimitar)
+Skills Acrobatics +17, Bluff +19, Escape Artist +6,
+Intimidate +17, Knowledge (planes) +13, Perception
++19, Sense Motive +19, Stealth +9, Swim +17; Racial
+Modifiers +6 Escape Artist, +4 Perception
+Languages Common, Infernal; telepathy 100 ft.
+
+#Asurendra (asura) 24-25
+ASURENDRA CR 20
+XP 307,200
+LE Huge outsider (asura, evil, extraplanar, lawful)
+Init +12; Senses all-around vision, darkvision 60 ft., low-light
+vision, scent, true seeing; Perception +34
+Aura dimensional lock (20 ft., enemies only), elusive (100 ft.)
+DEFENSE
+AC 35, touch 25, flat-footed 26 (+5 deflection, +8 Dex, +1 dodge,
++3 insight, +10 natural, -2 size)
+hp 385 (22d10+264); regeneration 10 (good weapons, good spells)
+Fort +25, Ref +17, Will +20; +2 vs. enchantment spells,
+DR 15/chaotic and good; Immune curse effects, disease, flanking,
+poison, polymorph; Resist acid 10, electricity 10; SR 31
+OFFENSE
+Speed 50 ft., climb 50 ft., fly 50 ft. (perfect), swim 50 ft.
+Melee bite +28 (2d6+6 plus grab and poison), 6 claws +33
+(2d6+13 plus curse)
+Space 15 ft.; Reach 15 ft.
+Special Attacks curse of false wisdom, spirit blades (+27,
+3d6+7/19-20), swallow whole (4d6+19 bludgeoning plus
+4d8+12 acid damage, AC 15, 34 hp)
+Spell-Like Abilities (CL 20th; concentration +30)
+Constant-dimensional lock (enemies only), freedom of
+movement, tongues, true seeing
+At will-death knell (DC 22), greater dispel magic, greater
+scrying, greater teleport (self plus 50 lbs. of objects only)
+3/day-quickened baleful polymorph (DC 25), quickened
+blade barrier (DC 26), blasphemy (DC 27), quickened death
+knell (DC 22), deeper darkness, demand (DC 28)
+1/day-power word stun, summon (level 9, any 1 CR 19 or
+lower asura 100%), time stop
+STATISTICS
+Str 36, Dex 26, Con 34, Int 25, Wis 25, Cha 31
+Base Atk +22; CMB +37 (+41 grapple); CMD 61
+Feats Awesome Blow, Cleave, Combat ReflexesB, Critical Focus,
+Deflect ArrowsB, DodgeB, Great Cleave, Improved Bull Rush,
+Improved Initiative, Lightning Reflexes, MobilityB, Power
+Attack, Quicken Spell-Like Ability (baleful polymorph, blade
+barrier, death knell), Snatch ArrowsB, Spring AttackB
+Skills Acrobatics +31 (+39 when jumping), Bluff +33, Climb +21,
+Diplomacy +30, Escape Artist +14, Fly +35, Intimidate +33,
+Knowledge (arcana) +27, Knowledge (history) +13,
+Knowledge (planes) +30, Knowledge (religion) +27,
+Perception +34, Perform (dance) +33, Sense Motive +30,
+Spellcraft +27, Stealth +23, Swim +21, Use Magic Device +30;
+Racial Modifiers Acrobatics (+8 when jumping), +6 Escape
+Artist, +4 Perception
+Languages Common, Infernal; tongues, telepathy 100 ft.
+
+#Tripurasura (asura) 26
+TRIPURASURA CR 2
+XP 600
+LE Tiny outsider (asura, evil, extraplanar, lawful)
+Init +2; Senses darkvision 60 ft., detect magic; Perception +10
+DEFENSE
+AC 16, touch 16, flat-footed 13 (+2 Dex, +1 dodge, +1 insight,
++2 size)
+hp 19 (3d10+3); fast healing 2
+Fort +4, Ref +3, Will +5, +2 vs. enchantments
+DR 5/cold iron or good; Immune curse effects, disease,
+poison; Resist acid 10, electricity 10
+OFFENSE
+Speed 20 ft.
+Melee sting +8 (1d4-1 plus poison)
+Spell-Like Abilities (CL 6th; concentration +7)
+Constant-detect magic
+At will-feather fall
+3/day-levitate, locate object, spider climb
+1/week-commune (6 questions, CL 12th)
+STATISTICS
+Str 8, Dex 14, Con 12, Int 13, Wis 15, Cha 13
+Base Atk +3; CMB +3; CMD 13
+Feats Dodge, Weapon Finesse
+Skills Acrobatics +8 (+4 when jumping), Appraise +4, Bluff
++7, Escape Artist +8, Knowledge (arcana) +4, Knowledge
+(planes) +7, Perception +10, Perform (dance) +5, Spellcraft +4,
+Stealth +14; Racial Modifiers -4 Acrobatics when jumping,
++6 Escape Artist, +4 Perception
+Languages Common, Infernal
+SQ change shape (any Small humanoid; alter self ), elusive
+
+
+#Upasunda (asura) 27
+UPASUNDA CR 9
+XP 6,400
+LE Medium outsider (asura, evil, extraplanar, lawful)
+Init +7; Senses all-around vision, darkvision 60 ft.; Perception +23
+Aura elusive (50 ft.)
+DEFENSE
+AC 24, touch 21, flat-footed 16 (+7 Dex, +1 dodge, +3 insight,
++3 natural)
+hp 114 (12d10+48); regeneration 5 (good weapons, good spells)
+Fort +12, Ref +11, Will +15
+Defensive Abilities improved evasion; DR 10/good; Immune
+curse effects, disease, flanking, poison; Resist acid 10,
+electricity 10; SR 20
+OFFENSE
+Speed 50 ft.
+Melee mwk longsword +20/+15/+10 (1d8+6/19-20), mwk spear
++19 (1d8+6/3), mwk kukri +19 (1d4+6/18-20) or
+6 slams +18 (1d4+6)
+Special Attacks infused weapons, multiweapon mastery
+Spell-Like Abilities (CL 9th; concentration +13)
+At will-disguise self, greater teleport (self plus 50 lbs. of
+objects only), feather fall, see invisibility, spider climb
+3/day-deeper darkness, levitate, rainbow pattern (DC 18)
+1/day-haste, hold monster (DC 18), summon (level 4,
+2 adhukaits 45% or 1 upasunda 20%)
+STATISTICS
+Str 22, Dex 24, Con 19, Int 15, Wis 24, Cha 19
+Base Atk +12; CMB +18 (+20 grapple); CMD 36 (38 grapple)
+Feats Cleave, Combat ReflexesB, Deflect ArrowsB, Dodge,
+Great Cleave, Improved GrappleB, Mobility, Power Attack,
+Spring Attack
+Skills Acrobatics +19 (+27 when jumping), Bluff +16,
+Diplomacy +13, Escape Artist +25, Intimidate +16,
+Knowledge (arcana) +8, Knowledge (planes) +14,
+Perception +23, Perform (dance) +16, Sense Motive
++19, Stealth +19; Racial Modifiers +8 Acrobatics when
+jumping, +6 Escape Artist, +4 Perception
+Languages Common, Infernal; telepathy 100 ft.
+
+#Atomie 28
+ATOMIE CR 1
+XP 400
+CN Diminutive fey
+Init +7; Senses low-light vision; Perception +7
+DEFENSE
+AC 17, touch 17, flat-footed 14 (+3 Dex, +4 size)
+hp 9 (2d6+2)
+Fort +1, Ref +6, Will +5
+DR 2/cold iron
+OFFENSE
+Speed 20 ft., fly 50 ft. (good)
+Melee rapier +8 (1d2-2/18-20)
+Space 1 ft.; Reach 0 ft.
+Special Attacks sneak attack +1d6
+Spell-Like Abilities (CL 6th; concentration +10)
+Constant-speak with animals
+At will-dancing lights, reduce person (DC 15)
+3/day-invisibility (self only)
+1/day-shrink item
+STATISTICS
+Str 6, Dex 17, Con 13, Int 11, Wis 14, Cha 18
+Base Atk +1; CMB +0; CMD 8
+Feats Improved InitiativeB, Weapon Finesse
+Skills Acrobatics +8 (+4 when jumping), Bluff +9, Escape Artist +7,
+Fly +18, Perception +7, Sense Motive +6, Stealth +20
+Languages Common, Sylvan; speak with animals
+
+#Axe beak 29
+AXE BEAK CR 2
+XP 600
+N Large animal
+Init +3; Senses low-light vision; Perception +9
+DEFENSE
+AC 14, touch 12, flat-footed 11 (+3 Dex, +2 natural, -1 size)
+hp 22 (3d8+9)
+Fort +6, Ref +6, Will +1
+OFFENSE
+Speed 50 ft.
+Melee bite +5 (1d8+6)
+Space 10 ft.; Reach 10 ft.
+Special Attacks sudden charge
+STATISTICS
+Str 18, Dex 17, Con 16, Int 2, Wis 11, Cha 10
+Base Atk +2; CMB +7; CMD 20
+Feats Run, Skill Focus (Perception)
+Skills Perception +9
+
+#Azruverda 30
+AZRUVERDA CR 13
+XP 25,600
+CG Huge aberration
+Init +2; Senses darkvision 60 ft., tremorsense 100 ft.;
+Perception +22
+DEFENSE
+AC 25, touch 10, flat-footed 23 (+2 Dex, +15 natural, -2 size)
+hp 168 (16d8+96)
+Fort +11, Ref +7, Will +15
+DR 10/magic and slashing; Immune acid; Resist cold 10
+OFFENSE
+Speed 50 ft., climb 30 ft.
+Melee bite +21 (2d6+11), 2 claws +21 (1d10+11)
+Ranged acid spit +13 touch (10d6 acid)
+Space 15 ft.; Reach 15 ft.
+Special Attacks acid spit, rend (1d10+11)
+Spell-Like Abilities (CL 16th; concentration +23)
+At will-dancing lights, faerie fire
+3/day-daylight, giant vermin, insect plague, repel vermin
+(DC 21), summon swarm
+STATISTICS
+Str 32, Dex 15, Con 23, Int 14, Wis 16, Cha 25
+Base Atk +12; CMB +25 (+29 bull rush); CMD 37 (39 vs. bull
+rush, 45 vs. trip)
+Feats Awesome Blow, Combat Reflexes, Greater Bull Rush,
+Improved Bull Rush, Iron Will, Point-Blank
+Shot, Power Attack, Weapon Focus (acid spit)
+Skills Climb +26, Handle Animal
++17, Intimidate +26, Knowledge
+(dungeoneering) +12, Knowledge
+(nature) +12, Perception +22, Sense
+Motive +13, Spellcraft +15, Survival +16
+Languages Aklo, Common, Undercommon
+SQ vermin master
+
+#Baku 31
+BAKU CR 8
+XP 4,800
+N Medium magical beast
+Init +9; Senses darkvision 60 ft., low-light vision; Perception +16
+DEFENSE
+AC 15, touch 15, flat-footed 10 (+5 Dex)
+hp 95 (10d10+40)
+Fort +11, Ref +12, Will +8
+DR 10/cold iron; Immune mind-affecting effects, sleep; SR 19
+OFFENSE
+Speed 30 ft., fly 60 ft. (perfect)
+Melee 2 claws +15 (1d4+2), gore +15 (1d6+2)
+Special Attacks mental drain
+Spell-Like Abilities (CL 10th; concentration +17)
+At will-invisibility, lullaby, sleep (DC 18)
+3/day-deep slumber (DC 20), dream
+1/day-ethereal jaunt, modify memory (DC 21)
+STATISTICS
+Str 14, Dex 21, Con 18, Int 15, Wis 16, Cha 25
+Base Atk +10; CMB +12; CMD 27 (31 vs. trip)
+Feats Alertness, Flyby Attack, Improved Initiative, Iron Will,
+Weapon Finesse
+Skills Diplomacy +15, Fly +18, Perception +16, Sense Motive +13,
+Spellcraft +8, Stealth +16
+Languages Aklo, Celestial, Common
+SQ dream claws
+
+#Baluchitherium (megafauna) 192
+
+
+#Bandersnatch 32-33
+
+
+#Baregara 34
+
+
+#Basilosaurus (megafauna) 193
+
+
+#Baykok 35
+
+
+#Berbalang 40
+
+
+#Bhuta 41
+
+
+#Bogeyman 42
+
+
+#Bone golem 133
+
+
+#Brain ooze 43
+
+
+#Brass golem 134
+
+
+#Ash giant 126
+#Cairn linnorm 182
+#Antelope (herd animal) 147
+
+
+#Archelon (megafauna) 192
+
+
+#Cannon golem 135
+
+
+#Carbuncle 44
+
+
+#Carnivorous crystal 45
+
+
+#Caryatid column 46
+
+
+#Catfolk 47
+
+
+#Caulborn 48
+
+
+#Cave giant 127
+
+
+#Cecaelia 49
+
+
+#Ceratioidi 50
+
+
+#Cerberi 51
+
+
+#Cerebric fungus 52
+
+
+#Clockwork goliath 54
+
+
+#Clockwork leviathan 55
+
+
+#Clockwork servant 56
+
+
+#Clockwork soldier 57
+
+
+#Clockwork spy 58
+
+
+#Cold rider 59
+
+
+#Coloxus (demon) 72
+
+
+#Contract devil 76-77
+
+
+#Criosphinx 252
+
+
+#Crucidaemon (daemon) 62
+
+
+#Dandasuka (rakshasa) 225
+
+
+#Deadfall scorpion 237
+
+
+#Death's head jellyfish 155
+
+
+#Deathtrap ooze 64
+
+
+#Deathweb 65
+
+
+#Deep sea serpent 240
+
+
+#Demilich 66-67
+
+
+#Derhii 75
+
+
+#Desert drake 105
+
+
+#Desert giant 128
+
+
+#Dimetrodon (dinosaur) 78
+
+
+#Dire corby 80
+
+
+#Disenchanter 81
+
+
+#Aghash (div) 83
+
+
+#Akvan (div) 84-85
+
+
+#Doru (div) 86
+
+
+#Dragonne 104
+
+
+#Dybbuk 108
+
+
+#Ecorche 109
+
+
+
+
+#Elk (herd animal) 147
+
+
+#Eremite (kyton) 172-173
+
+
+#Faerie dragon 91
+
+
+#Faun 114
+
+
+#Festrog 115
+
+
+#Fey creature 116-117
+
+
+#Fire yai (oni) 206
+
+
+#Fjord linnorm 183
+
+
+#Flail snail 118
+
+
+#Flumph 119
+
+
+#Flying squirrel (familiar) 112
+
+
+#Foo creature 120-121
+
+
+#Foo dog 120
+
+
+#Foo lion 120
+
+
+#Forest dragon 94-95
+
+
+#Fossil golem 136
+
+
+#Fox (familiar) 112
+
+
+#Fuath (gremlin) 142
+
+
+#Augur (kyton) 171
+#Fungus leshy 177
+
+
+#Garden ooze 122
+
+
+#Garuda 123
+
+
+#Ghawwas (div) 87
+
+
+#Ghorazagh 124
+
+
+#Ghost scorpion 237
+
+
+#Ghul 125
+
+
+#Giant adult ant lion 17
+
+
+#Giant ant lion 17
+
+
+#Giant chameleon (lizard) 186
+
+
+#Giant crab spider 254
+
+
+#Giant gecko (lizard) 186
+
+
+#Giant owl 213
+
+
+#Giant porcupine 222
+
+
+#Giant rot grub (parasite) 215
+
+
+#Giant sea anemone 238
+
+
+#Giant skunk 247
+
+
+#Giant vulture 284
+
+
+#Girtablilu 130
+
+
+#Globster 131
+
+
+#Goat (familiar) 112
+
+
+#Goblin snake 132
+
+
+#Gorynych 137
+
+
+#Gourd leshy 178
+
+
+#Graveknight 138-139
+
+
+#Graven guardian 140-141
+
+
+#Great cyclops 61
+
+
+#Great horned owl 213
+
+
+#Grodair 143
+
+
+#Grootslang 144
+
+
+#Guecubu 145
+
+
+#Harbinger archon 18
+
+
+#Hekatonkheires (titan) 268-269
+
+
+#Hellwasp swarm 146
+
+
+#Hieracosphinx 253
+
+
+#Hodag 148
+
+
+#Hollow serpent 149
+
+
+#Huecuva 150
+
+
+#Humbaba 151
+
+
+#Hungry fog 152
+
+
+#Ice yai (oni) 207
+
+
+#Iguanodon (dinosaur) 78
+
+
+#Iku-turso 153
+
+
+#Incubus (demon) 73
+
+
+#Interlocutor (kyton) 174
+
+
+#Jackalwere 154
+
+
+#Jiang-shi vampire 278-279
+
+
+#Jinushigami (kami) 160-161
+
+
+#Jorogumo 156
+
+
+#Jotund troll 272
+
+
+#Jubjub bird 157
+
+
+#Jungle giant 129
+
+
+#Kamadan 158
+
+
+#Kangaroo (marsupial) 191
+
+
+#Kappa 166
+
+
+#Kech 167
+
+
+#Kirin 168
+
+
+#Kodama (kami) 162
+
+
+#Kongamato 169
+
+
+#Kuwa (oni) 208
+
+
+#Lammasu 175
+
+
+#Leaf leshy 179
+
+
+#Legion archon 19
+
+
+#Lukwata 187
+
+
+#Lunar naga 197
+
+
+#Maftet 188
+
+
+#Magmin 189
+
+
+#Maharaja (rakshasa) 226-227
+
+
+#Manananggal 190
+
+
+#Marai (rakshasa) 228
+
+
+#Megalania (megafauna) 193
+
+
+#Mobogo 194
+
+
+#Moon-beast 195
+
+
+#Moss troll 273
+
+
+#Myceloid 196
+
+
+#Nephilim 200
+
+
+#Nixie 201
+
+
+#Norn 202
+
+
+#Nuckelavee 203
+
+
+#Nue 204
+
+
+#Ogre spider 254
+
+
+#Otter (familiar) 113
+
+
+#Pachycephalosaurus (dinosaur) 79
+
+
+#Pairaka (div) 88
+
+
+#Pale stranger 214
+
+
+#Penanggalen 216-217
+
+
+#Peri 218
+
+
+#Phantom fungus 219
+
+
+#Pig (familiar) 113
+
+
+#Plasma ooze 220
+
+
+#Popobala 221
+
+
+#Porcupine 222
+
+
+#Pukwudgie 223
+
+
+#Raccoon (familiar) 113
+
+
+#Raktavarna (rakshasa) 229
+
+
+#Ratfolk 231
+
+
+#Rift drake 106
+
+
+#River drake 107
+
+
+#Rot grub swarm (parasite) 215
+
+
+#Royal naga 198
+
+
+#Rusalka 232
+
+
+#Sabosan 233
+
+
+#Sagari 234
+
+
+#Sapphire jellyfish 155
+
+
+#Sargassum fiend 235
+
+
+#Sasquatch 236
+
+
+#Schir (demon) 74
+
+
+#Sea bonze 239
+
+
+#Sea dragon 96-97
+
+
+#Seaweed leshy 180
+
+
+#Sepid (div) 89
+
+
+#Shadow mastiff 241
+
+
+#Shae 242
+
+
+#Shaggy demodand 69
+
+
+#Shark-eating crab 60
+
+
+#Shedu 243
+
+
+#Shikigami (kami) 163
+
+
+#Shinigami 244
+
+
+#Shipwrecker crab 60
+
+
+#Shira (div) 90
+
+
+#Simurgh 245
+
+
+#Siyokoy 246
+
+
+#Skunk 247
+
+
+#Sky dragon 98-99
+
+
+#Sleipnir 248
+
+
+#Slimy demodand 70
+
+
+#Snake swarm 249
+
+
+#Sovereign dragon 100-101
+
+
+#Spider eater 255
+
+
+#Spinosaurus (dinosaur) 79
+
+
+#Spirit oni 209
+
+
+#Sprite 256
+
+
+#Stymphalidies 257
+
+
+#Suli 258
+
+
+#Taiga linnorm 184
+
+
+#Tanuki 259
+
+
+#Taotieh 260
+
+
+#Tarry demodand 71
+
+
+#Tataka (rakshasa) 230
+
+
+#Tatzlwyrm 261
+
+
+#Tempest behemoth 37
+
+
+#Terra-cotta soldier 262
+
+
+#Thalassic behemoth 38
+
+
+#Thriae queen 264-265
+
+
+#Thriae seer 266
+
+
+#Thriae soldier 267
+
+
+#Thunder behemoth 39
+
+
+#Thylacine (marsupial) 191
+
+
+#Tojanida 270
+
+
+#Tophet 271
+
+
+#Tor linnorm 185
+
+
+#Toshigami (kami) 164
+
+
+
+
+#Trollhound 274
+
+
+#Tupilaq 275
+
+
+#Tzitzimitl 276
+
+
+#Underworld dragon 102-103
+
+
+#Unfettered eidolon 110-111
+
+
+#Valkyrie 277
+
+
+#Vanara 280
+
+
+#Venomous snake swarm 249
+
+
+#Vishkanya 281
+
+
+#Vodyanoi 282
+
+
+#Void yai (oni) 210-211
+
+
+#Voonith 283
+
+
+#Vulnudaemon (daemon) 63
+
+
+#Vulture 284
+
+
+#Water naga 199
+
+
+#Water yai (oni) 212
+
+
+#Wolf-in-sheep's-clothing 285
+
+
+#Yithian 286
+
+
+#Yuki-onna 287
+
+
+#Zoog 288
+
+
+#Zuishin (kami) 165
+
+
+#Zuvembie 289
+
+
+
+
+
+
+
+
+
+
+
+#Androsphinx 251
+
+

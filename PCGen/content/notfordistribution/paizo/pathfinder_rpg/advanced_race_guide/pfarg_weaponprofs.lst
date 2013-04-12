@@ -1,0 +1,15 @@
+# CVS $Revision: $ $Author: $ -- Thu Aug  2 19:19:21 2012 -- reformated by prettylst.pl v1.39 (build )
+SOURCELONG:Advanced Race Guide	SOURCESHORT:PFARG	SOURCEWEB:http://paizo.com/products/btpy8rv2?Pathfinder-Roleplaying-Game-Advanced-Race-Guide	SOURCEDATE:2012-06
+# ORIGINAL ENTRY: Douglas Limmer
+# ORIGINAL ENTRY DATE: 2012/07/30
+
+# COMMENT: Dummy goblin weaponprofs to avoid errors
+# Weapon Name				Type
+Dogslicer					TYPE:Goblin
+Horsechopper				TYPE:Goblin
+
+# COMMENT: Dummy Eastern weaponprofs to avoid errors (for Tengu)
+Helmet (Dwarven Boulder)	TYPE:Melee.Dwarven.Bludgeoning.Exotic
+Waraxe (Dwarven Double)		TYPE:Melee.Dwarven.Slashing.Exotic
+Longaxe (Dwarven)			TYPE:Melee.Dwarven.Slashing.Exotic
+Longhammer (Dwarven)		TYPE:Melee.Dwarven.Bludgeoning.Exotic

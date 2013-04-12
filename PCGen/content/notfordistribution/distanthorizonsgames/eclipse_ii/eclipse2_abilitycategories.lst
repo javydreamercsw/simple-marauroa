@@ -1,0 +1,41 @@
+#SOURCELONG:Eclipse II - The Libram Incarna	SOURCESHORT:EclipseII
+#Original Entry By: Andrew Maitland
+
+# Twilight Isle Campaign Racial Addons
+ABILITYCATEGORY:Elemental Bond Choice		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:ThunderDwarfElementalBond		PLURAL:Elemental Bond Choices			DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:Stat Boost Choice			VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:StatBoostChoice				PLURAL:Stat Boost Choices			DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:Shadow Elf Stat Boost Choice	VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:ShadowElfStatChoice			PLURAL:Shadow Elf Stat Choices		DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:Skill Mastery Group Choice	VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:SkillMasteryChoice				PLURAL:Skill Mastery Choices			DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:Shadow Elf Spell Choice		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:ShadowElfSpell				PLURAL:Shadow Elf Spell Choices		DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:Ikam Subrace Choice			VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:IkamSubRace					PLURAL:Ikam Subrace Choices			DISPLAYLOCATION:Racial Abilities
+
+
+ABILITYCATEGORY:Elemental Birthright Adept Choice	VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	ABILITYLIST:Adept ~ Eclipse (Theurgical Noun (Air))|Adept ~ Eclipse (Theurgical Noun (Earth))|Adept ~ Eclipse (Theurgical Noun (Fire))|Adept ~ Eclipse (Theurgical Noun (Water))|Adept ~ Eclipse (Theurgical Noun (Spirit))		PLURAL:Adept Choices			DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:+3 Elemental Birthright Skill Choice	VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:ElementalSkillChoicePlusThree		PLURAL:+3 Skill Choices			DISPLAYLOCATION:Racial Abilities
+ABILITYCATEGORY:+1 Elemental Birthright Skill Choice	VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO		CATEGORY:Special Ability	TYPE:ElementalSkillChoicePlusOne		PLURAL:+1 Skill Choices			DISPLAYLOCATION:Racial Abilities
+
+#Fedyra Racial Package Choices
+ABILITYCATEGORY:Fedyra Fey Package		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:FedyraFeyPackage								DISPLAYLOCATION:Racial Abilities	PLURAL:Fedyra Fey Packages
+ABILITYCATEGORY:Fedyra Dragon Package	VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:FedyraDragonPackage							DISPLAYLOCATION:Racial Abilities	PLURAL:Fedyra Dragon Packages
+ABILITYCATEGORY:Fedyra Stat			VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:FedyraStat									DISPLAYLOCATION:Racial Abilities	PLURAL:Fedyra Stat Choices
+
+# Ancient One Template
+ABILITYCATEGORY:Deep Lore Selection		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:DeepLoreSelection								DISPLAYLOCATION:Racial Abilities	PLURAL:Deep Lore Selections
+ABILITYCATEGORY:Past Master Choice		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:PastMasterChoice								DISPLAYLOCATION:Racial Abilities	PLURAL:Past Master Choices	
+	
+# Pureblooded Human
+ABILITYCATEGORY:Pureblood Human Racial Boost		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:PurebloodHumanStat								DISPLAYLOCATION:Racial Abilities	PLURAL:Pureblood Human Racial Boosts	
+ABILITYCATEGORY:Human Racial Stat		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:NO					CATEGORY:Special Ability	TYPE:HumanStat								DISPLAYLOCATION:Racial Abilities	PLURAL:Human Racial Boosts	
+
+
+# Martial Arts Homebrews // Web Blog Section
+ABILITYCATEGORY:Bladesinger Style Art		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:BladesingerStyle.MADefaultStyle	PLURAL:Bladesinger Techniques			DISPLAYLOCATION:Character Creation Pool
+ABILITYCATEGORY:Katana Senkou Style Art		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:KatanaSenkouStyle.MADefaultStyle	PLURAL:Katana Senkou Style Art Techniques	DISPLAYLOCATION:Character Creation Pool
+ABILITYCATEGORY:War Wizard Style Art		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:WarWizardStyle.MADefaultStyle		PLURAL:War Wizard Style Art Techniques	DISPLAYLOCATION:Character Creation Pool
+
+ABILITYCATEGORY:Canmarg Martial Art			VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:CanmargStyle.MADefaultStyle		PLURAL:Canmarg Techniques			DISPLAYLOCATION:Character Creation Pool
+ABILITYCATEGORY:Street Fighting Art			VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:StreetFightingStyle.MADefaultStyle	PLURAL:Street Fighting Techniques		DISPLAYLOCATION:Character Creation Pool
+ABILITYCATEGORY:Arnis-Barang Style Art		VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:StreetFightingStyle.MADefaultStyle	PLURAL:Arnis-Barang Techniques		DISPLAYLOCATION:Character Creation Pool
+
+
+ABILITYCATEGORY:Atheria Birthright			VISIBLE:QUALIFY	EDITABLE:YES		EDITPOOL:YES	FRACTIONALPOOL:YES	CATEGORY:Special Ability	TYPE:AtheriaBirthright			DISPLAYLOCATION:Character Creation Pool

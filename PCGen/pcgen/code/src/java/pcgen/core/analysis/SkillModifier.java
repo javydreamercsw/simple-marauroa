@@ -1,0 +1,140 @@
+/*
+ * Copyright 2008 (C) Tom Parker <thpr@users.sourceforge.net>
+ * Derived from Skill.java
+ * Copyright 2001 (C) Bryan McRoberts <merton_monk@yahoo.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ * Created on June 9, 2008
+ */
+package pcgen.core.analysis;
+
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
+import pcgen.cdom.enumeration.ObjectKey;
+import pcgen.cdom.enumeration.Type;
+import pcgen.core.Globals;
+import pcgen.core.PCStat;
+import pcgen.core.PlayerCharacter;
+import pcgen.core.SettingsHandler;
+import pcgen.core.Skill;
+
+public final class SkillModifier
+{
+
+	public static Integer modifier(Skill sk, PlayerCharacter aPC)
+	{
+		int bonus = 0;
+		if (aPC == null)
+		{
+			return Integer.valueOf(0);
+		}
+
+		String keyName = sk.getKeyName();
+		PCStat stat = sk.get(ObjectKey.KEY_STAT);
+		if (stat != null)
+		{
+			bonus = aPC.getStatModFor(stat);
+			bonus += aPC.getTotalBonusTo("SKILL", "STAT." + stat.getAbb());
+		}
+		bonus += aPC.getTotalBonusTo("SKILL", keyName);
+
+		// loop through all current skill types checking for boni
+		for (Type singleType : sk.getTrueTypeList(false))
+		{
+			bonus += aPC.getTotalBonusTo("SKILL", "TYPE." + singleType);
+		}
+
+		// now check for any lists of skills, etc
+		bonus += aPC.getTotalBonusTo("SKILL", "LIST");
+
+		// now check for ALL
+		bonus += aPC.getTotalBonusTo("SKILL", "ALL");
+
+		// these next two if-blocks try to get BONUS:[C]CSKILL|TYPE=xxx|y to
+		// function
+		if (aPC.isClassSkill(sk))
+		{
+			bonus += aPC.getTotalBonusTo("CSKILL", keyName);
+
+			// loop through all current skill types checking for boni
+			for (Type singleType : sk.getTrueTypeList(false))
+			{
+				bonus += aPC.getTotalBonusTo("CSKILL", "TYPE." + singleType);
+			}
+
+			bonus += aPC.getTotalBonusTo("CSKILL", "LIST");
+		}
+
+		if (!aPC.isClassSkill(sk)
+				&& !sk.getSafe(ObjectKey.EXCLUSIVE))
+		{
+			bonus += aPC.getTotalBonusTo("CCSKILL", keyName);
+
+			// loop through all current skill types checking for boni
+			for (Type singleType : sk.getTrueTypeList(false))
+			{
+				bonus += aPC.getTotalBonusTo("CCSKILL", "TYPE." + singleType);
+			}
+
+			bonus += aPC.getTotalBonusTo("CCSKILL", "LIST");
+		}
+
+		// the above two if-blocks try to get
+		// BONUS:[C]CSKILL|TYPE=xxx|y to function
+		int aCheckBonus = sk.getSafe(ObjectKey.ARMOR_CHECK).calculateBonus(aPC);
+		bonus += aCheckBonus;
+
+		String aString = SettingsHandler.getGame().getRankModFormula();
+		if (aString.length() != 0)
+		{
+			aString = aString.replaceAll(Pattern.quote("$$RANK$$"), SkillRankControl.getTotalRank(aPC, sk).toString());
+			bonus += aPC.getVariableValue(aString, "").intValue();
+		}
+
+		return bonus;
+	}
+
+	/**
+	 * Get the modifier to the skill granted by the key attribute
+	 * 
+	 * @param pc
+	 * @return modifier
+	 */
+	public static int getStatMod(Skill sk, PlayerCharacter pc)
+	{
+		PCStat stat = sk.get(ObjectKey.KEY_STAT);
+		if (stat == null)
+		{
+			int statMod = 0;
+			if (Globals.getGameModeHasPointPool())
+			{
+				ArrayList<Type> typeList = new ArrayList<Type>();
+				SkillInfoUtilities.getKeyStatList(pc, sk, typeList);
+				for (int i = 0; i < typeList.size(); ++i)
+				{
+					statMod += pc.getTotalBonusTo("SKILL", "TYPE."
+							+ typeList.get(i));
+				}
+			}
+			return statMod;
+		}
+		else
+		{
+			return pc.getStatModFor(stat);
+		}
+	}
+}

@@ -1,0 +1,847 @@
+# Original Entry By: Andrew Maitland
+# Entry Date: Feb 2013
+
+
+#Adaro 7
+Poison (Ex) Adaros favor a paralytic toxin secreted by the flying nettlefin pufferfish-a sticky venom that doesn't wash away in water. Nettlefin Toxin: Spear-injury; save Fort DC 15; frequency 1/minute for 4 minutes; effect paralyzed for 1 minute; cure 2 consecutive saves.
+Poison Use (Ex) Adaros are skilled in the use of poison and never risk accidentally poisoning themselves.
+Rain Frenzy (Su) Adaros revere storms, and their lust for blood is amplified exponentially while it is raining. While fighting in the rain or during other stormy weather, adaros act as though affected by the rage spell. An adaro gains this benefit even if it is underwater, but only as long as it remains within a move action away from the water's surface (50 feet for most adaros).
+Speak with Sharks (Su) An adaro can communicate telepathically with sharks to a distance of 100 feet. This communication is limited to simple concepts, such as "come," "defend," or "attack."
+
+#Adherer 8
+Adhesive (Su) A weapon that strikes an adherer becomes stuck fast to the creature's adhesive flesh unless the wielder succeeds at a DC 14 Reflex save. A creature adjacent to the adherer can attempt to pry off a stuck weapon with a DC 17 Strength check, but doing so provokes an attack of opportunity from the adherer. The adherer's adhesive flesh gives it a +8 racial bonus on grapple checks. It can attempt to grapple a foe as a free action whenever a creature successfully hits it with a natural attack or an unarmed strike. An adherer does not gain the grappled condition when it grapples a foe, nor does it provoke attacks of opportunity when it attempts to do so. Fire can temporarily burn away an adherer's adhesive coating-whenever an adherer takes at least 10 points of fire damage, it loses its adhesive special quality for 1d4 rounds. Universal solvent, alchemical solvent, or a similar fluid removes an adherer's adhesive quality for 1 hour if it fails a DC 15 Reflex save, or for 1d4 rounds if it makes the save. The adherer's skin loses its adhesive quality 1 hour after the adherer dies. An adherer can release anything stuck to it as a free action. The save DCs are Constitution-based.
+
+#Adlet 9
+Arctic Stride (Ex) An adlet can move through any sort of difficult terrain at its normal speed while within arctic or snowy terrain. Magically altered terrain affects an adlet normally.
+Frozen Breath (Su) An adlet's breath is supernaturally cold, and deals an additional 1d6 points of cold damage with its bite as a result. Once every 1d4 rounds as a swift action, it can exhale, filling a 10-foot-radius spread around it with frigid air that deals 2d6 points of cold damage and staggers those in the area with numbing cold. A DC 21 Fortitude save negates the staggered effect but not the cold damage. The save DC is Constitution-based.
+
+#Ahuizotl 10
+Tenacious Grapple (Ex) An ahuizotl does not gain the grappled condition when it grapples a foe.
+Voice Mimicry (Ex) An ahuizotl can perfectly mimic the sound of humanoid sobbing and can even attempt to mimic voices it has heard. When mimicking a voice, an ahuizotl must make a Bluff check opposed by its listener's Sense Motive check. If the listener has never heard the voice the ahuizotl is attempting to mimic, the listener takes a -8 penalty on the Sense Motive check.
+
+#Akhlut 11
+Savage Bite (Ex) An akhlut's bite threatens a critical hit on a roll of 18-20.
+Shore Storming (Ex) An akhlut automatically transforms into an orca whenever it is fully immersed in water, losing its legs and fur. Likewise, when an akhlut emerges from the water, it automatically transforms into its wolf-orca hybrid form. If an akhlut moves from water to land (or vice versa) on the round before initiating combat, it gains a +8 bonus on its initiative check. This initial attack resolves as a charge. An akhlut has the same statistics in both forms.
+Snow Vision (Ex) An akhlut can see perfectly well in snowy conditions, and does not take any penalties on Perception checks while in snowy weather.
+Snow Walking (Su) An akhlut can walk on snow or thin sheets of ice as though affected by water walk. It only leaves a trail on such surfaces when it wants to.
+
+#Allip 12
+Babble (Su) An allip constantly mutters to itself, creating a hypnotic effect. All sane creatures within 60 feet of the allip must succeed at a DC 15 Will save or be fascinated for 2d4 rounds. While a target is fascinated, the allip can approach it without breaking the effect, but an attack by the allip does end the effect. Creatures that successfully save cannot be affected by the same allip's babble for 24 hours. This is a sonic, mind-affecting compulsion effect. The save DC is Charismabased.
+Madness (Su) Anyone targeting an allip with a thought detection, mind control, or telepathic effect makes direct contact with its tortured mind and takes 1d4 points of Wisdom damage.
+Touch of Insanity (Su) The touch of an allip deals 1d4 points of Wisdom damage (DC 15 Will negates). A successful critical hit causes 1d4 points of Wisdom damage and 1 point of Wisdom drain (instead of double Wisdom damage). With each successful attack, an allip gains 5 temporary hit points. The save DC is Charisma-based.
+
+#Alraune 13
+Calming Fragrance (Su) A supernaturally sweet perfume that calms the nerves and blunts aggression constantly surrounds an alraune to a radius of 60 feet. Any creature in this area of effect must make a DC 24 Will save at the start of its turn to avoid falling under the effects of calm emotions for 1 round. Creatures that could be attracted to the alraune's current apparent gender take a -2 penalty on this Will save, while all other creatures gain a +2 bonus on the save. This is a mind-affecting effect. The save DC is Charisma-based.
+Feed (Ex) An alraune's roots can feed on a helpless or willing target. At the end of an hour of feeding, the victim takes 1d6 points of both Constitution and Intelligence drain, and the alraune heals 3d6 points of damage.
+
+#Animal lord 14-15
+
+
+#Annis hag 16
+
+
+# Ant Lion, Giant 
+Sand Trap (Ex) A giant ant lion can create a 60-foot-diameter, 20-foot-deep pit in any sand or soft earth surface. Creating a sand trap takes 1 hour. A DC 15 Perception check allows a creature to realize such a depression in the sand is in fact a trap. Any creature that steps into the trap slides to the center if it fails a DC 14 Reflex save-such victims take no damage, but they do fall prone. A giant ant lion can make an attack of opportunity against any creature that falls to the bottom of its sand trap. These creatures can move across sand traps at their normal speed and are immune to the trap's effects. Other creatures can navigate the trap's walls with a DC 20 Climb check.
+
+
+# Harbinger Archon 18
+Blades (Ex) A harbinger can extend blades from its body to strike with as primary natural attacks. These blades possess a +1 enhancement bonus on attack and damage rolls, and are treated as both magic and good-aligned for the purposes of penetrating damage reduction.
+Disassemble (Su) As a move-equivalent action, a harbinger can break apart into its components. This is treated as gaseous form, except the archon retains its full flight speed and DR, and cannot fit through gaps smaller than 1 inch in diameter. Reforming into an orrery is a standard action.
+Minor Archon (Ex) Harbinger archons lack the aura of menace and teleport abilities of more powerful archons.
+Wrath (Su) Once per minute, a harbinger archon can emit a blast of energy that deals 2d6 points of force damage to adjacent creatures. A DC 12 Reflex save halves this damage. The harbinger can choose to omit any target from this blast that it desires, damaging only those foes it chooses. The save DC is Charisma-based.
+
+# Legion Archon 19
+Flames of Faith (Ex) A legion archon can manifest a +1 flaming burst greatsword or +1 flaming javelin as a move-equivalent action. The legion archon's sword vanishes if it leaves its hand, and its javelin vanishes after striking or missing its target.
+Second Skin (Ex) A legion archon is proficient in all forms of armor. It takes no reduction to its speed or any armor check penalties from wearing any sort of armor. Most legion archons wear full plate armor.
+
+#Ascomoid 20
+Poison (Ex) Spores-inhaled; save Fort DC 16; frequency 1/round for 6 rounds; effect 1d2 Str damage; cure 2 saves. The save DC is Constitution-based.
+Spores (Ex) Once per round as a free action, an ascomoid can release a jet of deadly spores to a range of 30 feet. Upon impacting a solid surface, such as a wall or creature, the jet billows out into a cloud of spores that fills a 10-foot-radius spread. This cloud lasts for 1 round before dispersing. Any creature in the cloud must make a DC 16 Fortitude save or become nauseated as long as it remains in the cloud. Any creature that fails to save against this nausea is also exposed to the ascomoid's poison (see above). The save DC is Constitution-based.
+
+#Adhukait (asura) 22
+Dance of Disaster (Su) Whenever an adhukait hits with a melee attack during a full-attack action, it can move 10 feet before making its next attack. The adhukait's normal speed does not limit this movement-it can move 10 feet after any successful hit among its four attacks, as long as it has another attack to make.
+Dual Mind (Su) An adhukait is a single creature with two distinct minds, so it can attempt two saving throws against mind-affecting effects. If either saving throw succeeds, the mind-affecting effect fails to affect the adhukait.
+
+#Aghasura (asura) 23
+Attraction Aura (Su) An aghasura exudes a 50-foot aura whenever it remains motionless for at least 1 round. All nonevil creatures that enter this area must make a DC 21 Will save to avoid being compelled to move toward the aghasura's location. If the aghasura moves, the effect ends for all currently affected creatures. This is a mind-affecting compulsion. The save DC is Charisma-based.
+Dual Wielder (Ex) An aghasura does not take a penalty on attack or damage rolls when attacking with two weapons. Infused Weapons (Su) Weapons an aghasura wields are considered to be magic for the purposes of overcoming damage reduction. In addition, such weapons gain the ability to deliver the aghasura's poison on a successful attack.
+Poison (Ex) Bite or weapon-injury; save Fort DC 23; frequency 1/round for 6 rounds; effect 1d4 Con damage; cure 2 consecutive saves.
+
+#Asurendra (asura) 24-25
+Curse of False Wisdom (Su) Claw-contact; save Will DC 31; frequency 1 day; effect 1d6 Wis drain.
+Poison (Ex) Bite-injury; save Fort DC 33; frequency 1/round for 6 rounds; effect 1d6 Con; cure 2 consecutive saves.
+Spirit Blades (Su) As a swift action, an asurendra can call forth up to six longsword-shaped force effects that float near the asurendra until directed. The asurendra can use a standard action to direct one blade to attack a target up to a distance of 50 feet away, or use a full-attack action to cause all six blades to attack up to six different targets up to a distance of 50 feet away, each to a different location if desired. Once an asurendra directs a spirit blade to attack a foe, the blade continues to make a single attack against that foe each round on the asurendra's turn until directed otherwise by the asurendra and as long as the foe remains within 50 feet of the asurendra. As a move action, the asurendra can direct all currently attacking blades to switch targets to new foes within 50 feet. These weapons attack using the asurendra's base attack bonus modified by its Wisdom modifier (+29 for most asurendras), and deal 3d6 points of damage plus an amount of force damage equal to the asurendra's Wisdom modifier (3d6+7 for most asurendras). Physical attacks do no affect these blades, but disintegrate, a sphere of annihilation, or a rod of cancellation (touch AC 25) causes them to vanish. If a spirit blade's target dies or moves beyond a 50-foot range and the asurendra does not retarget that blade by the end of its turn, the blade vanishes. Likewise, any blades that are not within 50 feet of the asurendra at the end of its turn also vanish.
+
+#Tripurasura (asura) 26
+Change Shape (Su) The tripurasura has only one alternative form-when it uses change shape, it always appears as the same Small humanoid. Most take the form of gnomes or human children.
+Elusive (Su) The tripurasura and items it carries are considered to be under the effects of a nondetection spell. A caster must succeed at a DC 14 caster level check to overcome this effect.
+Poison (Ex) Tongue-injury; save Fort DC 12; frequency 1/round for 6 rounds; effect 1d2 Wis damage; cure 1 save.
+
+#Upasunda (asura) 27
+Infused Weapons (Su) In addition to being evil and lawful, weapons an upasunda wields are considered to be magic for the purposes of overcoming damage reduction.
+Multiweapon Mastery (Ex) An upasunda takes no penalties when fighting with multiple weapons.
+
+#Atomie 28
+#Axe beak 29
+Sudden Charge (Ex) When making a charge attack, an axe beak makes a single bite attack. If successful, it may also attempt to trip its opponent as a free action without provoking an attack of opportunity. If the attempt fails, the axe beak cannot be tripped in return.
+
+
+
+#Azruverda 30
+Acid Spit (Ex) An azruverda can spit a stream of acid at a target within 60 feet as a ranged touch attack that deals 10d6 points of acid damage.
+Vermin Master (Su) An azruverda can mentally control to up to 32 HD (twice the azruverda's racial Hit Dice) of vermin at any one time through a combination of supernatural pheromones and magical manipulation. To control a vermin, the azruverda must be able to see it, and it must be within 120 feet. Attempting to control a vermin is a standard action-the vermin can resist this attempt with a DC 25 Will save. If the vermin fails this save, the azruverda can issue a simple mental command like "fight," "come here," "go there," or "stand still" as a swift action. Though composed of thousands of individuals, vermin with the swarm subtype are vulnerable to this ability as well. An azruverda can release a creature from this control as a free action. Vermin affected by this ability act normally unless an azruverda is actively controlling it, but never attack their master azruverda. The save DC is Charisma-based.
+
+#Baku 31
+Dream Claws (Ex) A baku's claws are treated as cold iron and magic for purposes of overcoming damage reduction.
+Dream Eating (Su) A baku can feed upon the dreams of any single sleeping creature within 100 feet. Alternatively, the baku can feed upon the dreams of a creature that it manages to contact with its dream spell-like ability. A creature can resist this effect with a DC 22 Will save. When a baku feeds in this way, it can elect to consume only nightmares or all dreams. If it only consumes nightmares, the target creature is immune to the effects of the nightmare spell, the dream haunting ability of the night hag, and other similar attacks for that period of sleep. If the baku instead feeds on all of the creature's dreams, that creature is fatigued upon waking and does not gain any benefits it would have received from sleep, such as natural healing or the ability to regain spells after resting. This is a mind-affecting sleep effect. The save DC is Charisma-based.
+Mental Drain (Su) When a baku attacks with a claw, it can choose, as a swift action, to deal 1d4 points of Intelligence damage on that attack. A DC 22 Will save negates this ability damage. The save DC is Charisma-based.
+
+
+
+#Bandersnatch 32-33
+
+
+#Baregara 34
+
+
+
+
+#Baykok 35
+
+
+#Berbalang 40
+
+
+#Bhuta 41
+
+
+#Bogeyman 42
+
+
+#Bone golem 133
+
+
+#Brain ooze 43
+
+
+#Brass golem 134
+
+
+#Cairn linnorm 182
+
+
+#Cannon golem 135
+
+
+#Carbuncle 44
+
+
+#Carnivorous crystal 45
+
+
+#Caryatid column 46
+
+
+#Catfolk 47
+
+
+#Caulborn 48
+
+
+#Cave giant 127
+
+
+#Cecaelia 49
+
+
+#Ceratioidi 50
+
+
+#Cerberi 51
+
+
+#Cerebric fungus 52
+
+
+#Clockwork goliath 54
+
+
+#Clockwork leviathan 55
+
+
+#Clockwork servant 56
+
+
+#Clockwork soldier 57
+
+
+#Clockwork spy 58
+
+
+#Cold rider 59
+
+
+#Coloxus (demon) 72
+
+
+#Contract devil 76-77
+
+
+#Criosphinx 252
+
+
+#Crucidaemon (daemon) 62
+
+
+#Dandasuka (rakshasa) 225
+
+
+#Deadfall scorpion 237
+
+
+#Death's head jellyfish 155
+
+
+#Deathtrap ooze 64
+
+
+#Deathweb 65
+
+
+#Deep sea serpent 240
+
+
+#Demilich 66-67
+
+
+#Derhii 75
+
+
+#Desert drake 105
+
+
+#Desert giant 128
+
+
+#Dimetrodon (dinosaur) 78
+
+
+#Dire corby 80
+
+
+#Disenchanter 81
+
+
+#Doru (div) 86
+
+
+#Dragonne 104
+
+
+#Dybbuk 108
+
+
+#Ecorche 109
+
+
+#Eremite (kyton) 172-173
+
+
+#Faerie dragon 91
+
+
+#Faun 114
+
+
+#Festrog 115
+
+
+#Fey creature 116-117
+
+
+#Fire yai (oni) 206
+
+
+#Fjord linnorm 183
+
+
+#Flail snail 118
+
+
+#Flumph 119
+
+
+#Flying squirrel (familiar) 112
+
+
+#Foo creature 120-121
+
+
+#Foo dog 120
+
+
+#Foo lion 120
+
+
+#Forest dragon 94-95
+
+
+#Fossil golem 136
+
+
+#Fox (familiar) 112
+
+
+#Fuath (gremlin) 142
+
+
+#Fungus leshy 177
+
+
+#Garden ooze 122
+
+
+#Garuda 123
+
+
+#Ghawwas (div) 87
+
+
+#Ghorazagh 124
+
+
+#Ghost scorpion 237
+
+
+#Ghul 125
+
+
+#Giant adult ant lion 17
+
+
+#Giant ant lion 17
+
+
+#Giant chameleon (lizard) 186
+
+
+#Giant crab spider 254
+
+
+#Giant gecko (lizard) 186
+
+
+#Giant owl 213
+
+
+#Giant porcupine 222
+
+
+#Giant rot grub (parasite) 215
+
+
+#Giant sea anemone 238
+
+
+#Giant skunk 247
+
+
+#Giant vulture 284
+
+
+#Girtablilu 130
+
+
+#Globster 131
+
+
+#Goat (familiar) 112
+
+
+#Goblin snake 132
+
+
+#Gorynych 137
+
+
+#Gourd leshy 178
+
+
+#Graveknight 138-139
+
+
+#Graven guardian 140-141
+
+
+#Great cyclops 61
+
+
+#Great horned owl 213
+
+
+#Grodair 143
+
+
+#Grootslang 144
+
+
+#Guecubu 145
+
+
+#Harbinger archon 18
+
+
+#Hekatonkheires (titan) 268-269
+
+
+#Hellwasp swarm 146
+
+
+#Elk (herd animal) 147
+#Antelope (herd animal) 147
+#Archelon (megafauna) 192
+
+
+#Baluchitherium (megafauna) 192
+#Basilosaurus (megafauna) 193
+
+
+#Hieracosphinx 253
+
+
+#Hodag 148
+
+
+#Hollow serpent 149
+
+
+#Huecuva 150
+
+
+#Humbaba 151
+
+
+#Hungry fog 152
+
+
+#Ice yai (oni) 207
+
+
+#Iguanodon (dinosaur) 78
+
+
+#Iku-turso 153
+
+
+#Incubus (demon) 73
+
+
+#Interlocutor (kyton) 174
+
+
+#Jackalwere 154
+
+
+#Jiang-shi vampire 278-279
+
+
+#Jinushigami (kami) 160-161
+
+
+#Jorogumo 156
+
+
+#Jotund troll 272
+
+
+#Jubjub bird 157
+
+
+#Jungle giant 129
+
+
+#Kamadan 158
+
+
+#Kangaroo (marsupial) 191
+
+
+#Kappa 166
+
+
+#Kech 167
+
+
+#Kirin 168
+
+
+#Kodama (kami) 162
+
+
+#Kongamato 169
+
+
+#Kuwa (oni) 208
+
+
+#Lammasu 175
+
+
+#Leaf leshy 179
+
+
+#Legion archon 19
+
+
+#Lukwata 187
+
+
+#Lunar naga 197
+
+
+#Maftet 188
+
+
+#Magmin 189
+
+
+#Maharaja (rakshasa) 226-227
+
+
+#Manananggal 190
+
+
+#Marai (rakshasa) 228
+
+
+#Megalania (megafauna) 193
+
+
+#Mobogo 194
+
+
+#Moon-beast 195
+
+
+#Moss troll 273
+
+
+#Myceloid 196
+
+
+#Nephilim 200
+
+
+#Nixie 201
+
+
+#Norn 202
+
+
+#Nuckelavee 203
+
+
+#Nue 204
+
+
+#Ogre spider 254
+
+
+#Otter (familiar) 113
+
+
+#Pachycephalosaurus (dinosaur) 79
+
+
+#Pairaka (div) 88
+
+
+#Pale stranger 214
+
+
+#Penanggalen 216-217
+
+
+#Peri 218
+
+
+#Phantom fungus 219
+
+
+#Pig (familiar) 113
+
+
+#Plasma ooze 220
+
+
+#Popobala 221
+
+
+#Porcupine 222
+
+
+#Pukwudgie 223
+
+
+#Raccoon (familiar) 113
+
+
+#Raktavarna (rakshasa) 229
+
+
+#Ratfolk 231
+
+
+#Rift drake 106
+
+
+#River drake 107
+
+
+#Rot grub swarm (parasite) 215
+
+
+#Royal naga 198
+
+
+#Rusalka 232
+
+
+#Sabosan 233
+
+
+#Sagari 234
+
+
+#Sapphire jellyfish 155
+
+
+#Sargassum fiend 235
+
+
+#Sasquatch 236
+
+
+#Schir (demon) 74
+
+
+#Sea bonze 239
+
+
+#Sea dragon 96-97
+
+
+#Seaweed leshy 180
+
+
+#Sepid (div) 89
+
+
+#Shadow mastiff 241
+#Androsphinx 251
+
+
+#Shae 242
+
+
+#Shaggy demodand 69
+
+
+#Shark-eating crab 60
+
+
+#Shedu 243
+
+
+#Shikigami (kami) 163
+
+
+#Shinigami 244
+
+
+#Shipwrecker crab 60
+
+
+#Shira (div) 90
+
+
+#Simurgh 245
+
+
+#Siyokoy 246
+
+
+#Skunk 247
+
+
+#Sky dragon 98-99
+
+
+#Sleipnir 248
+
+
+#Slimy demodand 70
+
+
+#Snake swarm 249
+
+
+#Sovereign dragon 100-101
+
+
+#Spider eater 255
+
+
+#Spinosaurus (dinosaur) 79
+
+
+#Spirit oni 209
+
+
+#Sprite 256
+
+
+#Stymphalidies 257
+
+
+#Suli 258
+
+
+#Taiga linnorm 184
+
+
+#Tanuki 259
+
+
+#Taotieh 260
+
+
+#Tarry demodand 71
+
+
+#Tataka (rakshasa) 230
+
+
+#Tatzlwyrm 261
+
+
+#Tempest behemoth 37
+
+
+#Terra-cotta soldier 262
+
+
+#Thalassic behemoth 38
+
+
+#Thriae queen 264-265
+
+
+#Thriae seer 266
+
+
+#Thriae soldier 267
+
+
+#Thunder behemoth 39
+
+
+#Thylacine (marsupial) 191
+
+
+#Tojanida 270
+
+
+#Tophet 271
+
+
+#Tor linnorm 185
+
+
+#Toshigami (kami) 164
+
+
+
+
+#Trollhound 274
+
+
+#Tupilaq 275
+
+
+#Tzitzimitl 276
+
+
+#Underworld dragon 102-103
+
+
+#Unfettered eidolon 110-111
+
+
+#Valkyrie 277
+
+
+#Vanara 280
+
+
+#Venomous snake swarm 249
+
+
+#Vishkanya 281
+
+
+#Vodyanoi 282
+
+
+#Void yai (oni) 210-211
+
+
+#Voonith 283
+
+
+#Vulnudaemon (daemon) 63
+
+
+#Vulture 284
+
+
+#Water naga 199
+
+
+#Water yai (oni) 212
+
+
+#Wolf-in-sheep's-clothing 285
+
+
+#Yithian 286
+
+
+#Yuki-onna 287
+
+
+#Zoog 288
+
+
+#Zuishin (kami) 165
+
+
+#Zuvembie 289
+
+
+
+
+
+#Aghash (div) 83
+
+
+#Akvan (div) 84-85
+
+
+
+#Ash giant 126
+
+
+
+
+#Augur (kyton) 171
