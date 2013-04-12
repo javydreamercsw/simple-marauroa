@@ -61,7 +61,6 @@
         <module>Dimension-Extension</module>
         <module>Marauroa-Monitor-Extension</module>
         <module>Zone-Extension</module>
-        <module>marauroa</module>
         <module>D20-Extension</module>
     </modules>
     <build>
