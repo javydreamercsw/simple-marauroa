@@ -93,7 +93,7 @@ public abstract class AbstractCardCache implements ICardCache {
      * Constructor
      *
      * @param name Cache name
-     * @throws DBException Error initializing Cache database 
+     * @throws DBException Error initializing Cache database
      */
     public AbstractCardCache(final String name) throws DBException {
         this.name = name;
@@ -195,7 +195,8 @@ public abstract class AbstractCardCache implements ICardCache {
      */
     public boolean cardImageExists(final ICard card, final ICardSet<ICard> set)
             throws CannotDetermineSetAbbriviation {
-        return new File(createLocalImageFilePath(card, set)).exists();
+        String path = createLocalImageFilePath(card, set);
+        return path == null ? false : new File(path).exists();
     }
 
     /**
