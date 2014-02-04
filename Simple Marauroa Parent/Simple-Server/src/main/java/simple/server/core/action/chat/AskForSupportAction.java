@@ -20,7 +20,7 @@ import simple.server.core.engine.SimpleRPRuleProcessor;
 public class AskForSupportAction implements ActionProvider {
 
     protected Map<String, Long> lastMsg = new HashMap<String, Long>();
-    private static final String _SUPPORT = "support";
+    protected static final String _SUPPORT = "support";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
