@@ -1,1 +1,0 @@
-perl ParseCasterLevel.pl <test_in.dat >test_out.dat

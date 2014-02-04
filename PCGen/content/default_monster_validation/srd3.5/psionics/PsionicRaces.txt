@@ -1,8 +1,0 @@
-PsionicRaces
-
-Dromite: Valid
-Duergar: Valid
-Elan: Valid
-Half-Giant: Valid
-Maenad: Valid
-Xeph: Valid
