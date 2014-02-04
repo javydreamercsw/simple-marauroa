@@ -23,6 +23,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
@@ -106,9 +107,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             Collection<? extends MarauroaServerExtension> ext =
                     Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
             logger.info("Found " + ext.size() + " extensions to register!");
-            for (Iterator<? extends MarauroaServerExtension> it =
-                    ext.iterator(); it.hasNext();) {
-                MarauroaServerExtension extension = it.next();
+            for (MarauroaServerExtension extension : ext) {
                 logger.info("Loading extension: " + extension.getClass()
                         .getSimpleName());
                 extension.updateDatabase();
@@ -118,8 +117,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             Collection<? extends IRPEvent> events =
                     Lookup.getDefault().lookupAll(IRPEvent.class);
             logger.info("Found " + events.size() + " events to register!");
-            for (Iterator<? extends IRPEvent> it = events.iterator(); it.hasNext();) {
-                IRPEvent event = it.next();
+            for (IRPEvent event : events) {
                 logger.info("Registering event: " + event.getClass()
                         .getSimpleName()
                         + ": " + event.getRPClassName());
@@ -130,12 +128,20 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             Collection<? extends RPEntityInterface> classes =
                     Lookup.getDefault().lookupAll(RPEntityInterface.class);
             logger.info("Found " + classes.size() + " Entities to register!");
-            for (Iterator<? extends RPEntityInterface> it =
-                    classes.iterator(); it.hasNext();) {
-                RPEntityInterface entity = it.next();
+            for (RPEntityInterface entity : classes) {
                 logger.info("Registering entity: " 
                         + entity.getClass().getSimpleName());
                 entity.generateRPClass();
+            }
+            logger.info("Done!");
+            logger.info("Loading actionss...");
+            Collection<? extends ActionProvider> actions =
+                    Lookup.getDefault().lookupAll(ActionProvider.class);
+            logger.info("Found " + actions.size() + " Actions to register!");
+            for (ActionProvider action : actions) {
+                logger.info("Registering action: " 
+                        + action.getClass().getSimpleName());
+                action.register();
             }
             logger.info("Done!");
 
@@ -165,13 +171,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             //Empty right now but just in case
             super.onInit();
             boolean needDefault = true;
-            for (Iterator<? extends IDefaultZoneProvider> it =
-                    Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)
-                    .iterator(); it.hasNext();) {
-                IDefaultZoneProvider provider = it.next();
-                for (Iterator<IRPZone> it2 = provider.getDefaultZones()
-                        .iterator(); it2.hasNext();) {
-                    IRPZone zone = it2.next();
+            for (IDefaultZoneProvider provider : Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)) {
+                for (IRPZone zone : provider.getDefaultZones()) {
                     if (needDefault) {
                         setDefaultZone(zone);
                         needDefault = false;
@@ -181,10 +182,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     }
                 }
             }
-            for (Iterator<? extends MarauroaServerExtension> it2 =
-                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                    .iterator(); it2.hasNext();) {
-                MarauroaServerExtension extension = it2.next();
+            for (MarauroaServerExtension extension : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                 extension.afterWorldInit();
             }
         } catch (IOException e) {
@@ -227,10 +225,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             simpleZone = (SimpleRPZone) zone;
         }
         super.addRPZone(simpleZone);
-        for (Iterator<? extends MarauroaServerExtension> it2 =
-                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                .iterator(); it2.hasNext();) {
-            MarauroaServerExtension extension = it2.next();
+        for (MarauroaServerExtension extension : 
+                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             extension.onAddRPZone(simpleZone);
         }
     }
@@ -366,8 +362,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         boolean result = false;
         if (object instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) object;
-            for (Iterator<IRPZone> it = this.iterator(); it.hasNext();) {
-                IRPZone zone = it.next();
+            for (IRPZone zone : this) {
                 if (zone.getID().getID().equals(object.get("zoneid"))) {
                     add(object);
                     logger.debug("Object added");

@@ -1,18 +1,21 @@
 package simple.server.core.action.admin;
 
+import simple.server.core.action.ActionProvider;
 import marauroa.common.game.RPAction;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
-public class TellAllAction extends AdministrationAction {
+@ServiceProvider(service = ActionProvider.class)
+public class TellAllAction extends AdministrationAction implements ActionProvider{
 
     private static final String _TEXT = "text";
     private static final String _TELLALL = "tellall";
 
-    public static void register() {
+    public void register() {
         CommandCenter.register(_TELLALL, new TellAllAction(), 200);
     }
 

@@ -6,17 +6,21 @@ import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionProvider;
+import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
 /**
  * Handles asking for /support.
  */
-public class AskForSupportAction implements ActionListener {
+@ServiceProvider(service = ActionProvider.class)
+public class AskForSupportAction implements ActionProvider {
 
     protected Map<String, Long> lastMsg = new HashMap<String, Long>();
+    private static final String _SUPPORT = "support";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -37,5 +41,9 @@ public class AskForSupportAction implements ActionListener {
                 player.notifyWorldAboutChanges();
             }
         }
+    }
+
+    public void register() {
+        CommandCenter.register(_SUPPORT, new AskForSupportAction());
     }
 }

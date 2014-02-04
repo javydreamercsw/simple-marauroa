@@ -5,9 +5,11 @@ import marauroa.common.Logger;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionProvider;
+import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.IRPWorld;
@@ -18,12 +20,14 @@ import simple.server.core.event.PrivateTextEvent;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public class PrivateChatAction implements ActionListener {
+@ServiceProvider(service = ActionProvider.class)
+public class PrivateChatAction implements ActionProvider {
 
     /**
      * the logger instance.
      */
     private static final Logger logger = Log4J.getLogger(PrivateChatAction.class);
+    public static final String _PRIVATE_CHAT = "private-chat";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -50,5 +54,9 @@ public class PrivateChatAction implements ActionListener {
                 logger.warn(mess.toString());
             }
         }
+    }
+
+    public void register() {
+        CommandCenter.register(_PRIVATE_CHAT, new PrivateChatAction());
     }
 }

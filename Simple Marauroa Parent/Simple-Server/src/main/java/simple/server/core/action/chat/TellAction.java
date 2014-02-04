@@ -5,9 +5,11 @@ import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionProvider;
+import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.action.admin.AdministrationAction;
@@ -17,13 +19,15 @@ import simple.server.core.event.LoginListener;
 /**
  * handles /tell-action (/msg-action).
  */
-public class TellAction implements ActionListener {
+@ServiceProvider(service = ActionProvider.class)
+public class TellAction implements ActionProvider {
 
     protected String text;
     protected String senderName;
     protected String receiverName;
     protected ClientObjectInterface sender;
     protected ClientObjectInterface receiver;
+    public static final String _TELL = "tell";
 
     protected void init(ClientObjectInterface player, RPAction action) {
         text = action.get(TEXT).trim();
@@ -174,5 +178,9 @@ public class TellAction implements ActionListener {
             }
         }
         return true;
+    }
+
+    public void register() {
+        CommandCenter.register(_TELL, new TellAction());
     }
 }
