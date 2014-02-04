@@ -9,8 +9,9 @@ import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.event.TextEvent;
@@ -21,8 +22,11 @@ import simple.server.core.event.TextEvent;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = MarauroaServerExtension.class)
-public class ChallengeExtension extends SimpleServerExtension implements ActionListener {
+@ServiceProviders({
+    @ServiceProvider(service = MarauroaServerExtension.class),
+    @ServiceProvider(service = ActionProvider.class)})
+public class ChallengeExtension extends SimpleServerExtension 
+implements ActionProvider {
 
     /**
      * the logger instance.
@@ -34,13 +38,6 @@ public class ChallengeExtension extends SimpleServerExtension implements ActionL
     public static final String _CANCEL_CHALLENGE = "Cancel_Challenge";
     private static final String _CHALLENGER = ChallengeEvent.CHALLENGER;
     private static final String _CHALLENGED = ChallengeEvent.CHALLENGED;
-
-    public ChallengeExtension() {
-        CommandCenter.register(_CHALLENGE, ChallengeExtension.this);
-        CommandCenter.register(_ACCEPT_CHALLENGE, ChallengeExtension.this);
-        CommandCenter.register(_REJECT_CHALLENGE, ChallengeExtension.this);
-        CommandCenter.register(_CANCEL_CHALLENGE, ChallengeExtension.this);
-    }
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -92,5 +89,12 @@ public class ChallengeExtension extends SimpleServerExtension implements ActionL
     @Override
     public String getName() {
         return "Challenge Extension";
+    }
+
+    public void register() {
+        CommandCenter.register(_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(_ACCEPT_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(_REJECT_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(_CANCEL_CHALLENGE, ChallengeExtension.this);
     }
 }
