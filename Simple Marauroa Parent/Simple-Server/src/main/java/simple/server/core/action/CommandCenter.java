@@ -44,8 +44,8 @@ public class CommandCenter {
 
     public static boolean execute(ClientObjectInterface player, RPAction action) {
         try {
-            ActionInterface actionListener = getAction(action);
-            actionListener.onAction((RPObject) player, action);
+            ActionInterface actionInterface = getAction(action);
+            actionInterface.onAction((RPObject) player, action);
             return true;
         } catch (Exception e) {
             logger.error("Cannot execute action " + action + " send by " + player, e);
