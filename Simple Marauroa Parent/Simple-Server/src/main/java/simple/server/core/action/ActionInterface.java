@@ -4,7 +4,7 @@ package simple.server.core.action;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 
-public interface ActionListener {
+public interface ActionInterface {
     
     /** Callback for the registered action
      * @param player

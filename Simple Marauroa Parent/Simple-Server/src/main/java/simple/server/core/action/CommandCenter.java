@@ -7,51 +7,44 @@ import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
-import simple.server.core.action.chat.ChatAction;
 
 public class CommandCenter {
 
     //TODO: Replace with Lookup
     private static final UnknownAction UNKNOWN_ACTION = new UnknownAction();
-    private static volatile ConcurrentHashMap<String, ActionListener> actionsMap;
+    private static volatile ConcurrentHashMap<String, ActionInterface> actionsMap;
     private static final Logger logger = Log4J.getLogger(CommandCenter.class);
 
-    protected static ConcurrentHashMap<String, ActionListener> getActionsMap() {
+    protected static ConcurrentHashMap<String, ActionInterface> getActionsMap() {
         if (actionsMap == null) {
-            actionsMap = new ConcurrentHashMap<String, ActionListener>();
-            registerActions();
+            actionsMap = new ConcurrentHashMap<String, ActionInterface>();
         }
         return actionsMap;
     }
 
-    public static void register(String action, ActionListener actionClass) {
+    public static void register(String action, ActionInterface actionClass) {
         getActionsMap().putIfAbsent(action, actionClass);
     }
 
-    public static void registerAndOverwrite(String action, ActionListener actionClass) {
+    public static void registerAndOverwrite(String action, ActionInterface actionClass) {
         getActionsMap().put(action, actionClass);
     }
 
-    public static void registerAndOverwrite(String action, ActionListener actionClass,
+    public static void registerAndOverwrite(String action, ActionInterface actionClass,
             int requiredAdminLevel) {
         registerAndOverwrite(action, actionClass);
         AdministrationAction.registerCommandLevel(action, requiredAdminLevel);
     }
 
-    public static void register(String action, ActionListener actionClass,
+    public static void register(String action, ActionInterface actionClass,
             int requiredAdminLevel) {
         register(action, actionClass);
         AdministrationAction.registerCommandLevel(action, requiredAdminLevel);
     }
 
-    protected static void registerActions() {
-        AdministrationAction.register();
-        ChatAction.register();
-    }
-
     public static boolean execute(ClientObjectInterface player, RPAction action) {
         try {
-            ActionListener actionListener = getAction(action);
+            ActionInterface actionListener = getAction(action);
             actionListener.onAction((RPObject) player, action);
             return true;
         } catch (Exception e) {
@@ -60,7 +53,7 @@ public class CommandCenter {
         }
     }
 
-    private static ActionListener getAction(RPAction action) {
+    private static ActionInterface getAction(RPAction action) {
         if (action == null) {
             return UNKNOWN_ACTION;
         } else {
@@ -68,12 +61,12 @@ public class CommandCenter {
         }
     }
 
-    private static ActionListener getAction(String type) {
+    private static ActionInterface getAction(String type) {
         if (type == null) {
             return UNKNOWN_ACTION;
         }
 
-        ActionListener action = getActionsMap().get(type);
+        ActionInterface action = getActionsMap().get(type);
         if (action == null) {
             return UNKNOWN_ACTION;
         } else {
@@ -81,7 +74,7 @@ public class CommandCenter {
         }
     }
 
-    static class UnknownAction implements ActionListener {
+    static class UnknownAction implements ActionInterface {
 
         private static final Logger logger = Log4J.getLogger(UnknownAction.class);
 

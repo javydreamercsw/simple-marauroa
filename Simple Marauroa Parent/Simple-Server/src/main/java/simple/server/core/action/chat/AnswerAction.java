@@ -1,16 +1,20 @@
-
 package simple.server.core.action.chat;
 
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionProvider;
+import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.*;
 
 /**
- * handles /tell-action (/msg-action). 
+ * handles /tell-action (/msg-action).
  */
-public class AnswerAction implements ActionListener {
+@ServiceProvider(service = ActionProvider.class)
+public class AnswerAction implements ActionProvider {
+
+    private static final String _ANSWER = "answer";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -27,5 +31,9 @@ public class AnswerAction implements ActionListener {
                 }
             }
         }
+    }
+
+    public void register() {
+        CommandCenter.register(_ANSWER, new AnswerAction());
     }
 }

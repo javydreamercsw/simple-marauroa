@@ -1,20 +1,24 @@
 package simple.server.core.action.admin;
 
+import simple.server.core.action.ActionProvider;
 import marauroa.common.game.RPAction;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
-public class SupportAnswerAction extends AdministrationAction {
+@ServiceProvider(service = ActionProvider.class)
+public class SupportAnswerAction extends AdministrationAction implements ActionProvider{
 
     private static final String _TEXT = "text";
     private static final String _SUPPORTANSWER = "supportanswer";
 
-    public static void register() {
+    @Override
+    public void register() {
         CommandCenter.register(_SUPPORTANSWER, new SupportAnswerAction(), 50);
     }
 

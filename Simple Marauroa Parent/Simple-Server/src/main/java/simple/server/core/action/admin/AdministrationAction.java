@@ -1,5 +1,6 @@
 package simple.server.core.action.admin;
 
+import simple.server.core.action.ActionProvider;
 import java.util.HashMap;
 import java.util.Map;
 import marauroa.common.Log4J;
@@ -9,7 +10,6 @@ import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPZone;
@@ -18,7 +18,7 @@ import simple.server.core.entity.Entity;
 /**
  * Most /commands for admins are handled here.
  */
-public abstract class AdministrationAction implements ActionListener {
+public abstract class AdministrationAction implements ActionProvider{
 
     private static final String _TARGETID = "targetid";
     protected static final Logger logger = Log4J.getLogger(AdministrationAction.class);
@@ -26,10 +26,7 @@ public abstract class AdministrationAction implements ActionListener {
     public static final int REQUIRED_ADMIN_LEVEL_FOR_SUPER = 5000;
     protected static final Map<String, Integer> REQUIRED_ADMIN_LEVELS = new HashMap<String, Integer>();
 
-    public static void register() {
-        SupportAnswerAction.register();
-        TellAllAction.register();
-        AdminLevelAction.register();
+    static {
         REQUIRED_ADMIN_LEVELS.put("support", 100);
         REQUIRED_ADMIN_LEVELS.put("super", 5000);
     }
@@ -61,7 +58,7 @@ public abstract class AdministrationAction implements ActionListener {
             return false;
         }
 
-        if (adminlevel < required.intValue()) {
+        if (adminlevel < required) {
             // not allowed
             logger.warn("Player " + player.getName() + " with admin level " + adminlevel + " tried to run admin command " + command + " which requires level " + required + ".");
 
