@@ -53,7 +53,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
      * A list of RPEntities that were killed in the current turn, together with
      * the Entity that killed it.
      */
-    private List<Pair<RPEntity, Entity>> entityToKill;
+    private final List<Pair<RPEntity, Entity>> entityToKill;
 
     public PlayerList getOnlinePlayers() {
         return onlinePlayers;
