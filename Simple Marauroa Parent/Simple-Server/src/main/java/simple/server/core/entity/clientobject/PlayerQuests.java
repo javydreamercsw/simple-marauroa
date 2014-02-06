@@ -18,7 +18,7 @@ class PlayerQuests implements java.io.Serializable {
 //TODO: move to extension
 
     private static final long serialVersionUID = 241191072527856202L;
-    private ClientObjectInterface player;
+    private final ClientObjectInterface player;
 
     public PlayerQuests(ClientObjectInterface player) {
         this.player = player;
@@ -27,7 +27,7 @@ class PlayerQuests implements java.io.Serializable {
     /**
      * Checks whether the player has completed the given quest or not.
      *
-     * @param name The quest's name
+     * @param name The quest name
      * @return true if the quest has been completed by the player
      */
     public boolean isQuestCompleted(String name) {
@@ -45,8 +45,8 @@ class PlayerQuests implements java.io.Serializable {
      * not. For many quests, this is true right after the quest has been
      * started.
      *
-     * @param name The quest's name
-     * @return true iff the player has made any progress in the quest
+     * @param name The quest name
+     * @return true if the player has made any progress in the quest
      */
     public boolean hasQuest(String name) {
         return (player.getKeyedSlot("!quests", name) != null);
@@ -55,7 +55,7 @@ class PlayerQuests implements java.io.Serializable {
     /**
      * Gets the player's current status in the given quest.
      *
-     * @param name The quest's name
+     * @param name The quest name
      * @return the player's status in the quest
      */
     public String getQuest(String name) {
