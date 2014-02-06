@@ -1,7 +1,6 @@
 
 package simple.common.game;
 
-import java.util.List;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
@@ -91,32 +90,6 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
     String getLastPrivateChatter();
 
     /**
-     * Gets the player's current status in the given quest.
-     *
-     * @param name
-     * The quest's name
-     * @return the player's status in the quest
-     */
-    String getQuest(String name);
-
-    /**
-     * List of quests
-     * @return List of quests
-     */
-    List<String> getQuests();
-
-    /**
-     * Checks whether the player has made any progress in the given quest or
-     * not. For many quests, this is true right after the quest has been
-     * started.
-     *
-     * @param name
-     * The quest's name
-     * @return true iff the player has made any progress in the quest
-     */
-    boolean hasQuest(String name);
-
-    /**
      * Check if another player should be notified that this player is away. This
      * assumes the player has already been checked for away. Players will be
      * reminded once an hour.
@@ -145,26 +118,6 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
      * @return true if invisible
      */
     boolean isInvisibleToCreatures();
-
-    /**
-     * Checks whether the player has completed the given quest or not.
-     *
-     * @param name
-     * The quest's name
-     * @return true iff the quest has been completed by the player
-     */
-    boolean isQuestCompleted(String name);
-
-    /**
-     * Is the named quest in one of the listed states?
-     *
-     * @param name
-     * quest
-     * @param states
-     * valid states
-     * @return true, if the quest is in one of theses states, false otherwise
-     */
-    boolean isQuestInState(String name, String... states);
 
     /**
      * Notifies this player that the given player has logged out.
@@ -197,12 +150,6 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
      * The zone this was removed from.
      */
     void onRemoved(IRPZone zone);
-
-    /**
-     * Remove a quest by name
-     * @param name quest to remove
-     */
-    void removeQuest(String name);
 
     /**
      * Clear out all recorded away responses.
@@ -281,21 +228,6 @@ public interface ClientObjectInterface extends RPEntityInterface, Serializable, 
      * @param lastPrivateChatterName
      */
     void setLastPrivateChatter(String lastPrivateChatterName);
-
-    /**
-     * Allows to store the player's current status in a quest in a string. This
-     * string may, for instance, be "started", "done", a semicolon- separated
-     * list of items that need to be brought/NPCs that need to be met, or the
-     * number of items that still need to be brought. Note that the string
-     * "done" has a special meaning: see isQuestComplete().
-     *
-     * @param name
-     * The quest's name
-     * @param status
-     * the player's status in the quest. Set it to null to completely
-     * reset the player's status for the quest.
-     */
-    void setQuest(String name, String status);
 
     @Override
     String toString();

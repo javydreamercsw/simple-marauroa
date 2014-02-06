@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -89,7 +88,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     private static List<String> adminNames = new LinkedList<String>();
     private int adminLevel;
     private boolean disconnected;
-    private PlayerQuests quests = new PlayerQuests(this);
     public static final String CLASS_NAME = "client_object";
 
     /**
@@ -99,21 +97,19 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     public ClientObject(RPObject object) {
         super(object);
-        //Is empty here?
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
         awayReplies = new HashMap<String, Long>();
         update();
-        addEmptySlots("!tutorial");
+        //For gaging
+        add("gag", 0);
         addEmptySlots("!visited");
     }
 
     @Override
     public final void update() {
-        for (Iterator<? extends MarauroaServerExtension> it =
-                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                .iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
+        for (MarauroaServerExtension extension
+                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             logger.debug("Processing extension to update client object "
                     + "class definition: " + extension.getClass()
                     .getSimpleName());
@@ -187,7 +183,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             /*
              * Only notify once an hour
              */
-            if ((now - lObj.longValue()) < (1000L * 60L * 60L)) {
+            if ((now - lObj) < (1000L * 60L * 60L)) {
                 return false;
             }
         }
@@ -454,79 +450,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 
     }
 
-    /**
-     * Checks whether the player has completed the given quest or not.
-     *
-     * @param name The quest's name
-     * @return true iff the quest has been completed by the player
-     */
-    @Override
-    public boolean isQuestCompleted(String name) {
-        return quests.isQuestCompleted(name);
-    }
-
-    /**
-     * Checks whether the player has made any progress in the given quest or
-     * not. For many quests, this is true right after the quest has been
-     * started.
-     *
-     * @param name The quest's name
-     * @return true iff the player has made any progress in the quest
-     */
-    @Override
-    public boolean hasQuest(String name) {
-        return quests.hasQuest(name);
-    }
-
-    /**
-     * Gets the player's current status in the given quest.
-     *
-     * @param name The quest's name
-     * @return the player's status in the quest
-     */
-    @Override
-    public String getQuest(String name) {
-        return quests.getQuest(name);
-    }
-
-    /**
-     * Allows to store the player's current status in a quest in a string. This
-     * string may, for instance, be "started", "done", a semicolon- separated
-     * list of items that need to be brought/NPCs that need to be met, or the
-     * number of items that still need to be brought. Note that the string
-     * "done" has a special meaning: see isQuestComplete().
-     *
-     * @param name The quest's name
-     * @param status the player's status in the quest. Set it to null to
-     * completely reset the player's status for the quest.
-     */
-    @Override
-    public void setQuest(String name, String status) {
-        quests.setQuest(name, status);
-    }
-
-    @Override
-    public List<String> getQuests() {
-        return quests.getQuests();
-    }
-
-    @Override
-    public void removeQuest(String name) {
-        quests.removeQuest(name);
-    }
-
-    /**
-     * Is the named quest in one of the listed states?
-     *
-     * @param name quest
-     * @param states valid states
-     * @return true, if the quest is in one of theses states, false otherwise
-     */
-    @Override
-    public boolean isQuestInState(String name, String... states) {
-        return quests.isQuestInState(name, states);
-    }
-
     private void addEmptySlots(String slot) {
         if (!hasSlot(slot)) {
             addSlot(new RPSlot(slot));
@@ -547,7 +470,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 //        if (player.has(ATTR_GRUMPY)) {
 //            player.remove(ATTR_GRUMPY);
 //        }
-
         readAdminsFromFile(player);
         //TODO: Move this to an extension
 //        loadItemsIntoSlots(player);
@@ -572,9 +494,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     }
 
     /**
-     * reads the admins from admins.list.
+     * Reads the administrators from admins list.
      *
-     * @param player ClientObject to check for super admin status.
+     * @param player ClientObject to check for super administrator status.
      */
     protected static void readAdminsFromFile(ClientObject player) {
         if (adminNames.isEmpty()) {
@@ -584,10 +506,10 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             try {
                 InputStream is = player.getClass().getClassLoader()
                         .getResourceAsStream(
-                        adminFilename);
+                                adminFilename);
 
                 if (is == null) {
-                    logger.info("data/conf/admins.list does not exist.");
+                    logger.warn("data/conf/admins.list does not exist.");
                 } else {
                     BufferedReader in = new BufferedReader(
                             new UnicodeSupportingInputStreamReader(is));
@@ -596,13 +518,13 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                         while ((line = in.readLine()) != null) {
                             adminNames.add(line);
                         }
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         logger.error("Error loading admin names from: " + adminFilename, e);
                     } finally {
                         in.close();
                     }
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 logger.error(
                         "Error loading admin names from: " + adminFilename, e);
             }
@@ -657,15 +579,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             player.addAttribute("offline", Type.LONG_STRING,
                     (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
-            //TODO: move to an extension
-            player.addRPSlot("!quests", 1, Definition.HIDDEN);
-            player.addRPSlot("!tutorial", 1, Definition.HIDDEN);
-
-            player.addAttribute("karma", Type.FLOAT, Definition.PRIVATE);
-            player.addAttribute("sentence", Type.STRING, Definition.HIDDEN);
-
-            player.addRPSlot("skills", 1, Definition.HIDDEN);
-
             // Non-removable while stored ones have values
             player.addRPSlot("!skills", 1,
                     (byte) (Definition.HIDDEN | Definition.VOLATILE));
@@ -688,10 +601,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     }
 
     protected static void extendClass(RPClass player) {
-        for (Iterator<? extends MarauroaServerExtension> it =
-                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                .iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
+        for (MarauroaServerExtension extension
+                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             logger.debug("Processing extension to modify client definition: "
                     + extension.getClass().getSimpleName());
             extension.modifyClientObjectDefinition(player);
@@ -1068,7 +979,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         int hash = 3;
         hash = 31 * hash + (this.features != null ? this.features.hashCode() : 0);
         hash = 31 * hash + this.adminLevel;
-        hash = 31 * hash + (this.quests != null ? this.quests.hashCode() : 0);
         hash = 31 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         hash = 31 * hash + (this.getID() != null ? this.getID().hashCode() : 0);
         return hash;

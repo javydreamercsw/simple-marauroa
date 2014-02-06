@@ -2,6 +2,7 @@ package simple.server.core.entity.clientobject;
 
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -32,13 +33,16 @@ public class GagManager implements LoginListener {
      * @param reason why criminal was gagged
      */
     @Override
-    public void gag(final String criminalName, ClientObjectInterface policeman, int minutes,
+    public void gag(final String criminalName, ClientObjectInterface policeman, 
+            int minutes,
             String reason) {
-        final ClientObjectInterface criminal =
-                ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
+        final ClientObjectInterface criminal
+                = ((SimpleRPRuleProcessor) Lookup.getDefault()
+                        .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
 
         if (criminal == null) {
-            String text = "ClientObjectInterface " + criminalName + " not found";
+            String text = "ClientObjectInterface " + criminalName 
+                    + " not found";
             policeman.sendPrivateText(text);
             logger.debug(text);
             return;
@@ -47,7 +51,8 @@ public class GagManager implements LoginListener {
         gag(criminal, policeman, minutes, reason, criminalName);
     }
 
-    void gag(final ClientObjectInterface criminal, ClientObjectInterface policeman, int minutes,
+    void gag(final ClientObjectInterface criminal, 
+            ClientObjectInterface policeman, int minutes,
             String reason, final String criminalName) {
         // no -1
         if (minutes < 0) {
@@ -56,14 +61,19 @@ public class GagManager implements LoginListener {
         }
 
         // Set the gag
-        long expireDate = System.currentTimeMillis() + (1000L * 60L * minutes); // Milliseconds
+        long expireDate = System.currentTimeMillis() 
+                + (1000L * 60L * minutes); // Milliseconds
 
-        criminal.setQuest("gag", "" + expireDate);
+        ((RPObject) criminal).put("gag", "" + expireDate);
 
         // Send messages
-        policeman.sendPrivateText("You have gagged " + criminalName + " for " + minutes + " minutes. Reason: " + reason + ".");
-        criminal.sendPrivateText("You have been gagged by " + policeman.getTitle() + " for " + minutes + " minutes. Reason: " + reason + ".");
-        SimpleRPRuleProcessor.sendMessageToSupporters("GagManager", policeman.getName() + " gagged " + criminalName + " for " + minutes + " minutes. Reason: " + reason + ".");
+        policeman.sendPrivateText("You have gagged " + criminalName 
+                + " for " + minutes + " minutes. Reason: " + reason + ".");
+        criminal.sendPrivateText("You have been gagged by " 
+                + policeman.getTitle() + " for " + minutes + " minutes. Reason: " + reason + ".");
+        SimpleRPRuleProcessor.sendMessageToSupporters("GagManager", 
+                policeman.getName() + " gagged " + criminalName + " for " 
+                        + minutes + " minutes. Reason: " + reason + ".");
 
         setupNotifier(criminal);
     }
@@ -76,9 +86,10 @@ public class GagManager implements LoginListener {
     public void release(ClientObjectInterface inmate) {
 
         if (isGagged(inmate)) {
-            inmate.removeQuest("gag");
+            ((RPObject) inmate).put("gag", "" + 0);
             inmate.sendPrivateText("Your gag sentence is over.");
-            logger.debug("ClientObjectInterface " + inmate.getName() + "released from gag.");
+            logger.debug("ClientObjectInterface " + inmate.getName()
+                    + "released from gag.");
         }
     }
 
@@ -89,10 +100,7 @@ public class GagManager implements LoginListener {
      * @return true, if it is gagged, false otherwise.
      */
     public static boolean isGagged(ClientObjectInterface player) {
-        if (player.hasQuest("gag")) {
-            return true;
-        }
-        return false;
+        return Long.parseLong(((RPObject) player).get("gag")) > 0;
     }
 
     /**
@@ -153,20 +161,20 @@ public class GagManager implements LoginListener {
         Lookup.getDefault().lookup(ITurnNotifier.class).notifyInSeconds(
                 (int) (getTimeRemaining(criminal) / 1000), new TurnListener() {
 
-            @Override
-            public void onTurnReached(int currentTurn) {
+                    @Override
+                    public void onTurnReached(int currentTurn) {
 
-                ClientObjectInterface criminal2 =
-                        ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
-                if (criminal2 == null) {
-                    logger.debug("Gagged player " + criminalName + "has logged out.");
-                    return;
-                }
+                        ClientObjectInterface criminal2
+                        = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
+                        if (criminal2 == null) {
+                            logger.debug("Gagged player " + criminalName + "has logged out.");
+                            return;
+                        }
 
-                tryExpire(criminal2);
+                        tryExpire(criminal2);
 
-            }
-        });
+                    }
+                });
     }
 
     /**
@@ -180,7 +188,7 @@ public class GagManager implements LoginListener {
         if (!isGagged(criminal)) {
             return 0L;
         }
-        long expireDate = Long.parseLong(criminal.getQuest("gag"));
+        long expireDate = Long.parseLong(((RPObject) criminal).get("gag"));
         long timeRemaining = expireDate - System.currentTimeMillis();
         return timeRemaining;
     }
