@@ -482,8 +482,7 @@ public class RPDeck extends RPEntity implements IDeck {
         List<ICard> deckCards = getDeck();
         java.util.Collections.shuffle(deckCards);
         getSlot(PAGES).clear();
-        for (Iterator<ICard> it = deckCards.iterator(); it.hasNext();) {
-            ICard card = it.next();
+        for (ICard card : deckCards) {
             getSlot(PAGES).add((RPCard) card);
         }
     }
@@ -517,8 +516,7 @@ public class RPDeck extends RPEntity implements IDeck {
             java.util.Collections.sort(handCards, comp);
         }
         getSlot(HAND).clear();
-        for (Iterator<ICard> it = handCards.iterator(); it.hasNext();) {
-            ICard card = it.next();
+        for (ICard card : handCards) {
             getSlot(HAND).add((RPCard) card);
         }
     }

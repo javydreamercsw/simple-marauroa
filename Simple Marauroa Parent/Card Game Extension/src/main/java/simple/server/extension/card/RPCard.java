@@ -48,11 +48,11 @@ public class RPCard extends RPEntity implements ICard {
              *
              */
             SET = "set";
-    private InstanceContent content = new InstanceContent();
+    private final InstanceContent content = new InstanceContent();
     /**
      * Lookup instance
      */
-    private Lookup lookup = new AbstractLookup(content);
+    private final Lookup lookup = new AbstractLookup(content);
 
     /**
      *
@@ -178,7 +178,7 @@ public class RPCard extends RPEntity implements ICard {
             return 0;
         } else {
             RPCard card = (RPCard) o;
-            return getName().compareTo(card.getName());
+            return card == null ? -1 : getName().compareTo(card.getName());
         }
     }
 
@@ -207,11 +207,11 @@ public class RPCard extends RPEntity implements ICard {
 
     @Override
     public boolean equals(Object obj) {
-        boolean result =true;
+        boolean result = true;
         if (obj == null) {
             result = false;
         }
-        if (getClass() != obj.getClass()) {
+        else if (getClass() != obj.getClass()) {
             result = false;
         }
         return result && super.equals(obj);
