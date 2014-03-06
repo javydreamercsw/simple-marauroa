@@ -172,14 +172,13 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
         if (matcher.find()) {
             String[] names = matcher.group(1).split("\\s+");
             whoplayers.clear();
-            for (int i = 0; i < names.length; i++) {
+            for (String name : names) {
                 /*
                  * NOTE: On the future Players names won't have any non ascii
                  * character.
                  */
                 matcher = Pattern.compile(
-                        "^([-_a-zA-Z0-9\u00E4\u00F6\u00FC\u00DF\u00C4\u00D6\u00DC]+)\\([0-9]+\\)$").matcher(
-                        names[i]);
+                        "^([-_a-zA-Z0-9\u00E4\u00F6\u00FC\u00DF\u00C4\u00D6\u00DC]+)\\([0-9]+\\)$").matcher(name);
                 if (matcher.find()) {
                     whoplayers.add(matcher.group(1));
                 }
