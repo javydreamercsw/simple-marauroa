@@ -7,7 +7,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath simple.server.core.engine.GenerateINI</exec.args>
+                <exec.args>-classpath %classpath simple.client.TextClient -h localhost -P 32180 -u test -p test -c test -W 1 -n Simple -v 0.02.06 -chat 1</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.classpathScope>runtime</exec.classpathScope>
             </properties>
@@ -19,7 +19,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
             </goals>
             <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath simple.server.core.engine.GenerateINI</exec.args>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath simple.client.TextClient -h localhost -P 32180 -u test -p test -c test -W 1 -n Simple -v 0.02.06 -chat 1</exec.args>
                 <exec.executable>java</exec.executable>
                 <exec.classpathScope>runtime</exec.classpathScope>
                 <jpda.listen>true</jpda.listen>
@@ -32,7 +32,7 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.2:exec</goal>
             </goals>
             <properties>
-                <exec.args>${profiler.args} -classpath %classpath simple.server.core.engine.GenerateINI</exec.args>
+                <exec.args>-classpath %classpath simple.client.TextClient -h localhost -P 32180 -u test -p test -c test -W 1 -n Simple -v 0.02.06 -chat 1</exec.args>
                 <exec.executable>${profiler.java}</exec.executable>
             </properties>
         </action>

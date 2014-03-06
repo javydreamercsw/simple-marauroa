@@ -31,8 +31,9 @@ public class TextClient extends Thread {
     private static boolean showWorld = false, chat = false;
     private Map<RPObject.ID, RPObject> world_objects;
     private marauroa.client.ClientFramework clientManager;
-    private PerceptionHandler handler;
-    private static final Logger logger = Logger.getLogger(TextClient.class.getSimpleName());
+    private final PerceptionHandler handler;
+    private static final Logger LOG
+            = Logger.getLogger(TextClient.class.getSimpleName());
 
     public TextClient(String h, String u, String p, String c, String P,
             boolean t, String name, String v) throws SocketException {
@@ -65,7 +66,7 @@ public class TextClient extends Thread {
             @Override
             public void onException(Exception exception,
                     MessageS2CPerception perception) {
-                logger.log(Level.SEVERE, port, exception);
+                LOG.log(Level.SEVERE, port, exception);
             }
 
             @Override
@@ -96,17 +97,17 @@ public class TextClient extends Thread {
                     //Get the list zones event results
                     for (RPEvent event : object.events()) {
                         try {
-                            logger.log(Level.INFO, "Processing: {0}, {1}",
+                            LOG.log(Level.INFO, "Processing: {0}, {1}",
                                     new Object[]{event, event.getName()});
                             if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
-                                logger.log(Level.INFO, "<{0}>{1}",
+                                LOG.log(Level.INFO, "<{0}>{1}",
                                         new Object[]{event.get("from"), event.get("text")});
                             } else {
-                                logger.log(Level.WARNING, "Received the following event but didn\'t "
+                                LOG.log(Level.WARNING, "Received the following event but didn\'t "
                                         + "know how to handle it: {0}", new Object[]{event});
                             }
                         } catch (Exception e) {
-                            logger.log(Level.SEVERE, null, e);
+                            LOG.log(Level.SEVERE, null, e);
                             break;
                         }
                     }
@@ -139,120 +140,127 @@ public class TextClient extends Thread {
         version = gversion;
         clientManager = new marauroa.client.ClientFramework(
                 "log4j.properties") {
-            @Override
-            protected String getGameName() {
-                return gameName;
-            }
+                    @Override
+                    protected String getGameName() {
+                        return gameName;
+                    }
 
-            @Override
-            protected String getVersionNumber() {
-                return version;
-            }
+                    @Override
+                    protected String getVersionNumber() {
+                        return version;
+                    }
 
-            @Override
-            protected void onPerception(MessageS2CPerception message) {
-                try {
-                    System.out.println("Received perception " + message.getPerceptionTimestamp());
+                    @Override
+                    protected void onPerception(MessageS2CPerception message) {
+                        try {
+                            System.out.println("Received perception " + message.getPerceptionTimestamp());
 
-                    handler.apply(message, world_objects);
-                    int i = message.getPerceptionTimestamp();
+                            handler.apply(message, world_objects);
+                            int i = message.getPerceptionTimestamp();
 
-                    if (chat) {
-                        RPAction action = new RPAction();
-                        action.put("type", "chat");
-                        action.put("text", "Hi!");
-                        clientManager.send(action);
-                        if (i % 50 == 0) {
-                            action.put("type", "chat");
-                            action.put("text", "Hi!");
-                            clientManager.send(action);
-                        } else if (i % 50 == 20) {
-                            action.put("type", "chat");
-                            action.put("text", "How are you?");
-                            clientManager.send(action);
+                            if (chat) {
+                                RPAction action = new RPAction();
+                                action.put("type", "chat");
+                                action.put("text", "Hi!");
+                                clientManager.send(action);
+                                if (i % 50 == 0) {
+                                    action.put("type", "chat");
+                                    action.put("text", "Hi!");
+                                    clientManager.send(action);
+                                } else if (i % 50 == 20) {
+                                    action.put("type", "chat");
+                                    action.put("text", "How are you?");
+                                    clientManager.send(action);
+                                }
+                            }
+                            if (showWorld) {
+                                System.out.println("<World contents ------------------------------------->");
+                                int j = 0;
+                                for (RPObject object : world_objects.values()) {
+                                    j++;
+                                    System.out.println(j + ". " + object);
+                                }
+                                System.out.println("</World contents ------------------------------------->");
+                            }
+                        } catch (Exception e) {
+                            LOG.log(Level.SEVERE, null, e);
                         }
                     }
-                    if (showWorld) {
-                        System.out.println("<World contents ------------------------------------->");
-                        int j = 0;
-                        for (RPObject object : world_objects.values()) {
-                            j++;
-                            System.out.println(j + ". " + object);
-                        }
-                        System.out.println("</World contents ------------------------------------->");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
 
-            @Override
-            protected List<TransferContent> onTransferREQ(
-                    List<TransferContent> items) {
-                for (TransferContent item : items) {
-                    item.ack = true;
-                }
-                return items;
-            }
+                    @Override
+                    protected List<TransferContent> onTransferREQ(
+                            List<TransferContent> items) {
+                                for (TransferContent item : items) {
+                                    item.ack = true;
+                                }
+                                return items;
+                            }
 
-            @Override
-            protected void onTransfer(List<TransferContent> items) {
-                System.out.println("Transfering ----");
-                for (TransferContent item : items) {
-                    System.out.println(item);
-                }
-            }
+                            @Override
+                            protected void onTransfer(List<TransferContent> items) {
+                                System.out.println("Transfering ----");
+                                for (TransferContent item : items) {
+                                    System.out.println(item);
+                                }
+                            }
 
-            @Override
-            protected void onAvailableCharacters(String[] characters) {
-                //See onAvailableCharacterDetails
-            }
+                            @Override
+                            protected void onAvailableCharacters(String[] characters) {
+                                //See onAvailableCharacterDetails
+                            }
 
-            @Override
-            protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
+                            @Override
+                            protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
 
-                // if there are no characters, create one with the specified name automatically
-                if (characters.isEmpty()) {
-                    System.out.println("The requested character is not available, trying to create character " + character);
-                    final RPObject template = new RPObject();
-                    try {
-                        final CharacterResult result = createCharacter(character, template);
-                        if (result.getResult().failed()) {
-                            System.out.println(result.getResult().getText());
-                        }
-                    } catch (final Exception e) {
-                        e.printStackTrace();
-                    }
-                    return;
-                }
+                                // if there are no characters, create one with the specified name automatically
+                                if (characters.isEmpty()) {
+                                    System.out.println("The requested character is not available, trying to create character " + character);
+                                    final RPObject template = new RPObject();
+                                    try {
+                                        final CharacterResult result = createCharacter(character, template);
+                                        if (result.getResult().failed()) {
+                                            System.out.println(result.getResult().getText());
+                                        }
+                                    } catch (final BannedAddressException e) {
+                                        LOG.log(Level.SEVERE, null, e);
+                                    } catch (final TimeoutException e) {
+                                        LOG.log(Level.SEVERE, null, e);
+                                    } catch (final InvalidVersionException e) {
+                                        LOG.log(Level.SEVERE, null, e);
+                                    }
+                                    return;
+                                }
 
-                // autologin if a valid character was specified.
-                if ((character != null) && (characters.keySet().contains(character))) {
-                    try {
-                        chooseCharacter(character);
-                    } catch (final Exception e) {
-                        System.out.println("TextClient::onAvailableCharacters" + e);
-                    }
-                    return;
-                }
-            }
+                                // autologin if a valid character was specified.
+                                if ((character != null) && (characters.keySet().contains(character))) {
+                                    try {
+                                        chooseCharacter(character);
+                                    } catch (final BannedAddressException e) {
+                                        LOG.log(Level.SEVERE, null, e);
+                                    } catch (final TimeoutException e) {
+                                        LOG.log(Level.SEVERE, null, e);
+                                    } catch (final InvalidVersionException e) {
+                                        LOG.log(Level.SEVERE, null, e);
+                                    }
+                                }
+                            }
 
-            @Override
-            protected void onServerInfo(String[] info) {
-                System.out.println("Server info");
-                for (String info_string : info) {
-                    System.out.println(info_string);
-                }
-            }
+                            @Override
+                            protected void onServerInfo(String[] info) {
+                                System.out.println("Server info");
+                                for (String info_string : info) {
+                                    System.out.println(info_string);
+                                }
+                            }
 
-            @Override
-            protected void onPreviousLogins(List<String> previousLogins) {
-                System.out.println("Previous logins");
-                for (String info_string : previousLogins) {
-                    System.out.println(info_string);
-                }
-            }
-        };
+                            @Override
+                            protected void onPreviousLogins(List<String> previousLogins) {
+                                System.out.println("Previous logins");
+                                for (String info_string : previousLogins) {
+                                    System.out.println(info_string);
+                                }
+                            }
+                };
     }
 
     @Override
@@ -262,7 +270,7 @@ public class TextClient extends Thread {
             System.out.println("Logging as: " + username + " with pass: " + password + " version: '" + version + "'");
             clientManager.login(username, password);
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         } catch (LoginFailedException e) {
             try {
@@ -271,26 +279,26 @@ public class TextClient extends Thread {
                 System.out.println("Logging as: " + username + " with pass: " + password + " version: '" + version + "'");
                 clientManager.login(username, password);
             } catch (LoginFailedException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 System.exit(1);
             } catch (TimeoutException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 System.exit(1);
             } catch (InvalidVersionException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 System.exit(1);
             } catch (BannedAddressException ex) {
-                logger.log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
                 System.exit(1);
             }
         } catch (InvalidVersionException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             System.exit(1);
         } catch (TimeoutException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             System.exit(1);
         } catch (BannedAddressException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
             System.exit(1);
         }
 
@@ -301,7 +309,7 @@ public class TextClient extends Thread {
             try {
                 sleep(100);
             } catch (InterruptedException e) {
-                logger.log(Level.SEVERE, null, e);
+                LOG.log(Level.SEVERE, null, e);
                 cond = false;
             }
         }
@@ -368,10 +376,10 @@ public class TextClient extends Thread {
             System.out.println("Optional parameters");
             System.out.println("* -W\tShow world content? 0 or 1");
             System.out.println("* -n\tGame name (Default is 'Simple')");
-            System.out.println("* -v\tGame Version (Default is '0.02.04')");
+            System.out.println("* -v\tGame Version (Default is '0.02.06')");
             System.out.println("* -chat\tEnable/Disable chat? 0 or 1");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SocketException e) {
+            LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
     }
