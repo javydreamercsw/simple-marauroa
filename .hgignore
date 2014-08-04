@@ -13,3 +13,8 @@ Marauroa Monitor Extension/*cobertura*
 **/target/*
 **/keystore
 **/nbactions-release-sign-artifacts.xml
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$

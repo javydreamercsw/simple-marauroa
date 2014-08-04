@@ -158,7 +158,7 @@ public class CardSet implements Serializable, ICardSet{
     }
 
     @Override
-    public String getGameName() {
+    public String getGame() {
         return getGame().getName();
     }
 
