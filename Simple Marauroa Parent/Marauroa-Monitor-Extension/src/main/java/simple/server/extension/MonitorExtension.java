@@ -14,7 +14,7 @@ import marauroa.server.game.db.DAORegister;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.IRPWorld;
 
@@ -23,7 +23,7 @@ import simple.server.core.engine.IRPWorld;
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
-public class MonitorExtension extends SimpleServerExtension implements ActionListener {
+public class MonitorExtension extends SimpleServerExtension implements ActionInterface {
 
     public static final String _MONITOR = "monitor";
     private static final Logger logger = Log4J.getLogger(MonitorExtension.class);
