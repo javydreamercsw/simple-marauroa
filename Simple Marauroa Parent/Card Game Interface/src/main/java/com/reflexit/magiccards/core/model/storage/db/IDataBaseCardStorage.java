@@ -77,10 +77,11 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param type CardType
      * @param name Card name
      * @param text Card text
+     * @param set Set the card is to be added to
      * @return Created card
      * @throws DBException
      */
-    ICard createCard(ICardType type, String name, byte[] text) 
+    ICard createCard(ICardType type, String name, byte[] text, ICardSet set) 
             throws DBException;
 
     /**
@@ -268,9 +269,10 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * Check if card type exists.
      *
      * @param name type name
+     * @param game Game to check in.
      * @return true if it exists, false otherwise
      */
-    boolean cardTypeExists(String name);
+    boolean cardTypeExists(String name, ICardGame game);
 
     /**
      * Get the card's attribute value.
@@ -301,17 +303,19 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * Check if set exists.
      *
      * @param name set name
+     * @param game Game to look into
      * @return true if exists
      */
-    boolean cardSetExists(String name);
+    boolean cardSetExists(String name, ICardGame game);
 
     /**
      * Check if card exists.
      *
      * @param name card name
+     * @param set Set to look into
      * @return true if exists
      */
-    boolean cardExists(String name);
+    boolean cardExists(String name, ICardSet set);
 
     /**
      * Check if game exists.

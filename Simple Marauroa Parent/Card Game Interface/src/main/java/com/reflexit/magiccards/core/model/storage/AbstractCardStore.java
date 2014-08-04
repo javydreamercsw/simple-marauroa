@@ -1,5 +1,6 @@
 package com.reflexit.magiccards.core.model.storage;
 
+import com.reflexit.magiccards.core.model.ICardSet;
 import com.reflexit.magiccards.core.model.events.CardEvent;
 import com.reflexit.magiccards.core.model.events.EventManager;
 import com.reflexit.magiccards.core.model.events.ICardEventListener;
@@ -29,9 +30,9 @@ public abstract class AbstractCardStore<T> extends EventManager
     protected abstract void doInitialize() throws Exception;
 
     @Override
-    public boolean addAll(final Collection cards) {
+    public boolean addAll(final Collection cards, ICardSet set) {
         initialize();
-        boolean modified = doAddAll(cards);
+        boolean modified = doAddAll(cards, set);
         if (modified) {
             fireEvent(new CardEvent(this, CardEvent.ADD, cards));
         }
@@ -51,14 +52,15 @@ public abstract class AbstractCardStore<T> extends EventManager
         }
     }
 
-    protected synchronized boolean doAddAll(final Collection<? extends T> col) {
+    protected synchronized boolean doAddAll(final Collection<? extends T> col,
+            ICardSet set) {
         boolean modified = false;
         boolean commit = isAutoCommit();
         setAutoCommit(false);
         try {
             for (final T element : col) {
                 final T card = element;
-                if (doAddCard(card)) {
+                if (doAddCard(card, set)) {
                     modified = true;
                 }
             }
@@ -69,10 +71,10 @@ public abstract class AbstractCardStore<T> extends EventManager
     }
 
     @Override
-    public boolean add(T card) {
+    public boolean add(T card, ICardSet set) {
         initialize();
         synchronized (this) {
-            if (!doAddCard(card)) {
+            if (!doAddCard(card, set)) {
                 return false;
             }
         }
@@ -81,11 +83,11 @@ public abstract class AbstractCardStore<T> extends EventManager
     }
 
     @Override
-    public boolean remove(T o) {
+    public boolean remove(T o, ICardSet set) {
         initialize();
         boolean res;
         synchronized (this) {
-            res = doRemoveCard(o);
+            res = doRemoveCard(o, set);
         }
         if (res) {
             fireEvent(new CardEvent(this, CardEvent.REMOVE, o));
@@ -94,9 +96,9 @@ public abstract class AbstractCardStore<T> extends EventManager
     }
 
     @Override
-    public boolean removeAll(Collection list) {
+    public boolean removeAll(Collection list, ICardSet set) {
         initialize();
-        boolean modified = doRemoveAll(list);
+        boolean modified = doRemoveAll(list, set);
         if (modified) {
             fireEvent(new CardEvent(this, CardEvent.REMOVE, list));
         }
@@ -104,22 +106,22 @@ public abstract class AbstractCardStore<T> extends EventManager
     }
 
     @Override
-    public boolean removeAll() {
+    public boolean removeAll(ICardSet set) {
         initialize();
-        boolean modified = doRemoveAll();
+        boolean modified = doRemoveAll(set);
         if (modified) {
             fireEvent(new CardEvent(this, CardEvent.REMOVE, null));
         }
         return modified;
     }
 
-    protected boolean doRemoveAll() {
+    protected boolean doRemoveAll(ICardSet set) {
         boolean modified = false;
         boolean commit = isAutoCommit();
         setAutoCommit(false);
         try {
-            for (T t : this) {
-                if (doRemoveCard(t)) {
+            for (Object t : set.getCards()) {
+                if (doRemoveCard((T) t, set)) {
                     modified = true;
                 }
             }
@@ -129,13 +131,13 @@ public abstract class AbstractCardStore<T> extends EventManager
         }
     }
 
-    protected boolean doRemoveAll(Collection<? extends T> list) {
+    protected boolean doRemoveAll(Collection<? extends T> list, ICardSet set) {
         boolean modified = false;
         boolean commit = isAutoCommit();
         setAutoCommit(false);
         try {
             for (T t : list) {
-                if (doRemoveCard(t)) {
+                if (doRemoveCard(t, set)) {
                     modified = true;
                 }
             }
@@ -167,9 +169,9 @@ public abstract class AbstractCardStore<T> extends EventManager
         }
     }
 
-    protected abstract boolean doAddCard(T card);
+    protected abstract boolean doAddCard(T card, ICardSet set);
 
-    protected abstract boolean doRemoveCard(T card);
+    protected abstract boolean doRemoveCard(T card, ICardSet set);
 
     @Override
     public void addListener(final ICardEventListener lis) {

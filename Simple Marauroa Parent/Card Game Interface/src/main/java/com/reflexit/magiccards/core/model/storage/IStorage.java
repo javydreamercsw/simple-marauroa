@@ -1,5 +1,6 @@
 package com.reflexit.magiccards.core.model.storage;
 
+import com.reflexit.magiccards.core.model.ICardSet;
 import java.util.Collection;
 
 public interface IStorage<T> extends Iterable<T> {
@@ -72,7 +73,7 @@ public interface IStorage<T> extends Iterable<T> {
      * @param card card to add
      * @return true if successful
      */
-    public boolean add(T card);
+    public boolean add(T card, ICardSet set);
 
     /**
      * Add list of cards.
@@ -80,7 +81,7 @@ public interface IStorage<T> extends Iterable<T> {
      * @param list list of cards
      * @return true if successful
      */
-    public boolean addAll(Collection<? extends T> list);
+    public boolean addAll(Collection<? extends T> list, ICardSet set);
 
     /**
      * Remove list of cards.
@@ -88,15 +89,24 @@ public interface IStorage<T> extends Iterable<T> {
      * @param list list of cards
      * @return true if successful
      */
-    public boolean removeAll(Collection<? extends T> list);
+    public boolean removeAll(Collection<? extends T> list, ICardSet set);
 
     /**
      * Remove all cards.
      *
      * @return true if successful
      */
-    public boolean removeAll();
+    public boolean removeAll(ICardSet set);
 
+    /**
+     * Check if card is contained within a set.
+     *
+     * @param card card to check
+     * @param set Set to look into
+     * @return true if successful
+     */
+    public boolean contains(T card, ICardSet set);
+    
     /**
      * Check if card is contained.
      *
@@ -111,7 +121,7 @@ public interface IStorage<T> extends Iterable<T> {
      * @param card card to remove
      * @return true if successful
      */
-    public boolean remove(T card);
+    public boolean remove(T card, ICardSet set);
 
     /**
      * Size.

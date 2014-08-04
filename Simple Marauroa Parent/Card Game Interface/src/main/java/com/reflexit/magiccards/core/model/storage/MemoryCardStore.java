@@ -94,16 +94,19 @@ public class MemoryCardStore<T> extends AbstractCardStoreWithStorage<T>
     }
 
     @Override
-    public String getGameName() {
+    public String getName() {
         return getStorage().getName();
     }
 
-    @Override
     public Collection<T> getCards() {
         ArrayList<T> cards = new ArrayList<T>();
         for (Iterator<T> it = getStorage().iterator(); it.hasNext();) {
             cards.add(it.next());
         }
         return cards;
+    }
+
+    public boolean contains(T o) {
+        return getStorage().contains(o);
     }
 }

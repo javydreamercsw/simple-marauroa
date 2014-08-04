@@ -4,8 +4,9 @@ import com.reflexit.magiccards.core.model.ICardEventManager;
 import com.reflexit.magiccards.core.model.ICardSet;
 import com.reflexit.magiccards.core.model.IMergeable;
 import java.util.Collection;
+import java.util.Iterator;
 
-public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
+public interface ICardStore<T> extends IMergeable<T>,
         ICardEventManager<T>, IStorageContainer<T> {
 
     /**
@@ -44,7 +45,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
      * @param cards cards to add
      * @return true if successful
      */
-    public boolean addAll(Collection<? extends T> cards);
+    public boolean addAll(Collection<? extends T> cards, ICardSet set);
 
     /**
      * Add card.
@@ -52,7 +53,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
      * @param card card to add
      * @return true if successful
      */
-    public boolean add(T card);
+    public boolean add(T card, ICardSet set);
 
     /**
      * Remove card.
@@ -60,7 +61,7 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
      * @param o card to remove
      * @return true if successful
      */
-    public boolean remove(T o);
+    public boolean remove(T o, ICardSet set);
 
     /**
      * Remove cards.
@@ -68,14 +69,14 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
      * @param list cards to remove
      * @return true if successful
      */
-    public boolean removeAll(Collection<? extends T> list);
+    public boolean removeAll(Collection<? extends T> list, ICardSet set);
 
     /**
      * Remove all cards.
      *
      * @return true if successful
      */
-    public boolean removeAll();
+    public boolean removeAll(ICardSet set);
 
     /**
      * Store size.
@@ -91,4 +92,6 @@ public interface ICardStore<T> extends ICardSet<T>, IMergeable<T>,
      * @return true if contained
      */
     public boolean contains(T o);
+
+    public Iterator<T> iterator();
 }
