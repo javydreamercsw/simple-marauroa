@@ -10,6 +10,7 @@
  */
 package com.reflexit.magiccards.core.model.storage;
 
+import com.reflexit.magiccards.core.model.ICardSet;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -43,11 +44,11 @@ public abstract class AbstractCardStoreWithStorage<T>
     }
 
     @Override
-    protected synchronized boolean doAddAll(Collection<? extends T> list) {
+    protected synchronized boolean doAddAll(Collection<? extends T> list, ICardSet set) {
         if (wrapped) {
-            return super.doAddAll(list);
+            return super.doAddAll(list, set);
         } else {
-            return storage.addAll(list);
+            return storage.addAll(list, set);
         }
     }
 
@@ -57,20 +58,20 @@ public abstract class AbstractCardStoreWithStorage<T>
     }
 
     @Override
-    public boolean doRemoveAll() {
+    public boolean doRemoveAll(ICardSet set) {
         if (wrapped) {
-            return super.doRemoveAll();
+            return super.doRemoveAll(set);
         } else {
-            return storage.removeAll();
+            return storage.removeAll(set);
         }
     }
 
     @Override
-    public boolean doRemoveAll(Collection<? extends T> list) {
+    public boolean doRemoveAll(Collection<? extends T> list, ICardSet set) {
         if (wrapped) {
-            return super.doRemoveAll(list);
+            return super.doRemoveAll(list, set);
         } else {
-            return storage.removeAll(list);
+            return storage.removeAll(list, set);
         }
     }
 
@@ -80,8 +81,8 @@ public abstract class AbstractCardStoreWithStorage<T>
     }
 
     @Override
-    protected boolean doAddCard(T card) {
-        return storage.add(card);
+    protected boolean doAddCard(T card, ICardSet set) {
+        return storage.add(card, set);
     }
 
     @Override
@@ -90,8 +91,8 @@ public abstract class AbstractCardStoreWithStorage<T>
     }
 
     @Override
-    protected boolean doRemoveCard(T card) {
-        return storage.remove(card);
+    protected boolean doRemoveCard(T card, ICardSet set) {
+        return storage.remove(card, set);
     }
 
     @Override
@@ -99,7 +100,6 @@ public abstract class AbstractCardStoreWithStorage<T>
         return storage.getComment();
     }
 
-    @Override
     public String getName() {
         return storage.getName();
     }
@@ -109,17 +109,17 @@ public abstract class AbstractCardStoreWithStorage<T>
         return storage.isVirtual();
     }
 
-    public boolean contains(T card) {
-        return storage.contains(card);
+    public boolean contains(T card, ICardSet set) {
+        return storage.contains(card, set);
     }
 
     @Override
-    public boolean remove(T o) {
-        return storage.remove(o);
+    public boolean remove(T o, ICardSet set) {
+        return storage.remove(o, set);
     }
 
     @Override
-    public boolean add(T card) {
-        return storage.add(card);
+    public boolean add(T card, ICardSet set) {
+        return storage.add(card, set);
     }
 }

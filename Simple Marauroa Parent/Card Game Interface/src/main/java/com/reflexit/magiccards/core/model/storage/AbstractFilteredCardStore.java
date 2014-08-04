@@ -205,8 +205,7 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
 
     protected Collection<ICard> removeSetDuplicates(Collection<ICard> filteredList) {
         LinkedHashMap<String, ICard> unique = new LinkedHashMap<String, ICard>();
-        for (Iterator<ICard> iterator = filteredList.iterator(); iterator.hasNext();) {
-            ICard elem = iterator.next();
+        for (ICard elem : filteredList) {
             if (elem instanceof ICard) {
                 ICard card = (ICard) elem;
                 ICard old = unique.get(card.getName());

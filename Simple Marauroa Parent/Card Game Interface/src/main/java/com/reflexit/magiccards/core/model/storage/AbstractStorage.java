@@ -10,6 +10,7 @@
  */
 package com.reflexit.magiccards.core.model.storage;
 
+import com.reflexit.magiccards.core.model.ICardSet;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -69,11 +70,11 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
     }
 
     @Override
-    public boolean add(T card) {
+    public boolean add(T card, ICardSet set) {
         load();
         boolean modified;
         synchronized (this) {
-            modified = doAddCard(card);
+            modified = doAddCard(card, set);
             if (modified) {
                 autoSave();
             }
@@ -84,12 +85,12 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
     protected abstract void doSave() throws FileNotFoundException;
 
     @Override
-    public boolean addAll(Collection<? extends T> list) {
+    public boolean addAll(Collection<? extends T> list, ICardSet set) {
         load();
         boolean modified = false;
         synchronized (this) {
             for (T element : list) {
-                if (doAddCard(element)) {
+                if (doAddCard(element, set)) {
                     modified = true;
                 }
             }
@@ -101,12 +102,12 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
     }
 
     @Override
-    public boolean removeAll(Collection<? extends T> list) {
+    public boolean removeAll(Collection<? extends T> list, ICardSet set) {
         load();
         boolean modified = false;
         synchronized (this) {
             for (Object element : list) {
-                if (doRemoveCard((T) element)) {
+                if (doRemoveCard((T) element, set)) {
                     modified = true;
                 }
             }
@@ -118,12 +119,12 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
     }
 
     @Override
-    public boolean removeAll() {
+    public boolean removeAll(ICardSet set) {
         load();
         boolean modified = false;
         synchronized (this) {
             for (T element : this) {
-                if (doRemoveCard(element)) {
+                if (doRemoveCard(element, set)) {
                     modified = true;
                 }
             }
@@ -135,7 +136,7 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
     }
 
     @Override
-    public boolean contains(T card) {
+    public boolean contains(T card, ICardSet set) {
         synchronized (this) {
             for (T element : this) {
                 if (element.equals(card)) {
@@ -146,7 +147,7 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
         }
     }
 
-    protected abstract boolean doAddCard(T card);
+    protected abstract boolean doAddCard(T card, ICardSet set);
 
     @Override
     public void setAutoCommit(boolean value) {
@@ -154,10 +155,10 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
     }
 
     @Override
-    public boolean remove(T card) {
+    public boolean remove(T card, ICardSet set) {
         load();
         synchronized (this) {
-            if (!doRemoveCard(card)) {
+            if (!doRemoveCard(card, set)) {
                 return false;
             }
             autoSave();
@@ -165,7 +166,7 @@ public abstract class AbstractStorage<T> implements IStorage<T> {
         return true;
     }
 
-    protected abstract boolean doRemoveCard(T card);
+    protected abstract boolean doRemoveCard(T card, ICardSet set);
 
     @Override
     public boolean isAutoCommit() {

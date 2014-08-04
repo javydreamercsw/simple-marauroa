@@ -10,8 +10,10 @@
  */
 package com.reflexit.magiccards.core.model.storage;
 
+import com.reflexit.magiccards.core.model.ICardSet;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * ArrayList based implementation for AbstractCardStore
@@ -22,30 +24,40 @@ import java.util.*;
  */
 public class MemoryCardStorage<T> extends AbstractStorage<T> {
 
-    protected final List<T> list = 
-            Collections.synchronizedList(new ArrayList<T>());
+    protected final Map<ICardSet, List<T>> memory
+            = new HashMap<ICardSet, List<T>>();
 
     @Override
     public Iterator<T> iterator() {
-        synchronized (list) {
-            ArrayList x = new ArrayList(list);
+        synchronized (memory) {
+            ArrayList x = new ArrayList();
+            for (Entry<ICardSet, List<T>> entry : memory.entrySet()) {
+                x.addAll(entry.getValue());
+            }
             return x.iterator();
         }
     }
 
     @Override
     public int size() {
-        return this.getList().size();
+        int size = 0;
+        for (Entry<ICardSet, List<T>> entry : memory.entrySet()) {
+            size += entry.getValue().size();
+        }
+        return size;
     }
 
     @Override
-    public boolean doRemoveCard(T card) {
-        return this.getList().remove(card);
+    public boolean doRemoveCard(T card, ICardSet set) {
+        return this.memory.get(set).remove(card);
     }
 
     @Override
-    public boolean doAddCard(T card) {
-        return this.getList().add(card);
+    public boolean doAddCard(T card, ICardSet set) {
+        if (!memory.containsKey(set)) {
+            memory.put(set, Collections.synchronizedList(new ArrayList<T>()));
+        }
+        return this.memory.get(set).add(card);
     }
 
     /**
@@ -61,8 +73,8 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
     /**
      * @return the list
      */
-    public Collection<T> getList() {
-        return this.list;
+    public Collection<T> getList(ICardSet set) {
+        return this.memory.get(set);
     }
 
     /**
@@ -77,7 +89,7 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
 
     @Override
     public void clearCache() {
-        list.clear();
+        memory.clear();
         setLoaded(false);
     }
 
@@ -107,27 +119,42 @@ public class MemoryCardStorage<T> extends AbstractStorage<T> {
     }
 
     @Override
-    public boolean add(T card) {
-        return list.add(card);
+    public boolean add(T card, ICardSet set) {
+        if (!memory.containsKey(set)) {
+            memory.put(set, Collections.synchronizedList(new ArrayList<T>()));
+        }
+        return this.memory.get(set).add(card);
     }
 
     @Override
-    public boolean addAll(Collection toAdd) {
-        return list.addAll(toAdd);
+    public boolean addAll(Collection toAdd, ICardSet set) {
+        if (!memory.containsKey(set)) {
+            memory.put(set, Collections.synchronizedList(new ArrayList<T>()));
+        }
+        return this.memory.get(set).addAll(toAdd);
     }
 
     @Override
-    public boolean removeAll(Collection<? extends T> toRemove) {
-        return list.removeAll(toRemove);
+    public boolean removeAll(Collection<? extends T> toRemove, ICardSet set) {
+        return this.memory.get(set).removeAll(toRemove);
     }
 
     @Override
+    public boolean contains(T card, ICardSet set) {
+        return this.memory.get(set).contains(card);
+    }
+
+    @Override
+    public boolean remove(T card, ICardSet set) {
+        return this.memory.get(set).remove(card);
+    }
+
     public boolean contains(T card) {
-        return list.contains(card);
-    }
-
-    @Override
-    public boolean remove(T card) {
-        return list.remove(card);
+        for (Entry<ICardSet, List<T>> entry : memory.entrySet()) {
+            if (entry.getValue().contains(card)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
