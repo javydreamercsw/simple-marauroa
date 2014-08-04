@@ -13,7 +13,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.ActionListener;
+import simple.server.core.action.ActionInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.DelayedAction;
 import simple.server.core.engine.IRPWorld;
@@ -28,7 +28,7 @@ import simple.server.core.event.PrivateTextEvent;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
-public class ZoneExtension extends SimpleServerExtension implements ActionListener {
+public class ZoneExtension extends SimpleServerExtension implements ActionInterface {
 
     /**
      * the logger instance.
