@@ -43,8 +43,8 @@ public abstract class AbstractCardCache implements ICardCache {
     /**
      * Logger
      */
-    private static final Logger LOG =
-            Logger.getLogger(AbstractCardCache.class.getName());
+    private static final Logger LOG
+            = Logger.getLogger(AbstractCardCache.class.getName());
 
     /**
      * Enable/disable cache
