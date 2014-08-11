@@ -156,7 +156,7 @@ public abstract class AbstractCardCache implements ICardCache {
             Integer cardId = Integer.valueOf(id);
             File loc = getCacheLocationFile();
             String locale = "EN";
-            String part = set.getGame()
+            String part = set.getCardGame()
                     + System.getProperty("file.separator") + "Cards"
                     + System.getProperty("file.separator") + editionAbbr
                     + System.getProperty("file.separator")
@@ -286,10 +286,7 @@ public abstract class AbstractCardCache implements ICardCache {
             throws CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
         File file = new File(path);
-        if (file.exists()) {
-            return true;
-        }
-        return false;
+        return file.exists();
     }
 
     @Override
@@ -363,7 +360,7 @@ public abstract class AbstractCardCache implements ICardCache {
         File loc = getCacheLocationFile();
         Edition edition = Editions.getInstance()
                 .getEditionByName(set.getName());
-        String part = set.getGame()
+        String part = set.getCardGame()
                 + System.getProperty("file.separator") + "Sets"
                 + System.getProperty("file.separator")
                 + edition.getMainAbbreviation()
