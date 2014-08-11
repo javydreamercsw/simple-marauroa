@@ -36,7 +36,8 @@ public final class Editions implements ISearchableProperty {
             if (date == null || date.length() == 0 || date.equals("?")) {
                 release = new Date();
             } else {
-                SimpleDateFormat formatter = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
+                SimpleDateFormat formatter = 
+                        new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
                 release = formatter.parse(date);
             }
         }
@@ -49,8 +50,7 @@ public final class Editions implements ISearchableProperty {
             if (abbr == null || abbrs.length == 0) {
                 return false;
             }
-            for (int i = 0; i < abbrs.length; i++) {
-                String a = abbrs[i];
+            for (String a : abbrs) {
                 if (abbr.equals(a)) {
                     return true;
                 }
@@ -65,8 +65,8 @@ public final class Editions implements ISearchableProperty {
             if (isAbbreviationFake()) {
                 abbrs[0] = abbr;
             } else {
-                for (int i = 0; i < abbrs.length; i++) {
-                    if (abbrs[i].equals(abbr)) {
+                for (String abbr1 : abbrs) {
+                    if (abbr1.equals(abbr)) {
                         return;
                     }
                 }
@@ -181,8 +181,7 @@ public final class Editions implements ISearchableProperty {
         public void setFormats(String legality) {
             String[] legs = legality.split(",");
             clearLegality();
-            for (int i = 0; i < legs.length; i++) {
-                String string = legs[i];
+            for (String string : legs) {
                 addFormat(string.trim());
             }
         }
@@ -208,8 +207,7 @@ public final class Editions implements ISearchableProperty {
     }
 
     public String getNameByAbbr(String abbr) {
-        for (Iterator<String> iterator = name2ed.keySet().iterator(); iterator.hasNext();) {
-            String name = iterator.next();
+        for (String name : name2ed.keySet()) {
             Editions.Edition value = name2ed.get(name);
             if (value != null && value.abbreviationOf(abbr)) {
                 return name;
@@ -258,8 +256,7 @@ public final class Editions implements ISearchableProperty {
     @Override
     public Collection<String> getIds() {
         ArrayList<String> list = new ArrayList<String>();
-        for (Iterator<Editions.Edition> iterator = this.name2ed.values().iterator(); iterator.hasNext();) {
-            Editions.Edition ed = iterator.next();
+        for (Editions.Edition ed : this.name2ed.values()) {
             String abbr = ed.getMainAbbreviation();
             list.add(getPrefConstant(abbr));
         }
@@ -277,8 +274,7 @@ public final class Editions implements ISearchableProperty {
     @Override
     public String getNameById(String id) {
         HashMap<String, String> idToName = new HashMap<String, String>();
-        for (Iterator<String> iterator = this.name2ed.keySet().iterator(); iterator.hasNext();) {
-            String name = iterator.next();
+        for (String name : this.name2ed.keySet()) {
             String id1 = getPrefConstantByName(name);
             idToName.put(id1, name);
         }
