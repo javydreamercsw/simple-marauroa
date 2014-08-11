@@ -29,11 +29,12 @@ public class CardAttribute implements Serializable, ICardAttribute {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "CardAttributeGen")
-    @TableGenerator(name = "CardAttributeGen", table = "card_attribute",
+    @GeneratedValue(strategy = GenerationType.TABLE, 
+            generator = "CardAttributeGen")
+    @TableGenerator(name = "CardAttributeGen", table = "card_id",
     pkColumnName = "tablename",
     valueColumnName = "last_id",
-    pkColumnValue = "card",
+    pkColumnValue = "card_attribute",
     allocationSize = 1,
     initialValue=1)
     @Column(name = "id", nullable = false)
@@ -79,10 +80,7 @@ public class CardAttribute implements Serializable, ICardAttribute {
             return false;
         }
         CardAttribute other = (CardAttribute) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override
