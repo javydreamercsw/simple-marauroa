@@ -20,7 +20,7 @@ public class DummySet implements ICardSet {
         return name;
     }
 
-    public ICardGame getGame() {
+    public ICardGame getCardGame() {
         return new DummyGame();
     }
 

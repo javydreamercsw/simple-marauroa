@@ -4,6 +4,7 @@
  */
 package com.reflexit.magiccards.core.storage.database;
 
+import com.reflexit.magiccards.core.model.ICardGame;
 import com.reflexit.magiccards.core.model.ICardSet;
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -30,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CardSet.findByAbbreviation", query = "SELECT c FROM CardSet c WHERE c.abbreviation = :abbreviation"),
     @NamedQuery(name = "CardSet.findByName", query = "SELECT c FROM CardSet c WHERE c.name = :name"),
     @NamedQuery(name = "CardSet.findByReleased", query = "SELECT c FROM CardSet c WHERE c.released = :released")})
-public class CardSet implements Serializable, ICardSet{
+public class CardSet implements Serializable, ICardSet {
+
     @Basic(optional = false)
     @Column(name = "released", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -132,10 +135,9 @@ public class CardSet implements Serializable, ICardSet{
             return false;
         }
         CardSet other = (CardSet) object;
-        if ((this.cardSetPK == null && other.cardSetPK != null) || (this.cardSetPK != null && !this.cardSetPK.equals(other.cardSetPK))) {
-            return false;
-        }
-        return true;
+        return (this.cardSetPK != null || other.cardSetPK == null)
+                && (this.cardSetPK == null
+                || this.cardSetPK.equals(other.cardSetPK));
     }
 
     @Override
@@ -158,12 +160,17 @@ public class CardSet implements Serializable, ICardSet{
     }
 
     @Override
-    public String getGame() {
-        return getGame().getName();
-    }
-
-    @Override
     public Collection getCards() {
         return getCardList();
+    }
+
+    public ICardGame getCardGame() {
+        for (ICardGame g
+                : Lookup.getDefault().lookupAll(ICardGame.class)) {
+            if (g.getName().equals(name)) {
+                return g;
+            }
+        }
+        return null;
     }
 }

@@ -408,7 +408,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     public ICard createCard(ICardType type, String name, byte[] text, ICardSet set)
             throws DBException {
         try {
-            if (!cardTypeExists(type.getName(), set.getGame())) {
+            if (!cardTypeExists(type.getName(), set.getCardGame())) {
                 type = (CardType) createCardType(type.getName());
             }
             CardJpaController cardController
@@ -954,5 +954,18 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     @Override
     public Map<String, String> getConnectionSettings() {
         return dataBaseProperties;
+    }
+
+    public boolean contains(T card) {
+        boolean result = false;
+        for (IGame g : getGames()) {
+            for (ICardSet s : getSetsForGame(g)) {
+                if (contains(card, s)) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

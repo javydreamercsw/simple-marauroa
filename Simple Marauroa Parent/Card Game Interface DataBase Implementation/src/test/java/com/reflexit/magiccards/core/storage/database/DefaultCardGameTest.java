@@ -5,11 +5,11 @@ import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardCollection;
 import com.reflexit.magiccards.core.model.IGame;
 import com.reflexit.magiccards.core.model.IGameCellRendererImageFactory;
+import com.reflexit.magiccards.core.model.storage.db.DBException;
 import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
 import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 import java.awt.Image;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.junit.Assert.*;
@@ -33,7 +33,7 @@ public class DefaultCardGameTest {
 
     public DefaultCardGameTest() {
     }
-    
+
     /**
      * Test the database.
      */
@@ -41,13 +41,14 @@ public class DefaultCardGameTest {
     public void testDatabase() {
         try {
             Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
-        } catch (Exception ex) {
+        } catch (DBException ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
     }
 
-    public static class DefaultCardGameImpl extends DefaultCardGame implements DataBaseStateListener {
+    public static class DefaultCardGameImpl extends DefaultCardGame
+            implements DataBaseStateListener {
 
         static {
             attribs.add("rarity");
@@ -86,16 +87,20 @@ public class DefaultCardGameTest {
                 parameters.put("name", "creature");
                 assertFalse(Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardAttribute.findByName", parameters).isEmpty());
                 System.out.println("Check the attributes");
-                for (Iterator<String> it = attribs.iterator(); it.hasNext();) {
-                    String rarity = it.next();
+                for (String rarity : attribs) {
                     parameters.put("name", rarity);
                     assertFalse(Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardAttribute.findByName", parameters).isEmpty());
                 }
+                System.out.println("Create set");
+                CardSet cs1 = (CardSet) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardSet((IGame) game, "Test Set", "TS", new Date());
+                assertTrue(cs1 != null);
+                CardSet cs2 = (CardSet) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardSet((IGame) game, "Test Set2", "TS2", new Date());
+                assertTrue(cs2 != null);
                 System.out.println("Create card type");
                 CardType sampleType = (CardType) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardType("sample");
                 System.out.println("Create a card");
-                Card card = (Card) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCard(sampleType, "Sample", "Sample body text".getBytes());
-                Card card2 = (Card) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCard(sampleType, "Sample2", "Sample body text".getBytes());
+                Card card = (Card) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCard(sampleType, "Sample", "Sample body text".getBytes(), cs1);
+                Card card2 = (Card) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCard(sampleType, "Sample2", "Sample body text".getBytes(), cs2);
                 parameters.put("name", card.getName());
                 result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("Card.findByName", parameters);
                 assertFalse(result.isEmpty());
@@ -103,8 +108,7 @@ public class DefaultCardGameTest {
                 assertTrue(temp.getName().equals(card.getName()));
                 assertTrue(Arrays.equals(temp.getText(), card.getText()));
                 System.out.println("Add an attribute to a card");
-                for (Iterator<String> it = attribs.iterator(); it.hasNext();) {
-                    String rarity = it.next();
+                for (String rarity : attribs) {
                     parameters.put("name", rarity);
                     result = Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardAttribute.findByName", parameters);
                     assertFalse(result.isEmpty());
@@ -112,15 +116,9 @@ public class DefaultCardGameTest {
                             rarity, "test");
                 }
                 System.out.println("Check attributes");
-                for (Iterator<CardHasCardAttribute> it = card.getCardHasCardAttributeList().iterator(); it.hasNext();) {
-                    CardHasCardAttribute chca = it.next();
+                for (CardHasCardAttribute chca : card.getCardHasCardAttributeList()) {
                     assertTrue(chca.getValue().equals("test"));
                 }
-                System.out.println("Create set");
-                CardSet cs1 = (CardSet) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardSet((IGame) game, "Test Set", "TS", new Date());
-                assertTrue(cs1 != null);
-                CardSet cs2 = (CardSet) Lookup.getDefault().lookup(IDataBaseCardStorage.class).createCardSet((IGame) game, "Test Set2", "TS2", new Date());
-                assertTrue(cs2 != null);
                 System.out.println("Add card to set");
                 ArrayList<Card> cards = new ArrayList<Card>();
                 cards.add(card);
@@ -138,14 +136,12 @@ public class DefaultCardGameTest {
                 System.out.println(set1);
                 System.out.println(set2);
                 System.out.println("Check Collection Type");
-                for (Iterator<String> it = collectionTypes.iterator(); it.hasNext();) {
-                    String type = it.next();
+                for (String type : collectionTypes) {
                     parameters.put("name", type);
                     assertFalse(Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardCollectionType.findByName", parameters).isEmpty());
                 }
                 System.out.println("Check Collections");
-                for (Iterator<Entry<String, String>> it = collections.entrySet().iterator(); it.hasNext();) {
-                    Map.Entry<String, String> entry = it.next();
+                for (Map.Entry<String, String> entry : collections.entrySet()) {
                     parameters.put("name", entry.getValue());
                     assertFalse(Lookup.getDefault().lookup(IDataBaseCardStorage.class).namedQuery("CardCollection.findByName", parameters).isEmpty());
                 }
@@ -167,7 +163,7 @@ public class DefaultCardGameTest {
                 String collectionList = Lookup.getDefault().lookup(IDataBaseCardStorage.class).printCardsCollection((ICardCollection) collection);
                 assertFalse(collectionList.isEmpty());
                 System.out.println(collectionList);
-            } catch (Exception ex) {
+            } catch (DBException ex) {
                 LOG.log(Level.SEVERE, null, ex);
                 fail();
             }

@@ -14,7 +14,7 @@ public interface ICardSet<ICard> extends Iterable<ICard> {
      * Card set's game name
      * @return Card set's game name
      */
-    public ICardGame getGame();
+    public ICardGame getCardGame();
     
     /**
      * Cards within the set
