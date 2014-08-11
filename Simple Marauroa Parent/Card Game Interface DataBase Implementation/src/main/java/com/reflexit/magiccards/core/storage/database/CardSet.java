@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.reflexit.magiccards.core.storage.database;
 
 import com.reflexit.magiccards.core.model.ICardGame;
@@ -167,7 +163,7 @@ public class CardSet implements Serializable, ICardSet {
     public ICardGame getCardGame() {
         for (ICardGame g
                 : Lookup.getDefault().lookupAll(ICardGame.class)) {
-            if (g.getName().equals(name)) {
+            if (g.getName().equals(getGame().getName())) {
                 return g;
             }
         }
