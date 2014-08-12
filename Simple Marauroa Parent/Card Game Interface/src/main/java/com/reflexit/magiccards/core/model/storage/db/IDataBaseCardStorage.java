@@ -1,6 +1,14 @@
 package com.reflexit.magiccards.core.model.storage.db;
 
-import com.reflexit.magiccards.core.model.*;
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardAttribute;
+import com.reflexit.magiccards.core.model.ICardCollection;
+import com.reflexit.magiccards.core.model.ICardCollectionType;
+import com.reflexit.magiccards.core.model.ICardGame;
+import com.reflexit.magiccards.core.model.ICardHasCardAttribute;
+import com.reflexit.magiccards.core.model.ICardSet;
+import com.reflexit.magiccards.core.model.ICardType;
+import com.reflexit.magiccards.core.model.IGame;
 import com.reflexit.magiccards.core.model.storage.IStorage;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,8 +47,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return results
      * @throws DBException
      */
-    List<Object> namedQuery(String query, HashMap<String, 
-            Object> parameters) throws DBException;
+    List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws DBException;
 
     /**
      * Close the database.
@@ -81,7 +88,20 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Created card
      * @throws DBException
      */
-    ICard createCard(ICardType type, String name, byte[] text, ICardSet set) 
+    ICard createCard(ICardType type, String name, byte[] text, ICardSet set)
+            throws DBException;
+
+    /**
+     * Update a card.
+     *
+     * @param type CardType
+     * @param name Card name
+     * @param text Card text
+     * @param set Set the card is to be added to
+     * @return Updated card
+     * @throws DBException
+     */
+    ICard updateCard(ICardType type, String name, byte[] text, ICardSet set)
             throws DBException;
 
     /**
@@ -93,7 +113,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return CardHasCardAttribute
      * @throws DBException
      */
-    ICardHasCardAttribute addAttributeToCard(ICard card, String attr, 
+    ICardHasCardAttribute addAttributeToCard(ICard card, String attr,
             String value) throws DBException;
 
     /**
@@ -106,7 +126,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Created CardSet
      * @throws DBException
      */
-    ICardSet createCardSet(IGame game, String name, String abbreviation, 
+    ICardSet createCardSet(IGame game, String name, String abbreviation,
             Date released) throws DBException;
 
     /**
@@ -142,7 +162,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return the created collection type
      * @throws DBException
      */
-    ICardCollectionType createCardCollectionType(String name) 
+    ICardCollectionType createCardCollectionType(String name)
             throws DBException;
 
     /**
@@ -153,7 +173,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Created Card Collection
      * @throws DBException
      */
-    ICardCollection createCardCollection(ICardCollectionType type, 
+    ICardCollection createCardCollection(ICardCollectionType type,
             String name) throws DBException;
 
     /**
@@ -164,7 +184,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Updated CardCollection
      * @throws DBException
      */
-    ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards, 
+    ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards,
             ICardCollection collection) throws DBException;
 
     /**
@@ -175,7 +195,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Updated CardCollection
      * @throws DBException
      */
-    ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards, 
+    ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards,
             ICardCollection collection) throws DBException;
 
     /**
@@ -211,7 +231,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return results
      * @throws DBException
      */
-    List<Object> createdQuery(String query, HashMap<String, Object> parameters) 
+    List<Object> createdQuery(String query, HashMap<String, Object> parameters)
             throws DBException;
 
     /**
@@ -230,7 +250,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @param attributes Set of attributes
      * @throws DBException
      */
-    void addAttributesToCard(ICard card, Map<String, String> attributes) 
+    void addAttributesToCard(ICard card, Map<String, String> attributes)
             throws DBException;
 
     /**
@@ -385,4 +405,14 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return required information to connect to the database
      */
     Map<String, String> getConnectionSettings();
+
+    /**
+     * Get the card with specified name on the specified set.
+     *
+     * @see cardExists
+     * @param name Card name.
+     * @param set Set to look into
+     * @return Card if found, null otherwise.
+     */
+    ICard getCard(String name, ICardSet set);
 }
