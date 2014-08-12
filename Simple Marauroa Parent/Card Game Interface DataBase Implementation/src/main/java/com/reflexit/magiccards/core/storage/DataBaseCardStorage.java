@@ -404,6 +404,37 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         return false;
     }
 
+    public ICard updateCard(ICardType type, String name, byte[] text, ICardSet set)
+            throws DBException {
+        try {
+            if (!cardTypeExists(type.getName(), set.getCardGame())) {
+                type = (CardType) createCardType(type.getName());
+            }
+            CardJpaController cardController
+                    = new CardJpaController(getEntityManagerFactory());
+            //Make sure to get the database object
+            HashMap parameters = new HashMap();
+            parameters.put("name", name);
+            List<Object> cards = namedQuery("Card.findByName", parameters);
+            if (!cards.isEmpty()) {
+                Card card = (Card) cards.get(0);
+                card.setCardType((CardType) type);
+                card.setText(text);
+                card.setSetName(set.getName());
+                if (card.getCardSetList() == null) {
+                    card.setCardSetList(new ArrayList<CardSet>());
+                }
+                cardController.edit(card);
+                LOG.log(Level.FINE,
+                        "Updated card: {0} on the database!", name);
+                return (ICard) card;
+            }
+            return null;
+        } catch (Exception ex) {
+            throw new DBException(ex.toString());
+        }
+    }
+
     @Override
     public ICard createCard(ICardType type, String name, byte[] text, ICardSet set)
             throws DBException {
@@ -967,5 +998,18 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
             }
         }
         return result;
+    }
+
+    public ICard getCard(String name, ICardSet set) {
+        ICard card = null;
+        if (cardExists(name, set)) {
+            for (ICard c : getCardsForSet(set)) {
+                if (c.getName().equals(name)) {
+                    card = c;
+                    break;
+                }
+            }
+        }
+        return card;
     }
 }
