@@ -36,8 +36,8 @@ public final class Editions implements ISearchableProperty {
             if (date == null || date.length() == 0 || date.equals("?")) {
                 release = new Date();
             } else {
-                SimpleDateFormat formatter = 
-                        new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
+                SimpleDateFormat formatter
+                        = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
                 release = formatter.parse(date);
             }
         }
@@ -90,7 +90,14 @@ public final class Editions implements ISearchableProperty {
         }
 
         public String getExtraAbbreviation() {
-            return abbrs.length > 1 ? abbrs[1] : "";
+            if (abbrs.length > 1) {
+                String line = abbrs[1];
+                for (int i = 2; i < abbrs.length; i++) {
+                    line += "," + abbrs[i];
+                }
+                return line;
+            }
+            return "";
         }
 
         public void setType(String type) {
