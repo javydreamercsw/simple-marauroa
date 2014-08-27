@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import org.apache.commons.io.FileUtils;
 import org.openide.util.Lookup;
 
 /**
@@ -187,12 +188,12 @@ public abstract class AbstractCardCache implements ICardCache {
     /**
      * Download and save card image, if not already saved
      *
-     * @param card
-     * @param set
-     * @param url
-     * @param remote
-     * @param forceRemote
-     * @return
+     * @param card Card to get image for
+     * @param set Set the card is from
+     * @param url URL to get the image from
+     * @param remote do remote
+     * @param forceRemote force remote update
+     * @return File of the card image.
      * @throws IOException
      * @throws CannotDetermineSetAbbriviation
      */
@@ -218,14 +219,12 @@ public abstract class AbstractCardCache implements ICardCache {
         File file2 = new File(path + ".part");
         CardFileUtils.saveStream(st, file2);
         st.close();
+        file.delete();
         if (file2.exists()) {
-            if (!file2.renameTo(file) || !file.exists()) {
-                throw new IOException("failed to rename into "
-                        + file.toString());
-            }
+            FileUtils.moveFile(file2, file);
             return file;
         }
-        throw new FileNotFoundException(file.toString());
+        throw new FileNotFoundException(file.getName());
     }
 
     /**
