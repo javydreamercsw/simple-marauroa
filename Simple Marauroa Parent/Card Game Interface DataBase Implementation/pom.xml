@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.180</version>
+            <version>1.4.181</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE80</version>
+            <version>${netbeans.version}</version>
             <type>jar</type>
         </dependency>
     </dependencies>
