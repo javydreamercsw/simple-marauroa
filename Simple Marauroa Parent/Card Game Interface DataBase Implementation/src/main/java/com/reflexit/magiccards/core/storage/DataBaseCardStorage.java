@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.*;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
