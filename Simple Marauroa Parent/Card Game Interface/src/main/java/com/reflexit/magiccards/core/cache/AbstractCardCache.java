@@ -46,6 +46,10 @@ public abstract class AbstractCardCache implements ICardCache {
      */
     private static final Logger LOG
             = Logger.getLogger(AbstractCardCache.class.getName());
+    /**
+     * The game for this cache
+     */
+    private final ICardGame game;
 
     /**
      * Enable/disable loading
@@ -87,11 +91,12 @@ public abstract class AbstractCardCache implements ICardCache {
      * @param name Cache name
      * @throws DBException Error initializing Cache database
      */
-    public AbstractCardCache(final String name) throws DBException {
-        this.name = name;
+    public AbstractCardCache(final ICardGame game) throws DBException {
+        this.name = game.getName()+" Cache";
         setLoadingEnabled(true);
         setCachingEnabled(true);
         Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
+        this.game = game;
     }
 
     @Override
@@ -299,7 +304,7 @@ public abstract class AbstractCardCache implements ICardCache {
      */
     @Override
     public final String getGameName() {
-        return name;
+        return getGame().getName();
     }
 
     /**
@@ -325,12 +330,10 @@ public abstract class AbstractCardCache implements ICardCache {
             File file2 = new File(dest.getAbsolutePath() + ".part");
             CardFileUtils.saveStream(st, file2);
             st.close();
-            if (file2.exists()) {
-                if (!file2.renameTo(dest) || file2.exists()) {
-                    throw new IOException("failed to rename into "
-                            + dest.toString());
-                }
+            if (dest.exists()) {
+                dest.delete();
             }
+            FileUtils.copyFile(file2, dest);
             file2.deleteOnExit();
         }
         if (dest.exists()) {
@@ -366,11 +369,6 @@ public abstract class AbstractCardCache implements ICardCache {
     }
 
     private ICardGame getGame() {
-        for (ICardGame game : Lookup.getDefault().lookupAll(ICardGame.class)) {
-            if (game.getName().equals(getGameName())) {
-                return game;
-            }
-        }
-        return null;
+        return game;
     }
 }
