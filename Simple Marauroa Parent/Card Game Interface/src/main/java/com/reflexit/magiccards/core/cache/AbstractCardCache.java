@@ -38,10 +38,6 @@ public abstract class AbstractCardCache implements ICardCache {
      */
     private static File cacheDir;
     /**
-     * Cache name
-     */
-    private String name;
-    /**
      * Logger
      */
     private static final Logger LOG
@@ -92,7 +88,6 @@ public abstract class AbstractCardCache implements ICardCache {
      * @throws DBException Error initializing Cache database
      */
     public AbstractCardCache(final ICardGame game) throws DBException {
-        this.name = game.getName()+" Cache";
         setLoadingEnabled(true);
         setCachingEnabled(true);
         Lookup.getDefault().lookup(IDataBaseCardStorage.class).initialize();
