@@ -316,7 +316,7 @@ public abstract class AbstractCardCache implements ICardCache {
             final boolean overwrite) throws IOException {
         InputStream st = null;
         if (!dest.exists() || overwrite) {
-            LOG.log(Level.INFO, "Downloading file from: {0}", url);
+            LOG.log(Level.FINE, "Downloading file from: {0}", url);
             try {
                 st = url.openStream();
             } catch (IOException e) {
