@@ -213,8 +213,13 @@ public abstract class DefaultCardGame implements ICardGame,
             // Create the buffered image
             GraphicsDevice gs = ge.getDefaultScreenDevice();
             GraphicsConfiguration gc = gs.getDefaultConfiguration();
-            bimage = gc.createCompatibleImage(
-                    image.getWidth(null), image.getHeight(null), transparency);
+            int width = image.getWidth(null);
+            int height = image.getHeight(null);
+            if (width > 0 || height > 0) {
+                bimage = gc.createCompatibleImage(
+                        image.getWidth(null), image.getHeight(null), 
+                        transparency);
+            }
         } catch (HeadlessException e) {
             // The system does not have a screen
             LOG.log(Level.SEVERE,
