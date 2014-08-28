@@ -163,8 +163,7 @@ public abstract class DefaultCardGame implements ICardGame,
     public List<String> getColumns() {
         ArrayList<String> columns = new ArrayList<String>();
         try {
-            columns.add("Name");
-            columns.add("Set");
+            columns.add("Text");
             HashMap parameters = new HashMap();
             parameters.put("game", getName());
             List result = Lookup.getDefault().lookup(IDataBaseCardStorage.class)
