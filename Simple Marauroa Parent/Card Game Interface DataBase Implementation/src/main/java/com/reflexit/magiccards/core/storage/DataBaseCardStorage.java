@@ -26,7 +26,6 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.*;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -819,10 +818,19 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
 
     @Override
     public IGame createGame(String name) {
+        Game game = null;
         GameJpaController controller
                 = new GameJpaController(getEntityManagerFactory());
-        Game game = new Game(name);
-        controller.create(game);
+        for (Game g : controller.findGameEntities()) {
+            if (g.getName().equals(name)) {
+                game = g;
+                break;
+            }
+        }
+        if (game == null) {
+            game = new Game(name);
+            controller.create(game);
+        }
         return (IGame) game;
     }
 
@@ -831,7 +839,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
             throws DBException {
         HashMap parameters = new HashMap();
         parameters.put("name", name);
-        return getAttributesForCard((ICard) namedQuery("Card.findByName", parameters).get(0));
+        return getAttributesForCard((ICard) namedQuery("Card.findByName", 
+                parameters).get(0));
     }
 
     @Override
