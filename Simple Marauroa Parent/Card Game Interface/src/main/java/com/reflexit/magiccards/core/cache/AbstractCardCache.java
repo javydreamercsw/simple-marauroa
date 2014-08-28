@@ -179,10 +179,15 @@ public abstract class AbstractCardCache implements ICardCache {
      * @return true if exists
      * @throws CannotDetermineSetAbbriviation
      */
-    public boolean cardImageExists(final ICard card, final ICardSet<ICard> set)
-            throws CannotDetermineSetAbbriviation {
-        String path = createLocalImageFilePath(card, set);
-        return path == null ? false : new File(path).exists();
+    public boolean cardImageExists(final ICard card,
+            final ICardSet<ICard> set) {
+        try {
+            String path = createLocalImageFilePath(card, set);
+            return path == null ? false : new File(path).exists();
+        } catch (CannotDetermineSetAbbriviation ex) {
+            LOG.log(Level.FINE, null, ex);
+            return false;
+        }
     }
 
     /**
