@@ -101,8 +101,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         put("type", CLASS_NAME);
         awayReplies = new HashMap<String, Long>();
         update();
-        //For gaging
-        add("gag", 0);
         addEmptySlots("!visited");
     }
 
