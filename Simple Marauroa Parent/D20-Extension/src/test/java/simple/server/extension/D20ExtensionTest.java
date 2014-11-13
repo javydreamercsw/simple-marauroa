@@ -1,13 +1,23 @@
 package simple.server.extension;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import marauroa.common.Log4J;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.openide.util.Lookup;
+import simple.common.SimpleException;
+import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.clientobject.ClientObject;
+import simple.server.extension.attribute.iD20Attribute;
+import simple.server.mock.MockSimpleRPWorld;
 
 /**
  *
@@ -15,11 +25,21 @@ import static org.junit.Assert.*;
  */
 public class D20ExtensionTest {
 
+    private static final Logger LOG
+            = Logger.getLogger(D20ExtensionTest.class.getName());
+
     public D20ExtensionTest() {
     }
 
     @BeforeClass
     public static void setUpClass() {
+        Log4J.init();
+
+        MockSimpleRPWorld.get();
+
+        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream().forEach((entity) -> {
+            entity.generateRPClass();
+        });
     }
 
     @AfterClass
@@ -61,20 +81,21 @@ public class D20ExtensionTest {
     @Test
     public void testRootRPClassUpdate() {
         System.out.println("rootRPClassUpdate");
-        
-    }
-
-    /**
-     * Test of getName method, of class D20Extension.
-     */
-    @Test
-    public void testGetName() {
-        System.out.println("getName");
+        ClientObject entity = new ClientObject(new RPObject("Test"));
         D20Extension instance = new D20Extension();
-        String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try {
+            instance.clientObjectUpdate(entity);
+            int count = 0;
+            for (iD20Attribute attr : Lookup.getDefault().lookupAll(iD20Attribute.class)) {
+                count++;
+                LOG.log(Level.INFO, "Checking default value for {0}", attr.getName());
+                assertEquals(attr.getDefaultValue(), entity.getInt(attr.getName()));
+            }
+            if (count == 0) {
+                fail("Faound no Attributes");
+            }
+        } catch (SimpleException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
     }
 }
