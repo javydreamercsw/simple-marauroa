@@ -2,7 +2,7 @@ package simple;
 
 import marauroa.common.Log4J;
 import org.openide.util.Lookup;
-import simple.server.core.engine.MockSimpleRPWorld;
+import simple.server.mock.MockSimpleRPWorld;
 import simple.server.core.entity.RPEntityInterface;
 
 /**

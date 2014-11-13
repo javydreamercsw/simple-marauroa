@@ -1,6 +1,8 @@
-package simple.server.core.engine;
+package simple.server.mock;
 
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.engine.PlayerList;
+import simple.server.core.engine.SimpleRPRuleProcessor;
 
 /**
  *

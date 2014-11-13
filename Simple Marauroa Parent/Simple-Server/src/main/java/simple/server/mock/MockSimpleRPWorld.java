@@ -1,6 +1,7 @@
-package simple.server.core.engine;
+package simple.server.mock;
 
 import marauroa.common.game.RPObject;
+import simple.server.core.engine.SimpleRPWorld;
 
 /**
  *
