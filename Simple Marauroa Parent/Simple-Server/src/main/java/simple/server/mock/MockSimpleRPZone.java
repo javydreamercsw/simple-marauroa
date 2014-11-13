@@ -1,4 +1,4 @@
-package simple.server.core.engine;
+package simple.server.mock;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,6 +7,8 @@ import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
 import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.Entity;
 
 /**

@@ -1,5 +1,6 @@
 package simple.server.core.engine;
 
+import simple.server.mock.MockSimpleRPWorld;
 import marauroa.common.game.IRPZone.ID;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
