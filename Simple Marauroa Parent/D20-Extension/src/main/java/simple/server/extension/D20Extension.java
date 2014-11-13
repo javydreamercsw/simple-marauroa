@@ -1,4 +1,4 @@
-package pcgen.system;
+package simple.server.extension;
 
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
