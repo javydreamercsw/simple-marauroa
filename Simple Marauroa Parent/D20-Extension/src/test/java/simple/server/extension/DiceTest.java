@@ -1,8 +1,5 @@
 package simple.server.extension;
 
-import simple.server.extension.DieEx;
-import simple.server.extension.Dice;
-import simple.server.extension.Die;
 import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;

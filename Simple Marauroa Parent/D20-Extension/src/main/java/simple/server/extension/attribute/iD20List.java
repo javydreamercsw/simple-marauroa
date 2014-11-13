@@ -1,11 +1,12 @@
-package simple.server.extension;
+package simple.server.extension.attribute;
 
 /**
- * An attribute is something for a character like Wisdom, Fortitude, etc.
+ * This represents lists, like skills, equipment, etc
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 
-public interface iD20Attribute {
+
+public interface iD20List {
     /**
      * Get Attribute name.
      * @return Attribute name
@@ -19,8 +20,8 @@ public interface iD20Attribute {
     public String getID();
     
     /**
-     * Get attribute modifier.
-     * @return attribute modifier
+     * List size, use -1 for unlimited.
+     * @return list size.
      */
-    public int getAttributeMod();
+    public int getSize();
 }
