@@ -17,10 +17,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.2</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -37,19 +37,8 @@
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>marauroa</artifactId>
-            <version>3.9.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
             <version>0.02.06-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.pcgen</groupId>
-            <artifactId>pcgen</artifactId>
-            <version>6.01.00-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
         <dependency>

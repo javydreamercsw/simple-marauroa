@@ -188,6 +188,6 @@ public class MazeGenerator {
         MazeGenerator maze = new MazeGenerator(N);
         StdDraw.show(0);
         maze.draw();
-//        maze.solve();
+        maze.solve();
     }
 }
