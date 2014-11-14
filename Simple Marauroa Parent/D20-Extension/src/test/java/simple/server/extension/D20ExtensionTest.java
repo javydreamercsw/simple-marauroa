@@ -73,6 +73,9 @@ public class D20ExtensionTest {
                 new DummyList().getName()));
         assertTrue(entity.hasDefinition(Definition.DefinitionClass.RPSLOT,
                 new DummyList2().getName()));
+        //Make sure stats are added
+        assertTrue(entity.hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
+                new DummyStat().getName()));
     }
 
     /**

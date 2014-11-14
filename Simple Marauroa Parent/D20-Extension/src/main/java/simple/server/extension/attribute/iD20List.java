@@ -6,19 +6,8 @@ package simple.server.extension.attribute;
  */
 
 
-public interface iD20List {
-    /**
-     * Get Attribute name.
-     * @return Attribute name
-     */
-    public String getName();
-    
-    /**
-     * Get the attribute id. Unique identification
-     * @return attribute id
-     */
-    public String getID();
-    
+public interface iD20List extends iD20Characteristic{
+  
     /**
      * List size, use -1 for unlimited.
      * @return list size.
