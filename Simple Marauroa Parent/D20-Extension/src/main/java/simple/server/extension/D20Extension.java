@@ -8,6 +8,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.attribute.iD20Attribute;
 import simple.server.extension.attribute.iD20List;
+import simple.server.extension.attribute.iD20Stat;
 
 /**
  *
@@ -25,6 +26,11 @@ public class D20Extension extends SimpleServerExtension {
         Lookup.getDefault().lookupAll(iD20Attribute.class).stream().forEach((attr) -> {
             LOG.info("Adding attribute: " + attr.getName());
             entity.addAttribute(attr.getName(), Definition.Type.INT);
+        });
+        //Stats
+        Lookup.getDefault().lookupAll(iD20Stat.class).stream().forEach((stat) -> {
+            LOG.info("Adding stat: " + stat.getName());
+            entity.addAttribute(stat.getName(), Definition.Type.INT);
         });
         //Other attributes
         Lookup.getDefault().lookupAll(iD20List.class).stream().forEach((attr) -> {
