@@ -17,5 +17,5 @@ public interface iD20Characteristic {
      * Get the attribute id. Unique identification
      * @return attribute id
      */
-    public String getID();
+    public String getShortName();
 }
