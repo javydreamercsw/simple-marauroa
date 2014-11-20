@@ -1,6 +1,5 @@
 package simple.server.core.entity;
 
-import java.util.Iterator;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.Definition;
@@ -57,10 +56,8 @@ public class Entity extends RPObject implements RPEntityInterface {
              */
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-            for (Iterator<? extends MarauroaServerExtension> it =
-                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                    .iterator(); it.hasNext();) {
-                MarauroaServerExtension extension = it.next();
+            for (MarauroaServerExtension extension
+                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                 logger.debug("Processing extension to modify root class "
                         + "definition: " + extension.getClass().getSimpleName());
                 extension.modifyRootRPClassDefinition(entity);
@@ -253,10 +250,8 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public void update() {
-        for (Iterator<? extends MarauroaServerExtension> it =
-                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                .iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
+        for (MarauroaServerExtension extension
+                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             logger.debug("Processing extension to update root class "
                     + "definition: " + extension.getClass().getSimpleName());
             extension.rootRPClassUpdate(this);
