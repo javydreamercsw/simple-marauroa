@@ -17,6 +17,7 @@ import simple.common.SimpleException;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.extension.attribute.iD20Attribute;
+import simple.server.extension.attribute.iD20Stat;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -37,7 +38,8 @@ public class D20ExtensionTest {
 
         MockSimpleRPWorld.get();
 
-        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream().forEach((entity) -> {
+        Lookup.getDefault().lookupAll(RPEntityInterface.class)
+                .stream().forEach((entity) -> {
             entity.generateRPClass();
         });
     }
@@ -89,13 +91,28 @@ public class D20ExtensionTest {
         try {
             instance.clientObjectUpdate(entity);
             int count = 0;
-            for (iD20Attribute attr : Lookup.getDefault().lookupAll(iD20Attribute.class)) {
+            for (iD20Attribute attr : 
+                    Lookup.getDefault().lookupAll(iD20Attribute.class)) {
                 count++;
-                LOG.log(Level.INFO, "Checking default value for {0}", attr.getName());
-                assertEquals(attr.getDefaultValue(), entity.getInt(attr.getName()));
+                LOG.log(Level.INFO, "Checking default value for {0}", 
+                        attr.getName());
+                assertEquals(attr.getDefaultValue(), 
+                        entity.getInt(attr.getName()));
             }
             if (count == 0) {
-                fail("Faound no Attributes");
+                fail("Found no Attributes");
+            }
+            count=0;
+            for (iD20Stat stat : 
+                    Lookup.getDefault().lookupAll(iD20Stat.class)) {
+                count++;
+                LOG.log(Level.INFO, "Checking default value for {0}", 
+                        stat.getName());
+                assertEquals(stat.getDefaultValue(), 
+                        entity.getInt(stat.getName()));
+            }
+            if (count == 0) {
+                fail("Found no Stats");
             }
         } catch (SimpleException ex) {
             LOG.log(Level.SEVERE, null, ex);

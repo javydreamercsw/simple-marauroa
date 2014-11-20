@@ -16,7 +16,7 @@ public class DummyAttr2 implements iD20Attribute {
     }
 
     @Override
-    public String getID() {
+    public String getShortName() {
         return "Dummy2";
     }
 

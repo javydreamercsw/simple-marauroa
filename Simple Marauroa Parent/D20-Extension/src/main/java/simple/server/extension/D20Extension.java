@@ -47,6 +47,12 @@ public class D20Extension extends SimpleServerExtension {
                 entity.put(attr.getName(), attr.getDefaultValue());
             }
         });
+        Lookup.getDefault().lookupAll(iD20Stat.class).stream().forEach((stat) -> {
+            if (!entity.has(stat.getName())) {
+                LOG.info("Updating stat: " + stat.getName());
+                entity.put(stat.getName(), stat.getDefaultValue());
+            }
+        });
     }
 
     @Override

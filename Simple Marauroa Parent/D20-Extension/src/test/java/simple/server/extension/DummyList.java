@@ -16,7 +16,7 @@ public class DummyList implements iD20List {
     }
 
     @Override
-    public String getID() {
+    public String getShortName() {
         return DummyList.class.getSimpleName();
     }
 

@@ -16,7 +16,7 @@ public class DummyStat implements iD20Stat {
     }
 
     @Override
-    public String getID() {
+    public String getShortName() {
         return "DummyStat";
     }
 
