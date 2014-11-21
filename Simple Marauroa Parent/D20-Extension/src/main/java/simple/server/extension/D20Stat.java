@@ -1,4 +1,4 @@
-package simple.server.extension.attribute;
+package simple.server.extension;
 
 import simple.server.extension.iD20Definition;
 

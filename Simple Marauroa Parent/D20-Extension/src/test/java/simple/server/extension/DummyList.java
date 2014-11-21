@@ -1,7 +1,6 @@
 package simple.server.extension;
 
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.extension.attribute.D20List;
 
 /**
  *

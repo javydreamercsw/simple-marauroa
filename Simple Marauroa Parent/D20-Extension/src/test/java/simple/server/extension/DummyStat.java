@@ -2,7 +2,6 @@ package simple.server.extension;
 
 import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.extension.attribute.D20Stat;
 
 /**
  *

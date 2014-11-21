@@ -1,4 +1,4 @@
-package simple.server.extension.attribute;
+package simple.server.extension;
 
 /**
  * This represents a Class in a D20 based game.
