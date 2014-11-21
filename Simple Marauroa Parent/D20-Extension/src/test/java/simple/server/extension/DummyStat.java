@@ -1,5 +1,6 @@
 package simple.server.extension;
 
+import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.attribute.iD20Stat;
 
@@ -28,5 +29,12 @@ public class DummyStat implements iD20Stat {
     @Override
     public String getDefaultValue() {
         return "0";
+    }
+    
+    private static int counter = 0;
+
+    @Override
+    public Definition.Type getDefinitionType() {
+        return Definition.Type.values()[counter++];
     }
 }

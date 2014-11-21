@@ -6,7 +6,7 @@ package simple.server.extension.attribute;
  */
 
 
-public interface iD20Stat extends iD20Characteristic{
+public interface iD20Stat extends iD20Characteristic, iD20Definition{
     public int getStatMod();
 
     public String getDefaultValue();
