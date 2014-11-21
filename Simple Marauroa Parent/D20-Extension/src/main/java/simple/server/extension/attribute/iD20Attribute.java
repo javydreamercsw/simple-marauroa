@@ -17,5 +17,5 @@ public interface iD20Attribute extends iD20Characteristic{
      * Get attribute default value.
      * @return default value
      */
-    public int getDefaultValue();
+    public String getDefaultValue();
 }

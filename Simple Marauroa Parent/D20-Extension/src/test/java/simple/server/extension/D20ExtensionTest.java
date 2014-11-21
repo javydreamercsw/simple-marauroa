@@ -1,22 +1,27 @@
 package simple.server.extension;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Log4J;
-import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.openide.util.Lookup;
-import simple.common.SimpleException;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.extension.attribute.iD20Attribute;
+import simple.server.extension.attribute.iD20List;
+import simple.server.extension.attribute.iD20Race;
 import simple.server.extension.attribute.iD20Stat;
 import simple.server.mock.MockSimpleRPWorld;
 
@@ -40,8 +45,10 @@ public class D20ExtensionTest {
 
         Lookup.getDefault().lookupAll(RPEntityInterface.class)
                 .stream().forEach((entity) -> {
-            entity.generateRPClass();
-        });
+                    LOG.log(Level.FINE, "Registering RPEntity: {0}",
+                            entity.getClass().getSimpleName());
+                    entity.generateRPClass();
+                });
     }
 
     @AfterClass
@@ -60,61 +67,57 @@ public class D20ExtensionTest {
      * Test of modifyRootRPClassDefinition method, of class D20Extension.
      */
     @Test
-    public void testModifyRootRPClassDefinition() {
-        System.out.println("modifyRootRPClassDefinition");
-        RPClass entity = new RPClass("Test");
-        D20Extension instance = new D20Extension();
-        instance.modifyRootRPClassDefinition(entity);
-        //Make sure that the Attributes are added
-        assertTrue(entity.hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
-                new DummyAttr().getName()));
-        assertTrue(entity.hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
-                new DummyAttr2().getName()));
-        //Make sure that the attribute lists are added
-        assertTrue(entity.hasDefinition(Definition.DefinitionClass.RPSLOT,
-                new DummyList().getName()));
-        assertTrue(entity.hasDefinition(Definition.DefinitionClass.RPSLOT,
-                new DummyList2().getName()));
-        //Make sure stats are added
-        assertTrue(entity.hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
-                new DummyStat().getName()));
-    }
-
-    /**
-     * Test of rootRPClassUpdate method, of class D20Extension.
-     */
-    @Test
-    public void testRootRPClassUpdate() {
-        System.out.println("rootRPClassUpdate");
-        ClientObject entity = new ClientObject(new RPObject("Test"));
-        D20Extension instance = new D20Extension();
+    public void testRPClassDefinition() {
         try {
-            instance.clientObjectUpdate(entity);
+            System.out.println("RPClass Definition Test");
+            RPClass entity = new RPClass("Test");
+            entity.isA(DummyRace.class.newInstance().getRPClassName());
+            //Check all classes are defined properly
             int count = 0;
-            for (iD20Attribute attr : 
-                    Lookup.getDefault().lookupAll(iD20Attribute.class)) {
-                count++;
-                LOG.log(Level.INFO, "Checking default value for {0}", 
-                        attr.getName());
-                assertEquals(attr.getDefaultValue(), 
-                        entity.getInt(attr.getName()));
+            Collection<? extends iD20Race> races
+                    = Lookup.getDefault().lookupAll(iD20Race.class);
+            for (iD20Race r : races) {
+                try {
+                    System.out.println("Checking class: " + r.getClass().getSimpleName());
+                    assertTrue(RPClass.hasRPClass(((Entity) r).getRPClassName()));
+                    //Check class
+                    //Attributes
+                    Constructor<?> cons = r.getClass().getConstructor(RPObject.class);
+                    RPObject test = (RPObject) cons.newInstance(new RPObject());
+                    test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
+                    assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
+                    Lookup.getDefault().lookupAll(iD20Attribute.class).stream().map((attr) -> {
+                        System.out.println(attr.getName() + ": " + test.get(attr.getName()));
+                        return attr;
+                    }).forEach((attr) -> {
+                        assertTrue(test.has(attr.getName()));
+                    });
+                    //Stats
+                    Lookup.getDefault().lookupAll(iD20Stat.class).stream().map((stat) -> {
+                        assertTrue(test.has(stat.getName()));
+                        return stat;
+                    }).forEach((stat) -> {
+                        System.out.println(stat.getName() + ": " + test.get(stat.getName()));
+                    });
+                    //Other attributes
+                    Lookup.getDefault().lookupAll(iD20List.class).stream().map((attr) -> {
+                        assertTrue(test.hasSlot(attr.getName()));
+                        return attr;
+                    }).forEach((attr) -> {
+                        System.out.println(attr.getName() + ": " + test.get(attr.getName()));
+                    });
+                    System.out.println(r.toString());
+                    count++;
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    LOG.log(Level.SEVERE, null, ex);
+                    fail();
+                }
             }
             if (count == 0) {
-                fail("Found no Attributes");
+                fail("Found no wrestler classes!");
             }
-            count=0;
-            for (iD20Stat stat : 
-                    Lookup.getDefault().lookupAll(iD20Stat.class)) {
-                count++;
-                LOG.log(Level.INFO, "Checking default value for {0}", 
-                        stat.getName());
-                assertEquals(stat.getDefaultValue(), 
-                        entity.getInt(stat.getName()));
-            }
-            if (count == 0) {
-                fail("Found no Stats");
-            }
-        } catch (SimpleException ex) {
+            assertEquals(races.size(), count);
+        } catch (InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
