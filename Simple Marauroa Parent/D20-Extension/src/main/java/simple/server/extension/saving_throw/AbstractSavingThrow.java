@@ -6,7 +6,7 @@ package simple.server.extension.saving_throw;
  */
 public abstract class AbstractSavingThrow implements D20SavingThrow {
 
-    protected int base = 0, misc = 0;
+    protected int base = 10, misc = 0;
 
     @Override
     public int getBaseScore() {
@@ -31,5 +31,15 @@ public abstract class AbstractSavingThrow implements D20SavingThrow {
     @Override
     public int getScore() {
         return getBaseScore() + getMiscMod();
+    }
+    
+    @Override
+    public String getName() {
+        return getClass().getSimpleName().replaceAll("_", " ");
+    }
+
+    @Override
+    public String getShortName() {
+        return getClass().getSimpleName().replaceAll("_", " ");
     }
 }
