@@ -10,7 +10,7 @@ public abstract class AbstractAbility implements D20Ability {
 
     @Override
     public int getDefaultValue() {
-        return 10;
+        return 11;
     }
 
     @Override
