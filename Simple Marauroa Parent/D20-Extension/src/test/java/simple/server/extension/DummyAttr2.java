@@ -2,14 +2,14 @@ package simple.server.extension;
 
 import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.extension.attribute.iD20Attribute;
+import simple.server.extension.attribute.D20Attribute;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = iD20Attribute.class)
-public class DummyAttr2 implements iD20Attribute {
+@ServiceProvider(service = D20Attribute.class)
+public class DummyAttr2 implements D20Attribute {
 
     @Override
     public String getName() {

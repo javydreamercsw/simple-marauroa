@@ -6,6 +6,6 @@ package simple.server.extension.attribute;
  */
 
 
-public interface iD20Class extends iD20Characteristic{
+public interface D20Class extends D20Characteristic{
     
 }

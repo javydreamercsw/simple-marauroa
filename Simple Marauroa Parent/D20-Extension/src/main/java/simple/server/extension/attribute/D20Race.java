@@ -9,7 +9,7 @@ import java.util.Map;
  */
 
 
-public interface iD20Race extends iD20Characteristic{
+public interface D20Race extends D20Characteristic{
    
     /**
      * A list of race bonuses in the format: Attribute name, Bonus
@@ -21,5 +21,5 @@ public interface iD20Race extends iD20Characteristic{
      * A list of the preferred classes on a D20 game. (Easier to gain levels)
      * @return list of the preferred
      */
-    List<iD20Class> getPrefferedClasses();
+    List<D20Class> getPrefferedClasses();
 }
