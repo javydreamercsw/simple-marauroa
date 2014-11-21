@@ -85,10 +85,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     /**
      * list of super admins read from admins.list.
      */
-    private static List<String> adminNames = new LinkedList<String>();
+    private static List<String> adminNames = new LinkedList<>();
     private int adminLevel;
     private boolean disconnected;
-    public static final String CLASS_NAME = "client_object";
 
     /**
      * Constructor
@@ -97,27 +96,29 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     public ClientObject(RPObject object) {
         super(object);
-        setRPClass(CLASS_NAME);
-        put("type", CLASS_NAME);
-        awayReplies = new HashMap<String, Long>();
+        RPCLASS_NAME = "client_object";
+        setRPClass(RPCLASS_NAME);
+        put("type", RPCLASS_NAME);
+        awayReplies = new HashMap<>();
         update();
         addEmptySlots("!visited");
     }
 
     @Override
     public final void update() {
-        for (MarauroaServerExtension extension
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
             logger.debug("Processing extension to update client object "
                     + "class definition: " + extension.getClass()
                     .getSimpleName());
+            return extension;
+        }).forEach((extension) -> {
             try {
                 extension.clientObjectUpdate(this);
             } catch (SimpleException ex) {
                 java.util.logging.Logger.getLogger(ClientObject.class.getName())
                         .log(Level.SEVERE, null, ex);
             }
-        }
+        });
         super.update();
     }
 
@@ -125,6 +126,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      * Constructor for serialization purposes
      */
     public ClientObject() {
+        RPCLASS_NAME = "client_object";
     }
 
     /**
@@ -501,30 +503,22 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 
             String adminFilename = "data/conf/admins.list";
 
-            try {
-                InputStream is = player.getClass().getClassLoader()
-                        .getResourceAsStream(
-                                adminFilename);
+            InputStream is = player.getClass().getClassLoader()
+                    .getResourceAsStream(
+                            adminFilename);
 
-                if (is == null) {
-                    logger.warn("data/conf/admins.list does not exist.");
-                } else {
-                    BufferedReader in = new BufferedReader(
-                            new UnicodeSupportingInputStreamReader(is));
-                    try {
-                        String line;
-                        while ((line = in.readLine()) != null) {
-                            adminNames.add(line);
-                        }
-                    } catch (IOException e) {
-                        logger.error("Error loading admin names from: " + adminFilename, e);
-                    } finally {
-                        in.close();
+            if (is == null) {
+                logger.warn("data/conf/admins.list does not exist.");
+            } else {
+                try (BufferedReader in = new BufferedReader(
+                        new UnicodeSupportingInputStreamReader(is))) {
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        adminNames.add(line);
                     }
+                } catch (IOException e) {
+                    logger.error("Error loading admin names from: " + adminFilename, e);
                 }
-            } catch (IOException e) {
-                logger.error(
-                        "Error loading admin names from: " + adminFilename, e);
             }
         }
 
@@ -538,8 +532,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     @Override
     public void generateRPClass() {
-        if (!RPClass.hasRPClass("client_object")) {
-            ExtensibleRPClass player = new ExtensibleRPClass("client_object");
+        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+            ExtensibleRPClass player = new ExtensibleRPClass(getRPClassName());
             player.isA("rpentity");
             //This is the assigned key for encryption purposes on the client
             player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
@@ -548,13 +542,15 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
              * Add event player.addRPEvent("<Event RPClassName>",
              * Definition.VOLATILE);
              */
-            player.addRPEvent(PrivateTextEvent.RPCLASS_NAME, Definition.PRIVATE);
+            player.addRPEvent(PrivateTextEvent.RPCLASS_NAME,
+                    Definition.PRIVATE);
 
             player.addAttribute("outfit", Type.INT);
             player.addAttribute("outfit_org", Type.INT);
 
             player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
-            player.addAttribute("grumpy", Type.LONG_STRING, Definition.VOLATILE);
+            player.addAttribute("grumpy", Type.LONG_STRING,
+                    Definition.VOLATILE);
 
             // Use this for admin menus and usage.
             player.addAttribute("admin", Type.FLAG);
@@ -599,16 +595,17 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     }
 
     protected static void extendClass(RPClass player) {
-        for (MarauroaServerExtension extension
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
             logger.debug("Processing extension to modify client definition: "
                     + extension.getClass().getSimpleName());
+            return extension;
+        }).forEach((extension) -> {
             extension.modifyClientObjectDefinition(player);
-        }
+        });
         logger.debug("ClientObject attributes:");
-        for (Definition def : player.getDefinitions()) {
+        player.getDefinitions().stream().forEach((def) -> {
             logger.debug(def.getName() + ": " + def.getType());
-        }
+        });
         logger.debug("-------------------------------");
     }
 
@@ -647,7 +644,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         if (slot == null) {
             return;
         }
-        List<RPObject> objects = new LinkedList<RPObject>();
+        List<RPObject> objects = new LinkedList<>();
         for (RPObject objectInSlot : slot) {
             objects.add(objectInSlot);
         }

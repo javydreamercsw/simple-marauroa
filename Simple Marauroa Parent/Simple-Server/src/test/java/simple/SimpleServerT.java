@@ -16,9 +16,10 @@ public abstract class SimpleServerT {
 
         MockSimpleRPWorld.get();
 
-        for (RPEntityInterface entity : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
+        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream().forEach((entity) -> {
+            System.out.println("Initializing RPEntity: " + entity.getClass().getSimpleName());
             entity.generateRPClass();
-        }
+        });
     }
 
     public SimpleServerT() {
