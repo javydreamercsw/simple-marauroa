@@ -6,7 +6,7 @@ package simple.server.extension.attribute;
  */
 
 
-public interface iD20List extends iD20Characteristic{
+public interface D20List extends D20Characteristic{
   
     /**
      * List size, use -1 for unlimited.

@@ -6,7 +6,7 @@ package simple.server.extension.attribute;
  */
 
 
-public interface iD20Characteristic {
+public interface D20Characteristic {
     /**
      * Get Attribute name.
      * @return Attribute name

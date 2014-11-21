@@ -19,10 +19,10 @@ import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.extension.attribute.iD20Attribute;
-import simple.server.extension.attribute.iD20List;
-import simple.server.extension.attribute.iD20Race;
-import simple.server.extension.attribute.iD20Stat;
+import simple.server.extension.attribute.D20Attribute;
+import simple.server.extension.attribute.D20List;
+import simple.server.extension.attribute.D20Race;
+import simple.server.extension.attribute.D20Stat;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -74,9 +74,9 @@ public class D20ExtensionTest {
             entity.isA(DummyRace.class.newInstance().getRPClassName());
             //Check all classes are defined properly
             int count = 0;
-            Collection<? extends iD20Race> races
-                    = Lookup.getDefault().lookupAll(iD20Race.class);
-            for (iD20Race r : races) {
+            Collection<? extends D20Race> races
+                    = Lookup.getDefault().lookupAll(D20Race.class);
+            for (D20Race r : races) {
                 try {
                     System.out.println("Checking class: " + r.getClass().getSimpleName());
                     assertTrue(RPClass.hasRPClass(((Entity) r).getRPClassName()));
@@ -86,21 +86,21 @@ public class D20ExtensionTest {
                     RPObject test = (RPObject) cons.newInstance(new RPObject());
                     test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
                     assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
-                    Lookup.getDefault().lookupAll(iD20Attribute.class).stream().map((attr) -> {
+                    Lookup.getDefault().lookupAll(D20Attribute.class).stream().map((attr) -> {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
                         return attr;
                     }).forEach((attr) -> {
                         assertTrue(test.has(attr.getName()));
                     });
                     //Stats
-                    Lookup.getDefault().lookupAll(iD20Stat.class).stream().map((stat) -> {
+                    Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
                         assertTrue(test.has(stat.getName()));
                         return stat;
                     }).forEach((stat) -> {
                         System.out.println(stat.getName() + ": " + test.get(stat.getName()));
                     });
                     //Other attributes
-                    Lookup.getDefault().lookupAll(iD20List.class).stream().map((attr) -> {
+                    Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
                         assertTrue(test.hasSlot(attr.getName()));
                         return attr;
                     }).forEach((attr) -> {
