@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
@@ -48,14 +47,14 @@ public abstract class AbstractRace extends RPEntity implements iD20Race {
                     LOG.log(Level.INFO, "Adding attribute: {0}", attr.getName());
                     return attr;
                 }).forEach((attr) -> {
-                    clazz.addAttribute(attr.getName(), Definition.Type.INT);
+                    clazz.addAttribute(attr.getName(), attr.getDefinitionType());
                 });
                 //Stats
                 Lookup.getDefault().lookupAll(iD20Stat.class).stream().map((stat) -> {
                     LOG.log(Level.INFO, "Adding stat: {0}", stat.getName());
                     return stat;
                 }).forEach((stat) -> {
-                    clazz.addAttribute(stat.getName(), Definition.Type.INT);
+                    clazz.addAttribute(stat.getName(), stat.getDefinitionType());
                 });
                 //Other attributes
                 Lookup.getDefault().lookupAll(iD20List.class).stream().map((attr) -> {

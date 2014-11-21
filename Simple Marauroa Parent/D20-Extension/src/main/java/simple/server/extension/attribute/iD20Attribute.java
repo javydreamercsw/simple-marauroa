@@ -5,7 +5,7 @@ package simple.server.extension.attribute;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 
-public interface iD20Attribute extends iD20Characteristic{
+public interface iD20Attribute extends iD20Characteristic, iD20Definition{
     
     /**
      * Get attribute modifier.

@@ -1,5 +1,6 @@
 package simple.server.extension;
 
+import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.attribute.iD20Attribute;
 
@@ -9,6 +10,8 @@ import simple.server.extension.attribute.iD20Attribute;
  */
 @ServiceProvider(service = iD20Attribute.class)
 public class DummyAttr implements iD20Attribute {
+
+    private static int counter = 0;
 
     @Override
     public String getName() {
@@ -28,5 +31,10 @@ public class DummyAttr implements iD20Attribute {
     @Override
     public String getDefaultValue() {
         return "0";
+    }
+
+    @Override
+    public Definition.Type getDefinitionType() {
+        return Definition.Type.values()[counter++];
     }
 }
