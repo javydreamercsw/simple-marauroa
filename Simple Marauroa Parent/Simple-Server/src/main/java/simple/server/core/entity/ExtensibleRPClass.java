@@ -1,6 +1,5 @@
 package simple.server.core.entity;
 
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.Definition.Type;
@@ -24,8 +23,7 @@ public class ExtensibleRPClass extends RPClass {
 
     @Override
     public void addAttribute(String name, Type type, byte b) {
-        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
+        for (MarauroaServerExtension extension : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             Logger.getLogger(ExtensibleRPClass.class.getSimpleName()).log(Level.FINE,
                     "Processing extension to add attribute: {0}",
                     extension.getClass().getSimpleName());
@@ -36,8 +34,7 @@ public class ExtensibleRPClass extends RPClass {
 
     @Override
     public void addAttribute(String name, Type type) {
-        for (Iterator<? extends MarauroaServerExtension> it = Lookup.getDefault().lookupAll(MarauroaServerExtension.class).iterator(); it.hasNext();) {
-            MarauroaServerExtension extension = it.next();
+        for (MarauroaServerExtension extension : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             Logger.getLogger(ExtensibleRPClass.class.getSimpleName()).log(Level.FINE,
                     "Processing extension to add attribute: {0}",
                     extension.getClass().getSimpleName());

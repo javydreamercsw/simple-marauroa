@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
@@ -12,6 +13,7 @@ import marauroa.common.game.RPSlot;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.server.core.engine.SimpleRPWorld;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.EquipListener;
@@ -35,66 +37,70 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
-            RPClass entity = new RPClass(RPCLASS_NAME);
-            entity.isA("entity");
-
-            // class, sword/armor/...
-            entity.addAttribute("class", Type.STRING);
-
-            // subclass, long sword/leather/armor/...
-            entity.addAttribute("subclass", Type.STRING);
-
-            // name of item (ie 'Kings Sword')
-            entity.addAttribute("name", Type.STRING);
-
-            // Some items have attack values
-            entity.addAttribute("atk", Type.SHORT);
-
-            // Some items indicate how often you can attack.
-            entity.addAttribute("rate", Type.SHORT);
-
-            // Some items have defense values
-            entity.addAttribute("def", Type.SHORT);
-
-            // Some items(food) have amount of something
-            // (a bottle, a piece of meat).
-            entity.addAttribute("amount", Type.INT);
-
-            // Some items (range weapons, ammunition, missiles)
-            // have a range.
-            entity.addAttribute("range", Type.SHORT);
-
-            // Some items(food) have regeneration
-            entity.addAttribute("regen", Type.INT);
-
-            // Some items(food) have regeneration speed
-            entity.addAttribute("frequency", Type.INT);
-
-            // Some items(Stackable) have quantity
-            entity.addAttribute("quantity", Type.INT);
-
-            // Some items (Stackable) have maximum quantity
-            entity.addAttribute("max_quantity", Type.INT);
-
-            // Some items have minimum level to prevent spoiling
-            // the fun for new players
-            entity.addAttribute("min_level", Type.INT);
-
-            // To store addAttributeitional info with an item
-            entity.addAttribute("infostring", Type.STRING);
-
-            // Some items have individual values
-            entity.addAttribute("persistent", Type.FLAG);
-
-            // Some items have lifesteal values
-            entity.addAttribute("lifesteal", Type.FLOAT);
-
-            // Some items are quest rewards that other players
-            // don't deserve.
-            entity.addAttribute("bound", Type.STRING);
-
-            // Some items should not be dropped on death
-            entity.addAttribute("undroppableondeath", Type.SHORT);
+            try {
+                RPClass entity = new RPClass(RPCLASS_NAME);
+                entity.isA(Entity.class.newInstance().getRPClassName());
+                
+                // class, sword/armor/...
+                entity.addAttribute("class", Type.STRING);
+                
+                // subclass, long sword/leather/armor/...
+                entity.addAttribute("subclass", Type.STRING);
+                
+                // name of item (ie 'Kings Sword')
+                entity.addAttribute("name", Type.STRING);
+                
+                // Some items have attack values
+                entity.addAttribute("atk", Type.SHORT);
+                
+                // Some items indicate how often you can attack.
+                entity.addAttribute("rate", Type.SHORT);
+                
+                // Some items have defense values
+                entity.addAttribute("def", Type.SHORT);
+                
+                // Some items(food) have amount of something
+                // (a bottle, a piece of meat).
+                entity.addAttribute("amount", Type.INT);
+                
+                // Some items (range weapons, ammunition, missiles)
+                // have a range.
+                entity.addAttribute("range", Type.SHORT);
+                
+                // Some items(food) have regeneration
+                entity.addAttribute("regen", Type.INT);
+                
+                // Some items(food) have regeneration speed
+                entity.addAttribute("frequency", Type.INT);
+                
+                // Some items(Stackable) have quantity
+                entity.addAttribute("quantity", Type.INT);
+                
+                // Some items (Stackable) have maximum quantity
+                entity.addAttribute("max_quantity", Type.INT);
+                
+                // Some items have minimum level to prevent spoiling
+                // the fun for new players
+                entity.addAttribute("min_level", Type.INT);
+                
+                // To store addAttributeitional info with an item
+                entity.addAttribute("infostring", Type.STRING);
+                
+                // Some items have individual values
+                entity.addAttribute("persistent", Type.FLAG);
+                
+                // Some items have lifesteal values
+                entity.addAttribute("lifesteal", Type.FLOAT);
+                
+                // Some items are quest rewards that other players
+                // don't deserve.
+                entity.addAttribute("bound", Type.STRING);
+                
+                // Some items should not be dropped on death
+                entity.addAttribute("undroppableondeath", Type.SHORT);
+            } catch (InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(Item.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -112,7 +118,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
             Map<String, String> attributes) {
         setRPClass(RPCLASS_NAME);
         put("type", "item");
-        possibleSlots = new LinkedList<String>();
+        possibleSlots = new LinkedList<>();
         update();
 
         setEntityClass(clazz);
@@ -122,9 +128,9 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
 
         if (attributes != null) {
             // store all attributes
-            for (Entry<String, String> entry : attributes.entrySet()) {
+            attributes.entrySet().stream().forEach((entry) -> {
                 put(entry.getKey(), entry.getValue());
-            }
+            });
         }
 
         update();
@@ -144,7 +150,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     public Item(Item item) {
         super(item);
         setRPClass("item");
-        possibleSlots = new ArrayList<String>(item.possibleSlots);
+        possibleSlots = new ArrayList<>(item.possibleSlots);
         update();
     }
 

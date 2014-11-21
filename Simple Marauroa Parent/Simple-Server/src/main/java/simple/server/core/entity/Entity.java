@@ -21,7 +21,7 @@ import simple.server.extension.MarauroaServerExtension;
 public class Entity extends RPObject implements RPEntityInterface {
 
     private static final long serialVersionUID = 1L;
-    public static final String RPCLASS_NAME = "entity";
+    protected String RPCLASS_NAME = "entity";
     /**
      * The logger.
      */
@@ -41,7 +41,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
-            RPClass entity = new RPClass(RPCLASS_NAME);
+            RPClass entity = new RPClass(getRPClassName());
 
             // Some things may have a textual description
             entity.addAttribute("description", Type.LONG_STRING,
@@ -56,16 +56,17 @@ public class Entity extends RPObject implements RPEntityInterface {
              */
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-            for (MarauroaServerExtension extension
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
                 logger.debug("Processing extension to modify root class "
                         + "definition: " + extension.getClass().getSimpleName());
+                return extension;
+            }).forEach((extension) -> {
                 extension.modifyRootRPClassDefinition(entity);
-            }
+            });
             if (logger.isDebugEnabled()) {
-                for (Definition def : entity.getDefinitions()) {
+                entity.getDefinitions().stream().forEach((def) -> {
                     logger.info(def.getName() + ": " + def.getType());
-                }
+                });
             }
         }
     }
@@ -276,5 +277,12 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void setOutfit(Outfit o, boolean defaultValue) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * @return the RPCLASS_NAME
+     */
+    public String getRPClassName() {
+        return RPCLASS_NAME;
     }
 }

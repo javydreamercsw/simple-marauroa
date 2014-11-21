@@ -1,5 +1,6 @@
 package simple.server.core.entity;
 
+import java.util.logging.Level;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.Definition.Type;
@@ -31,14 +32,17 @@ public class RPEntity extends Entity {
     @Override
     public void generateRPClass() {
         try {
-            if (!RPClass.hasRPClass("rpentity")) {
-                RPClass entity = new RPClass("rpentity");
-                entity.isA("entity");
+            if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+                RPClass entity = new RPClass(getRPClassName());
+                entity.isA(Entity.class.newInstance().getRPClassName());
                 entity.addAttribute("name", Type.STRING);
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
             }
         } catch (SyntaxException e) {
             logger.error("cannot generateRPClass", e);
+        } catch (InstantiationException | IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(RPEntity.class.getName())
+                    .log(Level.SEVERE, null, ex);
         }
     }
 
@@ -47,6 +51,7 @@ public class RPEntity extends Entity {
     }
 
     public RPEntity() {
+        RPCLASS_NAME="rpentity";
     }
 
     /**
