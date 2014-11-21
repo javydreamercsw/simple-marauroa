@@ -1,5 +1,6 @@
 package simple.server.extension;
 
+import simple.server.extension.ability.D20Ability;
 import simple.server.extension.skill.AbstractSkill;
 
 /**
@@ -10,8 +11,8 @@ public class DummySkill extends AbstractSkill {
 
     public DummySkill() {
         modifiers.clear();
-        modifiers.put(DummyAttr.class, "1");
-        modifiers.put(DummyAttr2.class, "2d4+1");
+        modifiers.put(DummyAbility.class, "1");
+        modifiers.put(DummyAbility2.class, "2d4+1");
     }
 
     @Override
@@ -22,5 +23,10 @@ public class DummySkill extends AbstractSkill {
     @Override
     public String getShortName() {
         return "DA";
+    }
+
+    @Override
+    public Class<? extends D20Ability> getAbility() {
+        return DummyAbility.class;
     }
 }

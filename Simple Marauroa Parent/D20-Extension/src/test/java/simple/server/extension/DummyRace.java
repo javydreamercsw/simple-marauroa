@@ -4,7 +4,6 @@ import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.extension.attribute.D20Race;
 
 /**
  *

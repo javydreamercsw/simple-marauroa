@@ -1,4 +1,4 @@
-package simple.server.extension.attribute;
+package simple.server.extension;
 
 import java.util.List;
 import java.util.Map;

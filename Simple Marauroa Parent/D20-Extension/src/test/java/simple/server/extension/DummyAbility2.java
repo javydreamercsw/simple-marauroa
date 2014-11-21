@@ -2,36 +2,32 @@ package simple.server.extension;
 
 import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.extension.attribute.D20Attribute;
+import simple.server.extension.ability.AbstractAbility;
+import simple.server.extension.ability.D20Ability;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = D20Attribute.class)
-public class DummyAttr implements D20Attribute {
-
-    private static int counter = 0;
+@ServiceProvider(service = D20Ability.class)
+public class DummyAbility2 extends AbstractAbility {
 
     @Override
     public String getName() {
-        return "Dummy";
+        return "Dummy2";
     }
 
     @Override
     public String getShortName() {
-        return "Dummy";
+        return "Dummy2";
     }
 
     @Override
-    public int getAttributeMod() {
+    public int getDefaultValue() {
         return 0;
     }
 
-    @Override
-    public String getDefaultValue() {
-        return "0";
-    }
+    private static int counter = 0;
 
     @Override
     public Definition.Type getDefinitionType() {

@@ -11,11 +11,7 @@ import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
 import simple.server.core.entity.RPEntity;
-import simple.server.extension.attribute.D20Attribute;
-import simple.server.extension.attribute.D20Class;
-import simple.server.extension.attribute.D20List;
-import simple.server.extension.attribute.D20Race;
-import simple.server.extension.attribute.D20Stat;
+import simple.server.extension.ability.D20Ability;
 
 /**
  *
@@ -43,7 +39,7 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
                 RPClass clazz = new RPClass(RP_CLASS);
                 clazz.isA(RPEntity.class.newInstance().getRPClassName());
                 //Attributes
-                Lookup.getDefault().lookupAll(D20Attribute.class).stream().map((attr) -> {
+                Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
                     LOG.log(Level.INFO, "Adding attribute: {0}", attr.getName());
                     return attr;
                 }).forEach((attr) -> {
@@ -76,7 +72,7 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     @Override
     public void update() {
         super.update();
-        Lookup.getDefault().lookupAll(D20Attribute.class).stream().forEach((attr) -> {
+        Lookup.getDefault().lookupAll(D20Ability.class).stream().forEach((attr) -> {
             if (!has(attr.getName())) {
                 LOG.log(Level.INFO, "Updating attribute: {0}", attr.getName());
                 put(attr.getName(), attr.getDefaultValue());

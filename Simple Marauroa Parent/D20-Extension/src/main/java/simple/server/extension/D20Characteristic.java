@@ -1,4 +1,4 @@
-package simple.server.extension.attribute;
+package simple.server.extension;
 
 /**
  * Shared methods of all characteristics.

@@ -8,21 +8,16 @@ import java.util.logging.Logger;
 import marauroa.common.Log4J;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.extension.attribute.D20Attribute;
-import simple.server.extension.attribute.D20List;
-import simple.server.extension.attribute.D20Race;
-import simple.server.extension.attribute.D20Stat;
+import simple.server.extension.ability.D20Ability;
+import simple.server.extension.skill.D20Skill;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -51,20 +46,8 @@ public class D20ExtensionTest {
                 });
     }
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
-     * Test of modifyRootRPClassDefinition method, of class D20Extension.
+     * Test of RPClass Definition.
      */
     @Test
     public void testRPClassDefinition() {
@@ -86,7 +69,7 @@ public class D20ExtensionTest {
                     RPObject test = (RPObject) cons.newInstance(new RPObject());
                     test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
                     assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
-                    Lookup.getDefault().lookupAll(D20Attribute.class).stream().map((attr) -> {
+                    Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
                         return attr;
                     }).forEach((attr) -> {
