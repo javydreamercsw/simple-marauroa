@@ -40,4 +40,14 @@ public abstract class AbstractSkill implements D20Skill {
     public void setRank(int rank) {
         this.rank = rank;
     }
+    
+    @Override
+    public String getName() {
+        return getClass().getSimpleName().replaceAll("_", " ");
+    }
+
+    @Override
+    public String getShortName() {
+        return getClass().getSimpleName().replaceAll("_", " ");
+    }
 }

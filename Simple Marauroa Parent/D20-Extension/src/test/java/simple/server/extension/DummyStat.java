@@ -26,8 +26,8 @@ public class DummyStat implements D20Stat {
     }
 
     @Override
-    public String getDefaultValue() {
-        return "0";
+    public int getDefaultValue() {
+        return 0;
     }
     
     private static int counter = 0;
