@@ -26,8 +26,7 @@ public class DummyAttr2 implements iD20Attribute {
     }
 
     @Override
-    public int getDefaultValue() {
-        return 0;
+    public String getDefaultValue() {
+        return "0";
     }
-
 }

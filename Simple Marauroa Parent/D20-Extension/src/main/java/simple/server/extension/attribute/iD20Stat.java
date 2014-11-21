@@ -9,5 +9,5 @@ package simple.server.extension.attribute;
 public interface iD20Stat extends iD20Characteristic{
     public int getStatMod();
 
-    public int getDefaultValue();
+    public String getDefaultValue();
 }

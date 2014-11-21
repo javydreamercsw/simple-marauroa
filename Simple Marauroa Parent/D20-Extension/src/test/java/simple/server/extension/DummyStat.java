@@ -26,7 +26,7 @@ public class DummyStat implements iD20Stat {
     }
 
     @Override
-    public int getDefaultValue() {
-        return 0;
+    public String getDefaultValue() {
+        return "0";
     }
 }
