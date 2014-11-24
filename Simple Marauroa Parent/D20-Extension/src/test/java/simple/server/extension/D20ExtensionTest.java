@@ -17,7 +17,6 @@ import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.ability.D20Ability;
-import simple.server.extension.skill.D20Skill;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -69,26 +68,20 @@ public class D20ExtensionTest {
                     RPObject test = (RPObject) cons.newInstance(new RPObject());
                     test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
                     assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
-                    Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
+                    for(D20Ability attr: Lookup.getDefault().lookupAll(D20Ability.class)){
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
-                        return attr;
-                    }).forEach((attr) -> {
                         assertTrue(test.has(attr.getName()));
-                    });
+                    }
                     //Stats
-                    Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
-                        assertTrue(test.has(stat.getName()));
-                        return stat;
-                    }).forEach((stat) -> {
+                    for(D20Stat stat: Lookup.getDefault().lookupAll(D20Stat.class)){
                         System.out.println(stat.getName() + ": " + test.get(stat.getName()));
-                    });
+                        assertTrue(test.has(stat.getName()));
+                    }
                     //Other attributes
-                    Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
-                        assertTrue(test.hasSlot(attr.getName()));
-                        return attr;
-                    }).forEach((attr) -> {
+                    for(D20List attr: Lookup.getDefault().lookupAll(D20List.class)){
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
-                    });
+                        assertTrue(test.hasSlot(attr.getName()));
+                    }
                     System.out.println(r.toString());
                     count++;
                 } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
