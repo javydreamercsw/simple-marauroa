@@ -22,7 +22,7 @@ public class AbstractSavingThrowTest {
     public void testGetBaseScore() {
         System.out.println("getBaseScore");
         AbstractSavingThrow instance = new AbstractSavingThrowImpl();
-        int expResult = 0;
+        int expResult = 10;
         int result = instance.getBaseScore();
         assertEquals(expResult, result);
     }
@@ -33,7 +33,7 @@ public class AbstractSavingThrowTest {
     @Test
     public void testSetBaseScore() {
         System.out.println("setBaseScore");
-        int score = 10;
+        int score = 20;
         AbstractSavingThrow instance = new AbstractSavingThrowImpl();
         instance.setBaseScore(score);
         assertEquals(score, instance.getBaseScore());
