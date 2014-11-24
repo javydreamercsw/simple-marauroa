@@ -106,19 +106,21 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 
     @Override
     public final void update() {
-        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
+        for (MarauroaServerExtension extension
+                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             logger.debug("Processing extension to update client object "
                     + "class definition: " + extension.getClass()
                     .getSimpleName());
-            return extension;
-        }).forEach((extension) -> {
+            logger.debug("Processing extension to update client object "
+                    + "class definition: " + extension.getClass()
+                    .getSimpleName());
             try {
                 extension.clientObjectUpdate(this);
             } catch (SimpleException ex) {
                 java.util.logging.Logger.getLogger(ClientObject.class.getName())
                         .log(Level.SEVERE, null, ex);
             }
-        });
+        }
         super.update();
     }
 
@@ -595,17 +597,17 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     }
 
     protected static void extendClass(RPClass player) {
-        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
+        for (MarauroaServerExtension extension
+                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             logger.debug("Processing extension to modify client definition: "
                     + extension.getClass().getSimpleName());
-            return extension;
-        }).forEach((extension) -> {
             extension.modifyClientObjectDefinition(player);
-        });
+        }
         logger.debug("ClientObject attributes:");
-        player.getDefinitions().stream().forEach((def) -> {
+        for (Definition def : player.getDefinitions()) {
             logger.debug(def.getName() + ": " + def.getType());
-        });
+
+        }
         logger.debug("-------------------------------");
     }
 
