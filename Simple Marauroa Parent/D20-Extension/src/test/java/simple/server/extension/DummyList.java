@@ -23,4 +23,9 @@ public class DummyList implements D20List {
     public int getSize() {
         return 10;
     }
+    
+    @Override
+    public String getDescription() {
+        return "Dummy";
+    }
 }

@@ -23,4 +23,9 @@ public class DummySavingThrow extends AbstractSavingThrow {
     public String getShortName() {
         return "Dummy Save";
     }
+    
+    @Override
+    public String getDescription() {
+        return "Dummy";
+    }
 }

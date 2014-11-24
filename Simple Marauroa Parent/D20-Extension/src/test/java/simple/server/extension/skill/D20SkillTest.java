@@ -42,8 +42,7 @@ public class D20SkillTest {
         assertEquals(dq.getModifier(DummyAbility.class), 1);
         assertTrue(dq.getModifier(DummyAbility2.class) > 1);
     }
-    
-    
+
     /**
      * Test of getAbility method, of class D20Skill.
      */
@@ -77,6 +76,11 @@ public class D20SkillTest {
         @Override
         public String getShortName() {
             return "IV";
+        }
+
+        @Override
+        public String getDescription() {
+            return "Dummy";
         }
 
         @Override

@@ -9,7 +9,7 @@ import simple.server.extension.DieEx;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class AbstractFeat implements D20Feat {
+public abstract class AbstractFeat implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> 
             bonus = new HashMap<>();

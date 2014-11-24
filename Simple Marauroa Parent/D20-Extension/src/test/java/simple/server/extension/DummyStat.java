@@ -36,4 +36,9 @@ public class DummyStat implements D20Stat {
     public Definition.Type getDefinitionType() {
         return Definition.Type.values()[counter++];
     }
+    
+    @Override
+    public String getDescription() {
+        return "Dummy";
+    }
 }

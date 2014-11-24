@@ -37,12 +37,12 @@ public class D20ExtensionTest {
 
         MockSimpleRPWorld.get();
 
-        Lookup.getDefault().lookupAll(RPEntityInterface.class)
-                .stream().forEach((entity) -> {
-                    LOG.log(Level.FINE, "Registering RPEntity: {0}",
-                            entity.getClass().getSimpleName());
-                    entity.generateRPClass();
-                });
+        for (RPEntityInterface entity
+                : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
+            LOG.log(Level.FINE, "Registering RPEntity: {0}",
+                    entity.getClass().getSimpleName());
+            entity.generateRPClass();
+        }
     }
 
     /**
@@ -68,17 +68,17 @@ public class D20ExtensionTest {
                     RPObject test = (RPObject) cons.newInstance(new RPObject());
                     test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
                     assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
-                    for(D20Ability attr: Lookup.getDefault().lookupAll(D20Ability.class)){
+                    for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
                         assertTrue(test.has(attr.getName()));
                     }
                     //Stats
-                    for(D20Stat stat: Lookup.getDefault().lookupAll(D20Stat.class)){
+                    for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
                         System.out.println(stat.getName() + ": " + test.get(stat.getName()));
                         assertTrue(test.has(stat.getName()));
                     }
                     //Other attributes
-                    for(D20List attr: Lookup.getDefault().lookupAll(D20List.class)){
+                    for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
                         assertTrue(test.hasSlot(attr.getName()));
                     }

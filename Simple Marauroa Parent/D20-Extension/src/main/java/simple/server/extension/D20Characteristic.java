@@ -18,4 +18,10 @@ public interface D20Characteristic {
      * @return attribute id
      */
     public String getShortName();
+    
+    /**
+     * Description of the characteristic.
+     * @return description.
+     */
+    public String getDescription();
 }
