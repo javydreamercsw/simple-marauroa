@@ -29,4 +29,9 @@ public class DummySkill extends AbstractSkill {
     public Class<? extends D20Ability> getAbility() {
         return DummyAbility.class;
     }
+    
+    @Override
+    public String getDescription() {
+        return "Dummy";
+    }
 }

@@ -33,4 +33,9 @@ public class DummyAbility2 extends AbstractAbility {
     public Definition.Type getDefinitionType() {
         return Definition.Type.values()[counter++];
     }
+    
+    @Override
+    public String getDescription() {
+        return "Dummy";
+    }
 }

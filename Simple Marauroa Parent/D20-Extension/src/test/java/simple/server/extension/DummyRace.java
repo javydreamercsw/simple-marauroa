@@ -26,4 +26,9 @@ public class DummyRace extends AbstractRace {
     public String getShortName() {
         return "Dummy Race";
     }
+
+    @Override
+    public String getHPDice() {
+        return "0";
+    }
 }

@@ -19,7 +19,7 @@ public class AbstractFeatTest {
     @Test
     public void testGetBonus() {
         System.out.println("getBonus");
-        AbstractFeat instance = new AbstractFeat();
+        DummyFeat instance = new DummyFeat();
         instance.bonus.put(DummySavingThrow.class, "1");
         assertEquals(1, instance.getBonus(DummySavingThrow.class));
         instance.bonus.clear();

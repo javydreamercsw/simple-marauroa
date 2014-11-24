@@ -74,8 +74,7 @@ public class AbstractSavingThrowTest {
         instance.setBaseScore(r.nextInt(10) + 1);
         instance.setMiscMod(r.nextInt(10) + 1);
         int result = instance.getScore();
-        int calculated = new DummyAbility().getAbilityModifier()
-                + instance.getBaseScore()
+        int calculated =  instance.getBaseScore()
                 + instance.getMiscMod();
         assertEquals(calculated, result);
     }
@@ -95,6 +94,11 @@ public class AbstractSavingThrowTest {
         @Override
         public String getShortName() {
             return "Test Save";
+        }
+
+        @Override
+        public String getDescription() {
+            return "Dummy";
         }
     }
 }

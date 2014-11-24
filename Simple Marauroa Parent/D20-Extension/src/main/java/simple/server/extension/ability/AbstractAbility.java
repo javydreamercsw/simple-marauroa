@@ -10,21 +10,6 @@ public abstract class AbstractAbility implements D20Ability {
 
     @Override
     public int getDefaultValue() {
-        return 11;
-    }
-
-    @Override
-    public void setAbilityScore(int score) {
-        this.score = score;
-    }
-
-    @Override
-    public int getAbilityScore() {
-        return score;
-    }
-
-    @Override
-    public int getAbilityModifier() {
-        return score % 10;
+        return 0;
     }
 }
