@@ -2,6 +2,8 @@ package simple.server.extension;
 
 import java.util.List;
 import java.util.Map;
+import simple.server.extension.feat.D20Feat;
+import simple.server.extension.skill.D20Skill;
 
 /**
  * This represents a Race in a D20 game.
@@ -18,8 +20,14 @@ public interface D20Race extends D20Characteristic{
     Map<String, Integer> getAttributeBonuses();
     
     /**
-     * A list of the preferred classes on a D20 game. (Easier to gain levels)
-     * @return list of the preferred
+     * A list of the preferred feats on a D20 game. (Easier to gain levels)
+     * @return list of the preferred feats
      */
-    List<D20Class> getPrefferedClasses();
+    Map<Class<? extends D20Feat>, Integer> getPrefferedFeats();
+    
+    /**
+     * A list of the preferred skills on a D20 game. (Easier to gain levels)
+     * @return list of the preferred skills
+     */
+    public List<Class<? extends D20Skill>> getPrefferedSkills();
 }
