@@ -244,19 +244,20 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * Set the entity sub-class.
      *
-     * @param	subclazz	The sub-class name.
+     * @param	subclazz The sub-class name.
      */
     public void setEntitySubClass(final String subclazz) {
         put("subclass", subclazz);
     }
 
     public void update() {
-        for (MarauroaServerExtension extension
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
             logger.debug("Processing extension to update root class "
                     + "definition: " + extension.getClass().getSimpleName());
+            return extension;
+        }).forEach((extension) -> {
             extension.rootRPClassUpdate(this);
-        }
+        });
     }
 
     @Override
