@@ -38,7 +38,8 @@ import simple.server.core.event.TutorialNotifier;
  * @author Javier A. Ortiz <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IRPRuleProcessor.class)
-public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRuleProcessor {
+public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
+        implements IRPRuleProcessor {
 
     private Configuration config;
     private static String VERSION;
@@ -261,35 +262,34 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
     @Override
     public synchronized boolean onInit(RPObject object) {
         boolean result = true;
-        if (object instanceof ClientObjectInterface) {
-            try {
-                final PlayerEntry entry
-                        = PlayerEntryContainer.getContainer().get(object);
-                final ClientObjectInterface player
-                        = Lookup.getDefault().lookup(IRPObjectFactory.class)
-                        .createClientObject(object);
-                entry.object = (RPObject) player;
-
-                addGameEvent(player.getName(), "login");
-                for (ILoginNotifier ln : Lookup.getDefault()
-                        .lookupAll(ILoginNotifier.class)) {
-                    ln.onPlayerLoggedIn(player);
-                }
-                TutorialNotifier.login(player);
-
-                getOnlinePlayers().add(player);
-                if (!player.isGhost()) {
-                    notifyOnlineStatus(true, player.getName());
-                }
-                Lookup.getDefault().lookup(IRPWorld.class)
-                        .addPlayer((RPObject) player);
-            } catch (Exception e) {
-                logger.error("There has been a severe problem loading player "
-                        + object.get("#db_id"), e);
-                result = false;
+        try {
+            final PlayerEntry entry
+                    = PlayerEntryContainer.getContainer().get(object);
+            final ClientObjectInterface player
+                    = Lookup.getDefault().lookup(IRPObjectFactory.class)
+                    .createClientObject(object);
+            super.onInit((RPObject) player);
+            entry.object = (RPObject) player;
+            
+            addGameEvent(player.getName(), "login");
+            for (ILoginNotifier ln : Lookup.getDefault()
+                    .lookupAll(ILoginNotifier.class)) {
+                ln.onPlayerLoggedIn(player);
             }
+            TutorialNotifier.login(player);
+
+            getOnlinePlayers().add(player);
+            if (!player.isGhost()) {
+                notifyOnlineStatus(true, player.getName());
+            }
+            Lookup.getDefault().lookup(IRPWorld.class)
+                    .addPlayer((RPObject) player);
+        } catch (Exception e) {
+            logger.error("There has been a severe problem loading player "
+                    + object.get("#db_id"), e);
+            result = false;
         }
-        return result && super.onInit(object);
+        return result;
     }
 
     @Override
