@@ -134,7 +134,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 entity.generateRPClass();
             }
             logger.info("Done!");
-            logger.info("Loading actionss...");
+            logger.info("Loading actions...");
             Collection<? extends ActionProvider> actions
                     = Lookup.getDefault().lookupAll(ActionProvider.class);
             logger.info("Found " + actions.size() + " Actions to register!");
@@ -187,9 +187,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                 extension.afterWorldInit();
             }
-        } catch (IOException e) {
-            logger.error("Error initializing the server!", e);
-        } catch (SQLException e) {
+        } catch (IOException | SQLException e) {
             logger.error("Error initializing the server!", e);
         }
     }
@@ -277,7 +275,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public List<SimpleRPZone> getZones() {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
 
         Iterator zoneList = iterator();
         while (zoneList.hasNext()) {
@@ -324,7 +322,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event, int delay) {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<SimpleRPZone>();
+        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
         if (zone != null) {
             availableZones.add(zone);
         } else {
