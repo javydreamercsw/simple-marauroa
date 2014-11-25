@@ -566,7 +566,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
             player.addAttribute("age", Type.INT);
-
+            
             // We use this for the buddy system
             player.addRPSlot("!buddy", 1, Definition.PRIVATE);
             player.addRPSlot("!ignore", 1, Definition.HIDDEN);

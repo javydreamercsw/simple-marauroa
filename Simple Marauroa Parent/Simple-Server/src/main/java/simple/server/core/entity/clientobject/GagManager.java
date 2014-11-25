@@ -33,15 +33,15 @@ public class GagManager implements LoginListener {
      * @param reason why criminal was gagged
      */
     @Override
-    public void gag(final String criminalName, ClientObjectInterface policeman, 
+    public void gag(final String criminalName, ClientObjectInterface policeman,
             int minutes,
             String reason) {
         final ClientObjectInterface criminal
                 = ((SimpleRPRuleProcessor) Lookup.getDefault()
-                        .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
+                .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
 
         if (criminal == null) {
-            String text = "ClientObjectInterface " + criminalName 
+            String text = "ClientObjectInterface " + criminalName
                     + " not found";
             policeman.sendPrivateText(text);
             logger.debug(text);
@@ -51,7 +51,7 @@ public class GagManager implements LoginListener {
         gag(criminal, policeman, minutes, reason, criminalName);
     }
 
-    void gag(final ClientObjectInterface criminal, 
+    void gag(final ClientObjectInterface criminal,
             ClientObjectInterface policeman, int minutes,
             String reason, final String criminalName) {
         // no -1
@@ -61,19 +61,19 @@ public class GagManager implements LoginListener {
         }
 
         // Set the gag
-        long expireDate = System.currentTimeMillis() 
+        long expireDate = System.currentTimeMillis()
                 + (1000L * 60L * minutes); // Milliseconds
 
         ((RPObject) criminal).put("gag", "" + expireDate);
 
         // Send messages
-        policeman.sendPrivateText("You have gagged " + criminalName 
+        policeman.sendPrivateText("You have gagged " + criminalName
                 + " for " + minutes + " minutes. Reason: " + reason + ".");
-        criminal.sendPrivateText("You have been gagged by " 
+        criminal.sendPrivateText("You have been gagged by "
                 + policeman.getTitle() + " for " + minutes + " minutes. Reason: " + reason + ".");
-        SimpleRPRuleProcessor.sendMessageToSupporters("GagManager", 
-                policeman.getName() + " gagged " + criminalName + " for " 
-                        + minutes + " minutes. Reason: " + reason + ".");
+        SimpleRPRuleProcessor.sendMessageToSupporters("GagManager",
+                policeman.getName() + " gagged " + criminalName + " for "
+                + minutes + " minutes. Reason: " + reason + ".");
 
         setupNotifier(criminal);
     }
