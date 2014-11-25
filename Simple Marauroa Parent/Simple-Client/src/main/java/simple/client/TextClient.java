@@ -19,6 +19,7 @@ import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
+import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.TextEvent;
 
 public class TextClient extends Thread {
@@ -153,24 +154,22 @@ public class TextClient extends Thread {
                     @Override
                     protected void onPerception(MessageS2CPerception message) {
                         try {
-                            System.out.println("Received perception " + message.getPerceptionTimestamp());
+                            System.out.println("Received perception " 
+                                    + message.getPerceptionTimestamp());
 
                             handler.apply(message, world_objects);
                             int i = message.getPerceptionTimestamp();
 
                             if (chat) {
                                 RPAction action = new RPAction();
-                                action.put("type", "chat");
-                                action.put("text", "Hi!");
-                                clientManager.send(action);
                                 if (i % 50 == 0) {
                                     action.put("type", "chat");
                                     action.put("text", "Hi!");
-                                    clientManager.send(action);
+                                    send(action);
                                 } else if (i % 50 == 20) {
                                     action.put("type", "chat");
                                     action.put("text", "How are you?");
-                                    clientManager.send(action);
+                                    send(action);
                                 }
                             }
                             if (showWorld) {
@@ -215,7 +214,7 @@ public class TextClient extends Thread {
                                 // if there are no characters, create one with the specified name automatically
                                 if (characters.isEmpty()) {
                                     System.out.println("The requested character is not available, trying to create character " + character);
-                                    final RPObject template = new RPObject();
+                                    final ClientObject template = new ClientObject();
                                     try {
                                         final CharacterResult result = createCharacter(character, template);
                                         if (result.getResult().failed()) {
@@ -357,7 +356,9 @@ public class TextClient extends Thread {
                     i++;
                 }
 
-                if ((username != null) && (password != null) && (character != null) && (host != null) && (port != null)) {
+                if ((username != null) && (password != null)
+                        && (character != null) && (host != null)
+                        && (port != null)) {
                     System.out.println("Parameter operation");
                     new TextClient(host, username, password, character, port,
                             tcp, name, version).start();
