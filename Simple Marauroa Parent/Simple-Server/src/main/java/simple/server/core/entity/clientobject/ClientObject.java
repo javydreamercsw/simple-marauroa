@@ -566,7 +566,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
             player.addAttribute("age", Type.INT);
-            
+
             // We use this for the buddy system
             player.addRPSlot("!buddy", 1, Definition.PRIVATE);
             player.addRPSlot("!ignore", 1, Definition.HIDDEN);
@@ -964,7 +964,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     @Override
     public boolean equals(Object obj) {
         boolean result = false;
-        if (obj != null && getClass() != obj.getClass()) {
+        if (obj != null && obj instanceof ClientObject) {
             final ClientObject other = (ClientObject) obj;
             result = this.hashCode() == other.hashCode();
         }
