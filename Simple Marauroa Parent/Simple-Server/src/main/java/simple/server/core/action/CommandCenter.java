@@ -17,7 +17,7 @@ public class CommandCenter {
 
     protected static ConcurrentHashMap<String, ActionInterface> getActionsMap() {
         if (actionsMap == null) {
-            actionsMap = new ConcurrentHashMap<String, ActionInterface>();
+            actionsMap = new ConcurrentHashMap<>();
         }
         return actionsMap;
     }
@@ -42,10 +42,10 @@ public class CommandCenter {
         AdministrationAction.registerCommandLevel(action, requiredAdminLevel);
     }
 
-    public static boolean execute(ClientObjectInterface player, RPAction action) {
+    public static boolean execute(RPObject player, RPAction action) {
         try {
             ActionInterface actionInterface = getAction(action);
-            actionInterface.onAction((RPObject) player, action);
+            actionInterface.onAction(player, action);
             return true;
         } catch (Exception e) {
             logger.error("Cannot execute action " + action + " send by " + player, e);
