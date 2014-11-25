@@ -66,7 +66,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
             logger.error(ex, ex);
         }
         onlinePlayers = new PlayerList();
-        entityToKill = new LinkedList<Pair<RPEntity, Entity>>();
+        entityToKill = new LinkedList<>();
         try {
             setVERSION(Configuration.getConfiguration().get("server_version"));
             setGAMENAME(Configuration.getConfiguration().get("server_name"));
@@ -146,7 +146,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
     }
 
     public void killRPEntity(RPEntity entity, Entity killer) {
-        entityToKill.add(new Pair<RPEntity, Entity>(entity, killer));
+        entityToKill.add(new Pair<>(entity, killer));
     }
 
     /**
@@ -183,7 +183,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
 
     @Override
     public void execute(RPObject caster, RPAction action) {
-        CommandCenter.execute((ClientObjectInterface) caster, action);
+        CommandCenter.execute(caster, action);
     }
 
     public int getTurn() {
@@ -263,10 +263,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
         boolean result = true;
         if (object instanceof ClientObjectInterface) {
             try {
-                final PlayerEntry entry = 
-                        PlayerEntryContainer.getContainer().get(object);
-                final ClientObjectInterface player =
-                        Lookup.getDefault().lookup(IRPObjectFactory.class)
+                final PlayerEntry entry
+                        = PlayerEntryContainer.getContainer().get(object);
+                final ClientObjectInterface player
+                        = Lookup.getDefault().lookup(IRPObjectFactory.class)
                         .createClientObject(object);
                 entry.object = (RPObject) player;
 
@@ -296,8 +296,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
     public synchronized boolean onExit(RPObject object) {
         super.onExit(object);
         try {
-            ClientObjectInterface player = ((SimpleRPRuleProcessor) 
-                    Lookup.getDefault().lookup(IRPRuleProcessor.class))
+            ClientObjectInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
                     .getPlayer(object.get("name"));
             if (player != null) {
                 if (wasKilled((RPEntity) player)) {
@@ -317,7 +316,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
                     SimpleRPZone zone = (SimpleRPZone) it.next();
                     if (zone.has(((RPObject) player).getID())
                             && !zone.getName().equals(
-                            player.getZone().getName())) {
+                                    player.getZone().getName())) {
                         logger.warn("Another instance of the player found in "
                                 + zone.getName());
                         zone.remove(((RPObject) player).getID());
@@ -361,20 +360,20 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
         ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
                 .forFilteredPlayersExecute(
-                new Task<ClientObjectInterface>() {
-                    @Override
-                    public void execute(ClientObjectInterface player) {
-                        player.sendPrivateText(message);
-                        player.notifyWorldAboutChanges();
-                    }
-                },
-                new FilterCriteria<ClientObjectInterface>() {
-                    @Override
-                    public boolean passes(ClientObjectInterface p) {
-                        return p.getAdminLevel()
+                        new Task<ClientObjectInterface>() {
+                            @Override
+                            public void execute(ClientObjectInterface player) {
+                                player.sendPrivateText(message);
+                                player.notifyWorldAboutChanges();
+                            }
+                        },
+                        new FilterCriteria<ClientObjectInterface>() {
+                            @Override
+                            public boolean passes(ClientObjectInterface p) {
+                                return p.getAdminLevel()
                                 >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
-                    }
-                });
+                            }
+                        });
 
     }
 
@@ -400,21 +399,21 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl implements IRPRul
             ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
                     .forAllPlayersExecute(new Task<ClientObjectInterface>() {
-                @Override
-                public void execute(ClientObjectInterface player) {
-                    player.notifyOnline(name);
-                }
-            });
+                        @Override
+                        public void execute(ClientObjectInterface player) {
+                            player.notifyOnline(name);
+                        }
+                    });
 
         } else {
             ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
                     .forAllPlayersExecute(new Task<ClientObjectInterface>() {
-                @Override
-                public void execute(ClientObjectInterface player) {
-                    player.notifyOffline(name);
-                }
-            });
+                        @Override
+                        public void execute(ClientObjectInterface player) {
+                            player.notifyOffline(name);
+                        }
+                    });
         }
     }
 }
