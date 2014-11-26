@@ -184,7 +184,11 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
 
     @Override
     public void execute(RPObject caster, RPAction action) {
-        CommandCenter.execute(caster, action);
+        if (caster instanceof ClientObjectInterface) {
+            CommandCenter.execute((ClientObjectInterface) caster, action);
+        } else {
+            logger.error(caster + " tried to execute action: " + action);
+        }
     }
 
     public int getTurn() {
@@ -270,7 +274,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                     .createClientObject(object);
             super.onInit((RPObject) player);
             entry.object = (RPObject) player;
-            
+
             addGameEvent(player.getName(), "login");
             for (ILoginNotifier ln : Lookup.getDefault()
                     .lookupAll(ILoginNotifier.class)) {

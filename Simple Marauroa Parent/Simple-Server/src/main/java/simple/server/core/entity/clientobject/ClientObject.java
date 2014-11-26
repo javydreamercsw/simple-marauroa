@@ -433,7 +433,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      * @param teleporter The player who initiated the teleporting, or null if no
      * player is responsible. This is only to give feedback if something goes
      * wrong. If no feedback is wanted, use null.
-     * @return true iff teleporting was successful
+     * @return true if teleporting was successful
      */
     public boolean teleport(SimpleRPZone zone,
             ClientObject teleporter) {
@@ -472,7 +472,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 //        if (player.has(ATTR_GRUMPY)) {
 //            player.remove(ATTR_GRUMPY);
 //        }
-        readAdminsFromFile(player);
+//        readAdminsFromFile(player);
         //TODO: Move this to an extension
 //        loadItemsIntoSlots(player);
         //TODO: Move this to an extension
