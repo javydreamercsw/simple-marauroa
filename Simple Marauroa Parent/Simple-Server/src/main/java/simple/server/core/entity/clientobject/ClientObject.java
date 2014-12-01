@@ -437,7 +437,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     public boolean teleport(SimpleRPZone zone,
             ClientObject teleporter) {
-        if (SimpleRPAction.placeat(zone, this)) {
+        if (SimpleRPAction.placeAt(zone, this)) {
             notifyWorldAboutChanges();
             return true;
         } else {
