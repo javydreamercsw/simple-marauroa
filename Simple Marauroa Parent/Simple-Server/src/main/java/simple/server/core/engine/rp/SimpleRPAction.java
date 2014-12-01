@@ -37,10 +37,12 @@ public class SimpleRPAction {
      * @param entity the entity to place
      * @return true, if it was possible to place the entity, false otherwise
      */
-    public static boolean placeat(SimpleRPZone zone, Entity entity) {
+    public static boolean placeAt(SimpleRPZone zone, Entity entity) {
         // check in case of players that that they are still in game
         // because the entity is added to the world again otherwise.
-        if (entity instanceof ClientObjectInterface && Lookup.getDefault().lookup(IRPObjectFactory.class).createDefaultClientObject(entity).isDisconnected()) {
+        if (entity instanceof ClientObjectInterface 
+                && Lookup.getDefault().lookup(IRPObjectFactory.class)
+                        .createDefaultClientObject(entity).isDisconnected()) {
             return true;
         }
 
@@ -75,7 +77,8 @@ public class SimpleRPAction {
          */
         if (entity instanceof ClientObjectInterface) {
             ClientObjectInterface player =
-                    Lookup.getDefault().lookup(IRPObjectFactory.class).createDefaultClientObject(entity);
+                    Lookup.getDefault().lookup(IRPObjectFactory.class)
+                            .createDefaultClientObject(entity);
 
             if (zoneChanged) {
                 /*
@@ -87,7 +90,8 @@ public class SimpleRPAction {
                     String source = oldZone.getName();
                     String destination = zone.getName();
 
-                    ( (SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class) ).addGameEvent(
+                    ( (SimpleRPRuleProcessor) Lookup.getDefault()
+                            .lookup(IRPRuleProcessor.class) ).addGameEvent(
                             player.getName(), "change zone", destination);
 
                     TutorialNotifier.zoneChange(player, source, destination);
@@ -96,7 +100,8 @@ public class SimpleRPAction {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Placed " + entity.getTitle() + " at " + zone.getName());
+            logger.debug("Placed " + entity.getTitle() + " at " 
+                    + zone.getName());
         }
         return true;
     }
