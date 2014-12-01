@@ -1,6 +1,9 @@
 package simple.server.core.event;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 
@@ -9,7 +12,13 @@ import simple.common.game.ClientObjectInterface;
  *
  * @author hendrik
  */
-public class TutorialNotifier {
+@ServiceProvider(service = ILoginNotifier.class)
+public class TutorialNotifier implements ILoginNotifier {
+
+    private List<LoginListener> listeners = new ArrayList<>();
+
+    public TutorialNotifier() {
+    }
 
     /**
      * If the specified event is unknown, add it to the list and send the text
@@ -94,6 +103,22 @@ public class TutorialNotifier {
     public static void newrelease(ClientObjectInterface player) {
     }
 
-    private TutorialNotifier() {
+    @Override
+    public void addListener(LoginListener listener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener);
+        }
+    }
+
+    @Override
+    public void onPlayerLoggedIn(ClientObjectInterface player) {
+        login(player);
+    }
+
+    @Override
+    public void removeListener(LoginListener listener) {
+        if (listeners.contains(listener)) {
+            listeners.remove(listener);
+        }
     }
 }
