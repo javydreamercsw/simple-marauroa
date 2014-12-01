@@ -31,7 +31,6 @@ import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
-import simple.server.core.event.TutorialNotifier;
 
 /**
  *
@@ -47,7 +46,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(SimpleRPRuleProcessor.class);
+    private static final Logger logger
+            = Log4J.getLogger(SimpleRPRuleProcessor.class);
     protected static RPServerManager rpman;
     protected PlayerList onlinePlayers;
     /**
@@ -280,7 +280,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                     .lookupAll(ILoginNotifier.class)) {
                 ln.onPlayerLoggedIn(player);
             }
-            TutorialNotifier.login(player);
 
             getOnlinePlayers().add(player);
             if (!player.isGhost()) {
