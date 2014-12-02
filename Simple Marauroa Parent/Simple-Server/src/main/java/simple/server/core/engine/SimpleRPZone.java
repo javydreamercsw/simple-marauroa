@@ -42,7 +42,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     private boolean deleteWhenEmpty = false;
     private boolean visited = false;
     private String password = "";
-    
+
     public SimpleRPZone(final String name) {
         super(name);
         contents = new LinkedList<>();
@@ -67,19 +67,19 @@ public class SimpleRPZone extends MarauroaRPZone {
         logger.debug("Layer timestamp: " + Integer.toString(content.timestamp));
         content.data = byteContents;
         content.timestamp = CRC.cmpCRC(content.data);
-        
+
         contents.add(content);
     }
-    
+
     public List<TransferContent> getContents() {
         return contents;
     }
-    
+
     @Override
     public void add(final RPObject object) {
         add(object, null);
     }
-    
+
     @Override
     public void onFinish() throws Exception {
         super.onFinish();
@@ -94,7 +94,7 @@ public class SimpleRPZone extends MarauroaRPZone {
                     (ClientObject) i.next());
         }
     }
-    
+
     @Override
     public RPObject remove(final RPObject.ID id) {
         return remove(objects.get(id));
@@ -112,7 +112,7 @@ public class SimpleRPZone extends MarauroaRPZone {
                     : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                 extension.onRPObjectRemoveFromZone(object);
             }
-            
+
             if (object instanceof ClientObjectInterface) {
                 ClientObjectInterface player = (ClientObjectInterface) object;
                 players.remove(player.getName());
@@ -140,7 +140,8 @@ public class SimpleRPZone extends MarauroaRPZone {
                     getID().toString());
             return super.remove(object.getID());
         } else {
-            throw new RuntimeException("Trying to remove null RPObject!");
+            logger.warn("Trying to remove null RPObject!");
+            return null;
         }
     }
 
@@ -153,7 +154,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     public String getName() {
         return getID().getID();
     }
-    
+
     @Override
     public String toString() {
         return "zone " + zoneid;
@@ -202,25 +203,25 @@ public class SimpleRPZone extends MarauroaRPZone {
         }
         return contentList;
     }
-    
+
     public ClientObjectInterface getPlayer(final String name) {
         return players.get(name);
     }
-    
+
     public void add(final RPObject object, final ClientObjectInterface player) {
         synchronized (this) {
             /*
              * Assign [zone relative] ID info.
              */
             assignRPObjectID(object);
-            
+
             for (MarauroaServerExtension extension
                     : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                 logger.debug("Processing extension: "
                         + extension.getClass().getSimpleName());
                 extension.onRPObjectAddToZone(object);
             }
-            
+
             if (object instanceof ClientObjectInterface) {
                 logger.debug("Processing ClientObjectInterface");
                 try {
@@ -268,7 +269,7 @@ public class SimpleRPZone extends MarauroaRPZone {
             super.add(object);
         }
     }
-    
+
     public void showZone() {
         logger.debug("Zone " + getName() + " contents:");
         logger.debug("Players: " + (getPlayers().isEmpty() ? "Empty" : ""));
@@ -281,7 +282,7 @@ public class SimpleRPZone extends MarauroaRPZone {
             logger.debug(co);
         }
     }
-    
+
     @Override
     public Perception getPerception(final RPObject player, final byte type) {
         Perception p = super.getPerception(player, type);
@@ -373,11 +374,11 @@ public class SimpleRPZone extends MarauroaRPZone {
         }
         return result;
     }
-    
+
     public void applyPublicEvent(RPEvent event) {
         applyPublicEvent(event, 0);
     }
-    
+
     public void applyPublicEvent(final RPEvent event, final int delay) {
         for (ClientObjectInterface p : getPlayers()) {
             logger.debug("Adding event to: " + p + ", " + ((RPObject) p).getID()
@@ -421,7 +422,7 @@ public class SimpleRPZone extends MarauroaRPZone {
     public void setDeleteWhenEmpty(boolean deleteWhenEmpty) {
         this.deleteWhenEmpty = deleteWhenEmpty;
     }
-    
+
     public void setPassword(final String pass) throws IOException {
         /**
          * encrypt password with private key. This way encryption is unique per
@@ -447,13 +448,13 @@ public class SimpleRPZone extends MarauroaRPZone {
     public boolean isLocked() {
         return !password.trim().isEmpty();
     }
-    
+
     public void unlock() {
         if (isLocked()) {
             password = "";
         }
     }
-    
+
     public boolean isPassword(final String pass) {
         boolean result;
         try {
