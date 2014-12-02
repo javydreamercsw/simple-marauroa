@@ -1,86 +1,17 @@
 package simple.client;
 
-import java.io.IOException;
 import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import marauroa.client.BannedAddressException;
-import marauroa.client.LoginFailedException;
-import marauroa.client.TimeoutException;
-import marauroa.common.net.InvalidVersionException;
 
-public class TextClient extends AbstractClient {
+public final class TextClient extends AbstractClient {
 
     private static final Logger LOG
             = Logger.getLogger(TextClient.class.getSimpleName());
 
     public TextClient(String h, String u, String p, String c, String P,
             boolean t, String name, String v) throws SocketException {
-        setHost(h);
-        setUsername(u);
-        setPassword(p);
-        setCharacter(c);
-        setPort(P);
-        setVersion(v);
-        setGameName(name);
-        createClientManager(getGameName() != null ? getGameName() : "Simple",
-                getVersion() != null ? getVersion() : "0.02.06");
-    }
-
-    @Override
-    public void run() {
-        try {
-            getClientManager().connect(getHost(), Integer.parseInt(getPort()));
-            System.out.println("Logging as: " + getUsername() + " with pass: "
-                    + getPassword() + " version: '" + getVersion() + "'");
-            getClientManager().login(getUsername(), getPassword());
-        } catch (IOException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        } catch (LoginFailedException e) {
-            try {
-                System.out.println("Creating account and logging in to continue....");
-                getClientManager().createAccount(getUsername(), getPassword(),
-                        getHost());
-                System.out.println("Logging as: " + getUsername()
-                        + " with pass: " + getPassword() + " version: '" 
-                        + getVersion() + "'");
-                getClientManager().login(getUsername(), getPassword());
-            } catch (LoginFailedException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-                System.exit(1);
-            } catch (TimeoutException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-                System.exit(1);
-            } catch (InvalidVersionException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-                System.exit(1);
-            } catch (BannedAddressException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-                System.exit(1);
-            }
-        } catch (InvalidVersionException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            System.exit(1);
-        } catch (TimeoutException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            System.exit(1);
-        } catch (BannedAddressException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            System.exit(1);
-        }
-
-        boolean cond = true;
-
-        while (cond) {
-            getClientManager().loop(0);
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                LOG.log(Level.SEVERE, null, e);
-                cond = false;
-            }
-        }
+        super.connect(h, u, p, c, P, name, v);
     }
 
     public static void main(String[] args) {
@@ -97,30 +28,41 @@ public class TextClient extends AbstractClient {
                 boolean tcp = false;
 
                 while (i != args.length) {
-                    if (args[i].equals("-u")) {
-                        username = args[i + 1];
-                    } else if (args[i].equals("-p")) {
-                        password = args[i + 1];
-                    } else if (args[i].equals("-c")) {
-                        character = args[i + 1];
-                    } else if (args[i].equals("-h")) {
-                        host = args[i + 1];
-                    } else if (args[i].equals("-P")) {
-                        port = args[i + 1];
-                    } else if (args[i].equals("-W")) {
-                        if ("1".equals(args[i + 1])) {
-                            setShowWorld(true);
-                        }
-                    } else if (args[i].equals("-chat")) {
-                        if ("1".equals(args[i + 1])) {
-                            setChat(true);
-                        }
-                    } else if (args[i].equals("-t")) {
-                        tcp = true;
-                    } else if (args[i].equals("-n")) {
-                        name = args[i + 1];
-                    } else if (args[i].equals("-v")) {
-                        version = args[i + 1];
+                    switch (args[i]) {
+                        case "-u":
+                            username = args[i + 1];
+                            break;
+                        case "-p":
+                            password = args[i + 1];
+                            break;
+                        case "-c":
+                            character = args[i + 1];
+                            break;
+                        case "-h":
+                            host = args[i + 1];
+                            break;
+                        case "-P":
+                            port = args[i + 1];
+                            break;
+                        case "-W":
+                            if ("1".equals(args[i + 1])) {
+                                setShowWorld(true);
+                            }
+                            break;
+                        case "-chat":
+                            if ("1".equals(args[i + 1])) {
+                                setChat(true);
+                            }
+                            break;
+                        case "-t":
+                            tcp = true;
+                            break;
+                        case "-n":
+                            name = args[i + 1];
+                            break;
+                        case "-v":
+                            version = args[i + 1];
+                            break;
                     }
                     i++;
                 }
@@ -129,8 +71,8 @@ public class TextClient extends AbstractClient {
                         && (character != null) && (host != null)
                         && (port != null)) {
                     System.out.println("Parameter operation");
-                    new TextClient(host, username, password, character, port,
-                            tcp, name, version).start();
+                    new Thread(new TextClient(host, username, password, character, port,
+                            tcp, name, version)).start();
                     return;
                 }
             }
@@ -152,5 +94,20 @@ public class TextClient extends AbstractClient {
             LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
+    }
+
+    @Override
+    public void connect(String host, String username, String password,
+            String user_character, String port, String game_name,
+            String version) throws SocketException {
+        setHost(host);
+        setUsername(username);
+        setPassword(password);
+        setCharacter(user_character);
+        setPort(port);
+        setVersion(version);
+        setGameName(game_name);
+        createClientManager(getGameName() != null ? getGameName() : "Simple",
+                getVersion() != null ? getVersion() : "0.02.06");
     }
 }
