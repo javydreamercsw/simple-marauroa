@@ -425,7 +425,7 @@ public class SimpleRPZone extends MarauroaRPZone {
 
     public void setPassword(final String pass) throws IOException {
         /**
-         * encrypt password with private key. This way encryption is unique per
+         * Encrypt password with private key. This way encryption is unique per
          * server. (Assuming that the server.ini file was generated and not
          * copied)
          */
