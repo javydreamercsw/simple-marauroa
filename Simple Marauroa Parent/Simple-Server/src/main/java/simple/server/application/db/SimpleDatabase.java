@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.server.game.db.DatabaseFactory;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -25,7 +26,7 @@ public class SimpleDatabase {
         return instance;
     }
 
-    public void initialize() throws SQLException{
+    public void initialize() throws SQLException {
         //Initialization made in JPADatabaseAdapter
         registerDAOs();
     }
@@ -33,5 +34,9 @@ public class SimpleDatabase {
     protected void registerDAOs() {
         logger.debug("Loading DAOs from: " + getClass().getSimpleName());
         //Override DAO's here
+        for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
+            logger.info("Registerig DAO: " + dao.getClass().getSimpleName());
+            dao.register();
+        }
     }
 }
