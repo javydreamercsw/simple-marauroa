@@ -1,5 +1,8 @@
 package simple.client;
 
+import java.io.IOException;
+import static java.lang.Thread.sleep;
+import java.net.SocketException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.BannedAddressException;
 import marauroa.client.ClientFramework;
+import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.client.net.PerceptionHandler;
@@ -32,7 +36,7 @@ import simple.server.core.entity.clientobject.ClientObject;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class AbstractClient extends Thread {
+public abstract class AbstractClient implements ClientFrameworkProvider {
 
     private String port;
     private String gameName;
@@ -218,6 +222,10 @@ public class AbstractClient extends Thread {
                 }
             }
         });
+        if (clientManager == null) {
+            createClientManager(gameName != null ? gameName : "jWrestling",
+                    version != null ? version : "0.09");
+        }
     }
 
     protected void createClientManager(String name, String gversion) {
@@ -237,9 +245,9 @@ public class AbstractClient extends Thread {
             @Override
             protected void onPerception(MessageS2CPerception message) {
                 try {
-                    System.out.println("Received perception " 
+                    System.out.println("Received perception "
                             + message.getPerceptionTimestamp());
-                    getHandler().apply(message,
+                    getPerceptionHandler().apply(message,
                             Lookup.getDefault().lookup(IWorldManager.class).getWorld());
                     int i = message.getPerceptionTimestamp();
                     if (isChat()) {
@@ -342,6 +350,45 @@ public class AbstractClient extends Thread {
         });
     }
 
+    @Override
+    public void run() {
+        try {
+            getClientManager().connect(getHost(), Integer.parseInt(getPort()));
+            LOG.log(Level.FINE, "Logging as: {0} with pass: {1} "
+                    + "version: ''{2}''", new Object[]{getUsername(),
+                        password, getVersion()});
+            getClientManager().login(getUsername(), password);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+        } catch (LoginFailedException e) {
+            try {
+                LOG.log(Level.WARNING,
+                        "Creating account and logging in to continue....");
+                getClientManager().createAccount(getUsername(), password, getHost());
+                getClientManager().login(getUsername(), password);
+            } catch (LoginFailedException | TimeoutException | InvalidVersionException | BannedAddressException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+                System.exit(1);
+            }
+        } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            System.exit(1);
+        }
+
+        boolean cond = true;
+
+        while (cond) {
+            getClientManager().loop(0);
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                LOG.log(Level.SEVERE, null, e);
+                cond = false;
+            }
+        }
+    }
+
     /**
      * @return the port
      */
@@ -366,6 +413,7 @@ public class AbstractClient extends Thread {
     /**
      * @return the clientManager
      */
+    @Override
     public marauroa.client.ClientFramework getClientManager() {
         return clientManager;
     }
@@ -373,14 +421,19 @@ public class AbstractClient extends Thread {
     /**
      * @param clientManager the clientManager to set
      */
+    @Override
     public void setClientManager(marauroa.client.ClientFramework clientManager) {
+        if (this.clientManager != null) {
+            LOG.warning("Trying to override ClientFramework!");
+        }
         this.clientManager = clientManager;
     }
 
     /**
      * @return the handler
      */
-    public PerceptionHandler getHandler() {
+    @Override
+    public PerceptionHandler getPerceptionHandler() {
         return handler;
     }
 
@@ -408,13 +461,15 @@ public class AbstractClient extends Thread {
     /**
      * @param handler the handler to set
      */
-    public void setHandler(PerceptionHandler handler) {
+    @Override
+    public void setPerceptionHandler(PerceptionHandler handler) {
         this.handler = handler;
     }
 
     /**
      * @return the character
      */
+    @Override
     public String getCharacter() {
         return character;
     }
@@ -468,4 +523,16 @@ public class AbstractClient extends Thread {
         this.password = password;
     }
 
+    @Override
+    public void connect(String host, String username, String password,
+            String user_character, String port,
+            String game_name, String version) throws SocketException {
+        setHost(host);
+        setUsername(username);
+        setPassword(password);
+        setCharacter(user_character);
+        setPort(port);
+        setVersion(version);
+        setGameName(game_name);
+    }
 }
