@@ -4,7 +4,7 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class TextClient extends AbstractClient {
+public final class TextClient extends DefaultClient {
 
     private static final Logger LOG
             = Logger.getLogger(TextClient.class.getSimpleName());

@@ -21,6 +21,7 @@ import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 import simple.client.api.AddListener;
 import simple.client.api.ClearListener;
 import simple.client.api.DeleteListener;
@@ -36,7 +37,8 @@ import simple.server.core.entity.clientobject.ClientObject;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public abstract class AbstractClient implements ClientFrameworkProvider {
+@ServiceProvider(service = ClientFrameworkProvider.class, position = 1)
+public class DefaultClient implements ClientFrameworkProvider {
 
     private String port;
     private String gameName;
@@ -50,7 +52,7 @@ public abstract class AbstractClient implements ClientFrameworkProvider {
     private String password;
 
     private static final Logger LOG
-            = Logger.getLogger(AbstractClient.class.getSimpleName());
+            = Logger.getLogger(DefaultClient.class.getSimpleName());
 
     /**
      * @return the showWorld
@@ -80,7 +82,7 @@ public abstract class AbstractClient implements ClientFrameworkProvider {
         chat = aChat;
     }
 
-    public AbstractClient() {
+    public DefaultClient() {
         handler = new PerceptionHandler(new IPerceptionListener() {
             @Override
             public boolean onAdded(RPObject object) {
@@ -234,7 +236,7 @@ public abstract class AbstractClient implements ClientFrameworkProvider {
         setClientManager(new ClientFramework("log4j.properties") {
             @Override
             protected String getGameName() {
-                return AbstractClient.this.getGameName();
+                return DefaultClient.this.getGameName();
             }
 
             @Override
