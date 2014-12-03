@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
@@ -22,12 +23,17 @@ import simple.server.extension.skill.D20Skill;
 public abstract class AbstractRace extends RPEntity implements D20Race {
 
     private String RP_CLASS = "Abstract Race";
+    public static final String FEAT_POINTS = "Feat Points";
+    public static final String SKILL_POINTS = "Skill Points";
+    protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
-    protected Map<Class<? extends D20Ability>, Integer> bonuses = new HashMap<>();
+    protected Map<Class<? extends D20Ability>, Integer> bonuses
+            = new HashMap<>();
     //Feat, level when is available.
     protected Map<Class<? extends D20Feat>, Integer> preferredFeats
             = new HashMap<>();
-    protected List<Class<? extends D20Skill>> preferredSkills = new ArrayList<>();
+    protected List<Class<? extends D20Skill>> preferredSkills
+            = new ArrayList<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractRace.class.getSimpleName());
 
@@ -45,20 +51,28 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
                 RPClass clazz = new RPClass(RP_CLASS);
                 clazz.isA(RPEntity.class.newInstance().getRPClassName());
                 //Attributes
-                for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+                Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
                     LOG.log(Level.FINE, "Adding attribute: {0}", attr.getName());
+                    return attr;
+                }).forEach((attr) -> {
                     clazz.addAttribute(attr.getName(), attr.getDefinitionType());
-                }
+                });
                 //Stats
-                for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+                Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
                     LOG.log(Level.FINE, "Adding stat: {0}", stat.getName());
+                    return stat;
+                }).forEach((stat) -> {
                     clazz.addAttribute(stat.getName(), stat.getDefinitionType());
-                }
+                });
                 //Other attributes
-                for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+                Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
                     LOG.log(Level.FINE, "Adding slot attribute: {0}", attr.getName());
+                    return attr;
+                }).forEach((attr) -> {
                     clazz.addRPSlot(attr.getName(), attr.getSize());
-                }
+                });
+                clazz.addAttribute(FEAT_POINTS, Definition.Type.INT);
+                clazz.addAttribute(SKILL_POINTS, Definition.Type.INT);
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
@@ -72,6 +86,14 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     @Override
     public void update() {
         super.update();
+        if (!has(FEAT_POINTS)) {
+            LOG.log(Level.FINE, "Updating attribute: {0}", FEAT_POINTS);
+            put(FEAT_POINTS, 2);
+        }
+        if (!has(SKILL_POINTS)) {
+            LOG.log(Level.FINE, "Updating attribute: {0}", SKILL_POINTS);
+            put(SKILL_POINTS, 20);
+        }
         Lookup.getDefault().lookupAll(D20Ability.class).stream().forEach((attr) -> {
             if (!has(attr.getName())) {
                 LOG.log(Level.FINE, "Updating attribute: {0}", attr.getName());
@@ -105,5 +127,15 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     @Override
     public List<Class<? extends D20Skill>> getPrefferedSkills() {
         return preferredSkills;
+    }
+    
+    @Override
+    public int getBonusSkillPoints(int level){
+        return bonusSkillPoints;
+    }
+    
+    @Override
+    public int getBonusFeatPoints(int level){
+        return bonusFeatPoints;
     }
 }
