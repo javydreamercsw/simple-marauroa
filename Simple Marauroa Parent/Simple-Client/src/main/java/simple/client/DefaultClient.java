@@ -45,7 +45,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     private String version;
     private marauroa.client.ClientFramework clientManager;
     private PerceptionHandler handler;
-    private static boolean showWorld = true, chat = true;
+    private static boolean showWorld = false, chat = false;
     private String character;
     private String host;
     private String username;
@@ -239,8 +239,8 @@ public class DefaultClient implements ClientFrameworkProvider {
             @Override
             protected void onPerception(MessageS2CPerception message) {
                 try {
-                    System.out.println("Received perception "
-                            + message.getPerceptionTimestamp());
+                    LOG.log(Level.FINE, "Received perception {0}",
+                            message.getPerceptionTimestamp());
                     getPerceptionHandler().apply(message,
                             Lookup.getDefault().lookup(IWorldManager.class).getWorld());
                     int i = message.getPerceptionTimestamp();
@@ -257,14 +257,15 @@ public class DefaultClient implements ClientFrameworkProvider {
                         }
                     }
                     if (isShowWorld()) {
-                        System.out.println("<World contents ------------------------------------->");
+                        LOG.log(Level.FINE, "<World contents ------------------------------------->");
                         int j = 0;
                         for (RPObject object
                                 : Lookup.getDefault().lookup(IWorldManager.class).getWorld().values()) {
                             j++;
-                            System.out.println(j + ". " + object);
+                            LOG.log(Level.FINE, "{0}. {1}",
+                                    new Object[]{j, object});
                         }
-                        System.out.println("</World contents ------------------------------------->");
+                        LOG.log(Level.FINE, "</World contents ------------------------------------->");
                     }
                 } catch (Exception e) {
                     LOG.log(Level.SEVERE, null, e);
