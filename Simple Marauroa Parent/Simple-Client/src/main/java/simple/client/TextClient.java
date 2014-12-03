@@ -8,9 +8,12 @@ public final class TextClient extends DefaultClient {
 
     private static final Logger LOG
             = Logger.getLogger(TextClient.class.getSimpleName());
+    private static boolean chat = false, world = false;
 
     public TextClient(String h, String u, String p, String c, String P,
             boolean t, String name, String v) throws SocketException {
+        setShowWorld(world);
+        setChat(chat);
         super.connect(h, u, p, c, P, name, v);
     }
 
@@ -46,12 +49,12 @@ public final class TextClient extends DefaultClient {
                             break;
                         case "-W":
                             if ("1".equals(args[i + 1])) {
-                                setShowWorld(true);
+                                world = true;
                             }
                             break;
                         case "-chat":
                             if ("1".equals(args[i + 1])) {
-                                setChat(true);
+                                chat = true;
                             }
                             break;
                         case "-t":

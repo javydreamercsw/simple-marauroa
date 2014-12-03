@@ -54,31 +54,23 @@ public class DefaultClient implements ClientFrameworkProvider {
     private static final Logger LOG
             = Logger.getLogger(DefaultClient.class.getSimpleName());
 
-    /**
-     * @return the showWorld
-     */
-    public static boolean isShowWorld() {
+    @Override
+    public boolean isShowWorld() {
         return showWorld;
     }
 
-    /**
-     * @param aShowWorld the showWorld to set
-     */
-    public static void setShowWorld(boolean aShowWorld) {
+    @Override
+    public void setShowWorld(boolean aShowWorld) {
         showWorld = aShowWorld;
     }
 
-    /**
-     * @return the chat
-     */
-    public static boolean isChat() {
+    @Override
+    public boolean isChat() {
         return chat;
     }
 
-    /**
-     * @param aChat the chat to set
-     */
-    public static void setChat(boolean aChat) {
+    @Override
+    public void setChat(boolean aChat) {
         chat = aChat;
     }
 
@@ -311,11 +303,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                         if (result.getResult().failed()) {
                             System.out.println(result.getResult().getText());
                         }
-                    } catch (final BannedAddressException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    } catch (final TimeoutException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    } catch (final InvalidVersionException e) {
+                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                     return;
@@ -324,11 +312,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                 if ((getCharacter() != null) && (characters.keySet().contains(getCharacter()))) {
                     try {
                         chooseCharacter(getCharacter());
-                    } catch (final BannedAddressException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    } catch (final TimeoutException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    } catch (final InvalidVersionException e) {
+                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                 }
@@ -391,38 +375,26 @@ public class DefaultClient implements ClientFrameworkProvider {
         }
     }
 
-    /**
-     * @return the port
-     */
+    @Override
     public String getPort() {
         return port;
     }
 
-    /**
-     * @return the gameName
-     */
+    @Override
     public String getGameName() {
         return gameName;
     }
 
-    /**
-     * @return the version
-     */
+    @Override
     public String getVersion() {
         return version;
     }
 
-    /**
-     * @return the clientManager
-     */
     @Override
     public marauroa.client.ClientFramework getClientManager() {
         return clientManager;
     }
 
-    /**
-     * @param clientManager the clientManager to set
-     */
     @Override
     public void setClientManager(marauroa.client.ClientFramework clientManager) {
         if (this.clientManager != null) {
@@ -431,96 +403,67 @@ public class DefaultClient implements ClientFrameworkProvider {
         this.clientManager = clientManager;
     }
 
-    /**
-     * @return the handler
-     */
     @Override
     public PerceptionHandler getPerceptionHandler() {
         return handler;
     }
 
-    /**
-     * @param port the port to set
-     */
+    @Override
     public void setPort(String port) {
         this.port = port;
     }
 
-    /**
-     * @param gameName the gameName to set
-     */
+    @Override
     public void setGameName(String gameName) {
         this.gameName = gameName;
     }
 
-    /**
-     * @param version the version to set
-     */
+    @Override
     public void setVersion(String version) {
         this.version = version;
     }
 
-    /**
-     * @param handler the handler to set
-     */
     @Override
     public void setPerceptionHandler(PerceptionHandler handler) {
         this.handler = handler;
     }
 
-    /**
-     * @return the character
-     */
     @Override
     public String getCharacter() {
         return character;
     }
 
-    /**
-     * @param character the character to set
-     */
+    @Override
     public void setCharacter(String character) {
         this.character = character;
     }
 
-    /**
-     * @return the host
-     */
+    @Override
     public String getHost() {
         return host;
     }
 
-    /**
-     * @param host the host to set
-     */
+    @Override
     public void setHost(String host) {
         this.host = host;
     }
 
-    /**
-     * @return the username
-     */
+    @Override
     public String getUsername() {
         return username;
     }
 
-    /**
-     * @param username the username to set
-     */
+    @Override
     public void setUsername(String username) {
         this.username = username;
     }
 
-    /**
-     * @return the password
-     */
+    @Override
     public String getPassword() {
         return password;
     }
 
-    /**
-     * @param password the password to set
-     */
+    @Override
     public void setPassword(String password) {
         this.password = password;
     }
