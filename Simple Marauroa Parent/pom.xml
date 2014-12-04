@@ -59,7 +59,6 @@
         <module>Card Game Interface DataBase Implementation</module>
         <module>Challenge-Extension</module>
         <module>Dimension-Extension</module>
-        <module>Marauroa-Monitor-Extension</module>
         <module>Zone-Extension</module>
         <module>D20-Extension</module>
     </modules>
