@@ -1,8 +1,5 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.D20Race;
-import simple.server.extension.d20.D20List;
-import simple.server.extension.d20.D20Stat;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -40,12 +37,13 @@ public class D20ExtensionTest {
 
         MockSimpleRPWorld.get();
 
-        for (RPEntityInterface entity
-                : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
+        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream().map((entity) -> {
             LOG.log(Level.FINE, "Registering RPEntity: {0}",
                     entity.getClass().getSimpleName());
+            return entity;
+        }).forEach((entity) -> {
             entity.generateRPClass();
-        }
+        });
     }
 
     /**
@@ -71,20 +69,26 @@ public class D20ExtensionTest {
                     RPObject test = (RPObject) cons.newInstance(new RPObject());
                     test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
                     assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
-                    for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+                    Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
+                        return attr;
+                    }).forEach((attr) -> {
                         assertTrue(test.has(attr.getName()));
-                    }
+                    });
                     //Stats
-                    for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+                    Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
                         System.out.println(stat.getName() + ": " + test.get(stat.getName()));
+                        return stat;
+                    }).forEach((stat) -> {
                         assertTrue(test.has(stat.getName()));
-                    }
+                    });
                     //Other attributes
-                    for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+                    Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
+                        return attr;
+                    }).forEach((attr) -> {
                         assertTrue(test.hasSlot(attr.getName()));
-                    }
+                    });
                     System.out.println(r.toString());
                     count++;
                 } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
