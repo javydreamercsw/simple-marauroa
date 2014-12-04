@@ -3,6 +3,8 @@ package simple.server.extension;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
+import simple.common.SimpleException;
+import simple.common.game.ClientObjectInterface;
 
 /**
  *
@@ -24,10 +26,9 @@ public class TutotialExtension extends SimpleServerExtension {
     }
 
     @Override
-    public void rootRPClassUpdate(RPObject entity) {
-        if (!entity.hasSlot(TUTORIAL)) {
-            entity.addSlot(TUTORIAL);
+    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
+        if (!((RPObject) client).hasSlot(TUTORIAL)) {
+            ((RPObject) client).addSlot(TUTORIAL);
         }
     }
-
 }
