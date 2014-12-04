@@ -7,8 +7,12 @@ import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import marauroa.common.game.Definition;
+import marauroa.common.game.IRPZone;
 import marauroa.common.game.IRPZone.ID;
-import marauroa.common.game.*;
+import marauroa.common.game.RPAction;
+import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
@@ -52,13 +56,15 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
             //Just wait a little bit...
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
+            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    list(player, ZoneEvent.LISTZONES, action);
-                }
-            }));
+                        private static final long serialVersionUID = -5644390861803492172L;
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            list(player, ZoneEvent.LISTZONES, action);
+                        }
+                    }));
         } else {
             logger.warn("Added a " + object.getClass());
         }
@@ -120,15 +126,17 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             logger.debug("Adding zone to the world...");
             world.addRPZone(zone);
             logger.info("Scheduling moving player to created zone...");
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(2,
+            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (player instanceof RPObject) {
-                        world.changeZone(action.get(ROOM), (RPObject) player);
-                    }
-                }
-            }));
+                        private static final long serialVersionUID = -5644390861803492172L;
+
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if (player instanceof RPObject) {
+                                world.changeZone(action.get(ROOM), (RPObject) player);
+                            }
+                        }
+                    }));
         } else {
             player.sendPrivateText(NotificationType.PRIVMSG, "Sorry, that room already exists!");
         }
@@ -194,7 +202,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             }
             world.applyPublicEvent(null,
                     new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
-                    ZoneEvent.REMOVE));
+                            ZoneEvent.REMOVE));
             for (ClientObjectInterface p : zone.getPlayers()) {
                 p.notifyWorldAboutChanges();
             }
