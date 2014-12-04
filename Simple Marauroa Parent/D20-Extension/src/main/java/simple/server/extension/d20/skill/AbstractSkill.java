@@ -50,4 +50,9 @@ public abstract class AbstractSkill implements D20Skill {
     public String getShortName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
+    
+    @Override
+    public String getDescription() {
+        return getClass().getSimpleName().replaceAll("_", " ");
+    }
 }
