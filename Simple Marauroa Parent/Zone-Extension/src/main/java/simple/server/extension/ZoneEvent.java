@@ -14,7 +14,7 @@ import simple.server.core.event.api.IRPEvent;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IRPEvent.class)
-public class ZoneEvent extends SimpleRPEvent{
+public class ZoneEvent extends SimpleRPEvent {
 
     public static final String FIELD = "field", RPCLASS_NAME = "zone_event",
             ACTION = "action", DESC = "description";
