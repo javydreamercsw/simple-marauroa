@@ -9,7 +9,7 @@
 
     <artifactId>Challenge-Extension</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>Challenge-Extension</name>
+    <name>Challenge Extension</name>
 
     <dependencies>
         <dependency>
