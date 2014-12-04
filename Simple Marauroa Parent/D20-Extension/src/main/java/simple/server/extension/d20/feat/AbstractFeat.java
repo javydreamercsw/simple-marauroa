@@ -1,8 +1,11 @@
 package simple.server.extension.d20.feat;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
+import simple.server.extension.d20.D20Race;
 import simple.server.extension.d20.DieEx;
 
 /**
@@ -11,8 +14,9 @@ import simple.server.extension.d20.DieEx;
  */
 public abstract class AbstractFeat implements D20Feat {
 
-    protected Map<Class<? extends D20Characteristic>, String> 
-            bonus = new HashMap<>();
+    protected Map<Class<? extends D20Characteristic>, String> bonus = new HashMap<>();
+    private List<Class<? extends D20Race>> exclusiveRaces = new ArrayList<>();
+    private List<Class<? extends D20Feat>> requirements = new ArrayList<>();
 
     @Override
     public String getName() {
@@ -36,5 +40,15 @@ public abstract class AbstractFeat implements D20Feat {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<Class<? extends D20Race>> getExclusiveRaces() {
+        return exclusiveRaces;
+    }
+
+    @Override
+    public List<Class<? extends D20Feat>> getRequirements() {
+        return requirements;
     }
 }
