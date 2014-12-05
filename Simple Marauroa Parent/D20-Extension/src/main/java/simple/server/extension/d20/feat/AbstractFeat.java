@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.D20Race;
+import simple.server.extension.d20.D20Weapon;
 import simple.server.extension.d20.DieEx;
 
 /**
@@ -14,9 +15,13 @@ import simple.server.extension.d20.DieEx;
  */
 public abstract class AbstractFeat implements D20Feat {
 
-    protected Map<Class<? extends D20Characteristic>, String> bonus = new HashMap<>();
+    protected Map<Class<? extends D20Characteristic>, String> bonus
+            = new HashMap<>();
     private List<Class<? extends D20Race>> exclusiveRaces = new ArrayList<>();
     private List<Class<? extends D20Feat>> requirements = new ArrayList<>();
+    protected boolean multiple = false;
+    protected D20Weapon focusWeapon = null;
+    protected D20Characteristic focusCharacteristic = null;
 
     @Override
     public String getName() {
@@ -50,5 +55,20 @@ public abstract class AbstractFeat implements D20Feat {
     @Override
     public List<Class<? extends D20Feat>> getRequirements() {
         return requirements;
+    }
+
+    @Override
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    @Override
+    public D20Characteristic getFocusCharacteristic() {
+        return focusCharacteristic;
+    }
+
+    @Override
+    public D20Weapon getFocusWeapon() {
+        return focusWeapon;
     }
 }
