@@ -25,7 +25,13 @@ public interface D20Race extends D20Characteristic {
      *
      * @return list of the preferred feats
      */
-    Map<Class<? extends D20Feat>, Integer> getPrefferedFeats();
+    List<Class<? extends D20Feat>> getPrefferedFeats();
+    
+    /**
+     * Feats awarded as a bonus.
+     * @return 
+     */
+    public Map<Class<? extends D20Feat>, Integer> getBonusFeats();
 
     /**
      * A list of the preferred skills on a D20 game. (Easier to gain levels)

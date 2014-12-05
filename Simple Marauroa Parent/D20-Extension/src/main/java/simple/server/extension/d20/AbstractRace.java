@@ -27,12 +27,14 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     public static final String SKILL_POINTS = "Skill Points";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
-    protected Map<Class<? extends D20Ability>, Integer> bonuses
+    private Map<Class<? extends D20Ability>, Integer> bonuses
             = new HashMap<>();
     //Feat, level when is available.
-    protected Map<Class<? extends D20Feat>, Integer> preferredFeats
+    private List<Class<? extends D20Feat>> preferredFeats = new ArrayList<>();
+    //Feat, level when is gained.
+    private Map<Class<? extends D20Feat>, Integer> bonusFeats
             = new HashMap<>();
-    protected List<Class<? extends D20Skill>> preferredSkills
+    private List<Class<? extends D20Skill>> preferredSkills
             = new ArrayList<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractRace.class.getSimpleName());
@@ -120,7 +122,12 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     }
 
     @Override
-    public Map<Class<? extends D20Feat>, Integer> getPrefferedFeats() {
+    public Map<Class<? extends D20Feat>, Integer> getBonusFeats() {
+        return bonusFeats;
+    }
+
+    @Override
+    public List<Class<? extends D20Feat>> getPrefferedFeats() {
         return preferredFeats;
     }
 
@@ -128,14 +135,14 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     public List<Class<? extends D20Skill>> getPrefferedSkills() {
         return preferredSkills;
     }
-    
+
     @Override
-    public int getBonusSkillPoints(int level){
+    public int getBonusSkillPoints(int level) {
         return bonusSkillPoints;
     }
-    
+
     @Override
-    public int getBonusFeatPoints(int level){
+    public int getBonusFeatPoints(int level) {
         return bonusFeatPoints;
     }
 }

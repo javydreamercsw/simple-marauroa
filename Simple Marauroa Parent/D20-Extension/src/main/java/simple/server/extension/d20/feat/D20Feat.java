@@ -3,6 +3,7 @@ package simple.server.extension.d20.feat;
 import java.util.List;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.D20Race;
+import simple.server.extension.d20.D20Weapon;
 
 /**
  *
@@ -31,4 +32,25 @@ public interface D20Feat extends D20Characteristic {
      * @return Map Feats to have this one available.
      */
     List<Class<? extends D20Feat>> getRequirements();
+
+    /**
+     * Can the player have multiple instances of this Feat.
+     *
+     * @return true if allowed, false otherwise.
+     */
+    boolean isMultiple();
+
+    /**
+     * A characteristic this feat focuses on.
+     *
+     * @return focused characteristic or null if none;
+     */
+    D20Characteristic getFocusCharacteristic();
+    
+    /**
+     * A weapon this feat focuses on.
+     *
+     * @return focused weapon or null if none;
+     */
+    D20Weapon getFocusWeapon();
 }
