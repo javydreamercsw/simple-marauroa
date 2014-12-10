@@ -88,14 +88,6 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     @Override
     public void update() {
         super.update();
-        if (!has(FEAT_POINTS)) {
-            LOG.log(Level.FINE, "Updating attribute: {0}", FEAT_POINTS);
-            put(FEAT_POINTS, 2);
-        }
-        if (!has(SKILL_POINTS)) {
-            LOG.log(Level.FINE, "Updating attribute: {0}", SKILL_POINTS);
-            put(SKILL_POINTS, 20);
-        }
         Lookup.getDefault().lookupAll(D20Ability.class).stream().forEach((attr) -> {
             if (!has(attr.getName())) {
                 LOG.log(Level.FINE, "Updating attribute: {0}", attr.getName());
