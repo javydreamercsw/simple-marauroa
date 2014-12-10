@@ -1,8 +1,8 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.DieEx;
-import simple.server.extension.d20.Die;
-import simple.server.extension.d20.Dice;
+import simple.server.extension.d20.dice.DieEx;
+import simple.server.extension.d20.dice.Die;
+import simple.server.extension.d20.dice.Dice;
 import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;

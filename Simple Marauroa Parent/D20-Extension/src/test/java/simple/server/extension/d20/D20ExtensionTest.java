@@ -1,5 +1,7 @@
 package simple.server.extension.d20;
 
+import simple.server.extension.d20.race.D20Race;
+import simple.server.extension.d20.stat.D20Stat;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;

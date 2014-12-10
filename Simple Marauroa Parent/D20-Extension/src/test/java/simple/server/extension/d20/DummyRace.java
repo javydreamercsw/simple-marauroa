@@ -1,6 +1,6 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.D20Race;
+import simple.server.extension.d20.race.D20Race;
 import simple.server.extension.d20.AbstractRace;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;

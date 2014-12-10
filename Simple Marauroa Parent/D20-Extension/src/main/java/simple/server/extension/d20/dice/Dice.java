@@ -1,4 +1,4 @@
-package simple.server.extension.d20;
+package simple.server.extension.d20.dice;
 
 /**
  *

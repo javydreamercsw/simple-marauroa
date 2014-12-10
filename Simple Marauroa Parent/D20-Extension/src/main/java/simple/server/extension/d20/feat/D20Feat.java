@@ -2,8 +2,8 @@ package simple.server.extension.d20.feat;
 
 import java.util.List;
 import simple.server.extension.d20.D20Characteristic;
-import simple.server.extension.d20.D20Race;
-import simple.server.extension.d20.D20Weapon;
+import simple.server.extension.d20.race.D20Race;
+import simple.server.extension.d20.weapon.D20Weapon;
 
 /**
  *

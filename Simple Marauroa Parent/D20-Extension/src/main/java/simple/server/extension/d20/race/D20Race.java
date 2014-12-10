@@ -1,7 +1,8 @@
-package simple.server.extension.d20;
+package simple.server.extension.d20.race;
 
 import java.util.List;
 import java.util.Map;
+import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.skill.D20Skill;

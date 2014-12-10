@@ -1,4 +1,7 @@
-package simple.server.extension.d20;
+package simple.server.extension.d20.stat;
+
+import simple.server.extension.d20.D20Characteristic;
+import simple.server.extension.d20.iD20Definition;
 
 /**
  * Stats like, HP

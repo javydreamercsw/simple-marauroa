@@ -1,4 +1,6 @@
-package simple.server.extension.d20;
+package simple.server.extension.d20.rpclass;
+
+import simple.server.extension.d20.D20Characteristic;
 
 /**
  * This represents a Class in a D20 based game.

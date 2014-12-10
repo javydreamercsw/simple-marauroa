@@ -1,6 +1,6 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.D20Stat;
+import simple.server.extension.d20.stat.D20Stat;
 import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
 
