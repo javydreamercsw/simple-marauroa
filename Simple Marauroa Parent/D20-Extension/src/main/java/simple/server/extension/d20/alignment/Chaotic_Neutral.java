@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Chaotic_Neutral extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "CN";
+    }
+
+    @Override
     public String getDescription() {
         return "A chaotic neutral character follows his whims. He is an "
                 + "individualist first and last. He values his own liberty "

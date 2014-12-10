@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Neutral_Evil extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "NE";
+    }
+
+    @Override
     public String getDescription() {
         return "A neutral evil villain does whatever she can get away with. "
                 + "She is out for herself, pure and simple. She sheds no "

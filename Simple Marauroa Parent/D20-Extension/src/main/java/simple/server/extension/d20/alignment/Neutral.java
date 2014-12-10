@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Neutral extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "N";
+    }
+
+    @Override
     public String getDescription() {
         return "A neutral character does what seems to be a good idea. "
                 + "She doesn’t feel strongly one way or the other when it "

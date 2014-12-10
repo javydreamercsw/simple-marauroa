@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Neutral_Good extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "NG";
+    }
+
+    @Override
     public String getDescription() {
         return "A neutral good character does the best that a good person can "
                 + "do. He is devoted to helping others. He works with kings "

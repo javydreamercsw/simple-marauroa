@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Chaotic_Good extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "CG";
+    }
+
+    @Override
     public String getDescription() {
         return "A chaotic good character acts as his conscience directs him "
                 + "with little regard for what others expect of him. He makes "

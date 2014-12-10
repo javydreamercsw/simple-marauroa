@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Lawful_Neutral extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "LN";
+    }
+
+    @Override
     public String getDescription() {
         return "A lawful neutral character acts as law, tradition, or a "
                 + "personal code directs her. Order and organization are "
