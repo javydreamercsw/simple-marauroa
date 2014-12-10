@@ -1,4 +1,6 @@
-package simple.server.extension.d20;
+package simple.server.extension.d20.weapon;
+
+import simple.server.extension.d20.D20Characteristic;
 
 /**
  *

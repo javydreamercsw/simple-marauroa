@@ -1,6 +1,6 @@
 package simple.server.extension.d20.skill;
 
-import simple.server.extension.d20.DieEx;
+import simple.server.extension.d20.dice.DieEx;
 import static simple.server.extension.d20.skill.D20Skill.modifiers;
 import simple.server.extension.d20.ability.D20Ability;
 
