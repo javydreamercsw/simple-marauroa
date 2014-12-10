@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Lawful_Good extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "LG";
+    }
+
+    @Override
     public String getDescription() {
         return "A lawful good character acts as a good person is expected or "
                 + "required to act. She combines a commitment to oppose evil "

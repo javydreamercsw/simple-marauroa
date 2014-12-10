@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Chaotic_Evil extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "CE";
+    }
+
+    @Override
     public String getDescription() {
         return "A chaotic evil character does whatever his greed, hatred, "
                 + "and lust for destruction drive him to do. He is "

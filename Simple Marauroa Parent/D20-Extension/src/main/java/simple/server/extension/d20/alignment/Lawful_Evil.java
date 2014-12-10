@@ -10,6 +10,11 @@ import org.openide.util.lookup.ServiceProvider;
 public class Lawful_Evil extends AbstractAlignment {
 
     @Override
+    public String getShortName() {
+        return "LE";
+    }
+
+    @Override
     public String getDescription() {
         return "A lawful evil villain methodically takes what he wants within "
                 + "the limits of his code of conduct without regard for whom "
