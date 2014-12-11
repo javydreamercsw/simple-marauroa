@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
@@ -25,8 +24,6 @@ import simple.server.extension.d20.skill.D20Skill;
 public abstract class AbstractRace extends RPEntity implements D20Race {
 
     private String RP_CLASS = "Abstract Race";
-    public static final String FEAT_POINTS = "Feat Points";
-    public static final String SKILL_POINTS = "Skill Points";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
     private Map<Class<? extends D20Ability>, Integer> bonuses
@@ -75,8 +72,6 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
                 }).forEach((attr) -> {
                     clazz.addRPSlot(attr.getName(), attr.getSize());
                 });
-                clazz.addAttribute(FEAT_POINTS, Definition.Type.INT);
-                clazz.addAttribute(SKILL_POINTS, Definition.Type.INT);
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
