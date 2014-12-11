@@ -1,5 +1,6 @@
 package simple.server.extension.d20;
 
+import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.race.D20Race;
 import simple.server.extension.d20.stat.D20Stat;
 import java.lang.reflect.Constructor;
@@ -19,6 +20,8 @@ import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.d20.ability.D20Ability;
+import simple.server.extension.d20.list.Alignment;
+import simple.server.extension.d20.map.D20Map;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -84,13 +87,23 @@ public class D20ExtensionTest {
                     }).forEach((stat) -> {
                         assertTrue(test.has(stat.getName()));
                     });
+                    //Maps
+                    Lookup.getDefault().lookupAll(D20Map.class).stream().map((attr) -> {
+                        System.out.println(attr.getName());
+                        return attr;
+                    }).forEach((attr) -> {
+                        assertTrue(test.hasMap(attr.getName()));
+                    });
                     //Other attributes
                     Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
                         System.out.println(attr.getName() + ": " + test.get(attr.getName()));
                         return attr;
                     }).forEach((attr) -> {
                         assertTrue(test.hasSlot(attr.getName()));
+                        assertEquals(attr.getSize(),test.getSlot(attr.getName()).size());
                     });
+                    //Alignment
+                    assertTrue(test.hasSlot(Alignment.ALIGNMENT));
                     System.out.println(r.toString());
                     count++;
                 } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

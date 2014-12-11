@@ -1,5 +1,6 @@
 package simple.server.extension.d20.skill;
 
+import marauroa.common.game.RPObject;
 import simple.server.extension.d20.dice.DieEx;
 import static simple.server.extension.d20.skill.D20Skill.modifiers;
 import simple.server.extension.d20.ability.D20Ability;
@@ -8,9 +9,9 @@ import simple.server.extension.d20.ability.D20Ability;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public abstract class AbstractSkill implements D20Skill {
+public abstract class AbstractSkill extends RPObject implements D20Skill {
 
-    private int rank = 0;
+    private Double rank = 0.0;
 
     @Override
     public boolean isModifiesAttribute(Class<? extends D20Ability> attr) {
@@ -32,12 +33,12 @@ public abstract class AbstractSkill implements D20Skill {
     }
 
     @Override
-    public int getRank() {
+    public Double getRank() {
         return rank;
     }
 
     @Override
-    public void setRank(int rank) {
+    public void setRank(Double rank) {
         this.rank = rank;
     }
     

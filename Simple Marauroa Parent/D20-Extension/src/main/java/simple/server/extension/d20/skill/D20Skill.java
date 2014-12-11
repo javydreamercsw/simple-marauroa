@@ -41,13 +41,15 @@ public interface D20Skill extends D20Characteristic {
 
     /**
      * Get the skill rank.
+     *
      * @return skill rank
      */
-    public int getRank();
-    
+    public Double getRank();
+
     /**
      * Set the skill rank.
-     * @param rank 
+     *
+     * @param rank
      */
-    public void setRank(int rank);
+    public void setRank(Double rank);
 }
