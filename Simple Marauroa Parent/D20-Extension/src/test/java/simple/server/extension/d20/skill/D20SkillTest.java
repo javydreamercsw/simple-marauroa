@@ -60,9 +60,9 @@ public class D20SkillTest {
     public void testRank() {
         System.out.println("Rank");
         DummySkill ds = new DummySkill();
-        assertEquals(0, ds.getRank());
-        ds.setRank(1);
-        assertEquals(1, ds.getRank());
+        assertTrue(0.0 == ds.getRank());
+        ds.setRank(1.0);
+        assertTrue(1.0 == ds.getRank());
     }
 
     @ServiceProvider(service = D20Ability.class)

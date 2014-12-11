@@ -1,5 +1,6 @@
 package simple.server.extension.d20;
 
+import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.race.D20Race;
 import simple.server.extension.d20.stat.D20Stat;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
@@ -15,6 +17,7 @@ import org.openide.util.Lookup;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
+import simple.server.extension.d20.map.D20Map;
 import simple.server.extension.d20.skill.D20Skill;
 
 /**
@@ -56,21 +59,32 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
                     LOG.log(Level.FINE, "Adding attribute: {0}", attr.getName());
                     return attr;
                 }).forEach((attr) -> {
-                    clazz.addAttribute(attr.getName(), attr.getDefinitionType());
+                    clazz.addAttribute(attr.getName(), attr.getDefinitionType(),
+                            attr.getDefinition());
                 });
                 //Stats
                 Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
                     LOG.log(Level.FINE, "Adding stat: {0}", stat.getName());
                     return stat;
                 }).forEach((stat) -> {
-                    clazz.addAttribute(stat.getName(), stat.getDefinitionType());
+                    clazz.addAttribute(stat.getName(), stat.getDefinitionType(),
+                            stat.getDefinition());
+                });
+                //Maps
+                Lookup.getDefault().lookupAll(D20Map.class).stream().map((map) -> {
+                    LOG.log(Level.FINE, "Adding map: {0}", map.getName());
+                    return map;
+                }).forEach((map) -> {
+                    clazz.addAttribute(map.getName(), Definition.Type.MAP,
+                            map.getDefinition());
                 });
                 //Other attributes
                 Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
                     LOG.log(Level.FINE, "Adding slot attribute: {0}", attr.getName());
                     return attr;
                 }).forEach((attr) -> {
-                    clazz.addRPSlot(attr.getName(), attr.getSize());
+                    clazz.addRPSlot(attr.getName(), attr.getSize(),
+                            attr.getDefinition());
                 });
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
@@ -99,8 +113,18 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
         });
         Lookup.getDefault().lookupAll(D20List.class).stream().forEach((stat) -> {
             if (!hasSlot(stat.getName())) {
-                LOG.log(Level.FINE, "Updating slopt: {0}", stat.getName());
-                addSlot(new RPSlot(stat.getName()));
+                LOG.log(Level.FINE, "Updating slot: {0}", stat.getName());
+                RPSlot slot = new RPSlot(stat.getName());
+                slot.setCapacity(stat.getSize());
+                addSlot(slot);
+            }
+        });
+        Lookup.getDefault().lookupAll(D20Map.class).stream().forEach((stat) -> {
+            if (!hasMap(stat.getName())) {
+                LOG.log(Level.FINE, "Updating map: {0}", stat.getName());
+                System.out.println(getRPClass().getDefinition(Definition.DefinitionClass.ATTRIBUTE, stat.getName()));
+                System.out.println(this);
+                addMap(stat.getName());
             }
         });
     }

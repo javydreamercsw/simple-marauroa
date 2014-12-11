@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import marauroa.common.game.RPObject;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.race.D20Race;
 import simple.server.extension.d20.weapon.D20Weapon;
@@ -13,7 +14,7 @@ import simple.server.extension.d20.dice.DieEx;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public abstract class AbstractFeat implements D20Feat {
+public abstract class AbstractFeat extends RPObject implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> bonus
             = new HashMap<>();

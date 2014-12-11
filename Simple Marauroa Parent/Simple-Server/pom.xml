@@ -45,15 +45,9 @@
             <version>1.2.17</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.javydreamercsw</groupId>
-            <artifactId>marauroa</artifactId>
-            <version>3.9.2</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jnlp</artifactId>
-                    <groupId>javax.jnlp</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa</artifactId>
+            <version>3.9.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>
