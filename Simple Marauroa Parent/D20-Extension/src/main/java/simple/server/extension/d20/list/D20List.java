@@ -6,7 +6,7 @@ import simple.server.extension.d20.iD20Definition;
 /**
  * This represents lists, like skills, equipment, etc
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public interface D20List extends D20Characteristic, iD20Definition {
 

@@ -5,7 +5,7 @@ import simple.server.extension.d20.saving_throw.AbstractSavingThrow;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public class DummySavingThrow extends AbstractSavingThrow {
 

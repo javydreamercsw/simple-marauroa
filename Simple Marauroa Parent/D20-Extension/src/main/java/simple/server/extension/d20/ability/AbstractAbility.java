@@ -4,7 +4,7 @@ import marauroa.common.game.Definition;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public abstract class AbstractAbility implements D20Ability {
 

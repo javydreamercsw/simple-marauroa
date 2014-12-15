@@ -7,7 +7,7 @@ import simple.server.extension.d20.stat.AbstractStat;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = D20Stat.class)
 public class DummyStat extends AbstractStat {

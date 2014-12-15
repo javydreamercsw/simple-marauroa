@@ -10,7 +10,7 @@ import simple.server.extension.d20.skill.D20Skill;
 /**
  * This represents a Race in a D20 game.
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public interface D20Race extends D20Characteristic {
 

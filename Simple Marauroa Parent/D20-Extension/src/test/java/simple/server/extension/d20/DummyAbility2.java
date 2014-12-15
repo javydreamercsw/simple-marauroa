@@ -7,7 +7,7 @@ import simple.server.extension.d20.ability.D20Ability;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = D20Ability.class)
 public class DummyAbility2 extends AbstractAbility {
@@ -36,6 +36,6 @@ public class DummyAbility2 extends AbstractAbility {
     
     @Override
     public String getDescription() {
-        return "Dummy";
+        return "Dummy Description 2";
     }
 }

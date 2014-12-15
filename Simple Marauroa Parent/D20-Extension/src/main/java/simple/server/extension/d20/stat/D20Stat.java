@@ -7,7 +7,7 @@ import simple.server.extension.d20.iD20DefinitionType;
 /**
  * Stats like, HP
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public interface D20Stat extends D20Characteristic, iD20Definition,
         iD20DefinitionType {

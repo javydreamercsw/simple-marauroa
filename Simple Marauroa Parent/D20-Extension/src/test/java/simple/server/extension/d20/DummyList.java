@@ -6,7 +6,7 @@ import simple.server.extension.d20.list.AbstractList;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = D20List.class)
 public class DummyList extends AbstractList {

@@ -35,10 +35,12 @@ import javax.swing.*;
  * <i>Standard draw</i>. This class provides a basic capability for creating
  * drawings with your programs. It uses a simple graphics model that allows you
  * to create drawings consisting of points, lines, and curves in a window on
- * your computer and to save the drawings to a file. <p> For additional
- * documentation, see <a href="http://introcs.cs.princeton.edu/15inout">Section
- * 1.5</a> of <i>Introduction to Programming in Java: An Interdisciplinary
- * Approach</i> by Robert Sedgewick and Kevin Wayne.
+ * your computer and to save the drawings to a file.
+ * <p>
+ * For additional documentation, see
+ * <a href="http://introcs.cs.princeton.edu/15inout">Section 1.5</a> of
+ * <i>Introduction to Programming in Java: An Interdisciplinary Approach</i> by
+ * Robert Sedgewick and Kevin Wayne.
  */
 public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
@@ -90,8 +92,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     private static final double DEFAULT_YMAX = 1.0;
     private static double xmin, ymin, xmax, ymax;
     // for synchronization
-    private static Object mouseLock = new Object();
-    private static Object keyLock = new Object();
+    private final static Object mouseLock = new Object();
+    private final static Object keyLock = new Object();
     // default font
     private static final Font DEFAULT_FONT = new Font("SansSerif", Font.PLAIN, 16);
     // current font
@@ -108,9 +110,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     private static double mouseX = 0;
     private static double mouseY = 0;
     // queue of typed key characters
-    private static LinkedList<Character> keysTyped = new LinkedList<Character>();
+    private static LinkedList<Character> keysTyped = new LinkedList<>();
     // set of key codes currently pressed down
-    private static TreeSet<Integer> keysDown = new TreeSet<Integer>();
+    private static TreeSet<Integer> keysDown = new TreeSet<>();
 
     // not instantiable
     private StdDraw() {
@@ -204,7 +206,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * User and screen coordinate systems
-    ************************************************************************
+     * ***********************************************************************
      */
     /**
      * Set the x-scale to be the default (between 0.0 and 1.0).
@@ -381,7 +383,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * Drawing geometric shapes.
-    ************************************************************************
+     * ***********************************************************************
      */
     /**
      * Draw a line from (x0, y0) to (x1, y1).
@@ -709,7 +711,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * Drawing images.
-    ************************************************************************
+     * ***********************************************************************
      */
     // get an image from the given filename
     private static Image getImage(String filename) {
@@ -863,7 +865,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * Drawing text.
-    ************************************************************************
+     * ***********************************************************************
      */
     /**
      * Write the given text string in the current font, centered on (x, y).
@@ -952,7 +954,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         defer = false;
         draw();
         try {
-            Thread.currentThread().sleep(t);
+            Thread.sleep(t);
         } catch (InterruptedException e) {
             System.out.println("Error sleeping");
         }
@@ -982,7 +984,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * Save drawing to a file.
-    ************************************************************************
+     * ***********************************************************************
      */
     /**
      * Save onscreen image to file - suffix must be png, jpg, or gif.
@@ -994,37 +996,39 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
         String suffix = filename.substring(filename.lastIndexOf('.') + 1);
 
         // png files
-        if (suffix.toLowerCase().equals("png")) {
-            try {
-                ImageIO.write(onscreenImage, suffix, file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } // need to change from ARGB to RGB for jpeg
-        // reference: http://archives.java.sun.com/cgi-bin/wa?A2=ind0404&L=java2d-interest&D=0&P=2727
-        else if (suffix.toLowerCase().equals("jpg")) {
-            WritableRaster raster = onscreenImage.getRaster();
-            WritableRaster newRaster;
-            newRaster = raster.createWritableChild(0, 0, width, height, 0, 0, new int[]{0, 1, 2});
-            DirectColorModel cm = (DirectColorModel) onscreenImage.getColorModel();
-            DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(),
-                    cm.getRedMask(),
-                    cm.getGreenMask(),
-                    cm.getBlueMask());
-            BufferedImage rgbBuffer = new BufferedImage(newCM, newRaster, false, null);
-            try {
-                ImageIO.write(rgbBuffer, suffix, file);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Invalid image file type: " + suffix);
+        switch (suffix.toLowerCase()) {
+        // need to change from ARGB to RGB for jpeg
+            case "png":
+                try {
+                    ImageIO.write(onscreenImage, suffix, file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }   break;
+            case "jpg":
+                WritableRaster raster = onscreenImage.getRaster();
+                WritableRaster newRaster;
+                newRaster = raster.createWritableChild(0, 0, width, height, 0, 0, new int[]{0, 1, 2});
+                DirectColorModel cm = (DirectColorModel) onscreenImage.getColorModel();
+                DirectColorModel newCM = new DirectColorModel(cm.getPixelSize(),
+                        cm.getRedMask(),
+                        cm.getGreenMask(),
+                        cm.getBlueMask());
+                BufferedImage rgbBuffer = new BufferedImage(newCM, newRaster, false, null);
+                try {
+                    ImageIO.write(rgbBuffer, suffix, file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }   break;
+            default:
+                System.out.println("Invalid image file type: " + suffix);
+                break;
         }
     }
 
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
         chooser.setVisible(true);
@@ -1037,7 +1041,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * Mouse interactions.
-    ************************************************************************
+     * ***********************************************************************
      */
     /**
      * Is the mouse being pressed?
@@ -1075,24 +1079,28 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mousePressed(MouseEvent e) {
         synchronized (mouseLock) {
             mouseX = StdDraw.userX(e.getX());
@@ -1104,6 +1112,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mouseReleased(MouseEvent e) {
         synchronized (mouseLock) {
             mousePressed = false;
@@ -1113,6 +1122,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mouseDragged(MouseEvent e) {
         synchronized (mouseLock) {
             mouseX = StdDraw.userX(e.getX());
@@ -1123,6 +1133,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void mouseMoved(MouseEvent e) {
         synchronized (mouseLock) {
             mouseX = StdDraw.userX(e.getX());
@@ -1133,7 +1144,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * ***********************************************************************
      * Keyboard interactions.
-    ************************************************************************
+     * ***********************************************************************
      */
     /**
      * Has the user typed a key?
@@ -1177,6 +1188,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void keyTyped(KeyEvent e) {
         synchronized (keyLock) {
             keysTyped.addFirst(e.getKeyChar());
@@ -1186,6 +1198,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void keyPressed(KeyEvent e) {
         keysDown.add(e.getKeyCode());
     }
@@ -1193,6 +1206,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
     /**
      * This method cannot be called directly.
      */
+    @Override
     public void keyReleased(KeyEvent e) {
         keysDown.remove(e.getKeyCode());
     }
