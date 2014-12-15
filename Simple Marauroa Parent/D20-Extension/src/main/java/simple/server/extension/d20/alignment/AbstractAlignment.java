@@ -18,7 +18,7 @@ public class AbstractAlignment implements D20Alignment {
     public String getDescription() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
-    
+
     @Override
     public Byte getDefinition() {
         return Definition.STANDARD;

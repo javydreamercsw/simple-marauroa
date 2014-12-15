@@ -80,7 +80,7 @@ import simple.server.extension.d20.iD20Definition;
  * be obedient and cats free-spirited, but they do not have the moral capacity
  * to be truly lawful or chaotic.
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public interface D20Alignment extends D20Characteristic, iD20Definition {
 

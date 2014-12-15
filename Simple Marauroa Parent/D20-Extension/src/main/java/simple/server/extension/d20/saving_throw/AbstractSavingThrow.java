@@ -2,7 +2,7 @@ package simple.server.extension.d20.saving_throw;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public abstract class AbstractSavingThrow implements D20SavingThrow {
 
@@ -32,7 +32,7 @@ public abstract class AbstractSavingThrow implements D20SavingThrow {
     public int getScore() {
         return getBaseScore() + getMiscMod();
     }
-    
+
     @Override
     public String getName() {
         return getClass().getSimpleName().replaceAll("_", " ");

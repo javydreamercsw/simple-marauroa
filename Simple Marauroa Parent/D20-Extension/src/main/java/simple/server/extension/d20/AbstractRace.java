@@ -22,7 +22,7 @@ import simple.server.extension.d20.skill.D20Skill;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public abstract class AbstractRace extends RPEntity implements D20Race {
 

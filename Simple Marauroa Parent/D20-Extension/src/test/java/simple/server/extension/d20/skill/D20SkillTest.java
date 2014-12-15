@@ -12,7 +12,7 @@ import simple.server.extension.d20.ability.D20Ability;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public class D20SkillTest {
 
@@ -80,7 +80,7 @@ public class D20SkillTest {
 
         @Override
         public String getDescription() {
-            return "Dummy";
+            return "Invalid Description.";
         }
 
         @Override

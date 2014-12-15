@@ -7,7 +7,7 @@ import simple.server.extension.d20.ability.D20Ability;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = D20Ability.class)
 public class DummyAbility extends AbstractAbility {
@@ -23,7 +23,7 @@ public class DummyAbility extends AbstractAbility {
     public String getShortName() {
         return "Dummy";
     }
-
+    
     @Override
     public Definition.Type getDefinitionType() {
         return Definition.Type.values()[counter++];
@@ -31,6 +31,6 @@ public class DummyAbility extends AbstractAbility {
 
     @Override
     public String getDescription() {
-        return "Dummy";
+        return "Dummy Description.";
     }
 }

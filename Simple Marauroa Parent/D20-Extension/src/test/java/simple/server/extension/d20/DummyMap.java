@@ -6,7 +6,7 @@ import simple.server.extension.d20.map.D20Map;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = D20Map.class)
 public class DummyMap extends AbstractMap {

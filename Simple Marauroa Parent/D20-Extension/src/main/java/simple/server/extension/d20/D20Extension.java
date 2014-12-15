@@ -10,7 +10,7 @@ import simple.server.extension.d20.map.D20Map;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class D20Extension extends SimpleServerExtension {

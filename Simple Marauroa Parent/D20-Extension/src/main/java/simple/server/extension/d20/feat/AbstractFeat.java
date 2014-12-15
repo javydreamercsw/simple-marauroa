@@ -12,7 +12,7 @@ import simple.server.extension.d20.dice.DieEx;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public abstract class AbstractFeat extends RPObject implements D20Feat {
 

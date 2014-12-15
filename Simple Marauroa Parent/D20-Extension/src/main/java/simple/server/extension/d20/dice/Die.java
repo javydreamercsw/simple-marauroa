@@ -2,7 +2,7 @@ package simple.server.extension.d20.dice;
 
 /**
  *
- * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 import java.util.Random;
 
