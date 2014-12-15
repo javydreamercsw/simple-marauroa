@@ -26,7 +26,7 @@ import simple.server.extension.d20.skill.D20Skill;
  */
 public abstract class AbstractRace extends RPEntity implements D20Race {
 
-    private String RP_CLASS = "Abstract Race";
+    public final static String RP_CLASS = "Abstract Race";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
     private Map<Class<? extends D20Ability>, Integer> bonuses
@@ -43,6 +43,7 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
 
     public AbstractRace(RPObject object) {
         super(object);
+        update();
     }
 
     public AbstractRace() {
@@ -55,37 +56,45 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
                 RPClass clazz = new RPClass(RP_CLASS);
                 clazz.isA(RPEntity.class.newInstance().getRPClassName());
                 //Attributes
-                Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
-                    LOG.log(Level.FINE, "Adding attribute: {0}", attr.getName());
-                    return attr;
-                }).forEach((attr) -> {
-                    clazz.addAttribute(attr.getName(), attr.getDefinitionType(),
-                            attr.getDefinition());
-                });
+                Lookup.getDefault().lookupAll(D20Ability.class).stream()
+                        .map((attr) -> {
+                            LOG.log(Level.FINE, "Adding attribute: {0}",
+                                    attr.getName());
+                            return attr;
+                        }).forEach((attr) -> {
+                            clazz.addAttribute(attr.getName(),
+                                    attr.getDefinitionType(),
+                                    attr.getDefinition());
+                        });
                 //Stats
-                Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
-                    LOG.log(Level.FINE, "Adding stat: {0}", stat.getName());
-                    return stat;
-                }).forEach((stat) -> {
-                    clazz.addAttribute(stat.getName(), stat.getDefinitionType(),
-                            stat.getDefinition());
-                });
+                Lookup.getDefault().lookupAll(D20Stat.class).stream()
+                        .map((stat) -> {
+                            LOG.log(Level.FINE, "Adding stat: {0}", stat.getName());
+                            return stat;
+                        }).forEach((stat) -> {
+                            clazz.addAttribute(stat.getName(),
+                                    stat.getDefinitionType(),
+                                    stat.getDefinition());
+                        });
                 //Maps
-                Lookup.getDefault().lookupAll(D20Map.class).stream().map((map) -> {
-                    LOG.log(Level.FINE, "Adding map: {0}", map.getName());
-                    return map;
-                }).forEach((map) -> {
-                    clazz.addAttribute(map.getName(), Definition.Type.MAP,
-                            map.getDefinition());
-                });
+                Lookup.getDefault().lookupAll(D20Map.class).stream()
+                        .map((map) -> {
+                            LOG.log(Level.FINE, "Adding map: {0}", map.getName());
+                            return map;
+                        }).forEach((map) -> {
+                            clazz.addAttribute(map.getName(), Definition.Type.MAP,
+                                    map.getDefinition());
+                        });
                 //Other attributes
-                Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
-                    LOG.log(Level.FINE, "Adding slot attribute: {0}", attr.getName());
-                    return attr;
-                }).forEach((attr) -> {
-                    clazz.addRPSlot(attr.getName(), attr.getSize(),
-                            attr.getDefinition());
-                });
+                Lookup.getDefault().lookupAll(D20List.class).stream()
+                        .map((attr) -> {
+                            LOG.log(Level.FINE, "Adding slot attribute: {0}",
+                                    attr.getName());
+                            return attr;
+                        }).forEach((attr) -> {
+                            clazz.addRPSlot(attr.getName(), attr.getSize(),
+                                    attr.getDefinition());
+                        });
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
@@ -99,37 +108,34 @@ public abstract class AbstractRace extends RPEntity implements D20Race {
     @Override
     public void update() {
         super.update();
-        Lookup.getDefault().lookupAll(D20Ability.class).stream().forEach((attr) -> {
-            if (!has(attr.getName())) {
-                LOG.log(Level.FINE, "Updating attribute: {0}", attr.getName());
-                put(attr.getName(), attr.getDefaultValue());
-            }
-        });
-        Lookup.getDefault().lookupAll(D20Stat.class).stream().forEach((stat) -> {
-            if (!has(stat.getName())) {
-                LOG.log(Level.FINE, "Updating stat: {0}", stat.getName());
-                put(stat.getName(), stat.getDefaultValue());
-            }
-        });
-        Lookup.getDefault().lookupAll(D20List.class).stream().forEach((stat) -> {
-            if (!hasSlot(stat.getName())) {
-                LOG.log(Level.FINE, "Updating slot: {0}", stat.getName());
-                RPSlot slot = new RPSlot(stat.getName());
-                slot.setCapacity(stat.getSize());
-                addSlot(slot);
-            }
-        });
-        Lookup.getDefault().lookupAll(D20Map.class).stream().forEach((stat) -> {
-            if (!hasMap(stat.getName())) {
-                LOG.log(Level.FINE, "Updating map: {0}", stat.getName());
-                System.out.println(getRPClass().getDefinition(Definition.DefinitionClass.ATTRIBUTE, stat.getName()));
-                System.out.println(this);
-                addMap(stat.getName());
-            }
-        });
+        Lookup.getDefault().lookupAll(D20Ability.class).stream()
+                .forEach((attr) -> {
+                    if (!has(attr.getName())) {
+                        LOG.log(Level.FINE, "Updating attribute: {0}",
+                                attr.getName());
+                        put(attr.getName(), attr.getDefaultValue());
+                    }
+                });
+        Lookup.getDefault().lookupAll(D20Stat.class).stream()
+                .forEach((stat) -> {
+                    if (!has(stat.getName())) {
+                        LOG.log(Level.FINE, "Updating stat: {0}", stat.getName());
+                        put(stat.getName(), stat.getDefaultValue());
+                    }
+                });
+        Lookup.getDefault().lookupAll(D20List.class).stream()
+                .forEach((stat) -> {
+                    if (!hasSlot(stat.getName())) {
+                        LOG.log(Level.FINE, "Updating slot: {0}", stat.getName());
+                        RPSlot slot = new RPSlot(stat.getName());
+                        slot.setCapacity(stat.getSize());
+                        addSlot(slot);
+                    }
+                });
     }
 
     @Override
+
     public Map<Class<? extends D20Ability>, Integer> getAttributeBonuses() {
         return bonuses;
     }

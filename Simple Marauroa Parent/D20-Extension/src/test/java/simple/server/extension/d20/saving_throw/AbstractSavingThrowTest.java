@@ -1,6 +1,5 @@
 package simple.server.extension.d20.saving_throw;
 
-import simple.server.extension.d20.saving_throw.AbstractSavingThrow;
 import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;
