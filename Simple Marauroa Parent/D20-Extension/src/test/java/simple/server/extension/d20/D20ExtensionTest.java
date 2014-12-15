@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Log4J;
+import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import static org.junit.Assert.assertEquals;
@@ -18,10 +19,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.list.Alignment;
-import simple.server.extension.d20.map.D20Map;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -42,13 +43,14 @@ public class D20ExtensionTest {
 
         MockSimpleRPWorld.get();
 
-        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream().map((entity) -> {
-            LOG.log(Level.FINE, "Registering RPEntity: {0}",
-                    entity.getClass().getSimpleName());
-            return entity;
-        }).forEach((entity) -> {
-            entity.generateRPClass();
-        });
+        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream()
+                .map((entity) -> {
+                    LOG.log(Level.FINE, "Registering RPEntity: {0}",
+                            entity.getClass().getSimpleName());
+                    return entity;
+                }).forEach((entity) -> {
+                    entity.generateRPClass();
+                });
     }
 
     /**
@@ -57,7 +59,7 @@ public class D20ExtensionTest {
     @Test
     public void testRPClassDefinition() {
         try {
-            System.out.println("RPClass Definition Test");
+            LOG.info("RPClass Definition Test");
             RPClass entity = new RPClass("Test");
             entity.isA(DummyRace.class.newInstance().getRPClassName());
             //Check all classes are defined properly
@@ -66,45 +68,58 @@ public class D20ExtensionTest {
                     = Lookup.getDefault().lookupAll(D20Race.class);
             for (D20Race r : races) {
                 try {
-                    System.out.println("Checking class: " + r.getClass().getSimpleName());
+                    LOG.log(Level.INFO, "Checking class: {0}",
+                            r.getClass().getSimpleName());
                     assertTrue(RPClass.hasRPClass(((Entity) r).getRPClassName()));
                     //Check class
                     //Attributes
                     Constructor<?> cons = r.getClass().getConstructor(RPObject.class);
-                    RPObject test = (RPObject) cons.newInstance(new RPObject());
+                    RPEntity test = (RPEntity) cons.newInstance(new RPObject());
+                    test.update();
                     test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
                     assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
-                    Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
-                        System.out.println(attr.getName() + ": " + test.get(attr.getName()));
-                        return attr;
-                    }).forEach((attr) -> {
+                    boolean pass = false;
+                    for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+                        LOG.log(Level.INFO, "{0}: {1}",
+                                new Object[]{attr.getName(),
+                                    test.get(attr.getName())});
                         assertTrue(test.has(attr.getName()));
-                    });
+                        assertTrue(test.getRPClass()
+                                .getDefinition(DefinitionClass.ATTRIBUTE,
+                                        attr.getName()) != null);
+                        pass = true;
+                    }
+                    assertTrue(pass);
                     //Stats
-                    Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
-                        System.out.println(stat.getName() + ": " + test.get(stat.getName()));
-                        return stat;
-                    }).forEach((stat) -> {
+                    pass = false;
+                    for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+                        LOG.log(Level.INFO, "{0}: {1}",
+                                new Object[]{stat.getName(),
+                                    test.get(stat.getName())});
                         assertTrue(test.has(stat.getName()));
-                    });
-                    //Maps
-                    Lookup.getDefault().lookupAll(D20Map.class).stream().map((attr) -> {
-                        System.out.println(attr.getName());
-                        return attr;
-                    }).forEach((attr) -> {
-                        assertTrue(test.hasMap(attr.getName()));
-                    });
+                        assertTrue(test.getRPClass()
+                                .getDefinition(DefinitionClass.ATTRIBUTE,
+                                        stat.getName()) != null);
+                        pass = true;
+                    }
+                    assertTrue(pass);
                     //Other attributes
-                    Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
-                        System.out.println(attr.getName() + ": " + test.get(attr.getName()));
-                        return attr;
-                    }).forEach((attr) -> {
+                    pass = false;
+                    for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+                        LOG.log(Level.INFO, "{0}: {1}",
+                                new Object[]{attr.getName(),
+                                    test.getSlot(attr.getName()).size()});
                         assertTrue(test.hasSlot(attr.getName()));
-                        assertEquals(attr.getSize(),test.getSlot(attr.getName()).size());
-                    });
+                        assertTrue(test.getRPClass()
+                                .getDefinition(DefinitionClass.RPSLOT,
+                                        attr.getName()) != null);
+                        assertEquals(attr.getSize(),
+                                test.getSlot(attr.getName()).getCapacity());
+                        pass = true;
+                    }
+                    assertTrue(pass);
                     //Alignment
                     assertTrue(test.hasSlot(Alignment.ALIGNMENT));
-                    System.out.println(r.toString());
                     count++;
                 } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     LOG.log(Level.SEVERE, null, ex);
