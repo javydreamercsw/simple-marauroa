@@ -38,7 +38,7 @@ public class AbilityAPTExporter implements IAPTExporter {
         sb.append(block);
         sb.append("Javier A. Ortiz Bultrón").append("\n");
         sb.append(block).append("\n");
-        sb.append("The following are the available abilities:").append("\n");
+        sb.append("  The following are the available abilities:").append("\n");
         //Create a separate file for each Ability
         for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
             File temp = new File(root.getAbsolutePath()
@@ -53,9 +53,8 @@ public class AbilityAPTExporter implements IAPTExporter {
             sb2.append(block);
             sb2.append("Javier A. Ortiz Bultrón").append("\n");
             sb2.append(block).append("\n");
-            sb2.append(a.getName()).append("\n");
-            sb2.append(" * ").append("Description").append("\n");
-            sb2.append(a.getDescription()).append("\n");
+            sb2.append(a.getName()).append("\n").append("\n");
+            sb2.append("  ").append(a.getDescription()).append("\n");
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
                                     new FileOutputStream(temp), "UTF-8")))) {
@@ -64,8 +63,11 @@ public class AbilityAPTExporter implements IAPTExporter {
                                 LOG.log(Level.SEVERE, null, ex);
                             }
                             //Add link to the main page
-                            sb.append(" * ").append("{{{./abilities/").append(a.getName())
-                                    .append(".html}").append(a.getName()).append("}}")
+                            sb.append(" * ").append("{{{./abilities/")
+                                    .append(a.getName())
+                                    .append(".html}")
+                                    .append(a.getName())
+                                    .append("}}")
                                     .append("\n");
         }
         try (BufferedWriter output
