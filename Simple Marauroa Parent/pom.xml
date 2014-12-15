@@ -50,6 +50,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <netbeans.version>RELEASE80</netbeans.version>
+        <marauroa.version>3.9.3-SNAPSHOT</marauroa.version>
     </properties>
     <modules>
         <module>Card Game Interface</module>
