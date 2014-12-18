@@ -3,7 +3,7 @@ package simple.server.extension.d20.feat;
 import java.util.List;
 import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
-import simple.server.extension.d20.race.D20Race;
+import simple.server.extension.d20.rpclass.D20Class;
 import simple.server.extension.d20.weapon.D20Weapon;
 
 /**
@@ -28,11 +28,11 @@ public interface D20Feat extends D20Characteristic {
     Map<Class<? extends D20Characteristic>, String> getBonuses();
 
     /**
-     * List of Races this Feat is exclusive to.
+     * List of Classes this Feat is exclusive to.
      *
-     * @return list of races. Empty means anyone can use it.
+     * @return list of classes. Empty means anyone can use it.
      */
-    List<Class<? extends D20Race>> getExclusiveRaces();
+    List<Class<? extends D20Class>> getExclusiveClasses();
 
     /**
      * Requirements for this Feat.

@@ -1,11 +1,8 @@
 package simple.server.extension.d20.race;
 
 import java.util.List;
-import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
-import simple.server.extension.d20.ability.D20Ability;
-import simple.server.extension.d20.feat.D20Feat;
-import simple.server.extension.d20.skill.D20Skill;
+import simple.server.extension.d20.rpclass.D20Class;
 
 /**
  * This represents a Race in a D20 game.
@@ -15,38 +12,11 @@ import simple.server.extension.d20.skill.D20Skill;
 public interface D20Race extends D20Characteristic {
 
     /**
-     * A list of race bonuses in the format: Attribute name, Bonus
+     * Get favored classes.
      *
-     * @return race bonuses
+     * @return favored classes
      */
-    Map<Class<? extends D20Ability>, Integer> getAttributeBonuses();
-
-    /**
-     * A list of the preferred feats on a D20 game. (Easier to gain levels)
-     *
-     * @return list of the preferred feats
-     */
-    List<Class<? extends D20Feat>> getPrefferedFeats();
-    
-    /**
-     * Feats awarded as a bonus.
-     * @return 
-     */
-    public Map<Class<? extends D20Feat>, Integer> getBonusFeats();
-
-    /**
-     * A list of the preferred skills on a D20 game. (Easier to gain levels)
-     *
-     * @return list of the preferred skills
-     */
-    public List<Class<? extends D20Skill>> getPrefferedSkills();
-
-    /**
-     * Equation for getting HP for each level.
-     *
-     * @return Equation for getting HP for each level
-     */
-    public String getHPDice();
+    List<Class<? extends D20Class>> getFavoredClasses();
 
     /**
      * Bonus points per level.

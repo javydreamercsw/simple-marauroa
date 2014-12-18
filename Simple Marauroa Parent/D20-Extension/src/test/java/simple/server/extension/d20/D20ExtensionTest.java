@@ -1,7 +1,6 @@
 package simple.server.extension.d20;
 
 import simple.server.extension.d20.list.D20List;
-import simple.server.extension.d20.race.D20Race;
 import simple.server.extension.d20.stat.D20Stat;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +22,7 @@ import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.list.Alignment;
+import simple.server.extension.d20.rpclass.D20Class;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -61,12 +61,12 @@ public class D20ExtensionTest {
         try {
             LOG.info("RPClass Definition Test");
             RPClass entity = new RPClass("Test");
-            entity.isA(DummyRace.class.newInstance().getRPClassName());
+            entity.isA(DummyClass.class.newInstance().getRPClassName());
             //Check all classes are defined properly
             int count = 0;
-            Collection<? extends D20Race> races
-                    = Lookup.getDefault().lookupAll(D20Race.class);
-            for (D20Race r : races) {
+            Collection<? extends D20Class> classes
+                    = Lookup.getDefault().lookupAll(D20Class.class);
+            for (D20Class r : classes) {
                 try {
                     LOG.log(Level.INFO, "Checking class: {0}",
                             r.getClass().getSimpleName());
@@ -129,7 +129,7 @@ public class D20ExtensionTest {
             if (count == 0) {
                 fail("Found no wrestler classes!");
             }
-            assertEquals(races.size(), count);
+            assertEquals(classes.size(), count);
         } catch (InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
