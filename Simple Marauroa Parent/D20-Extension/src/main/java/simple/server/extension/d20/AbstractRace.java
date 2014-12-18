@@ -34,16 +34,16 @@ public abstract class AbstractRace implements D20Race {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getClass().getSimpleName().replaceAll("_", " ");
     }
 
     @Override
     public String getShortName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getClass().getSimpleName().replaceAll("_", " ");
     }
 
     @Override
     public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "TODO";
     }
 }
