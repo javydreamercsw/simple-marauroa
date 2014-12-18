@@ -1,6 +1,7 @@
 package simple.server.extension.d20.feat;
 
 import java.util.List;
+import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.race.D20Race;
 import simple.server.extension.d20.weapon.D20Weapon;
@@ -18,6 +19,13 @@ public interface D20Feat extends D20Characteristic {
      * @return bonus or 0 if not provided.
      */
     int getBonus(Class<? extends D20Characteristic> st);
+
+    /**
+     * Get the bonuses for this feat.
+     *
+     * @return
+     */
+    Map<Class<? extends D20Characteristic>, String> getBonuses();
 
     /**
      * List of Races this Feat is exclusive to.
@@ -46,7 +54,7 @@ public interface D20Feat extends D20Characteristic {
      * @return focused characteristic or null if none;
      */
     D20Characteristic getFocusCharacteristic();
-    
+
     /**
      * A weapon this feat focuses on.
      *

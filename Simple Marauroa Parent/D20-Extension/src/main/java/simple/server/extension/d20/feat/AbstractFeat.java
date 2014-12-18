@@ -72,4 +72,9 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
     public D20Weapon getFocusWeapon() {
         return focusWeapon;
     }
+    
+    @Override
+    public Map<Class<? extends D20Characteristic>, String> getBonuses(){
+        return bonus;
+    }
 }
