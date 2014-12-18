@@ -1,31 +1,31 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.race.D20Race;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.extension.d20.rpclass.D20Class;
 
 /**
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProviders({
-    @ServiceProvider(service = D20Race.class),
+    @ServiceProvider(service = D20Class.class),
     @ServiceProvider(service = RPEntityInterface.class)})
-public class DummyRace extends AbstractRace {
+public class DummyClass extends AbstractClass {
 
-    public DummyRace() {
-        RPCLASS_NAME = "Dummy_Race";
+    public DummyClass() {
+        RPCLASS_NAME = "Dummy_Class";
     }
 
-    public DummyRace(RPObject object) {
+    public DummyClass(RPObject object) {
         super(object);
     }
 
     @Override
     public String getShortName() {
-        return "Dummy Race";
+        return "Dummy Class";
     }
 
     @Override
