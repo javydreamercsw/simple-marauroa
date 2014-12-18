@@ -6,12 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Modifier;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.apt.IAPTExporter;
 
 /**
@@ -84,21 +82,18 @@ public class FeatAPTExporter extends AbstractAPTExporter {
             }
             if (!a.getBonuses().isEmpty()) {
                 sb2.append("\n").append("Bonuses:").append("\n").append("\n");
-                for (Entry<Class<? extends D20Characteristic>, String> entry
-                        : a.getBonuses().entrySet()) {
-                    if (!Modifier.isAbstract(a.getClass().getModifiers())) {
-                        try {
-                            sb2.append(INDENT + INDENT + "* ")
-                                    .append(entry.getKey().newInstance().getName())
-                                    .append(": ")
-                                    .append(entry.getValue())
-                                    .append("\n")
-                                    .append("\n");
-                        } catch (InstantiationException | IllegalAccessException ex) {
-                            LOG.log(Level.SEVERE, null, ex);
-                        }
+                a.getBonuses().entrySet().stream().filter((entry) -> (!Modifier.isAbstract(a.getClass().getModifiers()))).forEach((entry) -> {
+                    try {
+                        sb2.append(INDENT + INDENT + "* ")
+                                .append(entry.getKey().newInstance().getName())
+                                .append(": ")
+                                .append(entry.getValue())
+                                .append("\n")
+                                .append("\n");
+                    } catch (InstantiationException | IllegalAccessException ex) {
+                        LOG.log(Level.SEVERE, null, ex);
                     }
-                }
+                });
             }
             sb2.append("\n").append("Miscellaneous:").append("\n").append("\n");
             sb2.append(INDENT + "Multiple instances? ")
