@@ -1,27 +1,29 @@
-package simple.server.extension.d20.ability;
+package simple.server.extension.d20.feat;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Modifier;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.apt.IAPTExporter;
-import simple.server.extension.d20.feat.AbstractAPTExporter;
 
 /**
- * this generates the apt files for abilities.
+ * This generates the apt files for Feats.
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = IAPTExporter.class)
-public class AbilityAPTExporter extends AbstractAPTExporter {
+public class FeatAPTExporter extends AbstractAPTExporter {
 
     private static final Logger LOG
-            = Logger.getLogger(AbilityAPTExporter.class.getName());
+            = Logger.getLogger(FeatAPTExporter.class.getName());
 
     @Override
     public void export(File root) throws IOException {
@@ -31,7 +33,7 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
         root.mkdirs();
         File file = new File(root.getAbsolutePath()
                 + System.getProperty("file.separator")
-                + "Abilities.apt");
+                + getFileName() + ".apt");
         StringBuilder sb = new StringBuilder();
         sb.append(BLOCK);
         sb.append(getFileName()).append("\n");
@@ -41,14 +43,15 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
         sb.append("  The following are the available ")
                 .append(getFileName().toLowerCase()).append(":")
                 .append("\n").append("\n");
-        //Create a separate file for each Ability
-        for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
+        //Create a separate file for each Feat
+        for (D20Feat a : Lookup.getDefault().lookupAll(D20Feat.class)) {
             File temp = new File(root.getAbsolutePath()
                     + System.getProperty("file.separator")
-                    + getFileName().toLowerCase()
+                    + getFileName().toLowerCase().replaceAll(" ", "_")
                     + System.getProperty("file.separator")
-                    + a.getName() + ".apt");
+                    + a.getName().replaceAll(" ", "_") + ".apt");
             temp.getParentFile().mkdirs();
+            LOG.log(Level.INFO, "Processing: {0}", a.getName());
             StringBuilder sb2 = new StringBuilder();
             sb2.append(BLOCK);
             sb2.append(a.getName()).append("\n");
@@ -57,6 +60,49 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
             sb2.append(BLOCK).append("\n");
             sb2.append(a.getName()).append("\n").append("\n");
             sb2.append(INDENT).append(a.getDescription()).append("\n");
+            sb2.append("\n");
+            if (a.getFocusCharacteristic() != null) {
+                sb2.append(INDENT).append("Characteristic: ")
+                        .append(a.getFocusCharacteristic().getName()).append("\n");
+            }
+            if (a.getFocusWeapon() != null) {
+                sb2.append(INDENT).append("Focus: ")
+                        .append(a.getFocusWeapon().getName()).append("\n");
+            }
+            if (a.getRequirements().size() > 0) {
+                sb2.append("Requirements:").append("\n");
+                a.getRequirements().stream().forEach((f) -> {
+                    try {
+                        D20Feat feat = f.newInstance();
+                        sb2.append(INDENT + INDENT + "* ")
+                                .append(feat.getName())
+                                .append("\n");
+                    } catch (InstantiationException | IllegalAccessException ex) {
+                        LOG.log(Level.SEVERE, null, ex);
+                    }
+                });
+            }
+            if (!a.getBonuses().isEmpty()) {
+                sb2.append("\n").append("Bonuses:").append("\n").append("\n");
+                for (Entry<Class<? extends D20Characteristic>, String> entry
+                        : a.getBonuses().entrySet()) {
+                    if (!Modifier.isAbstract(a.getClass().getModifiers())) {
+                        try {
+                            sb2.append(INDENT + INDENT + "* ")
+                                    .append(entry.getKey().newInstance().getName())
+                                    .append(": ")
+                                    .append(entry.getValue())
+                                    .append("\n")
+                                    .append("\n");
+                        } catch (InstantiationException | IllegalAccessException ex) {
+                            LOG.log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+            sb2.append("\n").append("Miscellaneous:").append("\n").append("\n");
+            sb2.append(INDENT + "Multiple instances? ")
+                    .append(a.isMultiple() ? "Yes" : "No").append("\n");
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
                                     new FileOutputStream(temp), "UTF-8")))) {
@@ -65,11 +111,11 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
                                 LOG.log(Level.SEVERE, null, ex);
                             }
                             //Add link to the main page
-                            sb.append("\n").append("    * ")
+                            sb.append("\n").append(INDENT + INDENT + "* ")
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
-                                    .append(a.getName())
+                                    .append(a.getName().replaceAll(" ", "_"))
                                     .append(".html}")
                                     .append(a.getName())
                                     .append("}}")
@@ -86,6 +132,6 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
 
     @Override
     public String getFileName() {
-        return "Abilities";
+        return "Feats";
     }
 }
