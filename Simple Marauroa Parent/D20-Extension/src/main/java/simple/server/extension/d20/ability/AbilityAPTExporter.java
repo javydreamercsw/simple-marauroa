@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.d20.apt.IAPTExporter;
-import simple.server.extension.d20.feat.AbstractAPTExporter;
+import simple.server.extension.d20.AbstractAPTExporter;
 
 /**
  * this generates the apt files for abilities.
@@ -31,7 +31,7 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
         root.mkdirs();
         File file = new File(root.getAbsolutePath()
                 + System.getProperty("file.separator")
-                + "Abilities.apt");
+                + getFileName() + ".apt");
         StringBuilder sb = new StringBuilder();
         sb.append(BLOCK);
         sb.append(getFileName()).append("\n");
