@@ -1,5 +1,6 @@
 package simple.server.extension.d20.feat;
 
+import simple.server.extension.d20.AbstractAPTExporter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,7 +39,7 @@ public class FeatAPTExporter extends AbstractAPTExporter {
         sb.append(BLOCK);
         sb.append(getAuthor()).append("\n");
         sb.append(BLOCK).append("\n");
-        sb.append("  The following are the available ")
+        sb.append(INDENT + "The following are the available ")
                 .append(getFileName().toLowerCase()).append(":")
                 .append("\n").append("\n");
         //Create a separate file for each Feat
@@ -68,7 +69,7 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                         .append(a.getFocusWeapon().getName()).append("\n");
             }
             if (a.getRequirements().size() > 0) {
-                sb2.append("Requirements:").append("\n");
+                sb2.append("Requirements:").append("\n").append("\n");
                 a.getRequirements().stream().forEach((f) -> {
                     try {
                         D20Feat feat = f.newInstance();
@@ -82,18 +83,20 @@ public class FeatAPTExporter extends AbstractAPTExporter {
             }
             if (!a.getBonuses().isEmpty()) {
                 sb2.append("\n").append("Bonuses:").append("\n").append("\n");
-                a.getBonuses().entrySet().stream().filter((entry) -> (!Modifier.isAbstract(a.getClass().getModifiers()))).forEach((entry) -> {
-                    try {
-                        sb2.append(INDENT + INDENT + "* ")
+                a.getBonuses().entrySet().stream().filter((entry)
+                        -> (!Modifier.isAbstract(a.getClass().getModifiers())))
+                        .forEach((entry) -> {
+                            try {
+                                sb2.append(INDENT + INDENT + "* ")
                                 .append(entry.getKey().newInstance().getName())
                                 .append(": ")
                                 .append(entry.getValue())
                                 .append("\n")
                                 .append("\n");
-                    } catch (InstantiationException | IllegalAccessException ex) {
-                        LOG.log(Level.SEVERE, null, ex);
-                    }
-                });
+                            } catch (InstantiationException | IllegalAccessException ex) {
+                                LOG.log(Level.SEVERE, null, ex);
+                            }
+                        });
             }
             sb2.append("\n").append("Miscellaneous:").append("\n").append("\n");
             sb2.append(INDENT + "Multiple instances? ")

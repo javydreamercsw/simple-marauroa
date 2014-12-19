@@ -57,6 +57,28 @@ public class RaceAPTExporter extends AbstractAPTExporter {
             sb2.append(BLOCK).append("\n");
             sb2.append(a.getName()).append("\n").append("\n");
             sb2.append(INDENT).append(a.getDescription()).append("\n");
+            StringBuilder sb3 = new StringBuilder();
+            for (int i = 0; i <= 20; i++) {
+                int bonus = a.getBonusFeatPoints(i);
+                if (bonus > 0) {
+                    sb3.append("Level ").append(i).append(": ").append(bonus);
+                }
+            }
+            if (!sb3.toString().trim().isEmpty()) {
+                sb2.append("Bonus Feat Points:").append("\n");
+                sb2.append(sb3.toString()).append("\n");
+            }
+            sb3.setLength(0);
+            for (int i = 0; i <= 20; i++) {
+                int bonus = a.getBonusSkillPoints(i);
+                if (bonus > 0) {
+                    sb3.append("Level ").append(i).append(": ").append(bonus);
+                }
+            }
+            if (!sb3.toString().trim().isEmpty()) {
+                sb2.append("Bonus Skill Points:").append("\n");
+                sb2.append(sb3.toString()).append("\n");
+            }
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
                                     new FileOutputStream(temp), "UTF-8")))) {

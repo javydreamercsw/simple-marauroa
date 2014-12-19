@@ -1,4 +1,4 @@
-package simple.server.extension.d20.feat;
+package simple.server.extension.d20;
 
 import simple.server.extension.d20.apt.IAPTExporter;
 
