@@ -64,7 +64,8 @@ public class SkillAPTExporter extends AbstractAPTExporter {
                 sb2.append(INDENT).append("Related ability: ")
                         .append(a.getAbility().newInstance().getName())
                         .append("\n").append("\n");
-                sb2.append("Modified Abilities: ").append("\n");
+                sb2.append(INDENT).append("Modified Abilities: ")
+                        .append("\n").append("\n");
                 Lookup.getDefault()
                         .lookupAll(D20Ability.class).stream().forEach((ability) -> {
                             sb2.append(INDENT + INDENT + "* ")
