@@ -79,6 +79,15 @@ public class RaceAPTExporter extends AbstractAPTExporter {
                 sb2.append("Bonus Skill Points:").append("\n");
                 sb2.append(sb3.toString()).append("\n");
             }
+            sb2.append("\n").append("Aging Effects:").append("\n").append("\n");
+            sb2.append(LIST + "Middle Age: ")
+                    .append(a.getMiddleAge()).append("\n");
+            sb2.append(LIST + "Old Age: ")
+                    .append(a.getOldAge()).append("\n");
+            sb2.append(LIST + "Venerable Age: ")
+                    .append(a.getVenerableAge()).append("\n");
+            sb2.append(LIST + "Maximum Age: ")
+                    .append(a.getMaximumAge()).append("\n");
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
                                     new FileOutputStream(temp), "UTF-8")))) {
@@ -87,7 +96,7 @@ public class RaceAPTExporter extends AbstractAPTExporter {
                                 LOG.log(Level.SEVERE, null, ex);
                             }
                             //Add link to the main page
-                            sb.append("\n").append("    * ")
+                            sb.append("\n").append(LIST)
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
