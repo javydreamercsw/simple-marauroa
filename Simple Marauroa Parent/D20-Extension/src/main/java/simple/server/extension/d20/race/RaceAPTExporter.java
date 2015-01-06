@@ -81,13 +81,13 @@ public class RaceAPTExporter extends AbstractAPTExporter {
             }
             sb2.append("\n").append("Aging Effects:").append("\n").append("\n");
             sb2.append(LIST + "Middle Age: ")
-                    .append(a.getMiddleAge()).append("\n");
+                    .append(a.getMiddleAge()).append("\n").append("\n");
             sb2.append(LIST + "Old Age: ")
-                    .append(a.getOldAge()).append("\n");
+                    .append(a.getOldAge()).append("\n").append("\n");
             sb2.append(LIST + "Venerable Age: ")
-                    .append(a.getVenerableAge()).append("\n");
+                    .append(a.getVenerableAge()).append("\n").append("\n");
             sb2.append(LIST + "Maximum Age: ")
-                    .append(a.getMaximumAge()).append("\n");
+                    .append(a.getMaximumAge()).append("\n").append("\n");
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
                                     new FileOutputStream(temp), "UTF-8")))) {
