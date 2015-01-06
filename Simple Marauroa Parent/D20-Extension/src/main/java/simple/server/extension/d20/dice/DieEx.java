@@ -44,7 +44,7 @@ public class DieEx extends Die {
 
             try {
                 drops = Integer.parseInt(hold);
-                modifier=drops;
+                modifier = drops;
             } catch (NoSuchElementException e) {
                 drops = 0;
             }
@@ -80,11 +80,11 @@ public class DieEx extends Die {
         }
 
         DieRoller = new DieEx(temp.toString());
-        System.out.println("you rolled " + DieRoller.roll());
+        System.out.println("You rolled " + DieRoller.roll());
     }
 
     /**
-     * Rolls the die using the paramaters set
+     * Rolls the die using the parameters set
      *
      * @return Value of the die rolls
      */
@@ -102,16 +102,17 @@ public class DieEx extends Die {
             Arrays.sort(rolls);
 
             if (!highDrop) {
-                for (int x = 0; ((x < drops) && (x < rolls.length)); x++) {
+                for (int x = 0; ((x < drops) 
+                        && (x < rolls.length)); x++) {
                     total -= rolls[x];
                 }
             } else {
-                for (int x = rolls.length - 1; x > (rolls.length - drops - 1); x--) {
+                for (int x = rolls.length - 1; 
+                        x > (rolls.length - drops - 1); x--) {
                     total -= rolls[x];
                 }
             }
         }
-
         timesRolled++;
         return total;
     }
