@@ -65,7 +65,7 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
                                 LOG.log(Level.SEVERE, null, ex);
                             }
                             //Add link to the main page
-                            sb.append("\n").append("    * ")
+                            sb.append("\n").append(LIST)
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
