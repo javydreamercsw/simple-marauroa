@@ -100,6 +100,26 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                 });
             }
             sb2.append("\n");
+            if (!a.getBonusSkills().isEmpty()) {
+                sb2.append("Bonus Skills:").append("\n");
+                sb2.append("\n");
+                a.getBonusSkills().entrySet().stream().forEach((entry) -> {
+                    try {
+                        D20Skill skill = entry.getKey().newInstance();
+                        sb2.append("\n").append(INDENT + INDENT + "* ")
+                                .append("{{{../skills/")
+                                .append(skill.getName().replaceAll(" ", "_"))
+                                .append(".html}")
+                                .append(skill.getName())
+                                .append("}}").append(": ")
+                                .append(" at Level ")
+                                .append(entry.getValue()).append("\n");
+                    } catch (InstantiationException | IllegalAccessException ex) {
+                        LOG.log(Level.SEVERE, null, ex);
+                    }
+                });
+            }
+            sb2.append("\n");
             if (!a.getPrefferedFeats().isEmpty()) {
                 sb2.append("Preferred Feats:").append("\n");
                 sb2.append("\n");
