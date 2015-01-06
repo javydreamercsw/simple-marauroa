@@ -86,15 +86,17 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                 a.getBonuses().entrySet().stream().filter((entry)
                         -> (!Modifier.isAbstract(a.getClass().getModifiers())))
                         .forEach((entry) -> {
-                            try {
-                                sb2.append(INDENT + INDENT + "* ")
-                                .append(entry.getKey().newInstance().getName())
-                                .append(": ")
-                                .append(entry.getValue())
-                                .append("\n")
-                                .append("\n");
-                            } catch (InstantiationException | IllegalAccessException ex) {
-                                LOG.log(Level.SEVERE, null, ex);
+                            if (!Modifier.isAbstract(entry.getKey().getModifiers())) {
+                                try {
+                                    sb2.append(INDENT + INDENT + "* ")
+                                    .append(entry.getKey().newInstance().getName())
+                                    .append(": ")
+                                    .append(entry.getValue())
+                                    .append("\n")
+                                    .append("\n");
+                                } catch (InstantiationException | IllegalAccessException ex) {
+                                    LOG.log(Level.SEVERE, null, ex);
+                                }
                             }
                         });
             }
