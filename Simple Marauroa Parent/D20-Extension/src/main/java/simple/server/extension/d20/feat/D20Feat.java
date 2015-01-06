@@ -61,4 +61,11 @@ public interface D20Feat extends D20Characteristic {
      * @return focused weapon or null if none;
      */
     D20Weapon getFocusWeapon();
+
+    /**
+     * Minimum level for having this feat available.
+     *
+     * @return Minimum level for having this feat available.
+     */
+    int levelRequirement();
 }
