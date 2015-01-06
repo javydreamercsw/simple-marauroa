@@ -33,4 +33,34 @@ public interface D20Race extends D20Characteristic {
      * @return Bonus points for level
      */
     public int getBonusFeatPoints(int level);
+    
+    /**
+     * Race middle age. At middle age, -1 to Str, Dex, 
+     * and Con; +1 to Int, Wis, and Cha.
+     * 
+     * @return Race's middle age.
+     */
+    public int getMiddleAge();
+    
+    /**
+     * Race old age. At old age, -2 to Str, Dex, and Con; 
+     * +1 to Int, Wis, and Cha.
+     * 
+     * @return Race's old age.
+     */
+    public int getOldAge();
+    
+    /**
+     * Race venerable age. At venerable age, -3 to Str, Dex, and Con; 
+     * +1 to Int, Wis, and Cha.
+     * 
+     * @return Race's venerable age.
+     */
+    public int getVenerableAge();
+    
+    /**
+     * Equation to calculate maximum age.
+     * @return Race's maximum age die.
+     */
+    public String getMaximumAge();
 }
