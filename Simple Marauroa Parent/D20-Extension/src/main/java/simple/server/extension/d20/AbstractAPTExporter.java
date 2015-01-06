@@ -8,8 +8,9 @@ import simple.server.extension.d20.apt.IAPTExporter;
  */
 public abstract class AbstractAPTExporter implements IAPTExporter {
 
-    public final String BLOCK = " -----\n";
-    public final String INDENT = "  ";
+    public static final String BLOCK = " -----\n";
+    public static final String INDENT = "  ";
+    public static final String LIST = INDENT + INDENT + "* ";
     private String AUTHOR = "Javier A. Ortiz Bultrón";
 
     /**
@@ -25,10 +26,11 @@ public abstract class AbstractAPTExporter implements IAPTExporter {
     public String getAuthor() {
         return AUTHOR;
     }
-    
+
     /**
      * THe name of the menu file without extension.
-     * @return 
+     *
+     * @return
      */
     public abstract String getFileName();
 }
