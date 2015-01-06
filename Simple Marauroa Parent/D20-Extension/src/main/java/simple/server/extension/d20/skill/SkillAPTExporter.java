@@ -14,7 +14,7 @@ import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.apt.IAPTExporter;
 
 /**
- * This generates the apt files for Feats.
+ * This generates the apt files for Skills.
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
@@ -66,13 +66,18 @@ public class SkillAPTExporter extends AbstractAPTExporter {
                         .append("\n").append("\n");
                 sb2.append(INDENT).append("Modified Abilities: ")
                         .append("\n").append("\n");
-                Lookup.getDefault()
-                        .lookupAll(D20Ability.class).stream().forEach((ability) -> {
-                            sb2.append(INDENT + INDENT + "* ")
+                int count = 0;
+                count = Lookup.getDefault().lookupAll(D20Ability.class).stream().filter((ability) -> (a.getModifier(ability.getClass()) > 0)).map((ability) -> {
+                    sb2.append(INDENT + INDENT + "* ")
                             .append(ability.getName()).append(": ")
                             .append(a.getModifier(ability.getClass()))
                             .append("\n").append("\n");
-                        });
+                    return ability;
+                }).map((_item) -> 1).reduce(count, Integer::sum);
+                if (count == 0) {
+                    sb2.append(INDENT + INDENT + "* ").append("None")
+                            .append("\n").append("\n");
+                }
                 try (BufferedWriter output
                         = new BufferedWriter((new OutputStreamWriter(
                                         new FileOutputStream(temp), "UTF-8")))) {
