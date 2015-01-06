@@ -40,6 +40,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
             = new ArrayList<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractClass.class.getSimpleName());
+    private Map<Class<? extends D20Skill>, Integer> bonusSkills
+            = new HashMap<>();
 
     public AbstractClass(RPObject object) {
         super(object);
@@ -135,7 +137,6 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     }
 
     @Override
-
     public Map<Class<? extends D20Ability>, Integer> getAttributeBonuses() {
         return bonuses;
     }
@@ -163,5 +164,10 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     @Override
     public int getBonusFeatPoints(int level) {
         return bonusFeatPoints;
+    }
+    
+    @Override
+    public Map<Class<? extends D20Skill>, Integer> getBonusSkills(){
+        return bonusSkills;
     }
 }
