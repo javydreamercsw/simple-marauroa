@@ -34,6 +34,13 @@ public interface D20Class extends D20Characteristic {
      * @return
      */
     public Map<Class<? extends D20Feat>, Integer> getBonusFeats();
+    
+    /**
+     * Skills awarded as a bonus.
+     *
+     * @return
+     */
+    public Map<Class<? extends D20Skill>, Integer> getBonusSkills();
 
     /**
      * A list of the preferred skills on a D20 game. (Easier to gain levels)
