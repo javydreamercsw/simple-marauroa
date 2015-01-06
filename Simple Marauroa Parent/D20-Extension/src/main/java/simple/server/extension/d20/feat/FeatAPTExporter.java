@@ -81,6 +81,14 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                     }
                 });
             }
+            if (a.levelRequirement() > 0) {
+                if (!sb2.toString().contains("Requirements:")) {
+                    sb2.append("Requirements:").append("\n").append("\n");
+                }
+                sb2.append(INDENT + INDENT + "* ")
+                        .append(a.levelRequirement())
+                        .append("\n");
+            }
             if (!a.getBonuses().isEmpty()) {
                 sb2.append("\n").append("Bonuses:").append("\n").append("\n");
                 a.getBonuses().entrySet().stream().filter((entry)

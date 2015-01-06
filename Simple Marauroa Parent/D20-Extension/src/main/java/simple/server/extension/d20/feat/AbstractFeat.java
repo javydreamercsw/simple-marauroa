@@ -18,12 +18,13 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> bonus
             = new HashMap<>();
-    private List<Class<? extends D20Class>> exclusiveClasses = 
-            new ArrayList<>();
+    private List<Class<? extends D20Class>> exclusiveClasses
+            = new ArrayList<>();
     private List<Class<? extends D20Feat>> requirements = new ArrayList<>();
     protected boolean multiple = false;
     protected D20Weapon focusWeapon = null;
     protected D20Characteristic focusCharacteristic = null;
+    protected int minimumLevel = 0;
 
     @Override
     public String getName() {
@@ -73,9 +74,21 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
     public D20Weapon getFocusWeapon() {
         return focusWeapon;
     }
-    
+
     @Override
-    public Map<Class<? extends D20Characteristic>, String> getBonuses(){
+    public Map<Class<? extends D20Characteristic>, String> getBonuses() {
         return bonus;
+    }
+
+    @Override
+    public int levelRequirement() {
+        return getMinimumLevel();
+    }
+
+    /**
+     * @return the minimumLevel
+     */
+    public int getMinimumLevel() {
+        return minimumLevel;
     }
 }
