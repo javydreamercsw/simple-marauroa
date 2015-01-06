@@ -18,7 +18,8 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> bonus
             = new HashMap<>();
-    private List<Class<? extends D20Class>> exclusiveClasses = new ArrayList<>();
+    private List<Class<? extends D20Class>> exclusiveClasses = 
+            new ArrayList<>();
     private List<Class<? extends D20Feat>> requirements = new ArrayList<>();
     protected boolean multiple = false;
     protected D20Weapon focusWeapon = null;
