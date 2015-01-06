@@ -8,8 +8,8 @@ import simple.server.extension.d20.apt.IAPTExporter;
  */
 public abstract class AbstractAPTExporter implements IAPTExporter {
 
-    protected final String BLOCK = " -----\n";
-    protected final String INDENT = "  ";
+    public final String BLOCK = " -----\n";
+    public final String INDENT = "  ";
     private String AUTHOR = "Javier A. Ortiz Bultrón";
 
     /**
