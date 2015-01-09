@@ -56,17 +56,18 @@ public class Entity extends RPObject implements RPEntityInterface {
              */
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-            for (MarauroaServerExtension extension
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
                 logger.debug("Processing extension to modify root class "
                         + "definition: " + extension.getClass().getSimpleName());
+                return extension;
+            }).map((extension) -> {
                 extension.modifyRootRPClassDefinition(entity);
-                if (logger.isDebugEnabled()) {
-                    entity.getDefinitions().stream().forEach((def) -> {
-                        logger.info(def.getName() + ": " + def.getType());
-                    });
-                }
-            }
+                return extension;
+            }).filter((_item) -> (logger.isDebugEnabled())).forEach((_item) -> {
+                entity.getDefinitions().stream().forEach((def) -> {
+                    logger.info(def.getName() + ": " + def.getType());
+                });
+            });
         }
     }
 
@@ -250,12 +251,13 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public void update() {
-        for (MarauroaServerExtension extension
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
             logger.debug("Processing extension to update root class "
                     + "definition: " + extension.getClass().getSimpleName());
+            return extension;
+        }).forEach((extension) -> {
             extension.rootRPClassUpdate(this);
-        }
+        });
     }
 
     @Override
