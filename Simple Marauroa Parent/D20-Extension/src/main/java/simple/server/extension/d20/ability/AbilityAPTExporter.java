@@ -47,15 +47,15 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
                     + System.getProperty("file.separator")
                     + getFileName().toLowerCase()
                     + System.getProperty("file.separator")
-                    + a.getName() + ".apt");
+                    + a.getCharacteristicName() + ".apt");
             temp.getParentFile().mkdirs();
             StringBuilder sb2 = new StringBuilder();
             sb2.append(BLOCK);
-            sb2.append(a.getName()).append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n");
             sb2.append(BLOCK);
             sb2.append(getAuthor()).append("\n");
             sb2.append(BLOCK).append("\n");
-            sb2.append(a.getName()).append("\n").append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n").append("\n");
             sb2.append(INDENT).append(a.getDescription()).append("\n");
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
@@ -69,9 +69,9 @@ public class AbilityAPTExporter extends AbstractAPTExporter {
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
-                                    .append(a.getName())
+                                    .append(a.getCharacteristicName())
                                     .append(".html}")
-                                    .append(a.getName())
+                                    .append(a.getCharacteristicName())
                                     .append("}}")
                                     .append("\n");
         }

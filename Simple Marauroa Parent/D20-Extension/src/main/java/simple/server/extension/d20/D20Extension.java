@@ -24,8 +24,8 @@ public class D20Extension extends SimpleServerExtension {
     public void rootRPClassUpdate(RPObject entity) {
         if (entity.instanceOf(RPClass.getRPClass(AbstractClass.RP_CLASS))) {
             Lookup.getDefault().lookupAll(D20Map.class).stream().forEach((stat) -> {
-                if (!entity.hasMap(stat.getName())) {
-                    entity.addMap(stat.getName());
+                if (!entity.hasMap(stat.getCharacteristicName())) {
+                    entity.addMap(stat.getCharacteristicName());
                 }
             });
         }

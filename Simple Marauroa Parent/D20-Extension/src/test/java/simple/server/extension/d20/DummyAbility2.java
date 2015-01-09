@@ -13,7 +13,7 @@ import simple.server.extension.d20.ability.D20Ability;
 public class DummyAbility2 extends AbstractAbility {
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return "Dummy2";
     }
 

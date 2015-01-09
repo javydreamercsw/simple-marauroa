@@ -16,7 +16,7 @@ public class DummySkill extends AbstractSkill {
     }
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return "Dummy Ability";
     }
 

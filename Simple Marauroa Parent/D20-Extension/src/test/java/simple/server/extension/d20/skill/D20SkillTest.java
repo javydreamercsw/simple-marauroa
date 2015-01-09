@@ -69,7 +69,7 @@ public class D20SkillTest {
     public static class iD20AttributeImpl extends AbstractAbility {
 
         @Override
-        public String getName() {
+        public String getCharacteristicName() {
             return "Invalid";
         }
 

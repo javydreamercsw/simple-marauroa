@@ -34,7 +34,7 @@ public abstract class AbstractRace implements D20Race {
     }
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
 

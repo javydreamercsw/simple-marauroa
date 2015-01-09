@@ -48,25 +48,25 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                     + System.getProperty("file.separator")
                     + getFileName().toLowerCase().replaceAll(" ", "_")
                     + System.getProperty("file.separator")
-                    + a.getName().replaceAll(" ", "_") + ".apt");
+                    + a.getCharacteristicName().replaceAll(" ", "_") + ".apt");
             temp.getParentFile().mkdirs();
-            LOG.log(Level.INFO, "Processing: {0}", a.getName());
+            LOG.log(Level.INFO, "Processing: {0}", a.getCharacteristicName());
             StringBuilder sb2 = new StringBuilder();
             sb2.append(BLOCK);
-            sb2.append(a.getName()).append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n");
             sb2.append(BLOCK);
             sb2.append(getAuthor()).append("\n");
             sb2.append(BLOCK).append("\n");
-            sb2.append(a.getName()).append("\n").append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n").append("\n");
             sb2.append(INDENT).append(a.getDescription()).append("\n");
             sb2.append("\n");
             if (a.getFocusCharacteristic() != null) {
                 sb2.append(INDENT).append("Characteristic: ")
-                        .append(a.getFocusCharacteristic().getName()).append("\n");
+                        .append(a.getFocusCharacteristic().getCharacteristicName()).append("\n");
             }
             if (a.getFocusWeapon() != null) {
                 sb2.append(INDENT).append("Focus: ")
-                        .append(a.getFocusWeapon().getName()).append("\n");
+                        .append(a.getFocusWeapon().getCharacteristicName()).append("\n");
             }
             if (a.getRequirements().size() > 0) {
                 sb2.append("Requirements:").append("\n").append("\n");
@@ -74,7 +74,7 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                     try {
                         D20Feat feat = f.newInstance();
                         sb2.append(INDENT + INDENT + "* ")
-                                .append(feat.getName())
+                                .append(feat.getCharacteristicName())
                                 .append("\n");
                     } catch (InstantiationException | IllegalAccessException ex) {
                         LOG.log(Level.SEVERE, null, ex);
@@ -97,7 +97,7 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                             if (!Modifier.isAbstract(entry.getKey().getModifiers())) {
                                 try {
                                     sb2.append(INDENT + INDENT + "* ")
-                                    .append(entry.getKey().newInstance().getName())
+                                    .append(entry.getKey().newInstance().getCharacteristicName())
                                     .append(": ")
                                     .append(entry.getValue())
                                     .append("\n")
@@ -123,9 +123,9 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
-                                    .append(a.getName().replaceAll(" ", "_"))
+                                    .append(a.getCharacteristicName().replaceAll(" ", "_"))
                                     .append(".html}")
-                                    .append(a.getName())
+                                    .append(a.getCharacteristicName())
                                     .append("}}")
                                     .append("\n");
         }

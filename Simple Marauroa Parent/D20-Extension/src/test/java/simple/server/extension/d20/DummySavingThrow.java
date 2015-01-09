@@ -15,7 +15,7 @@ public class DummySavingThrow extends AbstractSavingThrow {
     }
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return "Dummy Save";
     }
 

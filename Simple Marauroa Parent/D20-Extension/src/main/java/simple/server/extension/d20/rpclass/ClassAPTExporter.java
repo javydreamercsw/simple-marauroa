@@ -50,16 +50,16 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                     + System.getProperty("file.separator")
                     + getFileName().toLowerCase().replaceAll(" ", "_")
                     + System.getProperty("file.separator")
-                    + a.getName().replaceAll(" ", "_") + ".apt");
+                    + a.getCharacteristicName().replaceAll(" ", "_") + ".apt");
             temp.getParentFile().mkdirs();
-            LOG.log(Level.INFO, "Processing: {0}", a.getName());
+            LOG.log(Level.INFO, "Processing: {0}", a.getCharacteristicName());
             StringBuilder sb2 = new StringBuilder();
             sb2.append(BLOCK);
-            sb2.append(a.getName()).append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n");
             sb2.append(BLOCK);
             sb2.append(getAuthor()).append("\n");
             sb2.append(BLOCK).append("\n");
-            sb2.append(a.getName()).append("\n").append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n").append("\n");
             sb2.append(INDENT).append(a.getDescription()).append("\n")
                     .append("\n");
             sb2.append(INDENT).append("HP Dice: ").append(a.getHPDice())
@@ -72,7 +72,7 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                     try {
                         D20Ability ability = entry.getKey().newInstance();
                         sb2.append("\n").append(INDENT + INDENT + "* ")
-                                .append(ability.getName()).append(": ")
+                                .append(ability.getCharacteristicName()).append(": ")
                                 .append(entry.getValue()).append("\n");
                     } catch (InstantiationException | IllegalAccessException ex) {
                         LOG.log(Level.SEVERE, null, ex);
@@ -88,9 +88,9 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                         D20Feat feat = entry.getKey().newInstance();
                         sb2.append("\n").append(INDENT + INDENT + "* ")
                                 .append("{{{../feats/")
-                                .append(feat.getName().replaceAll(" ", "_"))
+                                .append(feat.getCharacteristicName().replaceAll(" ", "_"))
                                 .append(".html}")
-                                .append(feat.getName())
+                                .append(feat.getCharacteristicName())
                                 .append("}}").append(": ")
                                 .append(" at Level ")
                                 .append(entry.getValue()).append("\n");
@@ -108,9 +108,9 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                         D20Skill skill = entry.getKey().newInstance();
                         sb2.append("\n").append(INDENT + INDENT + "* ")
                                 .append("{{{../skills/")
-                                .append(skill.getName().replaceAll(" ", "_"))
+                                .append(skill.getCharacteristicName().replaceAll(" ", "_"))
                                 .append(".html}")
-                                .append(skill.getName())
+                                .append(skill.getCharacteristicName())
                                 .append("}}").append(": ")
                                 .append(" at Level ")
                                 .append(entry.getValue()).append("\n");
@@ -128,9 +128,9 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                         D20Feat feat = f.newInstance();
                         sb2.append("\n").append(INDENT + INDENT + "* ")
                                 .append("{{{../feats/")
-                                .append(feat.getName().replaceAll(" ", "_"))
+                                .append(feat.getCharacteristicName().replaceAll(" ", "_"))
                                 .append(".html}")
-                                .append(feat.getName())
+                                .append(feat.getCharacteristicName())
                                 .append("}}").append("\n");
                     } catch (InstantiationException | IllegalAccessException ex) {
                         LOG.log(Level.SEVERE, null, ex);
@@ -146,9 +146,9 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                         D20Skill skill = f.newInstance();
                         sb2.append("\n").append(INDENT + INDENT + "* ")
                                 .append("{{{../skills/")
-                                .append(skill.getName().replaceAll(" ", "_"))
+                                .append(skill.getCharacteristicName().replaceAll(" ", "_"))
                                 .append(".html}")
-                                .append(skill.getName())
+                                .append(skill.getCharacteristicName())
                                 .append("}}").append("\n");
                     } catch (InstantiationException | IllegalAccessException ex) {
                         LOG.log(Level.SEVERE, null, ex);
@@ -189,9 +189,9 @@ public class ClassAPTExporter extends AbstractAPTExporter {
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
-                                    .append(a.getName().replaceAll(" ", "_"))
+                                    .append(a.getCharacteristicName().replaceAll(" ", "_"))
                                     .append(".html}")
-                                    .append(a.getName())
+                                    .append(a.getCharacteristicName())
                                     .append("}}")
                                     .append("\n");
         }

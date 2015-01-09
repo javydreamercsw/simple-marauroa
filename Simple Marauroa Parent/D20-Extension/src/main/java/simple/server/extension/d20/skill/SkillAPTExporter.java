@@ -49,27 +49,27 @@ public class SkillAPTExporter extends AbstractAPTExporter {
                         + System.getProperty("file.separator")
                         + getFileName().toLowerCase().replaceAll(" ", "_")
                         + System.getProperty("file.separator")
-                        + a.getName().replaceAll(" ", "_") + ".apt");
+                        + a.getCharacteristicName().replaceAll(" ", "_") + ".apt");
                 temp.getParentFile().mkdirs();
-                LOG.log(Level.INFO, "Processing: {0}", a.getName());
+                LOG.log(Level.INFO, "Processing: {0}", a.getCharacteristicName());
                 StringBuilder sb2 = new StringBuilder();
                 sb2.append(BLOCK);
-                sb2.append(a.getName()).append("\n");
+                sb2.append(a.getCharacteristicName()).append("\n");
                 sb2.append(BLOCK);
                 sb2.append(getAuthor()).append("\n");
                 sb2.append(BLOCK).append("\n");
-                sb2.append(a.getName()).append("\n").append("\n");
+                sb2.append(a.getCharacteristicName()).append("\n").append("\n");
                 sb2.append(INDENT).append(a.getDescription()).append("\n");
                 sb2.append("\n");
                 sb2.append(INDENT).append("Related ability: ")
-                        .append(a.getAbility().newInstance().getName())
+                        .append(a.getAbility().newInstance().getCharacteristicName())
                         .append("\n").append("\n");
                 sb2.append(INDENT).append("Modified Abilities: ")
                         .append("\n").append("\n");
                 int count = 0;
                 count = Lookup.getDefault().lookupAll(D20Ability.class).stream().filter((ability) -> (a.getModifier(ability.getClass()) > 0)).map((ability) -> {
                     sb2.append(INDENT + INDENT + "* ")
-                            .append(ability.getName()).append(": ")
+                            .append(ability.getCharacteristicName()).append(": ")
                             .append(a.getModifier(ability.getClass()))
                             .append("\n").append("\n");
                     return ability;
@@ -90,9 +90,9 @@ public class SkillAPTExporter extends AbstractAPTExporter {
                                         .append("{{{./")
                                         .append(getFileName().toLowerCase())
                                         .append("/")
-                                        .append(a.getName().replaceAll(" ", "_"))
+                                        .append(a.getCharacteristicName().replaceAll(" ", "_"))
                                         .append(".html}")
-                                        .append(a.getName())
+                                        .append(a.getCharacteristicName())
                                         .append("}}")
                                         .append("\n");
             } catch (InstantiationException | IllegalAccessException ex) {

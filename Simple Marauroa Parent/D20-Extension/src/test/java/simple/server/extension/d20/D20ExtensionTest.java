@@ -21,7 +21,7 @@ import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.d20.ability.D20Ability;
-import simple.server.extension.d20.list.Alignment;
+import simple.server.extension.d20.misc.D20Misc;
 import simple.server.extension.d20.rpclass.D20Class;
 import simple.server.mock.MockSimpleRPWorld;
 
@@ -81,12 +81,12 @@ public class D20ExtensionTest {
                     boolean pass = false;
                     for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
                         LOG.log(Level.INFO, "{0}: {1}",
-                                new Object[]{attr.getName(),
-                                    test.get(attr.getName())});
-                        assertTrue(test.has(attr.getName()));
+                                new Object[]{attr.getCharacteristicName(),
+                                    test.get(attr.getCharacteristicName())});
+                        assertTrue(test.has(attr.getCharacteristicName()));
                         assertTrue(test.getRPClass()
                                 .getDefinition(DefinitionClass.ATTRIBUTE,
-                                        attr.getName()) != null);
+                                        attr.getCharacteristicName()) != null);
                         pass = true;
                     }
                     assertTrue(pass);
@@ -94,12 +94,12 @@ public class D20ExtensionTest {
                     pass = false;
                     for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
                         LOG.log(Level.INFO, "{0}: {1}",
-                                new Object[]{stat.getName(),
-                                    test.get(stat.getName())});
-                        assertTrue(test.has(stat.getName()));
+                                new Object[]{stat.getCharacteristicName(),
+                                    test.get(stat.getCharacteristicName())});
+                        assertTrue(test.has(stat.getCharacteristicName()));
                         assertTrue(test.getRPClass()
                                 .getDefinition(DefinitionClass.ATTRIBUTE,
-                                        stat.getName()) != null);
+                                        stat.getCharacteristicName()) != null);
                         pass = true;
                     }
                     assertTrue(pass);
@@ -107,19 +107,28 @@ public class D20ExtensionTest {
                     pass = false;
                     for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
                         LOG.log(Level.INFO, "{0}: {1}",
-                                new Object[]{attr.getName(),
-                                    test.getSlot(attr.getName()).size()});
-                        assertTrue(test.hasSlot(attr.getName()));
+                                new Object[]{attr.getCharacteristicName(),
+                                    test.getSlot(attr.getCharacteristicName()).size()});
+                        assertTrue(test.hasSlot(attr.getCharacteristicName()));
                         assertTrue(test.getRPClass()
                                 .getDefinition(DefinitionClass.RPSLOT,
-                                        attr.getName()) != null);
+                                        attr.getCharacteristicName()) != null);
                         assertEquals(attr.getSize(),
-                                test.getSlot(attr.getName()).getCapacity());
+                                test.getSlot(attr.getCharacteristicName()).getCapacity());
                         pass = true;
                     }
                     assertTrue(pass);
-                    //Alignment
-                    assertTrue(test.hasSlot(Alignment.ALIGNMENT));
+                    pass = false;
+                    for (D20Misc attr : Lookup.getDefault().lookupAll(D20Misc.class)) {
+                        LOG.log(Level.INFO, "{0}",
+                                new Object[]{attr.getCharacteristicName()});
+                        assertTrue(test.has(attr.getCharacteristicName()));
+                        assertTrue(test.getRPClass()
+                                .getDefinition(DefinitionClass.ATTRIBUTE,
+                                        attr.getCharacteristicName()) != null);
+                        pass = true;
+                    }
+                    assertTrue(pass);
                     count++;
                 } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                     LOG.log(Level.SEVERE, null, ex);

@@ -12,7 +12,7 @@ import simple.server.extension.d20.list.AbstractList;
 public class DummyList2 extends AbstractList {
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return DummyList2.class.getSimpleName();
     }
 

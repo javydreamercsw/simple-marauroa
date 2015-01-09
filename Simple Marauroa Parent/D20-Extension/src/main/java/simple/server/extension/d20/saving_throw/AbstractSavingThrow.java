@@ -34,7 +34,7 @@ public abstract class AbstractSavingThrow implements D20SavingThrow {
     }
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
 

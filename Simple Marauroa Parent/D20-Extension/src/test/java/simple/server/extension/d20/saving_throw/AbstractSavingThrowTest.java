@@ -87,7 +87,7 @@ public class AbstractSavingThrowTest {
         }
 
         @Override
-        public String getName() {
+        public String getCharacteristicName() {
             return "Test Save";
         }
 
