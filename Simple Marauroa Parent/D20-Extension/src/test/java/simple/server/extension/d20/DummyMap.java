@@ -12,7 +12,7 @@ import simple.server.extension.d20.map.D20Map;
 public class DummyMap extends AbstractMap {
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return "Dummy-Map";
     }
 

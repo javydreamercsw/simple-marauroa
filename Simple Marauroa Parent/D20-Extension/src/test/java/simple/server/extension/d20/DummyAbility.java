@@ -15,7 +15,7 @@ public class DummyAbility extends AbstractAbility {
     private static int counter = 0;
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return "Dummy";
     }
 

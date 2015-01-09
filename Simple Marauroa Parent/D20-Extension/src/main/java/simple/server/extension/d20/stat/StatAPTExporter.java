@@ -47,16 +47,16 @@ public class StatAPTExporter extends AbstractAPTExporter {
                     + System.getProperty("file.separator")
                     + getFileName().toLowerCase().replaceAll(" ", "_")
                     + System.getProperty("file.separator")
-                    + a.getName().replaceAll(" ", "_") + ".apt");
+                    + a.getCharacteristicName().replaceAll(" ", "_") + ".apt");
             temp.getParentFile().mkdirs();
-            LOG.log(Level.INFO, "Processing: {0}", a.getName());
+            LOG.log(Level.INFO, "Processing: {0}", a.getCharacteristicName());
             StringBuilder sb2 = new StringBuilder();
             sb2.append(BLOCK);
-            sb2.append(a.getName()).append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n");
             sb2.append(BLOCK);
             sb2.append(getAuthor()).append("\n");
             sb2.append(BLOCK).append("\n");
-            sb2.append(a.getName()).append("\n").append("\n");
+            sb2.append(a.getCharacteristicName()).append("\n").append("\n");
             sb2.append(INDENT).append(a.getDescription()).append("\n");
             sb2.append("\n");
             try (BufferedWriter output
@@ -71,9 +71,9 @@ public class StatAPTExporter extends AbstractAPTExporter {
                                     .append("{{{./")
                                     .append(getFileName().toLowerCase())
                                     .append("/")
-                                    .append(a.getName().replaceAll(" ", "_"))
+                                    .append(a.getCharacteristicName().replaceAll(" ", "_"))
                                     .append(".html}")
-                                    .append(a.getName())
+                                    .append(a.getCharacteristicName())
                                     .append("}}")
                                     .append("\n");
         }

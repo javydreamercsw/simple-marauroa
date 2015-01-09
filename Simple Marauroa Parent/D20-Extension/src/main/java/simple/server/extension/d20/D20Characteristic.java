@@ -12,7 +12,7 @@ public interface D20Characteristic {
      *
      * @return Attribute name
      */
-    public String getName();
+    public String getCharacteristicName();
 
     /**
      * Get the attribute id. Unique identification

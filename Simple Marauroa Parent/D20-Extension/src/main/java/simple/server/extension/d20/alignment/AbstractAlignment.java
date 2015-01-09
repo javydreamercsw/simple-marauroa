@@ -5,7 +5,7 @@ import marauroa.common.game.Definition;
 public class AbstractAlignment implements D20Alignment {
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
 

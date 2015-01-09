@@ -13,7 +13,7 @@ import simple.server.extension.d20.stat.AbstractStat;
 public class DummyStat extends AbstractStat {
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return "DummyStat";
     }
 

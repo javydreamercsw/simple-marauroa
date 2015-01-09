@@ -27,7 +27,7 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
     protected int minimumLevel = 0;
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
 

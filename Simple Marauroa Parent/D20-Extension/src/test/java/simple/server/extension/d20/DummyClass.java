@@ -32,4 +32,9 @@ public class DummyClass extends AbstractClass {
     public String getHPDice() {
         return "0";
     }
+
+    @Override
+    public String getCharacteristicName() {
+        return "Dummy Class";
+    }
 }

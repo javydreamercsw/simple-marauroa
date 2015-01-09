@@ -8,7 +8,7 @@ public abstract class AbstractMisc implements D20Misc {
     }
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
 

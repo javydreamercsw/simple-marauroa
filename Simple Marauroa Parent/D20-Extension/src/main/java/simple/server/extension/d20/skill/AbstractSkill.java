@@ -49,7 +49,7 @@ public abstract class AbstractSkill extends RPObject implements D20Skill {
     }
     
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return getClass().getSimpleName().replaceAll("_", " ");
     }
 

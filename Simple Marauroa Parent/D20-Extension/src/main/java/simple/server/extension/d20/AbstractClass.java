@@ -62,49 +62,49 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                 Lookup.getDefault().lookupAll(D20Ability.class).stream()
                         .map((attr) -> {
                             LOG.log(Level.FINE, "Adding attribute: {0}",
-                                    attr.getName());
+                                    attr.getCharacteristicName());
                             return attr;
                         }).forEach((attr) -> {
-                            clazz.addAttribute(attr.getName(),
+                            clazz.addAttribute(attr.getCharacteristicName(),
                                     attr.getDefinitionType(),
                                     attr.getDefinition());
                         });
                 //Stats
                 Lookup.getDefault().lookupAll(D20Stat.class).stream()
                         .map((stat) -> {
-                            LOG.log(Level.FINE, "Adding stat: {0}", stat.getName());
+                            LOG.log(Level.FINE, "Adding stat: {0}", stat.getCharacteristicName());
                             return stat;
                         }).forEach((stat) -> {
-                            clazz.addAttribute(stat.getName(),
+                            clazz.addAttribute(stat.getCharacteristicName(),
                                     stat.getDefinitionType(),
                                     stat.getDefinition());
                         });
                 //Maps
                 Lookup.getDefault().lookupAll(D20Map.class).stream()
                         .map((map) -> {
-                            LOG.log(Level.FINE, "Adding map: {0}", map.getName());
+                            LOG.log(Level.FINE, "Adding map: {0}", map.getCharacteristicName());
                             return map;
                         }).forEach((map) -> {
-                            clazz.addAttribute(map.getName(), Definition.Type.MAP,
+                            clazz.addAttribute(map.getCharacteristicName(), Definition.Type.MAP,
                                     map.getDefinition());
                         });
                 //Misc fields
                 Lookup.getDefault().lookupAll(D20Misc.class).stream().map((misc) -> {
                     LOG.log(Level.FINE, "Adding miscellaneous field: {0}",
-                            misc.getName());
+                            misc.getCharacteristicName());
                     return misc;
                 }).forEach((misc) -> {
-                    clazz.addAttribute(misc.getName(), misc.getDefinitionType(),
+                    clazz.addAttribute(misc.getCharacteristicName(), misc.getDefinitionType(),
                             misc.getDefinition());
                 });
                 //Other attributes
                 Lookup.getDefault().lookupAll(D20List.class).stream()
                         .map((attr) -> {
                             LOG.log(Level.FINE, "Adding slot attribute: {0}",
-                                    attr.getName());
+                                    attr.getCharacteristicName());
                             return attr;
                         }).forEach((attr) -> {
-                            clazz.addRPSlot(attr.getName(), attr.getSize(),
+                            clazz.addRPSlot(attr.getCharacteristicName(), attr.getSize(),
                                     attr.getDefinition());
                         });
             } catch (InstantiationException | IllegalAccessException ex) {
@@ -122,38 +122,32 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
         super.update();
         Lookup.getDefault().lookupAll(D20Ability.class).stream()
                 .forEach((attr) -> {
-                    if (!has(attr.getName())) {
+                    if (!has(attr.getCharacteristicName())) {
                         LOG.log(Level.FINE, "Updating attribute: {0}",
-                                attr.getName());
-                        put(attr.getName(), attr.getDefaultValue());
+                                attr.getCharacteristicName());
+                        put(attr.getCharacteristicName(), attr.getDefaultValue());
                     }
                 });
         Lookup.getDefault().lookupAll(D20Stat.class).stream()
                 .forEach((stat) -> {
-                    if (!has(stat.getName())) {
-                        LOG.log(Level.FINE, "Updating stat: {0}", stat.getName());
-                        put(stat.getName(), stat.getDefaultValue());
+                    if (!has(stat.getCharacteristicName())) {
+                        LOG.log(Level.FINE, "Updating stat: {0}", stat.getCharacteristicName());
+                        put(stat.getCharacteristicName(), stat.getDefaultValue());
                     }
                 });
         Lookup.getDefault().lookupAll(D20List.class).stream()
                 .forEach((stat) -> {
-                    if (!hasSlot(stat.getName())) {
-                        LOG.log(Level.FINE, "Updating slot: {0}", stat.getName());
-                        RPSlot slot = new RPSlot(stat.getName());
+                    if (!hasSlot(stat.getCharacteristicName())) {
+                        LOG.log(Level.FINE, "Updating slot: {0}", stat.getCharacteristicName());
+                        RPSlot slot = new RPSlot(stat.getCharacteristicName());
                         slot.setCapacity(stat.getSize());
                         addSlot(slot);
                     }
                 });
-        Lookup.getDefault().lookupAll(D20Map.class).stream().forEach((map) -> {
-            if (!has(map.getName())) {
-                LOG.log(Level.FINE, "Updating map: {0}", map.getName());
-                addMap(map.getName());
-            }
-        });
         Lookup.getDefault().lookupAll(D20Misc.class).stream().forEach((misc) -> {
-            if (!has(misc.getName())) {
-                LOG.log(Level.FINE, "Updating misc field: {0}", misc.getName());
-                put(misc.getName(), misc.getDefaultValue());
+            if (!has(misc.getCharacteristicName())) {
+                LOG.log(Level.FINE, "Updating misc field: {0}", misc.getCharacteristicName());
+                put(misc.getCharacteristicName(), misc.getDefaultValue());
             }
         });
     }

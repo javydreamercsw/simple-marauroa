@@ -13,7 +13,7 @@ public class Alignment extends AbstractList {
     public static final String ALIGNMENT = "Alignment";
 
     @Override
-    public String getName() {
+    public String getCharacteristicName() {
         return ALIGNMENT;
     }
 
