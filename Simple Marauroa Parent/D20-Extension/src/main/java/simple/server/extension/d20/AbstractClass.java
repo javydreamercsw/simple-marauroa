@@ -27,6 +27,7 @@ import simple.server.extension.d20.skill.D20Skill;
 public abstract class AbstractClass extends RPEntity implements D20Class {
 
     public final static String RP_CLASS = "Abstract Class";
+    public static final String TYPE = "Class";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
     private Map<Class<? extends D20Ability>, Integer> bonuses
@@ -97,6 +98,9 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                             clazz.addRPSlot(attr.getName(), attr.getSize(),
                                     attr.getDefinition());
                         });
+                //Add class type
+                clazz.addAttribute(TYPE, Definition.Type.STRING,
+                        Definition.STANDARD);
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
@@ -165,9 +169,9 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     public int getBonusFeatPoints(int level) {
         return bonusFeatPoints;
     }
-    
+
     @Override
-    public Map<Class<? extends D20Skill>, Integer> getBonusSkills(){
+    public Map<Class<? extends D20Skill>, Integer> getBonusSkills() {
         return bonusSkills;
     }
 }
