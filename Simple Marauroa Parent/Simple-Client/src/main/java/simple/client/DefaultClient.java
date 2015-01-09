@@ -75,147 +75,144 @@ public class DefaultClient implements ClientFrameworkProvider {
     }
 
     public DefaultClient() {
-        handler = new PerceptionHandler(new IPerceptionListener() {
-            @Override
-            public boolean onAdded(RPObject object) {
-                boolean result = false;
-                LOG.log(Level.FINE, "onAdded: {0}", object);
-                for (AddListener listener
-                        : Lookup.getDefault().lookupAll(AddListener.class)) {
-                    if (!listener.onAdded(object)) {
-                        result = true;
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            public boolean onClear() {
-                LOG.fine("onClear");
-                boolean result = false;
-                for (ClearListener listener
-                        : Lookup.getDefault().lookupAll(ClearListener.class)) {
-                    if (!listener.onClear()) {
-                        result = true;
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            public boolean onDeleted(RPObject object) {
-                LOG.log(Level.FINE, "onDeleted: {0}", object);
-                boolean result = false;
-                for (DeleteListener listener
-                        : Lookup.getDefault().lookupAll(DeleteListener.class)) {
-                    if (!listener.onDeleted(object)) {
-                        result = true;
-                    }
-                }
-                Lookup.getDefault().lookup(IWorldManager.class).getWorld()
-                        .remove(object.getID());
-                return result;
-            }
-
-            @Override
-            public void onException(Exception exception,
-                    MessageS2CPerception perception) {
-                for (ExceptionListener listener
-                        : Lookup.getDefault().lookupAll(ExceptionListener.class)) {
-                    listener.onException(exception, perception);
-                }
-                LOG.log(Level.SEVERE, getPort(), exception);
-            }
-
-            @Override
-            public boolean onModifiedAdded(RPObject object, RPObject changes) {
-                LOG.log(Level.FINE, "onModifiedAdded: {0}, {1}",
-                        new Object[]{object, changes});
-                boolean result = false;
-                for (ModificationListener listener
-                        : Lookup.getDefault().lookupAll(ModificationListener.class)) {
-                    if (!listener.onModifiedAdded(object, changes)) {
-                        result = true;
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            public boolean onModifiedDeleted(RPObject object, RPObject changes) {
-                LOG.log(Level.FINE, "onModifiedDeleted: {0}, {1}",
-                        new Object[]{object, changes});
-                boolean result = false;
-                for (ModificationListener listener
-                        : Lookup.getDefault().lookupAll(ModificationListener.class)) {
-                    if (!listener.onModifiedDeleted(object, changes)) {
-                        result = true;
-                    }
-                }
-                return result;
-            }
-
-            @Override
-            public boolean onMyRPObject(RPObject added, RPObject deleted) {
-                boolean result = true;
-                RPObject.ID id = null;
-                if (added != null) {
-                    id = added.getID();
-                }
-                if (deleted != null) {
-                    id = deleted.getID();
-                }
-                if (id != null) {
-                    RPObject object = Lookup.getDefault().lookup(IWorldManager.class).get(id);
-                    if (object != null) {
-                        Collection<? extends SelfChangeListener> listeners
-                                = Lookup.getDefault().lookupAll(SelfChangeListener.class);
-                        for (SelfChangeListener listener : listeners) {
-                            if (!listener.onMyRPObject(added, deleted)) {
-                                result = false;
-                                break;
-                            }
+        if (handler == null) {
+            handler = new PerceptionHandler(new IPerceptionListener() {
+                @Override
+                public boolean onAdded(RPObject object) {
+                    boolean result = false;
+                    LOG.log(Level.FINE, "onAdded: {0}", object);
+                    for (AddListener listener
+                            : Lookup.getDefault().lookupAll(AddListener.class)) {
+                        if (!listener.onAdded(object)) {
+                            result = true;
                         }
                     }
-                } else {
-                    // Unchanged.
-                    // Do nothing.
+                    return result;
                 }
-                return result;
-            }
 
-            @Override
-            public void onPerceptionBegin(byte type, int timestamp) {
-                for (PerceptionListener listener
-                        : Lookup.getDefault().lookupAll(PerceptionListener.class)) {
-                    listener.onPerceptionBegin(type, timestamp);
+                @Override
+                public boolean onClear() {
+                    LOG.fine("onClear");
+                    boolean result = false;
+                    for (ClearListener listener
+                            : Lookup.getDefault().lookupAll(ClearListener.class)) {
+                        if (!listener.onClear()) {
+                            result = true;
+                        }
+                    }
+                    return result;
                 }
-            }
 
-            @Override
-            public void onPerceptionEnd(byte type, int timestamp) {
-                for (PerceptionListener listener
-                        : Lookup.getDefault().lookupAll(PerceptionListener.class)) {
-                    listener.onPerceptionEnd(type, timestamp);
+                @Override
+                public boolean onDeleted(RPObject object) {
+                    LOG.log(Level.FINE, "onDeleted: {0}", object);
+                    boolean result = false;
+                    for (DeleteListener listener
+                            : Lookup.getDefault().lookupAll(DeleteListener.class)) {
+                        if (!listener.onDeleted(object)) {
+                            result = true;
+                        }
+                    }
+                    Lookup.getDefault().lookup(IWorldManager.class).getWorld()
+                            .remove(object.getID());
+                    return result;
                 }
-            }
 
-            @Override
-            public void onSynced() {
-                for (SyncListener listener
-                        : Lookup.getDefault().lookupAll(SyncListener.class)) {
-                    listener.onSynced();
+                @Override
+                public void onException(Exception exception,
+                        MessageS2CPerception perception) {
+                    Lookup.getDefault().lookupAll(ExceptionListener.class).stream().forEach((listener) -> {
+                        listener.onException(exception, perception);
+                    });
+                    LOG.log(Level.SEVERE, getPort(), exception);
                 }
-            }
 
-            @Override
-            public void onUnsynced() {
-                for (SyncListener listener
-                        : Lookup.getDefault().lookupAll(SyncListener.class)) {
-                    listener.onUnsynced();
+                @Override
+                public boolean onModifiedAdded(RPObject object, RPObject changes) {
+                    LOG.log(Level.FINE, "onModifiedAdded: {0}, {1}",
+                            new Object[]{object, changes});
+                    boolean result = false;
+                    for (ModificationListener listener
+                            : Lookup.getDefault().lookupAll(ModificationListener.class)) {
+                        if (!listener.onModifiedAdded(object, changes)) {
+                            result = true;
+                        }
+                    }
+                    return result;
                 }
-            }
-        });
+
+                @Override
+                public boolean onModifiedDeleted(RPObject object, RPObject changes) {
+                    LOG.log(Level.FINE, "onModifiedDeleted: {0}, {1}",
+                            new Object[]{object, changes});
+                    boolean result = false;
+                    for (ModificationListener listener
+                            : Lookup.getDefault().lookupAll(ModificationListener.class)) {
+                        if (!listener.onModifiedDeleted(object, changes)) {
+                            result = true;
+                        }
+                    }
+                    return result;
+                }
+
+                @Override
+                public boolean onMyRPObject(RPObject added, RPObject deleted) {
+                    boolean result = true;
+                    RPObject.ID id = null;
+                    if (added != null) {
+                        id = added.getID();
+                    }
+                    if (deleted != null) {
+                        id = deleted.getID();
+                    }
+                    if (id != null) {
+                        RPObject object = Lookup.getDefault().lookup(IWorldManager.class).get(id);
+                        if (object != null) {
+                            Collection<? extends SelfChangeListener> listeners
+                                    = Lookup.getDefault().lookupAll(SelfChangeListener.class);
+                            for (SelfChangeListener listener : listeners) {
+                                if (!listener.onMyRPObject(added, deleted)) {
+                                    result = false;
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        // Unchanged.
+                        // Do nothing.
+                    }
+                    return result;
+                }
+
+                @Override
+                public void onPerceptionBegin(byte type, int timestamp) {
+                    Lookup.getDefault().lookupAll(PerceptionListener.class).stream().forEach((listener) -> {
+                        listener.onPerceptionBegin(type, timestamp);
+                    });
+                }
+
+                @Override
+                public void onPerceptionEnd(byte type, int timestamp) {
+                    Lookup.getDefault().lookupAll(PerceptionListener.class).stream().forEach((listener) -> {
+                        listener.onPerceptionEnd(type, timestamp);
+                    });
+                }
+
+                @Override
+                public void onSynced() {
+                    Lookup.getDefault().lookupAll(SyncListener.class).stream().forEach((listener) -> {
+                        listener.onSynced();
+                    });
+                }
+
+                @Override
+                public void onUnsynced() {
+                    Lookup.getDefault().lookupAll(SyncListener.class).stream().forEach((listener) -> {
+                        listener.onUnsynced();
+                    });
+                }
+            });
+        }
         if (clientManager == null) {
             createClientManager(gameName != null ? gameName : "jWrestling",
                     version != null ? version : "0.09");
@@ -274,18 +271,18 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected List<TransferContent> onTransferREQ(List<TransferContent> items) {
-                for (TransferContent item : items) {
+                items.stream().forEach((item) -> {
                     item.ack = true;
-                }
+                });
                 return items;
             }
 
             @Override
             protected void onTransfer(List<TransferContent> items) {
                 System.out.println("Transfering ----");
-                for (TransferContent item : items) {
+                items.stream().forEach((item) -> {
                     System.out.println(item);
-                }
+                });
             }
 
             @Override
@@ -330,9 +327,9 @@ public class DefaultClient implements ClientFrameworkProvider {
             @Override
             protected void onPreviousLogins(List<String> previousLogins) {
                 System.out.println("Previous logins");
-                for (String info_string : previousLogins) {
+                previousLogins.stream().forEach((info_string) -> {
                     System.out.println(info_string);
-                }
+                });
             }
         });
     }
