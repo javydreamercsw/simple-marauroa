@@ -17,6 +17,7 @@ import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.map.D20Map;
+import simple.server.extension.d20.misc.D20Misc;
 import simple.server.extension.d20.rpclass.D20Class;
 import simple.server.extension.d20.skill.D20Skill;
 
@@ -27,7 +28,6 @@ import simple.server.extension.d20.skill.D20Skill;
 public abstract class AbstractClass extends RPEntity implements D20Class {
 
     public final static String RP_CLASS = "Abstract Class";
-    public static final String TYPE = "Class";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
     private Map<Class<? extends D20Ability>, Integer> bonuses
@@ -88,6 +88,15 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                             clazz.addAttribute(map.getName(), Definition.Type.MAP,
                                     map.getDefinition());
                         });
+                //Misc fields
+                Lookup.getDefault().lookupAll(D20Misc.class).stream().map((misc) -> {
+                    LOG.log(Level.FINE, "Adding miscellaneous field: {0}",
+                            misc.getName());
+                    return misc;
+                }).forEach((misc) -> {
+                    clazz.addAttribute(misc.getName(), misc.getDefinitionType(),
+                            misc.getDefinition());
+                });
                 //Other attributes
                 Lookup.getDefault().lookupAll(D20List.class).stream()
                         .map((attr) -> {
@@ -98,9 +107,6 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                             clazz.addRPSlot(attr.getName(), attr.getSize(),
                                     attr.getDefinition());
                         });
-                //Add class type
-                clazz.addAttribute(TYPE, Definition.Type.STRING,
-                        Definition.STANDARD);
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
@@ -138,6 +144,18 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                         addSlot(slot);
                     }
                 });
+        Lookup.getDefault().lookupAll(D20Map.class).stream().forEach((map) -> {
+            if (!has(map.getName())) {
+                LOG.log(Level.FINE, "Updating map: {0}", map.getName());
+                addMap(map.getName());
+            }
+        });
+        Lookup.getDefault().lookupAll(D20Misc.class).stream().forEach((misc) -> {
+            if (!has(misc.getName())) {
+                LOG.log(Level.FINE, "Updating misc field: {0}", misc.getName());
+                put(misc.getName(), misc.getDefaultValue());
+            }
+        });
     }
 
     @Override
