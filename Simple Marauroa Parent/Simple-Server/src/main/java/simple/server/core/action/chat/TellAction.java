@@ -180,6 +180,7 @@ public class TellAction implements ActionProvider {
         return true;
     }
 
+    @Override
     public void register() {
         CommandCenter.register(_TELL, new TellAction());
     }
