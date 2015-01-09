@@ -4,6 +4,8 @@ import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
+import simple.common.SimpleException;
+import simple.common.game.ClientObjectInterface;
 
 /**
  *
@@ -23,11 +25,11 @@ public class GagExtension extends SimpleServerExtension {
     public void modifyClientObjectDefinition(RPClass client) {
         client.addAttribute(GAG, Definition.Type.INT);
     }
-
+    
     @Override
-    public void rootRPClassUpdate(RPObject entity) {
-        if (!entity.has(GAG)) {
-            entity.add(GAG, 0);
+    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
+        if (!((RPObject) client).has(GAG)) {
+            ((RPObject) client).add(GAG, 0);
         }
     }
 }
