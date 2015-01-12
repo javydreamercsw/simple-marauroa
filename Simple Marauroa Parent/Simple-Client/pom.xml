@@ -31,11 +31,6 @@
             <artifactId>Marauroa-Simple-Server</artifactId>
             <version>0.02.06-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Marauroa</artifactId>
-            <version>3.9.3-SNAPSHOT</version>
-        </dependency>
     </dependencies>
     
     <build>
