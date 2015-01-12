@@ -4,6 +4,7 @@ import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.net.SocketException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -50,6 +51,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     private String host;
     private String username;
     private String password;
+    private Map<String, RPObject> characters = new HashMap<>();
 
     private static final Logger LOG
             = Logger.getLogger(DefaultClient.class.getSimpleName());
@@ -279,9 +281,9 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onTransfer(List<TransferContent> items) {
-                System.out.println("Transfering ----");
+                LOG.log(Level.INFO, "Transfering ----");
                 items.stream().forEach((item) -> {
-                    System.out.println(item);
+                    LOG.log(Level.INFO, item.toString());
                 });
             }
 
@@ -292,14 +294,17 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
+                DefaultClient.this.characters = characters;
                 // if there are no characters, create one with the specified name automatically
                 if (characters.isEmpty()) {
-                    System.out.println("The requested character is not available, trying to create character " + getCharacter());
+                    LOG.log(Level.WARNING,
+                            "The requested character is not available, trying "
+                            + "to create character {0}", getCharacter());
                     final ClientObject template = new ClientObject();
                     try {
                         final CharacterResult result = createCharacter(getCharacter(), template);
                         if (result.getResult().failed()) {
-                            System.out.println(result.getResult().getText());
+                            LOG.log(Level.WARNING, result.getResult().getText());
                         }
                     } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
@@ -318,17 +323,17 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onServerInfo(String[] info) {
-                System.out.println("Server info");
+                LOG.log(Level.INFO, "Server info");
                 for (String info_string : info) {
-                    System.out.println(info_string);
+                    LOG.log(Level.INFO, info_string);
                 }
             }
 
             @Override
             protected void onPreviousLogins(List<String> previousLogins) {
-                System.out.println("Previous logins");
+                LOG.log(Level.INFO, "Previous logins");
                 previousLogins.stream().forEach((info_string) -> {
-                    System.out.println(info_string);
+                    LOG.log(Level.INFO, info_string);
                 });
             }
         });
@@ -477,5 +482,10 @@ public class DefaultClient implements ClientFrameworkProvider {
         setPort(port);
         setVersion(version);
         setGameName(game_name);
+    }
+
+    @Override
+    public Map<String, RPObject> getCharacters() {
+        return characters;
     }
 }
