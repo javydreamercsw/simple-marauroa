@@ -1,8 +1,10 @@
 package simple.client;
 
 import java.net.SocketException;
+import java.util.Map;
 import marauroa.client.ClientFramework;
 import marauroa.client.net.PerceptionHandler;
+import marauroa.common.game.RPObject;
 
 public interface ClientFrameworkProvider extends Runnable {
 
@@ -137,4 +139,11 @@ public interface ClientFrameworkProvider extends Runnable {
      * @param password the password to set
      */
     public void setPassword(String password);
+
+    /**
+     * Access player's characters.
+     *
+     * @return player's characters
+     */
+    public Map<String, RPObject> getCharacters();
 }
