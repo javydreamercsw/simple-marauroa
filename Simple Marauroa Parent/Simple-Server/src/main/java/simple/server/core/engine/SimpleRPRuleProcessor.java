@@ -157,12 +157,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      * @return true if the given entity has been killed this turn.
      */
     private boolean wasKilled(RPEntity entity) {
-        for (Pair<RPEntity, Entity> entry : entityToKill) {
-            if (entity.equals(entry.first())) {
-                return true;
-            }
-        }
-        return false;
+        return entityToKill.stream().anyMatch((entry)
+                -> (entity.equals(entry.first())));
     }
 
     /**
@@ -196,7 +192,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     }
 
     /**
-     * Notify it when a new turn happens .
+     * Notify it when a new turn happens.
      */
     @Override
     public synchronized void beginTurn() {
@@ -276,10 +272,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             entry.object = (RPObject) player;
 
             addGameEvent(player.getName(), "login");
-            for (ILoginNotifier ln : Lookup.getDefault()
-                    .lookupAll(ILoginNotifier.class)) {
-                ln.onPlayerLoggedIn(player);
-            }
+            Lookup.getDefault()
+                    .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
+                        ln.onPlayerLoggedIn(player);
+                    });
 
             getOnlinePlayers().add(player);
             if (!player.isGhost()) {
