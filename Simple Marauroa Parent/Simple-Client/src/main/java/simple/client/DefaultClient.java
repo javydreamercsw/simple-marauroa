@@ -52,6 +52,8 @@ public class DefaultClient implements ClientFrameworkProvider {
     private String username;
     private String password;
     private Map<String, RPObject> characters = new HashMap<>();
+    private boolean createDefaultCharacter = false;
+    private boolean connected = false;
 
     private static final Logger LOG
             = Logger.getLogger(DefaultClient.class.getSimpleName());
@@ -295,8 +297,8 @@ public class DefaultClient implements ClientFrameworkProvider {
             @Override
             protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
                 DefaultClient.this.characters = characters;
-                // if there are no characters, create one with the specified name automatically
-                if (characters.isEmpty()) {
+                // If there are no characters, create one with the specified name automatically
+                if (characters.isEmpty() && isCreateDefaultCharacter()) {
                     LOG.log(Level.WARNING,
                             "The requested character is not available, trying "
                             + "to create character {0}", getCharacter());
@@ -311,7 +313,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                     }
                     return;
                 }
-                // autologin if a valid character was specified.
+                // Autologin if a valid character was specified.
                 if ((getCharacter() != null) && (characters.keySet().contains(getCharacter()))) {
                     try {
                         chooseCharacter(getCharacter());
@@ -364,16 +366,14 @@ public class DefaultClient implements ClientFrameworkProvider {
             LOG.log(Level.SEVERE, null, ex);
             System.exit(1);
         }
-
-        boolean cond = true;
-
-        while (cond) {
+        connected = true;
+        while (isConnected()) {
             getClientManager().loop(0);
             try {
                 sleep(100);
             } catch (InterruptedException e) {
                 LOG.log(Level.SEVERE, null, e);
-                cond = false;
+                connected = false;
             }
         }
     }
@@ -487,5 +487,23 @@ public class DefaultClient implements ClientFrameworkProvider {
     @Override
     public Map<String, RPObject> getCharacters() {
         return characters;
+    }
+
+    @Override
+    public boolean isCreateDefaultCharacter() {
+        return createDefaultCharacter;
+    }
+
+    @Override
+    public void setCreateDefaultCharacter(boolean createDefaultCharacter) {
+        this.createDefaultCharacter = createDefaultCharacter;
+    }
+
+    /**
+     * @return the connected
+     */
+    @Override
+    public boolean isConnected() {
+        return connected;
     }
 }

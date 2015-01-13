@@ -146,4 +146,23 @@ public interface ClientFrameworkProvider extends Runnable {
      * @return player's characters
      */
     public Map<String, RPObject> getCharacters();
+
+    /**
+     * Should default account creation if it doesn't exist?
+     *
+     * @return true if yes, false otherwise.
+     */
+    public boolean isCreateDefaultCharacter();
+
+    /**
+     * Enable/disable default account creation if it doesn't exist.
+     *
+     * @param enable the createDefaultCharacter to set
+     */
+    public void setCreateDefaultCharacter(boolean enable);
+
+    /**
+     * @return the connected status. true if logged in, false otherwise.
+     */
+    public boolean isConnected();
 }
