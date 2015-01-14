@@ -79,16 +79,6 @@ public interface MarauroaServerExtension {
     public void updateDatabase();
 
     /**
-     * Query the extension to plug in any changes to the perception of an
-     * object. This is called after the normal perceptions are sent.
-     *
-     * @param object Object to potentially modify the perception
-     * @param perception Perception
-     * @return true if updated
-     */
-    public boolean updateMonitor(RPObject object, Perception perception);
-
-    /**
      * When zone is added
      *
      * @param zone Zone added

@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
-import java.util.Map.Entry;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
@@ -108,10 +107,10 @@ public class SimpleRPZone extends MarauroaRPZone {
      */
     public RPObject remove(final RPObject object) {
         if (object != null) {
-            for (MarauroaServerExtension extension
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-                extension.onRPObjectRemoveFromZone(object);
-            }
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .stream().forEach((extension) -> {
+                        extension.onRPObjectRemoveFromZone(object);
+                    });
 
             if (object instanceof ClientObjectInterface) {
                 ClientObjectInterface player = (ClientObjectInterface) object;
@@ -215,12 +214,14 @@ public class SimpleRPZone extends MarauroaRPZone {
              */
             assignRPObjectID(object);
 
-            for (MarauroaServerExtension extension
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-                logger.debug("Processing extension: "
-                        + extension.getClass().getSimpleName());
-                extension.onRPObjectAddToZone(object);
-            }
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .stream().map((extension) -> {
+                        logger.debug("Processing extension: "
+                                + extension.getClass().getSimpleName());
+                        return extension;
+                    }).forEach((extension) -> {
+                        extension.onRPObjectAddToZone(object);
+                    });
 
             if (object instanceof ClientObjectInterface) {
                 logger.debug("Processing ClientObjectInterface");
@@ -273,14 +274,14 @@ public class SimpleRPZone extends MarauroaRPZone {
     public void showZone() {
         logger.debug("Zone " + getName() + " contents:");
         logger.debug("Players: " + (getPlayers().isEmpty() ? "Empty" : ""));
-        for (ClientObjectInterface co : getPlayers()) {
+        getPlayers().stream().forEach((co) -> {
             logger.debug(co);
-        }
+        });
         logger.debug("Objects: " + (objects.entrySet().isEmpty()
                 ? "Empty" : ""));
-        for (Entry co : objects.entrySet()) {
+        objects.entrySet().stream().forEach((co) -> {
             logger.debug(co);
-        }
+        });
     }
 
     @Override
@@ -294,13 +295,6 @@ public class SimpleRPZone extends MarauroaRPZone {
             logger.debug("Before:");
             logger.debug(p.toString());
             visited = true;
-            //Modify the perception
-            for (MarauroaServerExtension extension
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-                logger.debug("Processing extension: "
-                        + extension.getClass().getSimpleName());
-                extension.updateMonitor(player, p);
-            }
             logger.debug("Modification Done!");
             logger.debug("After:");
             logger.debug(p.toString());
@@ -380,9 +374,11 @@ public class SimpleRPZone extends MarauroaRPZone {
     }
 
     public void applyPublicEvent(final RPEvent event, final int delay) {
-        for (ClientObjectInterface p : getPlayers()) {
+        getPlayers().stream().map((p) -> {
             logger.debug("Adding event to: " + p + ", " + ((RPObject) p).getID()
                     + ", " + p.getZone());
+            return p;
+        }).forEach((p) -> {
             if (delay <= 0) {
                 ((RPObject) p).addEvent(event);
                 p.notifyWorldAboutChanges();
@@ -392,7 +388,7 @@ public class SimpleRPZone extends MarauroaRPZone {
                         delay,
                         new DelayedPlayerEventSender(event, p));
             }
-        }
+        });
     }
 
     /**

@@ -111,9 +111,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             logger.debug("Processing extension to update client object "
                     + "class definition: " + extension.getClass()
                     .getSimpleName());
-            logger.debug("Processing extension to update client object "
-                    + "class definition: " + extension.getClass()
-                    .getSimpleName());
             try {
                 extension.clientObjectUpdate(this);
             } catch (SimpleException ex) {
@@ -597,17 +594,18 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     }
 
     protected static void extendClass(RPClass player) {
-        for (MarauroaServerExtension extension
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                .stream().map((extension) -> {
             logger.debug("Processing extension to modify client definition: "
                     + extension.getClass().getSimpleName());
+            return extension;
+        }).forEach((extension) -> {
             extension.modifyClientObjectDefinition(player);
-        }
+        });
         logger.debug("ClientObject attributes:");
-        for (Definition def : player.getDefinitions()) {
+        player.getDefinitions().stream().forEach((def) -> {
             logger.debug(def.getName() + ": " + def.getType());
-
-        }
+        });
         logger.debug("-------------------------------");
     }
 
@@ -616,6 +614,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      *
      * @param player ClientObject
      */
+    //TODO: Move to configurable code
     protected static void loadItemsIntoSlots(ClientObject player) {
 
         // load items
