@@ -18,7 +18,6 @@ import simple.server.extension.d20.rpclass.D20Class;
  */
 public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
-    private Double rank = 0.0;
     private List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
     private List<Class<? extends D20Skill>> requirements = new ArrayList<>();
@@ -53,12 +52,12 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
     @Override
     public Double getRank() {
-        return rank;
+        return getDouble(RANK);
     }
 
     @Override
     public void setRank(Double rank) {
-        this.rank = rank;
+        put(RANK, rank);
     }
 
     @Override
