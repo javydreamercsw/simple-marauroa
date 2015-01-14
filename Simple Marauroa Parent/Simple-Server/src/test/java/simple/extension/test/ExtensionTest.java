@@ -3,8 +3,8 @@ package simple.extension.test;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import simple.SimpleServerT;
-import static simple.SimpleServerT.init;
 import static org.junit.Assert.*;
+import org.junit.Test;
 import simple.extension.DummyExtension;
 import simple.server.core.engine.IRPObjectFactory;
 
@@ -14,12 +14,11 @@ import simple.server.core.engine.IRPObjectFactory;
  */
 public class ExtensionTest extends SimpleServerT {
 
-    @org.junit.Test
+    @Test
     public void testExtensionModifications() throws Exception {
         System.out.println("Test Extension Modifications");
-        init();
-        RPObject object =
-                (RPObject) Lookup.getDefault()
+        RPObject object
+                = (RPObject) Lookup.getDefault()
                 .lookup(IRPObjectFactory.class)
                 .createDefaultClientObject("test");
         assertTrue(object.has(DummyExtension.testAttr1));

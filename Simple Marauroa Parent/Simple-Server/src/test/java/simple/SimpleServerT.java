@@ -1,6 +1,7 @@
 package simple;
 
 import marauroa.common.Log4J;
+import org.junit.BeforeClass;
 import org.openide.util.Lookup;
 import simple.server.mock.MockSimpleRPWorld;
 import simple.server.core.entity.RPEntityInterface;
@@ -11,15 +12,20 @@ import simple.server.core.entity.RPEntityInterface;
  */
 public abstract class SimpleServerT {
 
-    public static void init() throws Exception {
+    @BeforeClass
+    public static void setUpClass() {
         Log4J.init();
 
         MockSimpleRPWorld.get();
 
-        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream().forEach((entity) -> {
-            System.out.println("Initializing RPEntity: " + entity.getClass().getSimpleName());
-            entity.generateRPClass();
-        });
+        Lookup.getDefault().lookupAll(RPEntityInterface.class).stream()
+                .map((entity) -> {
+                    System.out.println("Registering RPEntity: "
+                            + entity.getClass().getSimpleName());
+                    return entity;
+                }).forEach((entity) -> {
+                    entity.generateRPClass();
+                });
     }
 
     public SimpleServerT() {
