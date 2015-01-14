@@ -13,11 +13,6 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     private Lookup lookup = new AbstractLookup(new InstanceContent());
 
     @Override
-    public boolean updateMonitor(RPObject object, Perception perception) {
-        return true;
-    }
-
-    @Override
     public void onAction(RPObject player, RPAction action) {
         //Do nothing by default
     }
