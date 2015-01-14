@@ -34,9 +34,11 @@ public class SimpleDatabase {
     protected void registerDAOs() {
         logger.debug("Loading DAOs from: " + getClass().getSimpleName());
         //Override DAO's here
-        for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
+        Lookup.getDefault().lookupAll(DAO.class).stream().map((dao) -> {
             logger.info("Registerig DAO: " + dao.getClass().getSimpleName());
+            return dao;
+        }).forEach((dao) -> {
             dao.register();
-        }
+        });
     }
 }
