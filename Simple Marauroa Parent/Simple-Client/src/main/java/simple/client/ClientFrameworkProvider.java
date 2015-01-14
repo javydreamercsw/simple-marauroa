@@ -2,9 +2,12 @@ package simple.client;
 
 import java.net.SocketException;
 import java.util.Map;
+import marauroa.client.BannedAddressException;
 import marauroa.client.ClientFramework;
+import marauroa.client.TimeoutException;
 import marauroa.client.net.PerceptionHandler;
 import marauroa.common.game.RPObject;
+import marauroa.common.net.InvalidVersionException;
 
 public interface ClientFrameworkProvider extends Runnable {
 
@@ -165,4 +168,7 @@ public interface ClientFrameworkProvider extends Runnable {
      * @return the connected status. true if logged in, false otherwise.
      */
     public boolean isConnected();
+    
+    public boolean chooseCharacter(String character) throws TimeoutException,
+	        InvalidVersionException, BannedAddressException;
 }

@@ -506,4 +506,10 @@ public class DefaultClient implements ClientFrameworkProvider {
     public boolean isConnected() {
         return connected;
     }
+
+    @Override
+    public boolean chooseCharacter(String character) throws TimeoutException,
+            InvalidVersionException, BannedAddressException {
+        return getClientManager().chooseCharacter(character);
+    }
 }
