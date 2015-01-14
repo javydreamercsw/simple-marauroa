@@ -1,12 +1,13 @@
 package simple.server.extension.d20.ability;
 
 import marauroa.common.game.Definition;
+import marauroa.common.game.RPObject;
 
 /**
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public abstract class AbstractAbility implements D20Ability {
+public abstract class AbstractAbility extends RPObject implements D20Ability {
 
     protected int score = 0;
 

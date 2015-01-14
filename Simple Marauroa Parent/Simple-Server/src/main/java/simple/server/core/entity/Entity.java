@@ -22,6 +22,7 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     private static final long serialVersionUID = 1L;
     protected String RPCLASS_NAME = "entity";
+    public static final String NAME = "name", DESC = "description";
     /**
      * The logger.
      */
@@ -44,13 +45,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             RPClass entity = new RPClass(getRPClassName());
 
             // Some things may have a textual description
-            entity.addAttribute("description", Type.LONG_STRING,
+            entity.addAttribute(DESC, Type.LONG_STRING,
                     Definition.HIDDEN);
-            //TODO: refactor to D20 system extension
-            entity.addAttribute("type", Type.STRING);
-            entity.addAttribute("class", Type.STRING);
-            entity.addAttribute("subclass", Type.STRING);
-            entity.addAttribute("title", Type.STRING);
             /*
              * If this is set, the client will discard/ignore entity
              */
@@ -115,22 +111,22 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public boolean hasDescription() {
-        return has("description") ? ((getDescription() != null)
+        return has(DESC) ? ((getDescription() != null)
                 && (getDescription().length() > 0)) : false;
     }
 
     public void setDescription(String text) {
         if (text == null) {
-            put("description", "");
+            put(DESC, "");
         } else {
-            put("description", text);
+            put(DESC, text);
         }
     }
 
     public String getDescription() {
         String description = "";
-        if (has("description")) {
-            description = get("description");
+        if (has(DESC)) {
+            description = get(DESC);
         }
         return description;
     }
@@ -141,7 +137,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      * @return The entity's name, or <code>null</code> if undefined.
      */
     public String getName() {
-        return has("name") ? get("name").replace("_", " ") : null;
+        return has(NAME) ? get(NAME).replace("_", " ") : null;
     }
 
     /**
@@ -150,7 +146,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      * @param name
      */
     public void setName(String name) {
-        put("name", name);
+        put(NAME, name);
     }
 
     /**
@@ -162,8 +158,8 @@ public class Entity extends RPObject implements RPEntityInterface {
         String result;
         if (has("title")) {
             result = get("title");
-        } else if (has("name")) {
-            result = get("name").replace('_', ' ');
+        } else if (has(NAME)) {
+            result = get(NAME).replace('_', ' ');
         } else if (has("subclass")) {
             result = get("subclass").replace('_', ' ');
         } else if (has("class")) {

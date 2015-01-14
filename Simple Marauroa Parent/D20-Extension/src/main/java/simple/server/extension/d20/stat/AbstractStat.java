@@ -1,8 +1,9 @@
 package simple.server.extension.d20.stat;
 
 import marauroa.common.game.Definition;
+import marauroa.common.game.RPObject;
 
-public abstract class AbstractStat implements D20Stat {
+public abstract class AbstractStat extends RPObject implements D20Stat {
 
     @Override
     public Byte getDefinition() {

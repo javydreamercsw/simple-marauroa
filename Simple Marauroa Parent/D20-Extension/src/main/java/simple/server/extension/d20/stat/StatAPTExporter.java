@@ -1,6 +1,6 @@
 package simple.server.extension.d20.stat;
 
-import simple.server.extension.d20.AbstractAPTExporter;
+import simple.server.extension.d20.apt.AbstractAPTExporter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;

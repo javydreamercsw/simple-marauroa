@@ -1,8 +1,9 @@
 package simple.server.extension.d20.alignment;
 
 import marauroa.common.game.Definition;
+import marauroa.common.game.RPObject;
 
-public class AbstractAlignment implements D20Alignment {
+public class AbstractAlignment extends RPObject implements D20Alignment {
 
     @Override
     public String getCharacteristicName() {

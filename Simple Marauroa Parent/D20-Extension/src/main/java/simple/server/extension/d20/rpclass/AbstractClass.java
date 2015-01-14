@@ -1,4 +1,4 @@
-package simple.server.extension.d20;
+package simple.server.extension.d20.rpclass;
 
 import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.stat.D20Stat;
@@ -18,7 +18,6 @@ import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.map.D20Map;
 import simple.server.extension.d20.misc.D20Misc;
-import simple.server.extension.d20.rpclass.D20Class;
 import simple.server.extension.d20.skill.D20Skill;
 
 /**

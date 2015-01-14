@@ -3,6 +3,7 @@ package simple.server.extension.d20.race;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import simple.server.extension.d20.rpclass.D20Class;
 
@@ -10,7 +11,7 @@ import simple.server.extension.d20.rpclass.D20Class;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public abstract class AbstractRace implements D20Race {
+public abstract class AbstractRace extends RPObject implements D20Race {
 
     protected List<Class<? extends D20Class>> prefferredCasses = 
             new ArrayList<>();
