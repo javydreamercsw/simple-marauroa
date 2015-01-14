@@ -93,7 +93,6 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
         }
         if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);
-            clazz.addAttribute(RANK, Definition.Type.STRING);
             clazz.isA(RP_CLASS);
         }
     }
