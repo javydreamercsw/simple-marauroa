@@ -12,13 +12,12 @@ import simple.server.core.entity.clientobject.ClientObject;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class ChangeZoneTest extends SimpleServerT{
+public class ChangeZoneTest extends SimpleServerT {
 
     private static ClientObject player1;
 
     @BeforeClass
-    public static void setUpClass() throws Exception {
-        init();
+    public static void setUpClass() {
         // load item configurations to handle money and other items
         SimpleSingletonRepository.getEntityManager();
         player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
@@ -49,7 +48,7 @@ public class ChangeZoneTest extends SimpleServerT{
             assertFalse(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone2"))).isEmpty());
         } catch (NullPointerException e) {
             //Expected when adding player
-        }catch (Exception e) {
+        } catch (Exception e) {
             fail();
         }
     }
