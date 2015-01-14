@@ -35,7 +35,7 @@ public class RPEntity extends Entity {
             if (!RPClass.hasRPClass(RPCLASS_NAME)) {
                 RPClass entity = new RPClass(getRPClassName());
                 entity.isA(Entity.class.newInstance().getRPClassName());
-                entity.addAttribute("name", Type.STRING);
+                entity.addAttribute(NAME, Type.STRING);
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
             }
         } catch (SyntaxException e) {
@@ -51,7 +51,7 @@ public class RPEntity extends Entity {
     }
 
     public RPEntity() {
-        RPCLASS_NAME="rpentity";
+        RPCLASS_NAME = "rpentity";
     }
 
     /**

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import marauroa.common.game.RPObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import marauroa.common.game.RPClass;
+import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.weapon.D20Weapon;
 import simple.server.extension.d20.dice.DieEx;
@@ -14,7 +17,7 @@ import simple.server.extension.d20.rpclass.D20Class;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public abstract class AbstractFeat extends RPObject implements D20Feat {
+public abstract class AbstractFeat extends RPEntity implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> bonus
             = new HashMap<>();
@@ -25,15 +28,23 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
     protected D20Weapon focusWeapon = null;
     protected D20Characteristic focusCharacteristic = null;
     protected int minimumLevel = 0;
+    public final static String RP_CLASS = "Abstract Feat";
+    private static final Logger LOG
+            = Logger.getLogger(AbstractFeat.class.getSimpleName());
+
+    public AbstractFeat() {
+        RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
+        setName(RPCLASS_NAME);
+    }
 
     @Override
     public String getCharacteristicName() {
-        return getClass().getSimpleName().replaceAll("_", " ");
+        return RPCLASS_NAME;
     }
 
     @Override
     public String getShortName() {
-        return getClass().getSimpleName().replaceAll("_", " ");
+        return RPCLASS_NAME;
     }
 
     @Override
@@ -82,13 +93,22 @@ public abstract class AbstractFeat extends RPObject implements D20Feat {
 
     @Override
     public int levelRequirement() {
-        return getMinimumLevel();
+        return minimumLevel;
     }
 
-    /**
-     * @return the minimumLevel
-     */
-    public int getMinimumLevel() {
-        return minimumLevel;
+    @Override
+    public void generateRPClass() {
+        if (!RPClass.hasRPClass(RP_CLASS)) {
+            try {
+                RPClass clazz = new RPClass(RP_CLASS);
+                clazz.isA(RPEntity.class.newInstance().getRPClassName());
+            } catch (InstantiationException | IllegalAccessException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+        }
+        if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
+            RPClass clazz = new RPClass(RPCLASS_NAME);
+            clazz.isA(RP_CLASS);
+        }
     }
 }

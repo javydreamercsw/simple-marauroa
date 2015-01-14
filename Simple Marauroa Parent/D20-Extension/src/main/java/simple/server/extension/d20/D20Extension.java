@@ -1,5 +1,7 @@
 package simple.server.extension.d20;
 
+import marauroa.common.game.Definition;
+import simple.server.extension.d20.rpclass.AbstractClass;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -15,6 +17,9 @@ import simple.server.extension.d20.map.D20Map;
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class D20Extension extends SimpleServerExtension {
 
+    public static final String TYPE = "type", CLASS = "class",
+            SUBCLASS = "subclass", TITLE = "title";
+
     @Override
     public String getName() {
         return "D20 Extension";
@@ -29,5 +34,13 @@ public class D20Extension extends SimpleServerExtension {
                 }
             });
         }
+    }
+
+    @Override
+    public void modifyRootRPClassDefinition(RPClass entity) {
+        entity.addAttribute(TYPE, Definition.Type.STRING);
+        entity.addAttribute(CLASS, Definition.Type.STRING);
+        entity.addAttribute(SUBCLASS, Definition.Type.STRING);
+        entity.addAttribute(TITLE, Definition.Type.STRING);
     }
 }

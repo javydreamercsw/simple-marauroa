@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.d20.apt.IAPTExporter;
-import simple.server.extension.d20.AbstractAPTExporter;
+import simple.server.extension.d20.apt.AbstractAPTExporter;
 
 /**
  * this generates the apt files for abilities.
