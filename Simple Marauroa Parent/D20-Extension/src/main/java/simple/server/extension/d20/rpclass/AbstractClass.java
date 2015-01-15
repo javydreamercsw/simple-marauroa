@@ -13,9 +13,12 @@ import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
+import simple.server.extension.d20.list.FeatList;
+import simple.server.extension.d20.list.SkillList;
 import simple.server.extension.d20.map.D20Map;
 import simple.server.extension.d20.misc.D20Misc;
 import simple.server.extension.d20.skill.D20Skill;
@@ -71,7 +74,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                 //Stats
                 Lookup.getDefault().lookupAll(D20Stat.class).stream()
                         .map((stat) -> {
-                            LOG.log(Level.FINE, "Adding stat: {0}", stat.getCharacteristicName());
+                            LOG.log(Level.FINE, "Adding stat: {0}",
+                                    stat.getCharacteristicName());
                             return stat;
                         }).forEach((stat) -> {
                             clazz.addAttribute(stat.getCharacteristicName(),
@@ -81,10 +85,12 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                 //Maps
                 Lookup.getDefault().lookupAll(D20Map.class).stream()
                         .map((map) -> {
-                            LOG.log(Level.FINE, "Adding map: {0}", map.getCharacteristicName());
+                            LOG.log(Level.FINE, "Adding map: {0}",
+                                    map.getCharacteristicName());
                             return map;
                         }).forEach((map) -> {
-                            clazz.addAttribute(map.getCharacteristicName(), Definition.Type.MAP,
+                            clazz.addAttribute(map.getCharacteristicName(),
+                                    Definition.Type.MAP,
                                     map.getDefinition());
                         });
                 //Misc fields
@@ -93,7 +99,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                             misc.getCharacteristicName());
                     return misc;
                 }).forEach((misc) -> {
-                    clazz.addAttribute(misc.getCharacteristicName(), misc.getDefinitionType(),
+                    clazz.addAttribute(misc.getCharacteristicName(),
+                            misc.getDefinitionType(),
                             misc.getDefinition());
                 });
                 //Other attributes
@@ -103,7 +110,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                                     attr.getCharacteristicName());
                             return attr;
                         }).forEach((attr) -> {
-                            clazz.addRPSlot(attr.getCharacteristicName(), attr.getSize(),
+                            clazz.addRPSlot(attr.getCharacteristicName(),
+                                    attr.getSize(),
                                     attr.getDefinition());
                         });
             } catch (InstantiationException | IllegalAccessException ex) {
@@ -124,20 +132,24 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                     if (!has(attr.getCharacteristicName())) {
                         LOG.log(Level.FINE, "Updating attribute: {0}",
                                 attr.getCharacteristicName());
-                        put(attr.getCharacteristicName(), attr.getDefaultValue());
+                        put(attr.getCharacteristicName(),
+                                attr.getDefaultValue());
                     }
                 });
         Lookup.getDefault().lookupAll(D20Stat.class).stream()
                 .forEach((stat) -> {
                     if (!has(stat.getCharacteristicName())) {
-                        LOG.log(Level.FINE, "Updating stat: {0}", stat.getCharacteristicName());
-                        put(stat.getCharacteristicName(), stat.getDefaultValue());
+                        LOG.log(Level.FINE, "Updating stat: {0}",
+                                stat.getCharacteristicName());
+                        put(stat.getCharacteristicName(),
+                                stat.getDefaultValue());
                     }
                 });
         Lookup.getDefault().lookupAll(D20List.class).stream()
                 .forEach((stat) -> {
                     if (!hasSlot(stat.getCharacteristicName())) {
-                        LOG.log(Level.FINE, "Updating slot: {0}", stat.getCharacteristicName());
+                        LOG.log(Level.FINE, "Updating slot: {0}",
+                                stat.getCharacteristicName());
                         RPSlot slot = new RPSlot(stat.getCharacteristicName());
                         slot.setCapacity(stat.getSize());
                         addSlot(slot);
@@ -145,10 +157,45 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                 });
         Lookup.getDefault().lookupAll(D20Misc.class).stream().forEach((misc) -> {
             if (!has(misc.getCharacteristicName())) {
-                LOG.log(Level.FINE, "Updating misc field: {0}", misc.getCharacteristicName());
+                LOG.log(Level.FINE, "Updating misc field: {0}",
+                        misc.getCharacteristicName());
                 put(misc.getCharacteristicName(), misc.getDefaultValue());
             }
         });
+        //Update the Feat descriptions
+        if (hasSlot(FeatList.FEAT)) {
+            RPSlot slot = getSlot(FeatList.FEAT);
+            Lookup.getDefault().lookupAll(D20Feat.class).stream().forEach((feat) -> {
+                for (RPObject rpo : slot) {
+                    if (rpo.get(Entity.NAME).equals(((RPEntity) feat).getRPClassName())
+                            && !rpo.get(Entity.DESC).equals(feat.getDescription())) {
+                        LOG.log(java.util.logging.Level.INFO,
+                                "Updating {0} from ''{1}'' to ''{2}''",
+                                new Object[]{((RPEntity) feat).get(Entity.NAME),
+                                    rpo.get(Entity.DESC),
+                                    feat.getDescription()});
+                        rpo.put(Entity.DESC, feat.getDescription());
+                    }
+                }
+            });
+        }
+        //Update the Skill descriptions
+        if (hasSlot(SkillList.SKILL)) {
+            RPSlot slot = getSlot(SkillList.SKILL);
+            Lookup.getDefault().lookupAll(D20Skill.class).stream().forEach((skill) -> {
+                for (RPObject rpo : slot) {
+                    if (rpo.get(Entity.NAME).equals(((RPEntity) skill).getRPClassName())
+                            && !rpo.get(Entity.DESC).equals(skill.getDescription())) {
+                        LOG.log(java.util.logging.Level.INFO,
+                                "Updating {0} from ''{1}'' to ''{2}''",
+                                new Object[]{((RPEntity) skill).get(Entity.NAME),
+                                    rpo.get(Entity.DESC),
+                                    skill.getDescription()});
+                        rpo.put(Entity.DESC, skill.getDescription());
+                    }
+                }
+            });
+        }
     }
 
     @Override
