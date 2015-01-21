@@ -314,7 +314,9 @@ public class DefaultClient implements ClientFrameworkProvider {
                     return;
                 }
                 // Autologin if a valid character was specified.
-                if ((getCharacter() != null) && (characters.keySet().contains(getCharacter()))) {
+                if ((getCharacter() != null)
+                        && (characters.keySet().contains(getCharacter()))
+                        && isCreateDefaultCharacter()) {
                     try {
                         chooseCharacter(getCharacter());
                     } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
