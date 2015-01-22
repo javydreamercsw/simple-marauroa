@@ -30,7 +30,17 @@ public interface ClientFrameworkProvider extends Runnable {
      */
     public void connect(String host, String username, String password,
             String user_character, String port,
-            String game_name, String version) throws SocketException;
+            String game_name, String version)
+            throws SocketException;
+
+    /**
+     * Set email.
+     *
+     * Meant to separate email as a field that can be asked optionally.
+     *
+     * @param email
+     */
+    public void setEmail(String email);
 
     /**
      * Set the Client manager.
@@ -168,7 +178,7 @@ public interface ClientFrameworkProvider extends Runnable {
      * @return the connected status. true if logged in, false otherwise.
      */
     public boolean isConnected();
-    
+
     public boolean chooseCharacter(String character) throws TimeoutException,
-	        InvalidVersionException, BannedAddressException;
+            InvalidVersionException, BannedAddressException;
 }

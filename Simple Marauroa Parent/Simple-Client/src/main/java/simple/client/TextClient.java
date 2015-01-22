@@ -110,6 +110,7 @@ public final class TextClient extends DefaultClient {
         setPort(port);
         setVersion(version);
         setGameName(game_name);
+        setEmail("dummy");
         createClientManager(getGameName() != null ? getGameName() : "Simple",
                 getVersion() != null ? getVersion() : "0.02.06");
     }
