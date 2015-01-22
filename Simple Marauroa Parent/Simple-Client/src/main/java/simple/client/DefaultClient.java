@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import marauroa.client.BannedAddressException;
 import marauroa.client.ClientFramework;
 import marauroa.client.LoginFailedException;
@@ -21,6 +23,7 @@ import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.api.AddListener;
@@ -51,6 +54,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     private String host;
     private String username;
     private String password;
+    private String email;
     private Map<String, RPObject> characters = new HashMap<>();
     private boolean createDefaultCharacter = false;
     private boolean connected = false;
@@ -219,7 +223,7 @@ public class DefaultClient implements ClientFrameworkProvider {
         }
         if (clientManager == null) {
             createClientManager(gameName != null ? gameName : "jWrestling",
-                    version != null ? version : "0.09");
+                    version != null ? version : "1.0");
         }
     }
 
@@ -343,7 +347,37 @@ public class DefaultClient implements ClientFrameworkProvider {
         });
     }
 
+    public void getEmailFromUser() {
+        String s = (String) JOptionPane.showInputDialog(
+                new JFrame(),
+                "Please provide your email below:",
+                "Additional Profile Information",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                null,
+                null);
+        //Validate email
+        if (isEmailValid(s)) {
+            setEmail(s);
+        } else {
+            int input = JOptionPane.showOptionDialog(null,
+                    "Provided email is invalid.",
+                    "Invalid Email",
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.ERROR_MESSAGE,
+                    null, null, null);
+            if (input == JOptionPane.OK_OPTION) {
+                getEmailFromUser();
+            }
+        }
+    }
+
+    public boolean isEmailValid(String email) {
+        return EmailValidator.getInstance().isValid(email);
+    }
+
     @Override
+    @SuppressWarnings("empty-statement")
     public void run() {
         try {
             getClientManager().connect(getHost(), Integer.parseInt(getPort()));
@@ -356,9 +390,13 @@ public class DefaultClient implements ClientFrameworkProvider {
             throw new RuntimeException(ex);
         } catch (LoginFailedException e) {
             try {
+                //Prompt user to enter additional information
+                getEmailFromUser();
+                while(getEmail().trim().isEmpty());
                 LOG.log(Level.WARNING,
                         "Creating account and logging in to continue....");
-                getClientManager().createAccount(getUsername(), password, getHost());
+                getClientManager().createAccount(getUsername(), password,
+                        getEmail());
                 getClientManager().login(getUsername(), password);
             } catch (LoginFailedException | TimeoutException | InvalidVersionException | BannedAddressException ex) {
                 LOG.log(Level.SEVERE, null, ex);
@@ -476,7 +514,8 @@ public class DefaultClient implements ClientFrameworkProvider {
     @Override
     public void connect(String host, String username, String password,
             String user_character, String port,
-            String game_name, String version) throws SocketException {
+            String game_name, String version)
+            throws SocketException {
         setHost(host);
         setUsername(username);
         setPassword(password);
@@ -513,5 +552,20 @@ public class DefaultClient implements ClientFrameworkProvider {
     public boolean chooseCharacter(String character) throws TimeoutException,
             InvalidVersionException, BannedAddressException {
         return getClientManager().chooseCharacter(character);
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    @Override
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
