@@ -1,17 +1,16 @@
 package simple.server.extension.d20.skill;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.D20Characteristic;
-import simple.server.extension.d20.rpclass.D20Class;
+import simple.server.extension.d20.requirement.D20Requirement;
 
 /**
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public interface D20Skill extends D20Characteristic {
+public interface D20Skill extends D20Characteristic, D20Requirement {
 
     /**
      * Allows to have dice equations as modifier.
@@ -54,18 +53,4 @@ public interface D20Skill extends D20Characteristic {
      * @param rank
      */
     public void setRank(Double rank);
-    
-    /**
-     * List of Classes this Feat is exclusive to.
-     *
-     * @return list of classes. Empty means anyone can use it.
-     */
-    List<Class<? extends D20Class>> getExclusiveClasses();
-
-    /**
-     * Requirements for this Feat.
-     *
-     * @return Map Feats to have this one available.
-     */
-    List<Class<? extends D20Skill>> getRequirements();
 }

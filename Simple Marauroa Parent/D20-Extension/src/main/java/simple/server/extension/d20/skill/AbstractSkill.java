@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import simple.server.core.entity.RPEntity;
+import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.dice.DieEx;
 import static simple.server.extension.d20.skill.D20Skill.modifiers;
 import simple.server.extension.d20.ability.D20Ability;
@@ -20,7 +21,8 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
     private List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
-    private List<Class<? extends D20Skill>> requirements = new ArrayList<>();
+    private List<Class<? extends D20Characteristic>> requirements
+            = new ArrayList<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractSkill.class.getSimpleName());
     public static final String RANK = "rank";
@@ -76,7 +78,7 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     }
 
     @Override
-    public List<Class<? extends D20Skill>> getRequirements() {
+    public List<Class<? extends D20Characteristic>> getRequirements() {
         return requirements;
     }
 
@@ -103,5 +105,10 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
         if (!has(RANK)) {
             put(RANK, "0.0");
         }
+    }
+
+    @Override
+    public int levelRequirement() {
+        return 0;
     }
 }

@@ -72,7 +72,7 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                 sb2.append("Requirements:").append("\n").append("\n");
                 a.getRequirements().stream().forEach((f) -> {
                     try {
-                        D20Feat feat = f.newInstance();
+                        D20Feat feat = (D20Feat) f.newInstance();
                         sb2.append(INDENT + INDENT + "* ")
                                 .append(feat.getCharacteristicName())
                                 .append("\n");
