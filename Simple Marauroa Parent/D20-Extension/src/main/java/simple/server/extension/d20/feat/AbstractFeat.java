@@ -23,7 +23,7 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
             = new HashMap<>();
     private List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
-    private List<Class<? extends D20Feat>> requirements = new ArrayList<>();
+    private List<Class<? extends D20Characteristic>> requirements = new ArrayList<>();
     protected boolean multiple = false;
     protected D20Weapon focusWeapon = null;
     protected D20Characteristic focusCharacteristic = null;
@@ -67,7 +67,7 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
     }
 
     @Override
-    public List<Class<? extends D20Feat>> getRequirements() {
+    public List<Class<? extends D20Characteristic>> getRequirements() {
         return requirements;
     }
 
