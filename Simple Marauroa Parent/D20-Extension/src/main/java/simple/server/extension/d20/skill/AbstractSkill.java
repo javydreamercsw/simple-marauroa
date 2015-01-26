@@ -1,7 +1,9 @@
 package simple.server.extension.d20.skill;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.Definition;
@@ -21,8 +23,8 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
     private List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
-    private List<Class<? extends D20Characteristic>> requirements
-            = new ArrayList<>();
+    private Map<Class<? extends D20Characteristic>, Integer> requirements
+            = new HashMap<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractSkill.class.getSimpleName());
     public static final String RANK = "rank";
@@ -78,7 +80,7 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     }
 
     @Override
-    public List<Class<? extends D20Characteristic>> getRequirements() {
+    public Map<Class<? extends D20Characteristic>, Integer> getRequirements() {
         return requirements;
     }
 
