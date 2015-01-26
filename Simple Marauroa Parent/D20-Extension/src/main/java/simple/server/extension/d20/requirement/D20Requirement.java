@@ -1,6 +1,7 @@
 package simple.server.extension.d20.requirement;
 
 import java.util.List;
+import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.rpclass.D20Class;
 
@@ -23,7 +24,7 @@ public interface D20Requirement {
      *
      * @return Map Feats to have this one available.
      */
-    List<Class<? extends D20Characteristic>> getRequirements();
+    Map<Class<? extends D20Characteristic>, Integer> getRequirements();
 
     /**
      * Minimum level for having this feat available.

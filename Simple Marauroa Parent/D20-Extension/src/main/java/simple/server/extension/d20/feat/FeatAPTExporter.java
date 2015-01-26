@@ -7,10 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Modifier;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.apt.IAPTExporter;
 
 /**
@@ -70,16 +72,18 @@ public class FeatAPTExporter extends AbstractAPTExporter {
             }
             if (a.getRequirements().size() > 0) {
                 sb2.append("Requirements:").append("\n").append("\n");
-                a.getRequirements().stream().forEach((f) -> {
+                for (Entry<Class<? extends D20Characteristic>, Integer> entry
+                        : a.getRequirements().entrySet()) {
                     try {
-                        D20Feat feat = (D20Feat) f.newInstance();
+                        D20Characteristic feat =
+                                (D20Characteristic) entry.getKey().newInstance();
                         sb2.append(INDENT + INDENT + "* ")
                                 .append(feat.getCharacteristicName())
                                 .append("\n");
                     } catch (InstantiationException | IllegalAccessException ex) {
                         LOG.log(Level.SEVERE, null, ex);
                     }
-                });
+                }
             }
             if (a.levelRequirement() > 0) {
                 if (!sb2.toString().contains("Requirements:")) {
