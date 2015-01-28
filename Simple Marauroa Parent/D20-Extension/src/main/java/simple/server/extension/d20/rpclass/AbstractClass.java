@@ -17,6 +17,7 @@ import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
+import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.FeatList;
 import simple.server.extension.d20.list.SkillList;
 import simple.server.extension.d20.map.D20Map;
@@ -60,6 +61,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
             try {
                 RPClass clazz = new RPClass(RP_CLASS);
                 clazz.isA(RPEntity.class.newInstance().getRPClassName());
+                //Level attribute
+                clazz.addAttribute(D20Level.LEVEL, Definition.Type.INT);
                 //Attributes
                 Lookup.getDefault().lookupAll(D20Ability.class).stream()
                         .map((attr) -> {
@@ -127,6 +130,9 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     @Override
     public void update() {
         super.update();
+        if (!has(D20Level.LEVEL)) {
+            put(D20Level.LEVEL, 0);
+        }
         Lookup.getDefault().lookupAll(D20Ability.class).stream()
                 .forEach((attr) -> {
                     if (!has(attr.getCharacteristicName())) {
@@ -231,5 +237,25 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     @Override
     public Map<Class<? extends D20Skill>, Integer> getBonusSkills() {
         return bonusSkills;
+    }
+
+    @Override
+    public int getLevel() {
+        return getInt(D20Level.LEVEL);
+    }
+
+    @Override
+    public void setLevel(int level) {
+        put(D20Level.LEVEL, level);
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return -1;
+    }
+
+    @Override
+    public void setMaxLevel(int max) {
+        //Do nothing
     }
 }

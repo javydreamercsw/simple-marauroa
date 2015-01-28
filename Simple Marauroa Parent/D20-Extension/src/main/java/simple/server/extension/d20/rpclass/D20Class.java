@@ -5,6 +5,7 @@ import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.feat.D20Feat;
+import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.skill.D20Skill;
 
 /**
@@ -12,7 +13,7 @@ import simple.server.extension.d20.skill.D20Skill;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public interface D20Class extends D20Characteristic {
+public interface D20Class extends D20Characteristic, D20Level {
 
     /**
      * A list of race bonuses in the format: Attribute name, Bonus
