@@ -1,7 +1,5 @@
 package simple.server.extension.d20.apt;
 
-import simple.server.extension.d20.apt.IAPTExporter;
-
 /**
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
