@@ -2,8 +2,6 @@ package simple.server.extension.d20.list;
 
 import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.extension.d20.list.AbstractList;
-import simple.server.extension.d20.list.D20List;
 
 /**
  *
