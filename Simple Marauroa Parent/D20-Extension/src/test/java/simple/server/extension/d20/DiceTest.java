@@ -1,11 +1,12 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.dice.DieEx;
-import simple.server.extension.d20.dice.Die;
-import simple.server.extension.d20.dice.Dice;
+import java.util.List;
 import java.util.Random;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import simple.server.extension.d20.dice.DiceParser;
+import simple.server.extension.d20.dice.DieRoll;
+import simple.server.extension.d20.dice.RollResult;
 
 /**
  *
@@ -20,8 +21,8 @@ public class DiceTest {
      * Test of roll method, of class Dice.
      */
     @Test
-    public void testRoll() {
-        System.out.println("roll");
+    public void testRoll2() {
+        System.out.println("roll 2");
         Random r = new Random();
         int num;
         int sides;
@@ -29,18 +30,22 @@ public class DiceTest {
         for (int i = 0; i < 100; i++) {
             num = r.nextInt(5) + 1;
             sides = r.nextInt(20) + 1;
-            mod = Die.randInt(-5, 5);
-            Dice instance = new Dice(num, sides, mod);
-            int result = instance.roll();
-            assertTrue(result > mod);
-            assertTrue(result <= num * sides + mod);
-            String eq = num + "d" + sides + (mod > 0 ? "+" : "") 
+            //Random # between -5 and 5
+            mod = r.nextInt(10) - 5;
+            String eq = num + "d" + sides + (mod > 0 ? "+" : "")
                     + (mod == 0 ? "" : mod);
-            System.out.println(eq + " = " + result);
-            assertEquals(eq, instance.toString());
-            //Reverse parse
-            DieEx dieEx = new DieEx(eq);
-            assertEquals(eq, dieEx.toString());
+            List<DieRoll> parseRoll = DiceParser.parseRoll(eq);
+            System.out.println("Results for " + eq + ":");
+            for (i = 0; i < parseRoll.size(); i++) {
+                DieRoll dr = parseRoll.get(i);
+                System.out.print(parseRoll.get(i));
+                System.out.print(": ");
+                RollResult roll = dr.makeRoll();
+                System.out.println(roll);
+                int result = roll.getTotal();
+                assertTrue(result > mod);
+                assertTrue(result <= num * sides + mod);
+            }
         }
     }
 }

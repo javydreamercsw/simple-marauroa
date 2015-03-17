@@ -10,7 +10,8 @@ import marauroa.common.game.RPClass;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.weapon.D20Weapon;
-import simple.server.extension.d20.dice.DieEx;
+import simple.server.extension.d20.dice.DiceParser;
+import simple.server.extension.d20.dice.DieRoll;
 import simple.server.extension.d20.rpclass.D20Class;
 
 /**
@@ -54,7 +55,10 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
         if (bonus.containsKey(st)) {
             String eq = bonus.get(st);
             if (eq.contains("d")) {
-                result = new DieEx(eq).roll();
+                List<DieRoll> parseRoll = DiceParser.parseRoll(eq);
+                for (DieRoll roll : parseRoll) {
+                    result += roll.makeRoll().getTotal();
+                }
             } else {
                 result = Integer.parseInt(eq);
             }
