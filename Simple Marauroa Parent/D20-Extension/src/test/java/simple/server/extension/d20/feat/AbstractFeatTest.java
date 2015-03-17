@@ -23,7 +23,7 @@ public class AbstractFeatTest {
         instance.bonus.put(DummySavingThrow.class, "1");
         assertEquals(1, instance.getBonus(DummySavingThrow.class));
         instance.bonus.clear();
-        instance.bonus.put(DummySavingThrow.class, "2d+1");
+        instance.bonus.put(DummySavingThrow.class, "2d1+1");
         assertTrue(instance.getBonus(DummySavingThrow.class) > 1);
         instance.bonus.clear();
         assertEquals(0, instance.getBonus(DummySavingThrow.class));
