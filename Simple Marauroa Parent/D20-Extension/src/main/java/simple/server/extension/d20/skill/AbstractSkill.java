@@ -10,9 +10,10 @@ import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
-import simple.server.extension.d20.dice.DieEx;
 import static simple.server.extension.d20.skill.D20Skill.modifiers;
 import simple.server.extension.d20.ability.D20Ability;
+import simple.server.extension.d20.dice.DiceParser;
+import simple.server.extension.d20.dice.DieRoll;
 import simple.server.extension.d20.rpclass.D20Class;
 
 /**
@@ -46,7 +47,10 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
         if (modifiers.containsKey(attr)) {
             String eq = modifiers.get(attr);
             if (eq.contains("d")) {
-                result = new DieEx(eq).roll();
+                List<DieRoll> parseRoll = DiceParser.parseRoll(eq);
+                for (DieRoll roll : parseRoll) {
+                    result += roll.makeRoll().getTotal();
+                }
             } else {
                 result = Integer.parseInt(eq);
             }
