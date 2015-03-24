@@ -27,7 +27,7 @@ public class DiceTest {
         int num;
         int sides;
         int mod;
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             num = r.nextInt(5) + 1;
             sides = r.nextInt(20) + 1;
             //Random # between -5 and 5
