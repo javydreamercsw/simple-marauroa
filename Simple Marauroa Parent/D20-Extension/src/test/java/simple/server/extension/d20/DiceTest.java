@@ -21,13 +21,13 @@ public class DiceTest {
      * Test of roll method, of class Dice.
      */
     @Test
-    public void testRoll2() {
-        System.out.println("roll 2");
+    public void testRoll() {
+        System.out.println("roll test");
         Random r = new Random();
         int num;
         int sides;
         int mod;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             num = r.nextInt(5) + 1;
             sides = r.nextInt(20) + 1;
             //Random # between -5 and 5
@@ -36,9 +36,9 @@ public class DiceTest {
                     + (mod == 0 ? "" : mod);
             List<DieRoll> parseRoll = DiceParser.parseRoll(eq);
             System.out.println("Results for " + eq + ":");
-            for (i = 0; i < parseRoll.size(); i++) {
-                DieRoll dr = parseRoll.get(i);
-                System.out.print(parseRoll.get(i));
+            for (int j = 0; j < parseRoll.size(); j++) {
+                DieRoll dr = parseRoll.get(j);
+                System.out.print((i + 1) + ") " + parseRoll.get(j));
                 System.out.print(": ");
                 RollResult roll = dr.makeRoll();
                 System.out.println(roll);
