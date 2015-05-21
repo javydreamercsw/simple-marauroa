@@ -22,9 +22,11 @@ import simple.server.extension.d20.rpclass.D20Class;
  */
 public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
-    private List<Class<? extends D20Class>> exclusiveClasses
+    private final List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
-    private Map<Class<? extends D20Characteristic>, Integer> requirements
+    private final Map<Class<? extends D20Characteristic>, Integer> requirements
+            = new HashMap<>();
+    private final Map<Class<? extends D20Characteristic>, Integer> opponentRequirements
             = new HashMap<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractSkill.class.getSimpleName());
@@ -116,5 +118,10 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     @Override
     public int levelRequirement() {
         return 0;
+    }
+    
+    @Override
+    public Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements() {
+        return opponentRequirements;
     }
 }

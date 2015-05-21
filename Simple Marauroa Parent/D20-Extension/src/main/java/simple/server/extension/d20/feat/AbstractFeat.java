@@ -22,9 +22,11 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> bonus
             = new HashMap<>();
-    private List<Class<? extends D20Class>> exclusiveClasses
+    private final List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
-    private Map<Class<? extends D20Characteristic>, Integer> requirements
+    private final Map<Class<? extends D20Characteristic>, Integer> requirements
+            = new HashMap<>();
+    private final Map<Class<? extends D20Characteristic>, Integer> opponentRequirements
             = new HashMap<>();
     protected boolean multiple = false;
     protected D20Weapon focusWeapon = null;
@@ -115,5 +117,10 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
             RPClass clazz = new RPClass(RPCLASS_NAME);
             clazz.isA(RP_CLASS);
         }
+    }
+
+    @Override
+    public Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements() {
+        return opponentRequirements;
     }
 }
