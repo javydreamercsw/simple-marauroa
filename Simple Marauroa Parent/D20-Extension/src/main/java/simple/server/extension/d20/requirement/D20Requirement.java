@@ -13,23 +13,30 @@ import simple.server.extension.d20.rpclass.D20Class;
 public interface D20Requirement {
 
     /**
-     * List of Classes this Feat is exclusive to.
+     * List of Classes this element is exclusive to.
      *
      * @return list of classes. Empty means anyone can use it.
      */
     List<Class<? extends D20Class>> getExclusiveClasses();
 
     /**
-     * Requirements for this Feat.
+     * Requirements for this element.
      *
-     * @return Map Feats to have this one available.
+     * @return Map characteristics to have this one available.
      */
     Map<Class<? extends D20Characteristic>, Integer> getRequirements();
+    
+    /**
+     * Opponent requirements for this element.
+     *
+     * @return Map characteristics to have this one available.
+     */
+    Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements();
 
     /**
-     * Minimum level for having this feat available.
+     * Minimum level for having this element available.
      *
-     * @return Minimum level for having this feat available.
+     * @return Minimum level for having this element available.
      */
     int levelRequirement();
 }

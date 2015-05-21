@@ -13,6 +13,8 @@ public class AbstractD20Requirement implements D20Requirement {
             = new ArrayList<>();
     protected Map<Class<? extends D20Characteristic>, Integer> requirements
             = new HashMap<>();
+    protected Map<Class<? extends D20Characteristic>, Integer> opponentRequirements
+            = new HashMap<>();
 
     @Override
     public List<Class<? extends D20Class>> getExclusiveClasses() {
@@ -27,5 +29,10 @@ public class AbstractD20Requirement implements D20Requirement {
     @Override
     public int levelRequirement() {
         return 0;
+    }
+
+    @Override
+    public Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements() {
+        return opponentRequirements;
     }
 }
