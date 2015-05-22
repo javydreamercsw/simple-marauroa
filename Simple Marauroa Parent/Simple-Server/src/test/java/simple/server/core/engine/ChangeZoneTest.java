@@ -3,7 +3,6 @@ package simple.server.core.engine;
 import simple.server.mock.MockSimpleRPWorld;
 import marauroa.common.game.IRPZone.ID;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import simple.SimpleServerT;
 import simple.server.core.entity.clientobject.ClientObject;
@@ -16,15 +15,6 @@ public class ChangeZoneTest extends SimpleServerT {
 
     private static ClientObject player1;
 
-    @BeforeClass
-    public static void setUpClass() {
-        // load item configurations to handle money and other items
-        SimpleSingletonRepository.getEntityManager();
-        player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
-        MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone1"));
-        MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone2"));
-    }
-
     /**
      * Test of getGameName method, of class SimpleDatabase.
      *
@@ -34,6 +24,10 @@ public class ChangeZoneTest extends SimpleServerT {
     public void changeZone() {
         try {
             System.out.println("changeZone");
+            SimpleSingletonRepository.getEntityManager();
+            player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
+            MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone1"));
+            MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone2"));
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone1")));
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone2")));
             assertFalse(MockSimpleRPWorld.get().hasRPZone(new ID("zone3")));
