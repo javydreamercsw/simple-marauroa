@@ -84,7 +84,7 @@ public abstract class AbstractCardCache implements ICardCache {
     /**
      * Constructor
      *
-     * @param name Cache name
+     * @param game Cache name
      * @throws DBException Error initializing Cache database
      */
     public AbstractCardCache(final ICardGame game) throws DBException {
@@ -177,7 +177,6 @@ public abstract class AbstractCardCache implements ICardCache {
      * @param card Card to check image for
      * @param set Set the card is from
      * @return true if exists
-     * @throws CannotDetermineSetAbbriviation
      */
     public boolean cardImageExists(final ICard card,
             final ICardSet<ICard> set) {
