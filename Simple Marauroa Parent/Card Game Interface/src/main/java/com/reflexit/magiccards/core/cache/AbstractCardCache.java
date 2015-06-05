@@ -346,16 +346,21 @@ public abstract class AbstractCardCache implements ICardCache {
         File loc = getCacheLocationFile();
         Edition edition = Editions.getInstance()
                 .getEditionByName(set.getName());
-        String part = set.getCardGame().getName()
-                + System.getProperty("file.separator")
-                + "Sets"
-                + System.getProperty("file.separator")
-                + edition.getMainAbbreviation()
-                + System.getProperty("file.separator")
-                + System.getProperty("file.separator")
-                + edition.getMainAbbreviation()
-                + ".jpg";
-        return new File(loc, part).getPath();
+        String part;
+        if (edition != null) {
+            part = set.getCardGame().getName()
+                    + System.getProperty("file.separator")
+                    + "Sets"
+                    + System.getProperty("file.separator")
+                    + edition.getMainAbbreviation()
+                    + System.getProperty("file.separator")
+                    + System.getProperty("file.separator")
+                    + edition.getMainAbbreviation()
+                    + ".jpg";
+            return new File(loc, part).getPath();
+        } else {
+            return null;
+        }
     }
 
     @Override
