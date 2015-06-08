@@ -255,15 +255,17 @@ public abstract class AbstractCardCache implements ICardCache {
             final boolean forceUpdate) throws IOException,
             CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
-        File file = new File(path);
-        if (file.exists() && forceUpdate == false) {
-            return true;
+        if (path != null) {
+            File file = new File(path);
+            if (file.exists() && forceUpdate == false) {
+                return true;
+            }
+            if (!isLoadingEnabled()) {
+                throw new CachedImageNotFoundException(
+                        "Cannot find cached image for " + card.getName());
+            }
+            Lookup.getDefault().lookup(ICacheData.class).add(card);
         }
-        if (!isLoadingEnabled()) {
-            throw new CachedImageNotFoundException(
-                    "Cannot find cached image for " + card.getName());
-        }
-        Lookup.getDefault().lookup(ICacheData.class).add(card);
         return false;
     }
 
