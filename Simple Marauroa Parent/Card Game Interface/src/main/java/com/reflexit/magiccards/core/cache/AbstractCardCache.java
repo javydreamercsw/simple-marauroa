@@ -206,29 +206,34 @@ public abstract class AbstractCardCache implements ICardCache {
             final URL url, final boolean remote, final boolean forceRemote)
             throws IOException, CannotDetermineSetAbbriviation {
         String path = createLocalImageFilePath(card, set);
-        File file = new File(path);
-        if (forceRemote == false && file.exists()) {
-            return file;
+        if (path == null) {
+            //Game might not have a image for the card.
+            return null;
+        } else {
+            File file = new File(path);
+            if (forceRemote == false && file.exists()) {
+                return file;
+            }
+            if (!remote) {
+                throw new CachedImageNotFoundException(
+                        "Cannot find cached image for " + card.getName());
+            }
+            InputStream st = null;
+            try {
+                st = url.openStream();
+            } catch (IOException e) {
+                throw new IOException("Cannot connect: " + e.getMessage());
+            }
+            File file2 = new File(path + ".part");
+            CardFileUtils.saveStream(st, file2);
+            st.close();
+            file.delete();
+            if (file2.exists()) {
+                FileUtils.moveFile(file2, file);
+                return file;
+            }
+            throw new FileNotFoundException(file.getName());
         }
-        if (!remote) {
-            throw new CachedImageNotFoundException(
-                    "Cannot find cached image for " + card.getName());
-        }
-        InputStream st = null;
-        try {
-            st = url.openStream();
-        } catch (IOException e) {
-            throw new IOException("Cannot connect: " + e.getMessage());
-        }
-        File file2 = new File(path + ".part");
-        CardFileUtils.saveStream(st, file2);
-        st.close();
-        file.delete();
-        if (file2.exists()) {
-            FileUtils.moveFile(file2, file);
-            return file;
-        }
-        throw new FileNotFoundException(file.getName());
     }
 
     /**
