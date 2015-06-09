@@ -17,24 +17,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "card_has_card_attribute")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CardHasCardAttribute.findAll", query = "SELECT c FROM CardHasCardAttribute c"),
-    @NamedQuery(name = "CardHasCardAttribute.findByCardId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardId = :cardId"),
-    @NamedQuery(name = "CardHasCardAttribute.findByCardCardTypeId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardCardTypeId = :cardCardTypeId"),
-    @NamedQuery(name = "CardHasCardAttribute.findByCardAttributeId", query = "SELECT c FROM CardHasCardAttribute c WHERE c.cardHasCardAttributePK.cardAttributeId = :cardAttributeId"),
-    @NamedQuery(name = "CardHasCardAttribute.findByValue", query = "SELECT c FROM CardHasCardAttribute c WHERE c.value = :value")})
+    @NamedQuery(name = "CardHasCardAttribute.findAll",
+            query = "SELECT c FROM CardHasCardAttribute c"),
+    @NamedQuery(name = "CardHasCardAttribute.findByCardId",
+            query = "SELECT c FROM CardHasCardAttribute c WHERE "
+            + "c.cardHasCardAttributePK.cardId = :cardId"),
+    @NamedQuery(name = "CardHasCardAttribute.findByCardCardTypeId",
+            query = "SELECT c FROM CardHasCardAttribute c WHERE "
+            + "c.cardHasCardAttributePK.cardCardTypeId = :cardCardTypeId"),
+    @NamedQuery(name = "CardHasCardAttribute.findByCardAttributeId",
+            query = "SELECT c FROM CardHasCardAttribute c WHERE "
+            + "c.cardHasCardAttributePK.cardAttributeId = :cardAttributeId"),
+    @NamedQuery(name = "CardHasCardAttribute.findByValue",
+            query = "SELECT c FROM CardHasCardAttribute c WHERE c.value = :value")})
 public class CardHasCardAttribute implements Serializable, ICardHasCardAttribute {
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected CardHasCardAttributePK cardHasCardAttributePK;
     @Basic(optional = false)
-    @Column(name = "value", nullable = false, length = 80)
+    @Lob
+    @Column(name = "value", nullable = false)
     private String value;
-    @JoinColumn(name = "card_attribute_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "card_attribute_id", referencedColumnName = "id",
+            nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CardAttribute cardAttribute;
     @JoinColumns({
-        @JoinColumn(name = "card_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false),
-        @JoinColumn(name = "card_card_type_id", referencedColumnName = "card_type_id", nullable = false, insertable = false, updatable = false)})
+        @JoinColumn(name = "card_id", referencedColumnName = "id",
+                nullable = false, insertable = false, updatable = false),
+        @JoinColumn(name = "card_card_type_id", referencedColumnName
+                = "card_type_id", nullable = false, insertable = false,
+                updatable = false)})
     @ManyToOne(optional = false)
     private Card card;
 
@@ -45,13 +59,16 @@ public class CardHasCardAttribute implements Serializable, ICardHasCardAttribute
         this.cardHasCardAttributePK = cardHasCardAttributePK;
     }
 
-    public CardHasCardAttribute(CardHasCardAttributePK cardHasCardAttributePK, String value) {
+    public CardHasCardAttribute(CardHasCardAttributePK cardHasCardAttributePK,
+            String value) {
         this.cardHasCardAttributePK = cardHasCardAttributePK;
         this.value = value;
     }
 
-    public CardHasCardAttribute(int cardId, int cardCardTypeId, int cardAttributeId) {
-        this.cardHasCardAttributePK = new CardHasCardAttributePK(cardId, cardCardTypeId, cardAttributeId);
+    public CardHasCardAttribute(int cardId, int cardCardTypeId,
+            int cardAttributeId) {
+        this.cardHasCardAttributePK = new CardHasCardAttributePK(cardId,
+                cardCardTypeId, cardAttributeId);
     }
 
     public CardHasCardAttributePK getCardHasCardAttributePK() {
@@ -100,15 +117,15 @@ public class CardHasCardAttribute implements Serializable, ICardHasCardAttribute
             return false;
         }
         CardHasCardAttribute other = (CardHasCardAttribute) object;
-        if ((this.cardHasCardAttributePK == null && other.cardHasCardAttributePK != null) || (this.cardHasCardAttributePK != null && !this.cardHasCardAttributePK.equals(other.cardHasCardAttributePK))) {
-            return false;
-        }
-        return true;
+        return !((this.cardHasCardAttributePK == null
+                && other.cardHasCardAttributePK != null)
+                || (this.cardHasCardAttributePK != null
+                && !this.cardHasCardAttributePK.equals(other.cardHasCardAttributePK)));
     }
 
     @Override
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.CardHasCardAttribute[ cardHasCardAttributePK=" + cardHasCardAttributePK + " ]";
     }
-    
+
 }
