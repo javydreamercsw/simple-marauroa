@@ -1,22 +1,23 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package com.reflexit.magiccards.core.storage.database.controller;
 
-import com.reflexit.magiccards.core.storage.database.CardHasCardAttribute;
-import com.reflexit.magiccards.core.storage.database.CardPK;
-import com.reflexit.magiccards.core.storage.database.CardSet;
 import com.reflexit.magiccards.core.storage.database.Card;
-import com.reflexit.magiccards.core.storage.database.CardType;
-import com.reflexit.magiccards.core.storage.database.CardCollectionHasCard;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.reflexit.magiccards.core.storage.database.CardType;
+import com.reflexit.magiccards.core.storage.database.CardSet;
 import java.util.ArrayList;
 import java.util.List;
+import com.reflexit.magiccards.core.storage.database.CardCollectionHasCard;
+import com.reflexit.magiccards.core.storage.database.CardHasCardAttribute;
+import com.reflexit.magiccards.core.storage.database.CardPK;
 import com.reflexit.magiccards.core.storage.database.controller.exceptions.IllegalOrphanException;
 import com.reflexit.magiccards.core.storage.database.controller.exceptions.NonexistentEntityException;
 import com.reflexit.magiccards.core.storage.database.controller.exceptions.PreexistingEntityException;
@@ -25,7 +26,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 public class CardJpaController implements Serializable {
 
@@ -333,5 +334,5 @@ public class CardJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
