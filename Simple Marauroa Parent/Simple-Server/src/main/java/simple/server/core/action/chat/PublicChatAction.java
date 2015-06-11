@@ -39,10 +39,17 @@ public class PublicChatAction implements ActionProvider {
                 Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
                         Lookup.getDefault().lookup(IRPWorld.class).getZone(((RPObject) player).get("zoneid")),
                         new TextEvent(text, player.getName()));
+            } else {
+                StringBuilder mess = new StringBuilder("Action is missing key components:\n");
+                if (!action.has(TEXT)) {
+                    mess.append(TEXT).append("\n");
+                }
+                logger.warn(mess.toString());
             }
         }
     }
 
+    @Override
     public void register() {
         CommandCenter.register(_CHAT, new PublicChatAction());
     }
