@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package com.reflexit.magiccards.core.storage.database.controller;
@@ -20,7 +21,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 public class CardTypeJpaController implements Serializable {
 

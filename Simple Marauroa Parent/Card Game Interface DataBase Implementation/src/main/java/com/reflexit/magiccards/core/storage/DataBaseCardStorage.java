@@ -214,8 +214,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 caController.create(attr);
                 LOG.log(Level.FINE,
                         "Created attribute: {0} on the database!", type);
-            } catch (PreexistingEntityException ex) {
-                throw new DBException(ex.toString());
             } catch (Exception ex) {
                 throw new DBException(ex.toString());
             }
@@ -836,7 +834,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
             throws DBException {
         HashMap parameters = new HashMap();
         parameters.put("name", name);
-        return getAttributesForCard((ICard) namedQuery("Card.findByName", 
+        return getAttributesForCard((ICard) namedQuery("Card.findByName",
                 parameters).get(0));
     }
 
