@@ -25,8 +25,8 @@ import simple.server.core.event.TextEvent;
 @ServiceProviders({
     @ServiceProvider(service = MarauroaServerExtension.class),
     @ServiceProvider(service = ActionProvider.class)})
-public class ChallengeExtension extends SimpleServerExtension 
-implements ActionProvider {
+public class ChallengeExtension extends SimpleServerExtension
+        implements ActionProvider {
 
     /**
      * the logger instance.
@@ -44,16 +44,22 @@ implements ActionProvider {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
             logger.debug("Action received: " + action);
-            ClientObjectInterface challenged = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(_CHALLENGED));
-            ClientObjectInterface challenger = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(_CHALLENGER));
+            ClientObjectInterface challenged = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+                    .getPlayer(action.get(_CHALLENGED));
+            ClientObjectInterface challenger = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+                    .getPlayer(action.get(_CHALLENGER));
             if (action.get("type").equals(_CHALLENGE)) {
                 logger.debug("Processing Challenge...");
                 //Check both players exist
-                if (challenged != null && challenger != null) {
-                    logger.debug("Both players still exist. Send the Challenge to the challenged.");
-                    challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER), action.get(_CHALLENGED), ChallengeEvent.CHALLENGE));
+                if (challenged != null && challenger != null
+                        && !challenged.getName().equals(challenger.getName())) {
+                    logger.debug("Both players still exist. "
+                            + "Send the Challenge to the challenged.");
+                    challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
+                            action.get(_CHALLENGED), ChallengeEvent.CHALLENGE));
                     if (player instanceof RPObject) {
-                        ((RPObject) player).addEvent(new TextEvent("Command completed", "System"));
+                        ((RPObject) player).addEvent(
+                                new TextEvent("Command completed", "System"));
                     }
                     challenged.notifyWorldAboutChanges();
                     logger.debug("Sent!");
@@ -64,17 +70,20 @@ implements ActionProvider {
                 }
             } else if (action.get("type").equals(_ACCEPT_CHALLENGE)) {
                 logger.debug("Processing challenge accept...");
-                challenger.addEvent(new ChallengeEvent(action.get(_CHALLENGER), action.get(_CHALLENGED), ChallengeEvent.ACCEPT));
+                challenger.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
+                        action.get(_CHALLENGED), ChallengeEvent.ACCEPT));
                 challenger.notifyWorldAboutChanges();
             } else if (action.get("type").equals(_REJECT_CHALLENGE)) {
                 logger.debug("Processing challenge reject...");
-                challenger.addEvent(new ChallengeEvent(action.get(_CHALLENGER), action.get(_CHALLENGED), ChallengeEvent.REJECT));
+                challenger.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
+                        action.get(_CHALLENGED), ChallengeEvent.REJECT));
                 challenger.notifyWorldAboutChanges();
             } else if (action.get("type").equals(_CANCEL_CHALLENGE)) {
                 logger.debug("Processing challenge cancel...");
                 //Notify challenged
                 if (challenged != null) {
-                    challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER), action.get(_CHALLENGED), ChallengeEvent.CANCEL));
+                    challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
+                            action.get(_CHALLENGED), ChallengeEvent.CANCEL));
                     challenged.notifyWorldAboutChanges();
                 }
             }

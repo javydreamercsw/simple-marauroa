@@ -21,6 +21,10 @@ public class TextEvent extends SimpleRPEvent {
 
     public static final String RPCLASS_NAME = "text";
     public static final String TEXT_TYPE = "texttype";
+    private final SimpleDateFormat defaultFormat
+            = new SimpleDateFormat("HH:mm:SS");
+    private final SimpleDateFormat extendedFormat
+            = new SimpleDateFormat("dd-MM-yy:HH:mm:SS");
 
     /**
      * Creates the rpclass.
@@ -56,7 +60,7 @@ public class TextEvent extends SimpleRPEvent {
         super(RPCLASS_NAME);
         put(TEXT, text);
         put(FROM, from);
-        put(TIME, new Date().toString());
+        put(TIME, formatDate(new Date()));
     }
 
     /**
@@ -71,6 +75,43 @@ public class TextEvent extends SimpleRPEvent {
         put(TEXT_TYPE, type.name());
         put(TEXT, text);
         put(FROM, from);
-        put(TIME, new Date().toString());
+        put(TIME, formatDate(new Date()));
+    }
+
+    /**
+     * Format date.
+     *
+     * @param date date to format
+     * @return formatted date
+     */
+    private String formatDate(Date date) {
+        return formatDate(date, defaultFormat);
+    }
+
+    /**
+     * Format date.
+     *
+     * @param date date to format
+     * @param format format for the date
+     * @return formatted date
+     */
+    private String formatDate(Date date, DateFormat format) {
+        if (format == null) {
+            format = defaultFormat;
+        }
+        if (isYesterday(date)) {
+            //Message was sent yesterday, add the date
+            format = extendedFormat;
+        }
+        return format.format(date);
+    }
+
+    private boolean isYesterday(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int day = c.get(Calendar.DAY_OF_WEEK);
+        c.setTime(new Date());
+        int now = c.get(Calendar.DAY_OF_WEEK);
+        return day < now;
     }
 }

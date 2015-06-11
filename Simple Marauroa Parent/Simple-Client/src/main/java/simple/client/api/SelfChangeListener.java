@@ -9,4 +9,11 @@ import marauroa.common.game.RPObject;
 public interface SelfChangeListener {
 
     public boolean onMyRPObject(RPObject added, RPObject deleted);
+
+    /**
+     * Get my RPObject.
+     *
+     * @return my RPObject
+     */
+    public RPObject getMyObject();
 }

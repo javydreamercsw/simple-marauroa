@@ -43,6 +43,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     private Configuration config;
     private static String VERSION;
     private static String GAMENAME;
+    private static boolean log_chat = false;
     /**
      * the logger instance.
      */
@@ -68,12 +69,9 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         }
         onlinePlayers = new PlayerList();
         entityToKill = new LinkedList<>();
-        try {
-            setVERSION(Configuration.getConfiguration().get("server_version"));
-            setGAMENAME(Configuration.getConfiguration().get("server_name"));
-        } catch (IOException ex) {
-            logger.error(ex);
-        }
+        setVERSION(config.get("server_version"));
+        setGAMENAME(config.get("server_name"));
+        setLogChat("true".equals(config.get("log_chat", "true")));
         addGameEvent("server system", "startup");
     }
 
@@ -373,7 +371,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                                 >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
                             }
                         });
-
     }
 
     /**
@@ -414,5 +411,19 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                         }
                     });
         }
+    }
+
+    /**
+     * @return the log_chat
+     */
+    public static boolean isLogChat() {
+        return log_chat;
+    }
+
+    /**
+     * @param aLog_chat the log_chat to set
+     */
+    public static void setLogChat(boolean aLog_chat) {
+        log_chat = aLog_chat;
     }
 }

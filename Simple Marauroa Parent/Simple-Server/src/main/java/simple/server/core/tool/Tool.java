@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Locale;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import marauroa.common.game.RPObject;
+import static simple.server.core.entity.Entity.NAME;
 
 /**
  * General use tools.
@@ -116,6 +118,11 @@ public class Tool {
         }
     }
 
-    public Tool() {
+    private Tool() {
+    }
+    
+    public static String extractName(RPObject obj) {
+        return obj.has(NAME) ? obj.get(NAME).replace("_", " ")
+                : obj.toString();
     }
 }

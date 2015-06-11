@@ -1,4 +1,3 @@
-
 package simple.server.core.engine;
 
 import java.util.Iterator;
@@ -9,18 +8,18 @@ import simple.common.game.ClientObjectInterface;
 
 public class PlayerList {
 
+    private final Map<String, ClientObjectInterface> players;
+
     public PlayerList() {
-        players = new ConcurrentHashMap<String, ClientObjectInterface>();
+        players = new ConcurrentHashMap<>();
     }
-    private Map<String, ClientObjectInterface> players;
 
     /**
      * Retrieve from this list a player specified by its name.
      *
-     * @param name
-     *            the unique name of a player
-     * @return the ClientObjectInterface specified by the name or <code> null </code> if not
-     *         found
+     * @param name the unique name of a player
+     * @return the ClientObjectInterface specified by the name or <code> null
+     * </code> if not found
      */
     ClientObjectInterface getOnlinePlayer(String name) {
         return players.get(name.toLowerCase());
@@ -45,11 +44,11 @@ public class PlayerList {
     /**
      * Calls the execute method of task for each player in this List.
      *
-     * @param task
-     *            the task to execute
+     * @param task the task to execute
      */
     public void forAllPlayersExecute(Task<ClientObjectInterface> task) {
-        Iterator<Map.Entry<String, ClientObjectInterface>> it = players.entrySet().iterator();
+        Iterator<Map.Entry<String, ClientObjectInterface>> it
+                = players.entrySet().iterator();
         while (it.hasNext()) {
             task.execute(it.next().getValue());
         }
@@ -59,14 +58,13 @@ public class PlayerList {
      * Calls the execute method of task for all player in this list that return
      * true in filter.
      *
-     * @param task
-     *            the task to execute.
-     * @param filter
-     *            the FilterCriteria to pass
+     * @param task the task to execute.
+     * @param filter the FilterCriteria to pass
      */
-    public void forFilteredPlayersExecute(Task<ClientObjectInterface> task, FilterCriteria<ClientObjectInterface> filter) {
-        Iterator<Map.Entry<String, ClientObjectInterface>> it = players.entrySet().iterator();
-
+    public void forFilteredPlayersExecute(Task<ClientObjectInterface> task,
+            FilterCriteria<ClientObjectInterface> filter) {
+        Iterator<Map.Entry<String, ClientObjectInterface>> it
+                = players.entrySet().iterator();
         while (it.hasNext()) {
 
             ClientObjectInterface player = it.next().getValue();
@@ -92,7 +90,7 @@ public class PlayerList {
         if (playerName != null) {
             players.put(playerName.toLowerCase(), player);
         } else {
-            throw new IllegalArgumentException("can't add player without name");
+            throw new IllegalArgumentException("Can't add player without name!");
         }
     }
 
@@ -102,7 +100,7 @@ public class PlayerList {
         if (playerName != null) {
             return players.remove(playerName.toLowerCase()) != null;
         } else {
-            throw new IllegalArgumentException("can't remove player without name:");
+            throw new IllegalArgumentException("Can't remove player without name!");
         }
     }
 }
