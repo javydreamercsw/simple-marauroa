@@ -84,7 +84,7 @@ public abstract class AbstractCardCache implements ICardCache {
     /**
      * Constructor
      *
-     * @param name Cache name
+     * @param game Cache name
      * @throws DBException Error initializing Cache database
      */
     public AbstractCardCache(final ICardGame game) throws DBException {
@@ -177,7 +177,6 @@ public abstract class AbstractCardCache implements ICardCache {
      * @param card Card to check image for
      * @param set Set the card is from
      * @return true if exists
-     * @throws CannotDetermineSetAbbriviation
      */
     public boolean cardImageExists(final ICard card,
             final ICardSet<ICard> set) {
@@ -347,16 +346,21 @@ public abstract class AbstractCardCache implements ICardCache {
         File loc = getCacheLocationFile();
         Edition edition = Editions.getInstance()
                 .getEditionByName(set.getName());
-        String part = set.getCardGame().getName()
-                + System.getProperty("file.separator")
-                + "Sets"
-                + System.getProperty("file.separator")
-                + edition.getMainAbbreviation()
-                + System.getProperty("file.separator")
-                + System.getProperty("file.separator")
-                + edition.getMainAbbreviation()
-                + ".jpg";
-        return new File(loc, part).getPath();
+        String part;
+        if (edition != null) {
+            part = set.getCardGame().getName()
+                    + System.getProperty("file.separator")
+                    + "Sets"
+                    + System.getProperty("file.separator")
+                    + edition.getMainAbbreviation()
+                    + System.getProperty("file.separator")
+                    + System.getProperty("file.separator")
+                    + edition.getMainAbbreviation()
+                    + ".jpg";
+            return new File(loc, part).getPath();
+        } else {
+            return null;
+        }
     }
 
     @Override

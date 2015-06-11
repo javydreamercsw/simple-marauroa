@@ -13,7 +13,7 @@
         <class>com.reflexit.magiccards.core.storage.database.Game</class>
         <properties>
             <property name="eclipselink.logging.level" value="SEVERE"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:~/Deck-Manager/data/card_manager"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:file:./Deck-Manager/data/card_manager"/>
             <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.H2Platform"/>
             <property name="javax.persistence.jdbc.password" value="card_manager"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>

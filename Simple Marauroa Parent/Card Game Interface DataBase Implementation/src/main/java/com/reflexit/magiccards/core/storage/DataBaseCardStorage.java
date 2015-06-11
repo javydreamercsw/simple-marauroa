@@ -95,9 +95,6 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         }
     }
 
-    /**
-     * @return the emf
-     */
     public EntityManagerFactory getEntityManagerFactory() {
         return emf;
     }

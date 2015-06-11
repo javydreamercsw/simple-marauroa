@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -415,4 +416,10 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Card if found, null otherwise.
      */
     ICard getCard(String name, ICardSet set);
+    
+    /**
+     * Get the EntityManager Factory.
+     * @return EntityManagerFactory
+     */
+    EntityManagerFactory getEntityManagerFactory();
 }
