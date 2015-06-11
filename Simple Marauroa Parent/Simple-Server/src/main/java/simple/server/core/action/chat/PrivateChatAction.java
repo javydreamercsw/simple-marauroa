@@ -42,7 +42,8 @@ public class PrivateChatAction implements ActionProvider {
                 String from = rpo.get("name");
                 logger.info("Processing private text action: " + action);
                 Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
-                        new PrivateTextEvent(NotificationType.PRIVMSG, text, target, from));
+                        new PrivateTextEvent(NotificationType.PRIVMSG, text, 
+                                target, from));
             } else {
                 StringBuilder mess = new StringBuilder("Action is missing key components:\n");
                 if (!action.has(TEXT)) {
@@ -56,6 +57,7 @@ public class PrivateChatAction implements ActionProvider {
         }
     }
 
+    @Override
     public void register() {
         CommandCenter.register(_PRIVATE_CHAT, new PrivateChatAction());
     }
