@@ -44,9 +44,11 @@ public class ChallengeExtension extends SimpleServerExtension
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
             logger.debug("Action received: " + action);
-            ClientObjectInterface challenged = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+            ClientObjectInterface challenged
+                    = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
                     .getPlayer(action.get(_CHALLENGED));
-            ClientObjectInterface challenger = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+            ClientObjectInterface challenger
+                    = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
                     .getPlayer(action.get(_CHALLENGER));
             if (action.get("type").equals(_CHALLENGE)) {
                 logger.debug("Processing Challenge...");
@@ -55,8 +57,24 @@ public class ChallengeExtension extends SimpleServerExtension
                         && !challenged.getName().equals(challenger.getName())) {
                     logger.debug("Both players still exist. "
                             + "Send the Challenge to the challenged.");
-                    challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
-                            action.get(_CHALLENGED), ChallengeEvent.CHALLENGE));
+                    switch (action.getInt(ChallengeEvent.ACTION)) {
+                        case ChallengeEvent.CHALLENGE:
+                            challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
+                                    action.get(_CHALLENGED), ChallengeEvent.CHALLENGE));
+                            break;
+                        case ChallengeEvent.CANCEL:
+                            logger.info("Processing challenge cancel!");
+                            break;
+                        case ChallengeEvent.ACCEPT:
+                            logger.info("Processing challenge accept!");
+                            break;
+                        case ChallengeEvent.REJECT:
+                            logger.info("Processing challenge reject!");
+                            break;
+                        default:
+                            logger.warn("Unhandled action: "
+                                    + action.getInt(ChallengeEvent.ACTION));
+                    }
                     if (player instanceof RPObject) {
                         ((RPObject) player).addEvent(
                                 new TextEvent("Command completed", "System"));
@@ -67,6 +85,24 @@ public class ChallengeExtension extends SimpleServerExtension
                     logger.error("Something's wrong...");
                     logger.error("Challenged: " + challenged);
                     logger.error("Challenger: " + challenger);
+                    switch (action.getInt(ChallengeEvent.ACTION)) {
+                        case ChallengeEvent.CHALLENGE:
+                            logger.warn("Processing challenge challenge!");
+                            break;
+                        case ChallengeEvent.CANCEL:
+                            logger.warn("Processing challenge cancel!");
+                            break;
+                        case ChallengeEvent.ACCEPT:
+                            logger.warn("Processing challenge accept!");
+                            break;
+                        case ChallengeEvent.REJECT:
+                            logger.warn("Processing challenge reject!");
+                            break;
+                    }
+                    if (player instanceof RPObject) {
+                        ((RPObject) player).addEvent(
+                                new TextEvent("Command not completed", "System"));
+                    }
                 }
             } else if (action.get("type").equals(_ACCEPT_CHALLENGE)) {
                 logger.debug("Processing challenge accept...");
