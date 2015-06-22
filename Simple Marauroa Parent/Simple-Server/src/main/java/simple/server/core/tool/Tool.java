@@ -118,7 +118,7 @@ public class Tool {
         }
     }
 
-    private Tool() {
+    protected Tool() {
     }
     
     public static String extractName(RPObject obj) {
