@@ -11,7 +11,7 @@ import simple.common.game.ClientObjectInterface;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
-public class TutotialExtension extends SimpleServerExtension {
+public class TutorialExtension extends SimpleServerExtension {
 
     private static final String TUTORIAL = "!tutorial";
 
