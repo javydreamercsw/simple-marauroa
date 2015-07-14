@@ -35,8 +35,8 @@ public class SimpleRPZone extends MarauroaRPZone {
      * the logger instance.
      */
     private static final Logger logger = Log4J.getLogger(SimpleRPZone.class);
-    private List<TransferContent> contents;
-    private HashMap<String, ClientObjectInterface> players;
+    private final List<TransferContent> contents;
+    private final HashMap<String, ClientObjectInterface> players;
     private String description = "";
     private boolean deleteWhenEmpty = false;
     private boolean visited = false;

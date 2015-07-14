@@ -18,7 +18,8 @@ import simple.common.game.ClientObjectInterface;
 public class SimpleRPObjectFactory extends RPObjectFactory
         implements IRPObjectFactory {
 
-    private static Logger logger = Log4J.getLogger(SimpleRPObjectFactory.class);
+    private static final Logger logger = 
+            Log4J.getLogger(SimpleRPObjectFactory.class);
 
     @Override
     public RPObject transform(RPObject object) {
