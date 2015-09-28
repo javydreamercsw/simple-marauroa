@@ -26,12 +26,12 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.188</version>
+            <version>${h2.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${unit.test.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
