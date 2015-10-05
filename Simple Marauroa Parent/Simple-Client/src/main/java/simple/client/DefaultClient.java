@@ -17,9 +17,11 @@ import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.client.net.PerceptionHandler;
+import marauroa.common.game.AccountResult;
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import marauroa.common.game.Result;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
@@ -395,9 +397,18 @@ public class DefaultClient implements ClientFrameworkProvider {
                 while (getEmail() == null || getEmail().trim().isEmpty());
                 LOG.log(Level.WARNING,
                         "Creating account and logging in to continue....");
-                getClientManager().createAccount(getUsername(), password,
+                AccountResult result = getClientManager().createAccount(getUsername(), password,
                         getEmail());
-                getClientManager().login(getUsername(), password);
+                if (result.getResult().equals(Result.OK_CREATED)) {
+                    getClientManager().login(getUsername(), password);
+                } else {
+                    if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
+                        LOG.severe("Account creation is disabled on server!");
+                    } else {
+                        LOG.severe("Unable to create account: " + result.getResult().getText());
+                    }
+                    System.exit(1);
+                }
             } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
                 LOG.log(Level.SEVERE, null, ex);
                 System.exit(1);
