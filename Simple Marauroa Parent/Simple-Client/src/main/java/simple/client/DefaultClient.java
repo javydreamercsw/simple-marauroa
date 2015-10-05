@@ -392,14 +392,18 @@ public class DefaultClient implements ClientFrameworkProvider {
             try {
                 //Prompt user to enter additional information
                 getEmailFromUser();
-                while(getEmail().trim().isEmpty());
+                while (getEmail() == null || getEmail().trim().isEmpty());
                 LOG.log(Level.WARNING,
                         "Creating account and logging in to continue....");
                 getClientManager().createAccount(getUsername(), password,
                         getEmail());
                 getClientManager().login(getUsername(), password);
-            } catch (LoginFailedException | TimeoutException | InvalidVersionException | BannedAddressException ex) {
+            } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
                 LOG.log(Level.SEVERE, null, ex);
+                System.exit(1);
+            } catch (InvalidVersionException ex) {
+                LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
+                        + " vs. protocol version: " + ex.getProtocolVersion(), ex);
                 System.exit(1);
             }
         } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
@@ -463,6 +467,8 @@ public class DefaultClient implements ClientFrameworkProvider {
 
     @Override
     public void setVersion(String version) {
+        LOG.log(Level.INFO, "Version changed from: ''{0}'' to: ''{1}''",
+                new Object[]{this.version, version});
         this.version = version;
     }
 
