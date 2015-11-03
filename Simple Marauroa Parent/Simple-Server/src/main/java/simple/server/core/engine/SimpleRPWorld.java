@@ -153,29 +153,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             });
             LOG.info("Done!");
 
-            //Make sure the system account exists. This will be the owner of NPC's
-            if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
-                    Configuration.getConfiguration()
-                    .get("system_account_name"))) {
-                LOG.info("Creating system account...");
-                //Must be the one with id 1
-                DAORegister.get().get(AccountDAO.class).addPlayer(
-                        Configuration.getConfiguration()
-                        .get("system_account_name"),
-                        Hash.hash(Configuration.getConfiguration()
-                                .get("system_password")),
-                        Configuration.getConfiguration().get("system_email"));
-                LOG.info("Done!");
-            } else {
-                LOG.info("Updating system account...");
-                //Account exists, make sure the password is up to date
-                DAORegister.get().get(AccountDAO.class).changePassword(
-                        Configuration.getConfiguration()
-                        .get("system_account_name"),
-                        Configuration.getConfiguration()
-                        .get("system_password"));
-                LOG.info("Done!");
-            }
+            createSystemAccount();
             //Empty right now but just in case
             super.onInit();
             boolean needDefault = true;
@@ -193,8 +171,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             }
             Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                     .stream().forEach((extension) -> {
-                extension.afterWorldInit();
-            });
+                        extension.afterWorldInit();
+                    });
         } catch (IOException | SQLException e) {
             LOG.error("Error initializing the server!", e);
         }
@@ -215,7 +193,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             SimpleRPZone sZone = (SimpleRPZone) i.next();
             rooms.append(sZone.getName()).append(
                     sZone.getDescription().isEmpty() ? "" : ": "
-                    + sZone.getDescription());
+                            + sZone.getDescription());
             if (i.hasNext()) {
                 rooms.append(separator);
             }
@@ -235,8 +213,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         super.addRPZone(simpleZone);
         Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream()
                 .forEach((extension) -> {
-            extension.onAddRPZone(simpleZone);
-        });
+                    extension.onAddRPZone(simpleZone);
+                });
     }
 
     @Override
@@ -371,7 +349,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         if (object instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) object;
             for (IRPZone zone : this) {
-                if (zone.getID().getID().equals(object.get("zoneid"))) {
+                if (zone.getID().getID().equals(player.getZone().getID().getID())) {
                     add(object);
                     LOG.debug("Object added");
                     showWorld();
@@ -433,5 +411,32 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             result = null;
         }
         return result;
+    }
+
+    @Override
+    public void createSystemAccount() throws SQLException, IOException {
+        //Make sure the system account exists. This will be the owner of NPC's
+        if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
+                Configuration.getConfiguration()
+                .get("system_account_name"))) {
+            LOG.info("Creating system account...");
+            //Must be the one with id 1
+            DAORegister.get().get(AccountDAO.class).addPlayer(
+                    Configuration.getConfiguration()
+                    .get("system_account_name"),
+                    Hash.hash(Configuration.getConfiguration()
+                            .get("system_password")),
+                    Configuration.getConfiguration().get("system_email"));
+            LOG.info("Done!");
+        } else {
+            LOG.info("Updating system account...");
+            //Account exists, make sure the password is up to date
+            DAORegister.get().get(AccountDAO.class).changePassword(
+                    Configuration.getConfiguration()
+                    .get("system_account_name"),
+                    Configuration.getConfiguration()
+                    .get("system_password"));
+            LOG.info("Done!");
+        }
     }
 }
