@@ -21,6 +21,7 @@ import simple.common.NotificationType;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
@@ -877,6 +878,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         object.setID(RPObject.INVALID_ID);
         object.put("type", DEFAULT_RP_CLASSNAME);
         object.put("name", characterName);
+        object.put("zoneid", 
+                Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;
     }
@@ -885,7 +888,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         ClientObject object = new ClientObject(template);
         object.setID(RPObject.INVALID_ID);
         object.put("type", DEFAULT_RP_CLASSNAME);
-
+        object.put("zoneid", 
+                Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;
     }
