@@ -108,7 +108,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     = Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
             LOG.info("Found " + ext.size() + " extensions to register!");
             ext.stream().map((extension) -> {
-                LOG.info("Loading extension: " + extension.getClass()
+                LOG.debug("Loading extension: " + extension.getClass()
                         .getSimpleName());
                 return extension;
             }).forEach((extension) -> {
@@ -120,7 +120,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     = Lookup.getDefault().lookupAll(IRPEvent.class);
             LOG.info("Found " + events.size() + " events to register!");
             events.stream().map((event) -> {
-                LOG.info("Registering event: " + event.getClass()
+                LOG.debug("Registering event: " + event.getClass()
                         .getSimpleName()
                         + ": " + event.getRPClassName());
                 return event;
@@ -133,7 +133,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     = Lookup.getDefault().lookupAll(RPEntityInterface.class);
             LOG.info("Found " + classes.size() + " Entities to register!");
             classes.stream().map((entity) -> {
-                LOG.info("Registering entity: "
+                LOG.debug("Registering entity: "
                         + entity.getClass().getSimpleName());
                 return entity;
             }).forEach((entity) -> {
@@ -145,7 +145,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     = Lookup.getDefault().lookupAll(ActionProvider.class);
             LOG.info("Found " + actions.size() + " Actions to register!");
             actions.stream().map((action) -> {
-                LOG.info("Registering action: "
+                LOG.debug("Registering action: "
                         + action.getClass().getSimpleName());
                 return action;
             }).forEach((action) -> {
