@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import marauroa.client.BannedAddressException;
 import marauroa.client.ClientFramework;
 import marauroa.client.LoginFailedException;
@@ -25,7 +23,6 @@ import marauroa.common.game.Result;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.api.AddListener;
@@ -349,35 +346,6 @@ public class DefaultClient implements ClientFrameworkProvider {
         });
     }
 
-    public void getEmailFromUser() {
-        String s = (String) JOptionPane.showInputDialog(
-                new JFrame(),
-                "Please provide your email below:",
-                "Additional Profile Information",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                null);
-        //Validate email
-        if (isEmailValid(s)) {
-            setEmail(s);
-        } else {
-            int input = JOptionPane.showOptionDialog(null,
-                    "Provided email is invalid.",
-                    "Invalid Email",
-                    JOptionPane.OK_OPTION,
-                    JOptionPane.ERROR_MESSAGE,
-                    null, null, null);
-            if (input == JOptionPane.OK_OPTION) {
-                getEmailFromUser();
-            }
-        }
-    }
-
-    public boolean isEmailValid(String email) {
-        return EmailValidator.getInstance().isValid(email);
-    }
-
     @Override
     @SuppressWarnings("empty-statement")
     public void run() {
@@ -393,19 +361,22 @@ public class DefaultClient implements ClientFrameworkProvider {
         } catch (LoginFailedException e) {
             try {
                 //Prompt user to enter additional information
-                getEmailFromUser();
-                while (getEmail() == null || getEmail().trim().isEmpty());
+                LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+                if (lp != null) {
+                    lp.getEmailFromUser();
+                    while (getEmail() == null || getEmail().trim().isEmpty());
+                }
                 LOG.log(Level.WARNING,
                         "Creating account and logging in to continue....");
-                AccountResult result = getClientManager().createAccount(getUsername(), password,
-                        getEmail());
+                AccountResult result = getClientManager().createAccount(getUsername(),
+                        password, getEmail());
                 if (result.getResult().equals(Result.OK_CREATED)) {
                     getClientManager().login(getUsername(), password);
                 } else {
                     if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
                         LOG.severe("Account creation is disabled on server!");
                     } else {
-                        LOG.log(Level.SEVERE, "Unable to create account: {0}", 
+                        LOG.log(Level.SEVERE, "Unable to create account: {0}",
                                 result.getResult().getText());
                     }
                     System.exit(1);
