@@ -405,7 +405,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                     if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
                         LOG.severe("Account creation is disabled on server!");
                     } else {
-                        LOG.severe("Unable to create account: " + result.getResult().getText());
+                        LOG.log(Level.SEVERE, "Unable to create account: {0}", 
+                                result.getResult().getText());
                     }
                     System.exit(1);
                 }
