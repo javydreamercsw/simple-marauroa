@@ -58,6 +58,7 @@ public interface ClientFrameworkProvider extends Runnable {
 
     /**
      * Get PerceptionHandler.
+     * @return Perception Handler
      */
     public PerceptionHandler getPerceptionHandler();
 
