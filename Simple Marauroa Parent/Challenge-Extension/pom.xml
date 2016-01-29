@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.sourceforge.javydreamercsw</groupId>
+        <artifactId>Simple-Marauroa</artifactId>
+        <version>0.02.06-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Challenge-Extension</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <name>Challenge Extension</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${unit.test.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Marauroa</artifactId>
+            <version>3.9.3-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jnlp</artifactId>
+                    <groupId>javax.jnlp</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Simple-Client</artifactId>
+            <version>0.02.06-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>
