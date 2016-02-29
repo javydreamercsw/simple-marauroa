@@ -57,6 +57,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     private Map<String, RPObject> characters = new HashMap<>();
     private boolean createDefaultCharacter = false;
     private boolean connected = false;
+    private boolean autocreation = true;
 
     private static final Logger LOG
             = Logger.getLogger(DefaultClient.class.getSimpleName());
@@ -359,39 +360,55 @@ public class DefaultClient implements ClientFrameworkProvider {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         } catch (LoginFailedException e) {
-            try {
-                //Prompt user to enter additional information
-                LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
-                if (lp != null) {
-                    lp.getEmailFromUser();
-                    while (getEmail() == null || getEmail().trim().isEmpty());
-                }
-                LOG.log(Level.WARNING,
-                        "Creating account and logging in to continue....");
-                AccountResult result = getClientManager().createAccount(getUsername(),
-                        password, getEmail());
-                if (result.getResult().equals(Result.OK_CREATED)) {
-                    getClientManager().login(getUsername(), password);
-                } else {
-                    if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
-                        LOG.severe("Account creation is disabled on server!");
-                        Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
-                                "Account creation is disabled on server!");
-                    } else {
-                        LOG.log(Level.SEVERE, "Unable to create account: {0}",
-                                result.getResult().getText());
-                        Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
-                                "Unable to create account: " + result.getResult().getText());
+            if (isAutoCreation()) {
+                try {
+                    //Prompt user to enter additional information
+                    LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+                    if (lp != null) {
+                        lp.getEmailFromUser();
+                        while (getEmail() == null || getEmail().trim().isEmpty()) {
+                            Thread.sleep(100);
+                        }
                     }
-                    System.exit(1);
+                    LOG.log(Level.WARNING,
+                            "Creating account and logging in to continue....");
+                    AccountResult result = getClientManager().createAccount(getUsername(),
+                            password, getEmail());
+                    if (result.getResult().equals(Result.OK_CREATED)) {
+                        getClientManager().login(getUsername(), password);
+                    } else {
+                        if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
+                            LOG.severe("Account creation is disabled on server!");
+                            Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
+                                    "Account creation is disabled on server!");
+                        } else {
+                            LOG.log(Level.SEVERE, "Unable to create account: {0}",
+                                    result.getResult().getText());
+                            Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
+                                    "Unable to create account: " + result.getResult().getText());
+                        }
+                        System.exit(1);
+                    }
+                } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
+                    LOG.log(Level.SEVERE, null, ex);
+                    if (ex instanceof LoginFailedException) {
+                        Lookup.getDefault().lookup(MessageProvider.class)
+                                .displayWarning("Login Failed!", ex.getLocalizedMessage());
+                    }
+                } catch (InvalidVersionException ex) {
+                    LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
+                            + " vs. protocol version: " + ex.getProtocolVersion(), ex);
+                    Lookup.getDefault().lookup(MessageProvider.class)
+                            .displayError("Invalid version!",
+                                    "Invalid version: " + ex.getVersion()
+                                    + " vs. protocol version: " + ex.getProtocolVersion());
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DefaultClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-                System.exit(1);
-            } catch (InvalidVersionException ex) {
-                LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
-                        + " vs. protocol version: " + ex.getProtocolVersion(), ex);
-                System.exit(1);
+            } else {
+                LOG.log(Level.SEVERE, null, e);
+                Lookup.getDefault().lookup(MessageProvider.class)
+                        .displayWarning("Login Failed!", e.getLocalizedMessage());
             }
         } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -560,5 +577,15 @@ public class DefaultClient implements ClientFrameworkProvider {
     @Override
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean isAutoCreation() {
+        return autocreation;
+    }
+
+    @Override
+    public void setAutoCreation(boolean autocreation) {
+        this.autocreation = autocreation;
     }
 }
