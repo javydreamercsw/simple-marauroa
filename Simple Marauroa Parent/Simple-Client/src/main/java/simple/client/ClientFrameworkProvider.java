@@ -58,6 +58,7 @@ public interface ClientFrameworkProvider extends Runnable {
 
     /**
      * Get PerceptionHandler.
+     *
      * @return Perception Handler
      */
     public PerceptionHandler getPerceptionHandler();
@@ -182,4 +183,18 @@ public interface ClientFrameworkProvider extends Runnable {
 
     public boolean chooseCharacter(String character) throws TimeoutException,
             InvalidVersionException, BannedAddressException;
+
+    /**
+     * Is account auto creation allowed in the client?
+     *
+     * @return true if true, false otherwise.
+     */
+    public boolean isAutoCreation();
+
+    /**
+     * Set if auto account creation is allowed in client.
+     *
+     * @param autocreation the autocreation to set
+     */
+    public void setAutoCreation(boolean autocreation);
 }
