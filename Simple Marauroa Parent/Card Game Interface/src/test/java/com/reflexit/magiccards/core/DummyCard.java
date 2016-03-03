@@ -2,6 +2,7 @@ package com.reflexit.magiccards.core;
 
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardField;
+import com.reflexit.magiccards.core.model.ICardType;
 import org.openide.util.Lookup;
 
 /**
@@ -41,6 +42,10 @@ public class DummyCard implements ICard {
     }
 
     public Lookup getLookup() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ICardType getCardType() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
