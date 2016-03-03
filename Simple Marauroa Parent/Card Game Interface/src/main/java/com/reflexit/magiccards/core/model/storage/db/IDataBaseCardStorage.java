@@ -290,10 +290,9 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * Check if card type exists.
      *
      * @param name type name
-     * @param game Game to check in.
      * @return true if it exists, false otherwise
      */
-    boolean cardTypeExists(String name, ICardGame game);
+    boolean cardTypeExists(String name);
 
     /**
      * Get the card's attribute value.
@@ -362,6 +361,14 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
     List<IGame> getGames();
 
     /**
+     * Get Game.
+     *
+     * @param name Game name.
+     * @return Game or null if not found.
+     */
+    IGame getGame(String name);
+
+    /**
      * Get sets for game.
      *
      * @param game game to get sets for
@@ -416,10 +423,19 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Card if found, null otherwise.
      */
     ICard getCard(String name, ICardSet set);
-    
+
     /**
      * Get the EntityManager Factory.
+     *
      * @return EntityManagerFactory
      */
     EntityManagerFactory getEntityManagerFactory();
+
+    /**
+     * Get card type from name.
+     *
+     * @param name name of card type.
+     * @return Type or null if not found.
+     */
+    public ICardType getCardType(String name);
 }

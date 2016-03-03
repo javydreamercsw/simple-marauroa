@@ -387,7 +387,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
 
     @Override
-    public boolean cardTypeExists(String name, ICardGame game) {
+    public boolean cardTypeExists(String name) {
         try {
             HashMap parameters = new HashMap();
             parameters.put("name", name);
@@ -402,7 +402,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     public ICard updateCard(ICardType type, String name, byte[] text, ICardSet set)
             throws DBException {
         try {
-            if (!cardTypeExists(type.getName(), set.getCardGame())) {
+            if (!cardTypeExists(type.getName())) {
                 type = (CardType) createCardType(type.getName());
             }
             CardJpaController cardController
@@ -430,17 +430,35 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         }
     }
 
+    private CardSet getCardSet(String name) {
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", name);
+            List result = namedQuery("CardSet.findByName", parameters);
+            if (!result.isEmpty()) {
+                return (CardSet) result.get(0);
+            }
+        } catch (DBException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     @Override
     public ICard createCard(ICardType type, String name, byte[] text, ICardSet set)
             throws DBException {
         try {
-            if (!cardTypeExists(type.getName(), set.getCardGame())) {
+            if (!cardTypeExists(type.getName())) {
                 type = (CardType) createCardType(type.getName());
             }
             CardJpaController cardController
                     = new CardJpaController(getEntityManagerFactory());
             Card card = new Card(((CardType) type).getId(), name, text);
             card.setCardType((CardType) type);
+            if (card.getCardSetList() == null) {
+                card.setCardSetList(new ArrayList<CardSet>());
+            }
+            card.getCardSetList().add(getCardSet(set.getName()));
             cardController.create(card);
             LOG.log(Level.FINE,
                     "Created card: {0} on the database!", name);
@@ -1016,5 +1034,28 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
             }
         }
         return card;
+    }
+
+    public ICardType getCardType(String name) {
+        try {
+            HashMap parameters = new HashMap();
+            parameters.put("name", name);
+            List result = namedQuery("CardType.findByName", parameters);
+            if (!result.isEmpty()) {
+                return (CardType) result.get(0);
+            }
+        } catch (DBException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public IGame getGame(String name) {
+        for (IGame g : getGames()) {
+            if (g.getName().equals(name)) {
+                return g;
+            }
+        }
+        return null;
     }
 }

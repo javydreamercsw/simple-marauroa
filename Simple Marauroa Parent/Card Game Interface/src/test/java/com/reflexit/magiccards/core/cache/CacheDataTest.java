@@ -2,6 +2,7 @@ package com.reflexit.magiccards.core.cache;
 
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardField;
+import com.reflexit.magiccards.core.model.ICardType;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
 import org.openide.util.Lookup;
@@ -54,6 +55,10 @@ public class CacheDataTest {
             @Override
             public Lookup getLookup() {
                 throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            public ICardType getCardType() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };
         CacheData instance = new CacheData();
