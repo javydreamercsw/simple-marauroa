@@ -430,7 +430,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
         }
     }
 
-    private CardSet getCardSet(String name) {
+    @Override
+    public CardSet getCardSet(String name) {
         try {
             HashMap parameters = new HashMap();
             parameters.put("name", name);
