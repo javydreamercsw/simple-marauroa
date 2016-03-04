@@ -1,5 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package com.reflexit.magiccards.core.storage.database.controller;
@@ -9,6 +10,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import com.reflexit.magiccards.core.storage.database.CardAttribute;
 import com.reflexit.magiccards.core.storage.database.Card;
 import com.reflexit.magiccards.core.storage.database.CardHasCardAttribute;
 import com.reflexit.magiccards.core.storage.database.CardHasCardAttributePK;
@@ -20,7 +22,7 @@ import javax.persistence.EntityManagerFactory;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 public class CardHasCardAttributeJpaController implements Serializable {
 
@@ -37,18 +39,28 @@ public class CardHasCardAttributeJpaController implements Serializable {
         if (cardHasCardAttribute.getCardHasCardAttributePK() == null) {
             cardHasCardAttribute.setCardHasCardAttributePK(new CardHasCardAttributePK());
         }
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
         cardHasCardAttribute.getCardHasCardAttributePK().setCardCardTypeId(cardHasCardAttribute.getCard().getCardPK().getCardTypeId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeId(cardHasCardAttribute.getCardAttribute().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            CardAttribute cardAttribute = cardHasCardAttribute.getCardAttribute();
+            if (cardAttribute != null) {
+                cardAttribute = em.getReference(cardAttribute.getClass(), cardAttribute.getId());
+                cardHasCardAttribute.setCardAttribute(cardAttribute);
+            }
             Card card = cardHasCardAttribute.getCard();
             if (card != null) {
                 card = em.getReference(card.getClass(), card.getCardPK());
                 cardHasCardAttribute.setCard(card);
             }
             em.persist(cardHasCardAttribute);
+            if (cardAttribute != null) {
+                cardAttribute.getCardHasCardAttributeList().add(cardHasCardAttribute);
+                cardAttribute = em.merge(cardAttribute);
+            }
             if (card != null) {
                 card.getCardHasCardAttributeList().add(cardHasCardAttribute);
                 card = em.merge(card);
@@ -67,20 +79,35 @@ public class CardHasCardAttributeJpaController implements Serializable {
     }
 
     public void edit(CardHasCardAttribute cardHasCardAttribute) throws NonexistentEntityException, Exception {
-        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
         cardHasCardAttribute.getCardHasCardAttributePK().setCardCardTypeId(cardHasCardAttribute.getCard().getCardPK().getCardTypeId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardId(cardHasCardAttribute.getCard().getCardPK().getId());
+        cardHasCardAttribute.getCardHasCardAttributePK().setCardAttributeId(cardHasCardAttribute.getCardAttribute().getId());
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             CardHasCardAttribute persistentCardHasCardAttribute = em.find(CardHasCardAttribute.class, cardHasCardAttribute.getCardHasCardAttributePK());
+            CardAttribute cardAttributeOld = persistentCardHasCardAttribute.getCardAttribute();
+            CardAttribute cardAttributeNew = cardHasCardAttribute.getCardAttribute();
             Card cardOld = persistentCardHasCardAttribute.getCard();
             Card cardNew = cardHasCardAttribute.getCard();
+            if (cardAttributeNew != null) {
+                cardAttributeNew = em.getReference(cardAttributeNew.getClass(), cardAttributeNew.getId());
+                cardHasCardAttribute.setCardAttribute(cardAttributeNew);
+            }
             if (cardNew != null) {
                 cardNew = em.getReference(cardNew.getClass(), cardNew.getCardPK());
                 cardHasCardAttribute.setCard(cardNew);
             }
             cardHasCardAttribute = em.merge(cardHasCardAttribute);
+            if (cardAttributeOld != null && !cardAttributeOld.equals(cardAttributeNew)) {
+                cardAttributeOld.getCardHasCardAttributeList().remove(cardHasCardAttribute);
+                cardAttributeOld = em.merge(cardAttributeOld);
+            }
+            if (cardAttributeNew != null && !cardAttributeNew.equals(cardAttributeOld)) {
+                cardAttributeNew.getCardHasCardAttributeList().add(cardHasCardAttribute);
+                cardAttributeNew = em.merge(cardAttributeNew);
+            }
             if (cardOld != null && !cardOld.equals(cardNew)) {
                 cardOld.getCardHasCardAttributeList().remove(cardHasCardAttribute);
                 cardOld = em.merge(cardOld);
@@ -117,6 +144,11 @@ public class CardHasCardAttributeJpaController implements Serializable {
                 cardHasCardAttribute.getCardHasCardAttributePK();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cardHasCardAttribute with id " + id + " no longer exists.", enfe);
+            }
+            CardAttribute cardAttribute = cardHasCardAttribute.getCardAttribute();
+            if (cardAttribute != null) {
+                cardAttribute.getCardHasCardAttributeList().remove(cardHasCardAttribute);
+                cardAttribute = em.merge(cardAttribute);
             }
             Card card = cardHasCardAttribute.getCard();
             if (card != null) {

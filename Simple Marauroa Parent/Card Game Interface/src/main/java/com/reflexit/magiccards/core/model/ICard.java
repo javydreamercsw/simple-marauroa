@@ -44,4 +44,11 @@ public interface ICard extends Comparable, Lookup.Provider {
      * @param set card's set
      */
     public void setSetName(String set);
+
+    /**
+     * Get the card's type.
+     *
+     * @return card's type.
+     */
+    public ICardType getCardType();
 }
