@@ -5,7 +5,6 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.Serializable;
 import simple.common.NotificationType;
-import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.RPEntityInterface;
 
 /**
@@ -231,9 +230,6 @@ public interface ClientObjectInterface extends RPEntityInterface,
      * @param name name to set
      */
     public void setName(String name);
-
-    @Override
-    public SimpleRPZone getZone();
 
     /**
      * Get title

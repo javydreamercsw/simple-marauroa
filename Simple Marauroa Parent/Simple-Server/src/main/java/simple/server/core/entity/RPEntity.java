@@ -21,7 +21,7 @@ public class RPEntity extends Entity {
     /**
      * The title attribute name.
      */
-    public static final String ATTR_TITLE = "title", NAME = "name";
+    public static final String ATTR_TITLE = "title";
     protected static final Statistics stats = Statistics.getStatistics();
     private int level;
     /**

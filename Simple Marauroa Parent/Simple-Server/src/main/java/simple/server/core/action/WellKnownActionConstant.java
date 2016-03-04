@@ -14,6 +14,7 @@ public class WellKnownActionConstant {
     public static final String MESSAGE = "message";
     public static final String TEXT = "text";
     public static final String FROM = "from";
+    public static final String TIME= "time";
 
     private WellKnownActionConstant() {
     }

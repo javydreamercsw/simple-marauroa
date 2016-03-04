@@ -1,20 +1,27 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.reflexit.magiccards.core.storage.database.controller;
 
 import com.reflexit.magiccards.core.storage.database.CardAttribute;
-import com.reflexit.magiccards.core.storage.database.controller.exceptions.NonexistentEntityException;
-import com.reflexit.magiccards.core.storage.database.controller.exceptions.PreexistingEntityException;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import com.reflexit.magiccards.core.storage.database.CardHasCardAttribute;
+import com.reflexit.magiccards.core.storage.database.controller.exceptions.IllegalOrphanException;
+import com.reflexit.magiccards.core.storage.database.controller.exceptions.NonexistentEntityException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 public class CardAttributeJpaController implements Serializable {
 
@@ -27,18 +34,31 @@ public class CardAttributeJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(CardAttribute cardAttribute) throws PreexistingEntityException, Exception {
+    public void create(CardAttribute cardAttribute) {
+        if (cardAttribute.getCardHasCardAttributeList() == null) {
+            cardAttribute.setCardHasCardAttributeList(new ArrayList<CardHasCardAttribute>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(cardAttribute);
-            em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findCardAttribute(cardAttribute.getId()) != null) {
-                throw new PreexistingEntityException("CardAttribute " + cardAttribute + " already exists.", ex);
+            List<CardHasCardAttribute> attachedCardHasCardAttributeList = new ArrayList<CardHasCardAttribute>();
+            for (CardHasCardAttribute cardHasCardAttributeListCardHasCardAttributeToAttach : cardAttribute.getCardHasCardAttributeList()) {
+                cardHasCardAttributeListCardHasCardAttributeToAttach = em.getReference(cardHasCardAttributeListCardHasCardAttributeToAttach.getClass(), cardHasCardAttributeListCardHasCardAttributeToAttach.getCardHasCardAttributePK());
+                attachedCardHasCardAttributeList.add(cardHasCardAttributeListCardHasCardAttributeToAttach);
             }
-            throw ex;
+            cardAttribute.setCardHasCardAttributeList(attachedCardHasCardAttributeList);
+            em.persist(cardAttribute);
+            for (CardHasCardAttribute cardHasCardAttributeListCardHasCardAttribute : cardAttribute.getCardHasCardAttributeList()) {
+                CardAttribute oldCardAttributeOfCardHasCardAttributeListCardHasCardAttribute = cardHasCardAttributeListCardHasCardAttribute.getCardAttribute();
+                cardHasCardAttributeListCardHasCardAttribute.setCardAttribute(cardAttribute);
+                cardHasCardAttributeListCardHasCardAttribute = em.merge(cardHasCardAttributeListCardHasCardAttribute);
+                if (oldCardAttributeOfCardHasCardAttributeListCardHasCardAttribute != null) {
+                    oldCardAttributeOfCardHasCardAttributeListCardHasCardAttribute.getCardHasCardAttributeList().remove(cardHasCardAttributeListCardHasCardAttribute);
+                    oldCardAttributeOfCardHasCardAttributeListCardHasCardAttribute = em.merge(oldCardAttributeOfCardHasCardAttributeListCardHasCardAttribute);
+                }
+            }
+            em.getTransaction().commit();
         } finally {
             if (em != null) {
                 em.close();
@@ -46,12 +66,45 @@ public class CardAttributeJpaController implements Serializable {
         }
     }
 
-    public void edit(CardAttribute cardAttribute) throws NonexistentEntityException, Exception {
+    public void edit(CardAttribute cardAttribute) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            CardAttribute persistentCardAttribute = em.find(CardAttribute.class, cardAttribute.getId());
+            List<CardHasCardAttribute> cardHasCardAttributeListOld = persistentCardAttribute.getCardHasCardAttributeList();
+            List<CardHasCardAttribute> cardHasCardAttributeListNew = cardAttribute.getCardHasCardAttributeList();
+            List<String> illegalOrphanMessages = null;
+            for (CardHasCardAttribute cardHasCardAttributeListOldCardHasCardAttribute : cardHasCardAttributeListOld) {
+                if (!cardHasCardAttributeListNew.contains(cardHasCardAttributeListOldCardHasCardAttribute)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain CardHasCardAttribute " + cardHasCardAttributeListOldCardHasCardAttribute + " since its cardAttribute field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            List<CardHasCardAttribute> attachedCardHasCardAttributeListNew = new ArrayList<CardHasCardAttribute>();
+            for (CardHasCardAttribute cardHasCardAttributeListNewCardHasCardAttributeToAttach : cardHasCardAttributeListNew) {
+                cardHasCardAttributeListNewCardHasCardAttributeToAttach = em.getReference(cardHasCardAttributeListNewCardHasCardAttributeToAttach.getClass(), cardHasCardAttributeListNewCardHasCardAttributeToAttach.getCardHasCardAttributePK());
+                attachedCardHasCardAttributeListNew.add(cardHasCardAttributeListNewCardHasCardAttributeToAttach);
+            }
+            cardHasCardAttributeListNew = attachedCardHasCardAttributeListNew;
+            cardAttribute.setCardHasCardAttributeList(cardHasCardAttributeListNew);
             cardAttribute = em.merge(cardAttribute);
+            for (CardHasCardAttribute cardHasCardAttributeListNewCardHasCardAttribute : cardHasCardAttributeListNew) {
+                if (!cardHasCardAttributeListOld.contains(cardHasCardAttributeListNewCardHasCardAttribute)) {
+                    CardAttribute oldCardAttributeOfCardHasCardAttributeListNewCardHasCardAttribute = cardHasCardAttributeListNewCardHasCardAttribute.getCardAttribute();
+                    cardHasCardAttributeListNewCardHasCardAttribute.setCardAttribute(cardAttribute);
+                    cardHasCardAttributeListNewCardHasCardAttribute = em.merge(cardHasCardAttributeListNewCardHasCardAttribute);
+                    if (oldCardAttributeOfCardHasCardAttributeListNewCardHasCardAttribute != null && !oldCardAttributeOfCardHasCardAttributeListNewCardHasCardAttribute.equals(cardAttribute)) {
+                        oldCardAttributeOfCardHasCardAttributeListNewCardHasCardAttribute.getCardHasCardAttributeList().remove(cardHasCardAttributeListNewCardHasCardAttribute);
+                        oldCardAttributeOfCardHasCardAttributeListNewCardHasCardAttribute = em.merge(oldCardAttributeOfCardHasCardAttributeListNewCardHasCardAttribute);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -69,7 +122,7 @@ public class CardAttributeJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -80,6 +133,17 @@ public class CardAttributeJpaController implements Serializable {
                 cardAttribute.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The cardAttribute with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<CardHasCardAttribute> cardHasCardAttributeListOrphanCheck = cardAttribute.getCardHasCardAttributeList();
+            for (CardHasCardAttribute cardHasCardAttributeListOrphanCheckCardHasCardAttribute : cardHasCardAttributeListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This CardAttribute (" + cardAttribute + ") cannot be destroyed since the CardHasCardAttribute " + cardHasCardAttributeListOrphanCheckCardHasCardAttribute + " in its cardHasCardAttributeList field has a non-nullable cardAttribute field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(cardAttribute);
             em.getTransaction().commit();
@@ -135,4 +199,5 @@ public class CardAttributeJpaController implements Serializable {
             em.close();
         }
     }
+    
 }

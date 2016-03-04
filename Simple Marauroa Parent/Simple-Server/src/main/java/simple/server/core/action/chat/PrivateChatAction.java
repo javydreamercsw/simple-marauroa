@@ -1,5 +1,7 @@
 package simple.server.core.action.chat;
 
+import java.io.IOException;
+import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPAction;
@@ -37,12 +39,20 @@ public class PrivateChatAction implements ActionProvider {
                 return;
             }
             if (action.has(TEXT) && action.has(TARGET)) {
-                String text = action.get(TEXT);
-                String target = action.get(TARGET);
-                String from = rpo.get("name");
-                logger.info("Processing private text action: " + action);
-                Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
-                        new PrivateTextEvent(NotificationType.PRIVMSG, text, target, from));
+                try {
+                    String text = action.get(TEXT);
+                    String target = action.get(TARGET);
+                    String from = rpo.get("name");
+                    logger.info("Processing private text action: " + action);
+                    Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
+                            new PrivateTextEvent(NotificationType.PRIVMSG, text,
+                                    target, from));
+                    if ("true".equals(Configuration.getConfiguration().get("log_chat", "false"))) {
+                        logger.info(text);
+                    }
+                } catch (IOException ex) {
+                    logger.warn(ex.toString(), ex);
+                }
             } else {
                 StringBuilder mess = new StringBuilder("Action is missing key components:\n");
                 if (!action.has(TEXT)) {
@@ -56,6 +66,7 @@ public class PrivateChatAction implements ActionProvider {
         }
     }
 
+    @Override
     public void register() {
         CommandCenter.register(_PRIVATE_CHAT, new PrivateChatAction());
     }

@@ -18,14 +18,15 @@ import simple.common.game.ClientObjectInterface;
 public class SimpleRPObjectFactory extends RPObjectFactory
         implements IRPObjectFactory {
 
-    private static Logger logger = Log4J.getLogger(SimpleRPObjectFactory.class);
+    private static final Logger LOG = 
+            Log4J.getLogger(SimpleRPObjectFactory.class);
 
     @Override
     public RPObject transform(RPObject object) {
         RPObject result;
         RPClass clazz = object.getRPClass();
         if (clazz == null) {
-            logger.error("Cannot create concrete object for " + object
+            LOG.error("Cannot create concrete object for " + object
                     + " because it does not have an SimpleRPClass.");
             result = super.transform(object);
         } else {

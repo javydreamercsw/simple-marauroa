@@ -9,21 +9,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import marauroa.client.BannedAddressException;
 import marauroa.client.ClientFramework;
 import marauroa.client.LoginFailedException;
 import marauroa.client.TimeoutException;
 import marauroa.client.net.IPerceptionListener;
 import marauroa.client.net.PerceptionHandler;
+import marauroa.common.game.AccountResult;
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import marauroa.common.game.Result;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.client.api.AddListener;
@@ -58,6 +57,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     private Map<String, RPObject> characters = new HashMap<>();
     private boolean createDefaultCharacter = false;
     private boolean connected = false;
+    private boolean autocreation = true;
 
     private static final Logger LOG
             = Logger.getLogger(DefaultClient.class.getSimpleName());
@@ -347,35 +347,6 @@ public class DefaultClient implements ClientFrameworkProvider {
         });
     }
 
-    public void getEmailFromUser() {
-        String s = (String) JOptionPane.showInputDialog(
-                new JFrame(),
-                "Please provide your email below:",
-                "Additional Profile Information",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                null,
-                null);
-        //Validate email
-        if (isEmailValid(s)) {
-            setEmail(s);
-        } else {
-            int input = JOptionPane.showOptionDialog(null,
-                    "Provided email is invalid.",
-                    "Invalid Email",
-                    JOptionPane.OK_OPTION,
-                    JOptionPane.ERROR_MESSAGE,
-                    null, null, null);
-            if (input == JOptionPane.OK_OPTION) {
-                getEmailFromUser();
-            }
-        }
-    }
-
-    public boolean isEmailValid(String email) {
-        return EmailValidator.getInstance().isValid(email);
-    }
-
     @Override
     @SuppressWarnings("empty-statement")
     public void run() {
@@ -389,18 +360,55 @@ public class DefaultClient implements ClientFrameworkProvider {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         } catch (LoginFailedException e) {
-            try {
-                //Prompt user to enter additional information
-                getEmailFromUser();
-                while(getEmail().trim().isEmpty());
-                LOG.log(Level.WARNING,
-                        "Creating account and logging in to continue....");
-                getClientManager().createAccount(getUsername(), password,
-                        getEmail());
-                getClientManager().login(getUsername(), password);
-            } catch (LoginFailedException | TimeoutException | InvalidVersionException | BannedAddressException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-                System.exit(1);
+            if (isAutoCreation()) {
+                try {
+                    //Prompt user to enter additional information
+                    LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+                    if (lp != null) {
+                        lp.getEmailFromUser();
+                        while (getEmail() == null || getEmail().trim().isEmpty()) {
+                            Thread.sleep(100);
+                        }
+                    }
+                    LOG.log(Level.WARNING,
+                            "Creating account and logging in to continue....");
+                    AccountResult result = getClientManager().createAccount(getUsername(),
+                            password, getEmail());
+                    if (result.getResult().equals(Result.OK_CREATED)) {
+                        getClientManager().login(getUsername(), password);
+                    } else {
+                        if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
+                            LOG.severe("Account creation is disabled on server!");
+                            Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
+                                    "Account creation is disabled on server!");
+                        } else {
+                            LOG.log(Level.SEVERE, "Unable to create account: {0}",
+                                    result.getResult().getText());
+                            Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
+                                    "Unable to create account: " + result.getResult().getText());
+                        }
+                        System.exit(1);
+                    }
+                } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
+                    LOG.log(Level.SEVERE, null, ex);
+                    if (ex instanceof LoginFailedException) {
+                        Lookup.getDefault().lookup(MessageProvider.class)
+                                .displayWarning("Login Failed!", ex.getLocalizedMessage());
+                    }
+                } catch (InvalidVersionException ex) {
+                    LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
+                            + " vs. protocol version: " + ex.getProtocolVersion(), ex);
+                    Lookup.getDefault().lookup(MessageProvider.class)
+                            .displayError("Invalid version!",
+                                    "Invalid version: " + ex.getVersion()
+                                    + " vs. protocol version: " + ex.getProtocolVersion());
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DefaultClient.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                LOG.log(Level.SEVERE, null, e);
+                Lookup.getDefault().lookup(MessageProvider.class)
+                        .displayWarning("Login Failed!", e.getLocalizedMessage());
             }
         } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -463,6 +471,8 @@ public class DefaultClient implements ClientFrameworkProvider {
 
     @Override
     public void setVersion(String version) {
+        LOG.log(Level.INFO, "Version changed from: ''{0}'' to: ''{1}''",
+                new Object[]{this.version, version});
         this.version = version;
     }
 
@@ -567,5 +577,15 @@ public class DefaultClient implements ClientFrameworkProvider {
     @Override
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean isAutoCreation() {
+        return autocreation;
+    }
+
+    @Override
+    public void setAutoCreation(boolean autocreation) {
+        this.autocreation = autocreation;
     }
 }

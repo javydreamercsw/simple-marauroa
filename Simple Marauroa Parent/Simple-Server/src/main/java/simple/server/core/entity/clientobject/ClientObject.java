@@ -21,6 +21,7 @@ import simple.common.NotificationType;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.admin.AdministrationAction;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
@@ -88,6 +89,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     private static List<String> adminNames = new LinkedList<>();
     private int adminLevel;
     private boolean disconnected;
+    public static final String DEFAULT_RP_CLASSNAME = "client_object";
 
     /**
      * Constructor
@@ -96,7 +98,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     public ClientObject(RPObject object) {
         super(object);
-        RPCLASS_NAME = "client_object";
+        RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
         setRPClass(RPCLASS_NAME);
         put("type", RPCLASS_NAME);
         awayReplies = new HashMap<>();
@@ -125,7 +127,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      * Constructor for serialization purposes
      */
     public ClientObject() {
-        RPCLASS_NAME = "client_object";
+        RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
     }
 
     /**
@@ -596,12 +598,12 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     protected static void extendClass(RPClass player) {
         Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                 .stream().map((extension) -> {
-            logger.debug("Processing extension to modify client definition: "
-                    + extension.getClass().getSimpleName());
-            return extension;
-        }).forEach((extension) -> {
-            extension.modifyClientObjectDefinition(player);
-        });
+                    logger.debug("Processing extension to modify client definition: "
+                            + extension.getClass().getSimpleName());
+                    return extension;
+                }).forEach((extension) -> {
+                    extension.modifyClientObjectDefinition(player);
+                });
         logger.debug("ClientObject attributes:");
         player.getDefinitions().stream().forEach((def) -> {
             logger.debug(def.getName() + ": " + def.getType());
@@ -874,8 +876,10 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     public static ClientObject createEmptyZeroLevelPlayer(String characterName) {
         ClientObject object = new ClientObject(new RPObject());
         object.setID(RPObject.INVALID_ID);
-        object.put("type", "client_object");
+        object.put("type", DEFAULT_RP_CLASSNAME);
         object.put("name", characterName);
+        object.put("zoneid", 
+                Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;
     }
@@ -883,8 +887,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     public static ClientObject createEmptyZeroLevelPlayer(RPObject template) {
         ClientObject object = new ClientObject(template);
         object.setID(RPObject.INVALID_ID);
-        object.put("type", "client_object");
-
+        object.put("type", DEFAULT_RP_CLASSNAME);
+        object.put("zoneid", 
+                Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;
     }

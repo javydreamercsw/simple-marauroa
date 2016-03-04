@@ -11,6 +11,7 @@ public interface IRPObjectFactory {
 
     /**
      * Create client object from RPObject
+     *
      * @param object RPObject to create from
      * @return Client Object
      */
@@ -18,6 +19,7 @@ public interface IRPObjectFactory {
 
     /**
      * Create default client object with provided name
+     *
      * @param name Name for the new object
      * @return Client Object
      */
@@ -25,6 +27,7 @@ public interface IRPObjectFactory {
 
     /**
      * Create default client object from provided RPObject
+     *
      * @param entity RPObject to create it from
      * @return Client Object
      */
@@ -32,12 +35,14 @@ public interface IRPObjectFactory {
 
     /**
      * Destroy the provided client object
+     *
      * @param object Client Object to destroy
      */
     void destroyClientObject(ClientObjectInterface object);
 
     /**
      * Transform RPObject
+     *
      * @param object RPObject to transform
      * @return transformed RPObject
      */

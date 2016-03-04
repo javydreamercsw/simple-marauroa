@@ -12,7 +12,7 @@ import org.openide.util.Lookup;
  */
 public class SimpleDatabase {
 
-    private static final Logger logger = Log4J.getLogger(SimpleDatabase.class);
+    private static final Logger LOG = Log4J.getLogger(SimpleDatabase.class);
     private static SimpleDatabase instance = null;
 
     public SimpleDatabase() {
@@ -32,10 +32,10 @@ public class SimpleDatabase {
     }
 
     protected void registerDAOs() {
-        logger.debug("Loading DAOs from: " + getClass().getSimpleName());
+        LOG.debug("Loading DAOs from: " + getClass().getSimpleName());
         //Override DAO's here
         Lookup.getDefault().lookupAll(DAO.class).stream().map((dao) -> {
-            logger.info("Registerig DAO: " + dao.getClass().getSimpleName());
+            LOG.debug("Registerig DAO: " + dao.getClass().getSimpleName());
             return dao;
         }).forEach((dao) -> {
             dao.register();

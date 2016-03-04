@@ -1,5 +1,6 @@
 package simple.server.core.event;
 
+import java.util.Date;
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
@@ -33,6 +34,7 @@ public class PrivateTextEvent extends SimpleRPEvent {
             rpclass.add(DefinitionClass.ATTRIBUTE, TARGET, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, FROM, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, TIME, Type.LONG_STRING);
             addCommonAttributes(rpclass);
         }
     }
@@ -44,7 +46,6 @@ public class PrivateTextEvent extends SimpleRPEvent {
 
     public PrivateTextEvent() {
         super(RPCLASS_NAME);
-        registerIfNeeded();
     }
 
     /**
@@ -57,7 +58,7 @@ public class PrivateTextEvent extends SimpleRPEvent {
         super(RPCLASS_NAME);
         put(TEXT_TYPE, type.name());
         put(TEXT, text);
-        registerIfNeeded();
+        put(TIME, new Date().toString());
     }
 
     /**
@@ -65,20 +66,16 @@ public class PrivateTextEvent extends SimpleRPEvent {
      *
      * @param type NotificationType
      * @param text Text
-     * @param target
+     * @param target target player
+     * @param from player who spoke
      */
-    public PrivateTextEvent(NotificationType type, String text, String target, String from) {
+    public PrivateTextEvent(NotificationType type, String text, String target,
+            String from) {
         super(RPCLASS_NAME);
         put(TEXT_TYPE, type.name());
         put(TEXT, text);
         put(TARGET, target);
         put(FROM, from);
-        registerIfNeeded();
-    }
-
-    private void registerIfNeeded() {
-        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
-            generateRPClass();
-        }
+        put(TIME, new Date().toString());
     }
 }

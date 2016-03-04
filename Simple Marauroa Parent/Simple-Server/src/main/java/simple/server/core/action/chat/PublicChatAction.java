@@ -1,5 +1,7 @@
 package simple.server.core.action.chat;
 
+import java.io.IOException;
+import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.RPAction;
@@ -34,15 +36,29 @@ public class PublicChatAction implements ActionProvider {
                 return;
             }
             if (action.has(TEXT)) {
-                String text = action.get(TEXT);
-                logger.debug("Processing text event: " + text);
-                Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                        Lookup.getDefault().lookup(IRPWorld.class).getZone(((RPObject) player).get("zoneid")),
-                        new TextEvent(text, player.getName()));
+                try {
+                    String text = action.get(TEXT);
+                    logger.debug("Processing text event: " + text);
+                    Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
+                            Lookup.getDefault().lookup(IRPWorld.class).getZone(((RPObject) player).get("zoneid")),
+                            new TextEvent(text, player.getName()));
+                    if ("true".equals(Configuration.getConfiguration().get("log_chat", "false"))) {
+                        logger.info(text);
+                    }
+                } catch (IOException ex) {
+                    logger.warn(ex.toString(), ex);
+                }
+            } else {
+                StringBuilder mess = new StringBuilder("Action is missing key components:\n");
+                if (!action.has(TEXT)) {
+                    mess.append(TEXT).append("\n");
+                }
+                logger.warn(mess.toString());
             }
         }
     }
 
+    @Override
     public void register() {
         CommandCenter.register(_CHAT, new PublicChatAction());
     }
