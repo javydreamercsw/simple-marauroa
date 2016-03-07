@@ -11,7 +11,6 @@ import com.reflexit.magiccards.core.model.ICardType;
 import com.reflexit.magiccards.core.model.IGame;
 import com.reflexit.magiccards.core.model.storage.IStorage;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManagerFactory;
@@ -48,7 +47,8 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return results
      * @throws DBException
      */
-    List<Object> namedQuery(String query, HashMap<String, Object> parameters) throws DBException;
+    List<Object> namedQuery(String query,
+            Map<String, Object> parameters) throws DBException;
 
     /**
      * Close the database.
@@ -185,7 +185,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Updated CardCollection
      * @throws DBException
      */
-    ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards,
+    ICardCollection addCardsToCollection(Map<ICard, Integer> cards,
             ICardCollection collection) throws DBException;
 
     /**
@@ -196,7 +196,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Updated CardCollection
      * @throws DBException
      */
-    ICardCollection removeCardsFromCollection(HashMap<ICard, Integer> cards,
+    ICardCollection removeCardsFromCollection(Map<ICard, Integer> cards,
             ICardCollection collection) throws DBException;
 
     /**
@@ -232,7 +232,7 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return results
      * @throws DBException
      */
-    List<Object> createdQuery(String query, HashMap<String, Object> parameters)
+    List<Object> createdQuery(String query, Map<String, Object> parameters)
             throws DBException;
 
     /**
@@ -438,4 +438,12 @@ public interface IDataBaseCardStorage<T> extends IStorage<T> {
      * @return Type or null if not found.
      */
     public ICardType getCardType(String name);
+
+    /**
+     * Get a set by name.
+     *
+     * @param name Card set's name
+     * @return Card Set or null if not found.
+     */
+    public ICardSet getCardSet(String name);
 }
