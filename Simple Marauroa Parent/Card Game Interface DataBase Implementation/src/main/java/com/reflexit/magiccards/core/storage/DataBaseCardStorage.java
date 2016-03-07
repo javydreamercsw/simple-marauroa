@@ -102,7 +102,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     @SuppressWarnings("unchecked")
     @Override
     public List<Object> createdQuery(String query,
-            HashMap<String, Object> parameters) throws DBException {
+            Map<String, Object> parameters) throws DBException {
         if (!initialized) {
             throw new DBException("Database not initialized yet!");
         }
@@ -137,13 +137,13 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
 
     @Override
     public List<Object> namedQuery(String query,
-            HashMap<String, Object> parameters) throws DBException {
+            Map<String, Object> parameters) throws DBException {
         return protectedNamedQuery(query, parameters, false);
     }
 
     @SuppressWarnings("unchecked")
     protected List<Object> protectedNamedQuery(String query,
-            HashMap<String, Object> parameters, boolean locked)
+            Map<String, Object> parameters, boolean locked)
             throws DBException {
         if (!initialized) {
             throw new DBException("Database not initialized yet!");
@@ -630,7 +630,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
 
     @Override
-    public ICardCollection addCardsToCollection(HashMap<ICard, Integer> cards,
+    public ICardCollection addCardsToCollection(Map<ICard, Integer> cards,
             ICardCollection collection) throws DBException {
         for (Entry<ICard, Integer> entry : cards.entrySet()) {
             if (entry.getValue() < 0) {
@@ -689,7 +689,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
 
     @Override
     public ICardCollection removeCardsFromCollection(
-            HashMap<ICard, Integer> cards, ICardCollection collection)
+            Map<ICard, Integer> cards, ICardCollection collection)
             throws DBException {
         for (Entry<ICard, Integer> entry : cards.entrySet()) {
             if (entry.getValue() < 0) {
@@ -758,7 +758,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
 
     @Override
     public ICardAttribute getCardAttribute(String attr) throws DBException {
-        HashMap parameters = new HashMap();
+        Map parameters = new HashMap();
         parameters.put("name", attr);
         List<Object> result = namedQuery("CardAttribute.findByName",
                 parameters);
