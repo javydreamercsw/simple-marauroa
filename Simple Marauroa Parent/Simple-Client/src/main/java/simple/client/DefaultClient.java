@@ -2,6 +2,7 @@ package simple.client;
 
 import java.io.IOException;
 import static java.lang.Thread.sleep;
+import java.net.ConnectException;
 import java.net.SocketException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -356,6 +357,16 @@ public class DefaultClient implements ClientFrameworkProvider {
                     + "version: ''{2}''", new Object[]{getUsername(),
                         password, getVersion()});
             getClientManager().login(getUsername(), password);
+            connected = true;
+        } catch (ConnectException ex) {
+            LOG.log(Level.WARNING, null, ex);
+            Lookup.getDefault().lookup(MessageProvider.class).displayWarning(
+                    "Unable to connect",
+                    "Unable to connect to the server: " + getHost());
+            LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+            if (lp != null) {
+                lp.displayLoginDialog();
+            }
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -376,6 +387,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                             password, getEmail());
                     if (result.getResult().equals(Result.OK_CREATED)) {
                         getClientManager().login(getUsername(), password);
+                        connected = true;
                     } else {
                         if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
                             LOG.severe("Account creation is disabled on server!");
@@ -387,7 +399,6 @@ public class DefaultClient implements ClientFrameworkProvider {
                             Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
                                     "Unable to create account: " + result.getResult().getText());
                         }
-                        System.exit(1);
                     }
                 } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
                     LOG.log(Level.SEVERE, null, ex);
@@ -414,7 +425,6 @@ public class DefaultClient implements ClientFrameworkProvider {
             LOG.log(Level.SEVERE, null, ex);
             System.exit(1);
         }
-        connected = true;
         while (isConnected()) {
             getClientManager().loop(0);
             try {
