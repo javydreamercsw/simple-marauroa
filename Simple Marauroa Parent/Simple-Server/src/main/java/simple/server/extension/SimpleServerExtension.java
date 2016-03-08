@@ -10,7 +10,7 @@ import simple.common.game.ClientObjectInterface;
 public abstract class SimpleServerExtension implements MarauroaServerExtension,
         Lookup.Provider {
 
-    private Lookup lookup = new AbstractLookup(new InstanceContent());
+    private final Lookup lookup = new AbstractLookup(new InstanceContent());
 
     @Override
     public void onAction(RPObject player, RPAction action) {
