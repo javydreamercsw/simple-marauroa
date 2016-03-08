@@ -33,18 +33,18 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     public final static String RP_CLASS = "Abstract Class";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     //Ability, Bonus
-    private Map<Class<? extends D20Ability>, Integer> bonuses
+    private final Map<Class<? extends D20Ability>, Integer> bonuses
             = new HashMap<>();
     //Feat, level when is available.
-    private List<Class<? extends D20Feat>> preferredFeats = new ArrayList<>();
+    private final List<Class<? extends D20Feat>> preferredFeats = new ArrayList<>();
     //Feat, level when is gained.
-    private Map<Class<? extends D20Feat>, Integer> bonusFeats
+    private final Map<Class<? extends D20Feat>, Integer> bonusFeats
             = new HashMap<>();
-    private List<Class<? extends D20Skill>> preferredSkills
+    private final List<Class<? extends D20Skill>> preferredSkills
             = new ArrayList<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractClass.class.getSimpleName());
-    private Map<Class<? extends D20Skill>, Integer> bonusSkills
+    private final Map<Class<? extends D20Skill>, Integer> bonusSkills
             = new HashMap<>();
 
     public AbstractClass(RPObject object) {
