@@ -20,8 +20,8 @@ import marauroa.common.game.AccountResult;
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
-import marauroa.common.game.Result;
 import marauroa.common.net.InvalidVersionException;
+import marauroa.common.net.message.MessageS2CLoginNACK.Reasons;
 import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
 import org.openide.util.Lookup;
@@ -371,7 +371,7 @@ public class DefaultClient implements ClientFrameworkProvider {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         } catch (LoginFailedException e) {
-            if (isAutoCreation()) {
+            if (e.getReason().equals(Reasons.USERNAME_WRONG) && isAutoCreation()) {
                 try {
                     //Prompt user to enter additional information
                     LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
@@ -385,26 +385,31 @@ public class DefaultClient implements ClientFrameworkProvider {
                             "Creating account and logging in to continue....");
                     AccountResult result = getClientManager().createAccount(getUsername(),
                             password, getEmail());
-                    if (result.getResult().equals(Result.OK_CREATED)) {
-                        getClientManager().login(getUsername(), password);
-                        connected = true;
-                    } else {
-                        if (result.getResult().equals(Result.FAILED_CREATE_ON_MAIN_INSTEAD)) {
+                    switch (result.getResult()) {
+                        case OK_CREATED:
+                            getClientManager().login(getUsername(), password);
+                            connected = true;
+                            break;
+                        case FAILED_CREATE_ON_MAIN_INSTEAD:
                             LOG.severe("Account creation is disabled on server!");
                             Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
                                     "Account creation is disabled on server!");
-                        } else {
+                            break;
+                        default:
                             LOG.log(Level.SEVERE, "Unable to create account: {0}",
                                     result.getResult().getText());
                             Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
                                     "Unable to create account: " + result.getResult().getText());
-                        }
+                            break;
                     }
                 } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                     if (ex instanceof LoginFailedException) {
                         Lookup.getDefault().lookup(MessageProvider.class)
-                                .displayWarning("Login Failed!", ex.getLocalizedMessage());
+                                .displayWarning("Login Failed!", 
+                                        ex.getLocalizedMessage()
+                                                +"\nMake sure you have verified "
+                                                + "your account. Check your provided email.");
                     }
                 } catch (InvalidVersionException ex) {
                     LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
