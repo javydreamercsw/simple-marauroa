@@ -288,9 +288,9 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onTransfer(List<TransferContent> items) {
-                LOG.log(Level.INFO, "Transfering ----");
+                LOG.log(Level.FINE, "Transfering ----");
                 items.stream().forEach((item) -> {
-                    LOG.log(Level.INFO, item.toString());
+                    LOG.log(Level.FINE, item.toString());
                 });
             }
 
@@ -332,17 +332,17 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onServerInfo(String[] info) {
-                LOG.log(Level.INFO, "Server info");
+                LOG.log(Level.FINE, "Server info");
                 for (String info_string : info) {
-                    LOG.log(Level.INFO, info_string);
+                    LOG.log(Level.FINE, info_string);
                 }
             }
 
             @Override
             protected void onPreviousLogins(List<String> previousLogins) {
-                LOG.log(Level.INFO, "Previous logins");
+                LOG.log(Level.FINE, "Previous logins");
                 previousLogins.stream().forEach((info_string) -> {
-                    LOG.log(Level.INFO, info_string);
+                    LOG.log(Level.FINE, info_string);
                 });
             }
         });
@@ -486,7 +486,7 @@ public class DefaultClient implements ClientFrameworkProvider {
 
     @Override
     public void setVersion(String version) {
-        LOG.log(Level.INFO, "Version changed from: ''{0}'' to: ''{1}''",
+        LOG.log(Level.FINE, "Version changed from: ''{0}'' to: ''{1}''",
                 new Object[]{this.version, version});
         this.version = version;
     }
