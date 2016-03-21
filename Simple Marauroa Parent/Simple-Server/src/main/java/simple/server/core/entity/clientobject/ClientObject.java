@@ -69,7 +69,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(ClientObject.class);
+    private static final Logger LOG = Log4J.getLogger(ClientObject.class);
     /**
      * The base log for karma use.
      */
@@ -110,7 +110,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     public final void update() {
         for (MarauroaServerExtension extension
                 : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-            logger.debug("Processing extension to update client object "
+            LOG.debug("Processing extension to update client object "
                     + "class definition: " + extension.getClass()
                     .getSimpleName());
             try {
@@ -509,7 +509,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                             adminFilename);
 
             if (is == null) {
-                logger.warn("data/conf/admins.list does not exist.");
+                LOG.warn("data/conf/admins.list does not exist.");
             } else {
                 try (BufferedReader in = new BufferedReader(
                         new UnicodeSupportingInputStreamReader(is))) {
@@ -518,7 +518,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                         adminNames.add(line);
                     }
                 } catch (IOException e) {
-                    logger.error("Error loading admin names from: " + adminFilename, e);
+                    LOG.error("Error loading admin names from: " + adminFilename, e);
                 }
             }
         }
@@ -598,17 +598,17 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     protected static void extendClass(RPClass player) {
         Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                 .stream().map((extension) -> {
-                    logger.debug("Processing extension to modify client definition: "
+                    LOG.debug("Processing extension to modify client definition: "
                             + extension.getClass().getSimpleName());
                     return extension;
                 }).forEach((extension) -> {
                     extension.modifyClientObjectDefinition(player);
                 });
-        logger.debug("ClientObject attributes:");
+        LOG.debug("ClientObject attributes:");
         player.getDefinitions().stream().forEach((def) -> {
-            logger.debug(def.getName() + ": " + def.getType());
+            LOG.debug(def.getName() + ": " + def.getType());
         });
-        logger.debug("-------------------------------");
+        LOG.debug("-------------------------------");
     }
 
     /**
@@ -631,7 +631,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 loadSlotContent(player, slot, newSlot);
             }
         } catch (RuntimeException e) {
-            logger.error("cannot create player", e);
+            LOG.error("cannot create player", e);
         }
     }
 
@@ -670,7 +670,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                         if (item.has("quantity")) {
                             quantity = item.getInt("quantity");
                         }
-                        logger.warn("Cannot restore " + quantity + " "
+                        LOG.warn("Cannot restore " + quantity + " "
                                 + name + " on login of " + player.getName()
                                 + " because this item"
                                 + " was removed from items.xml");
@@ -698,14 +698,14 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                         if (item.has("quantity")) {
                             quantity = item.getInt("quantity");
                         } else {
-                            logger.warn("Adding quantity=1 to "
+                            LOG.warn("Adding quantity=1 to "
                                     + item + ". Most likely cause is that "
                                     + "this item was not stackable in the past");
                         }
                         ((StackableItem) entity).setQuantity(quantity);
 
                         if (quantity <= 0) {
-                            logger.warn("Ignoring item " + name
+                            LOG.warn("Ignoring item " + name
                                     + " on login of player " + player.getName()
                                     + " because this item has an invalid "
                                     + "quantity: " + quantity);
@@ -729,11 +729,11 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     }
                     newSlot.add(entity);
                 } else {
-                    logger.warn("Non-item object found in " + player.getName()
+                    LOG.warn("Non-item object found in " + player.getName()
                             + "[" + slot.getName() + "]: " + item);
                 }
             } catch (Exception e) {
-                logger.error("Error adding " + item + " to player slot" + slot,
+                LOG.error("Error adding " + item + " to player slot" + slot,
                         e);
             }
         }
@@ -838,7 +838,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     static RPObject getKeyedSlotObject(RPObject object, String name) {
         if (!object.hasSlot(name)) {
-            logger.error("Expected to find " + name + " slot");
+            LOG.error("Expected to find " + name + " slot");
             return null;
         }
 
