@@ -89,7 +89,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                 @Override
                 public boolean onAdded(RPObject object) {
                     boolean result = false;
-                    LOG.log(Level.FINE, "onAdded: {0}", object);
+                    LOG.log(Level.INFO, "onAdded: {0}", object);
                     for (AddListener listener
                             : Lookup.getDefault().lookupAll(AddListener.class)) {
                         if (!listener.onAdded(object)) {
@@ -114,7 +114,7 @@ public class DefaultClient implements ClientFrameworkProvider {
 
                 @Override
                 public boolean onDeleted(RPObject object) {
-                    LOG.log(Level.FINE, "onDeleted: {0}", object);
+                    LOG.log(Level.INFO, "onDeleted: {0}", object);
                     boolean result = false;
                     for (DeleteListener listener
                             : Lookup.getDefault().lookupAll(DeleteListener.class)) {
@@ -138,7 +138,7 @@ public class DefaultClient implements ClientFrameworkProvider {
 
                 @Override
                 public boolean onModifiedAdded(RPObject object, RPObject changes) {
-                    LOG.log(Level.FINE, "onModifiedAdded: {0}, {1}",
+                    LOG.log(Level.INFO, "onModifiedAdded: {0}, {1}",
                             new Object[]{object, changes});
                     boolean result = false;
                     for (ModificationListener listener
@@ -152,7 +152,7 @@ public class DefaultClient implements ClientFrameworkProvider {
 
                 @Override
                 public boolean onModifiedDeleted(RPObject object, RPObject changes) {
-                    LOG.log(Level.FINE, "onModifiedDeleted: {0}, {1}",
+                    LOG.log(Level.INFO, "onModifiedDeleted: {0}, {1}",
                             new Object[]{object, changes});
                     boolean result = false;
                     for (ModificationListener listener
@@ -245,7 +245,7 @@ public class DefaultClient implements ClientFrameworkProvider {
             @Override
             protected void onPerception(MessageS2CPerception message) {
                 try {
-                    LOG.log(Level.FINE, "Received perception {0}",
+                    LOG.log(Level.INFO, "Received perception {0}",
                             message.getPerceptionTimestamp());
                     getPerceptionHandler().apply(message,
                             Lookup.getDefault().lookup(IWorldManager.class).getWorld());
@@ -263,15 +263,15 @@ public class DefaultClient implements ClientFrameworkProvider {
                         }
                     }
                     if (isShowWorld()) {
-                        LOG.log(Level.FINE, "<World contents ------------------------------------->");
+                        LOG.log(Level.INFO, "<World contents ------------------------------------->");
                         int j = 0;
                         for (RPObject object
                                 : Lookup.getDefault().lookup(IWorldManager.class).getWorld().values()) {
                             j++;
-                            LOG.log(Level.FINE, "{0}. {1}",
+                            LOG.log(Level.INFO, "{0}. {1}",
                                     new Object[]{j, object});
                         }
-                        LOG.log(Level.FINE, "</World contents ------------------------------------->");
+                        LOG.log(Level.INFO, "</World contents ------------------------------------->");
                     }
                 } catch (Exception e) {
                     LOG.log(Level.SEVERE, null, e);
@@ -288,9 +288,9 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onTransfer(List<TransferContent> items) {
-                LOG.log(Level.FINE, "Transfering ----");
+                LOG.log(Level.INFO, "Transfering ----");
                 items.stream().forEach((item) -> {
-                    LOG.log(Level.FINE, item.toString());
+                    LOG.log(Level.INFO, item.toString());
                 });
             }
 
@@ -332,17 +332,17 @@ public class DefaultClient implements ClientFrameworkProvider {
 
             @Override
             protected void onServerInfo(String[] info) {
-                LOG.log(Level.FINE, "Server info");
+                LOG.log(Level.INFO, "Server info");
                 for (String info_string : info) {
-                    LOG.log(Level.FINE, info_string);
+                    LOG.log(Level.INFO, info_string);
                 }
             }
 
             @Override
             protected void onPreviousLogins(List<String> previousLogins) {
-                LOG.log(Level.FINE, "Previous logins");
+                LOG.log(Level.INFO, "Previous logins");
                 previousLogins.stream().forEach((info_string) -> {
-                    LOG.log(Level.FINE, info_string);
+                    LOG.log(Level.INFO, info_string);
                 });
             }
         });
@@ -353,9 +353,10 @@ public class DefaultClient implements ClientFrameworkProvider {
     public void run() {
         try {
             getClientManager().connect(getHost(), Integer.parseInt(getPort()));
-            LOG.log(Level.FINE, "Logging as: {0} with pass: {1} "
+            LOG.log(Level.INFO, "Logging as: {0} with pass: {1} "
                     + "version: ''{2}''", new Object[]{getUsername(),
                         password, getVersion()});
+            setEmail("dummy@dummy.com");
             getClientManager().login(getUsername(), password);
             connected = true;
         } catch (ConnectException ex) {
@@ -373,13 +374,19 @@ public class DefaultClient implements ClientFrameworkProvider {
         } catch (LoginFailedException e) {
             if (e.getReason().equals(Reasons.USERNAME_WRONG) && isAutoCreation()) {
                 try {
-                    //Prompt user to enter additional information
-                    LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
-                    if (lp != null) {
-                        lp.getEmailFromUser();
-                        while (getEmail() == null || getEmail().trim().isEmpty()) {
-                            Thread.sleep(100);
+                    if (getEmail() == null) {
+                        //Prompt user to enter additional information
+                        LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+                        if (lp != null) {
+                            lp.getEmailFromUser();
+                            while (getEmail().trim().isEmpty()) {
+                                Thread.sleep(100);
+                            }
                         }
+                    }
+                    if (getEmail() == null) {
+                        LOG.severe("Unable to proceed without an email!");
+                        throw new RuntimeException("Unable to proceed without an email!");
                     }
                     LOG.log(Level.WARNING,
                             "Creating account and logging in to continue....");
@@ -406,10 +413,10 @@ public class DefaultClient implements ClientFrameworkProvider {
                     LOG.log(Level.SEVERE, null, ex);
                     if (ex instanceof LoginFailedException) {
                         Lookup.getDefault().lookup(MessageProvider.class)
-                                .displayWarning("Login Failed!", 
+                                .displayWarning("Login Failed!",
                                         ex.getLocalizedMessage()
-                                                +"\nMake sure you have verified "
-                                                + "your account. Check your provided email.");
+                                        + "\nMake sure you have verified "
+                                        + "your account. Check your provided email.");
                     }
                 } catch (InvalidVersionException ex) {
                     LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
