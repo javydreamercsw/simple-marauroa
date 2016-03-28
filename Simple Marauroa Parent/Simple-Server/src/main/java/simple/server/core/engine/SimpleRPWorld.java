@@ -107,50 +107,42 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             Collection<? extends MarauroaServerExtension> ext
                     = Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
             LOG.info("Found " + ext.size() + " extensions to register!");
-            ext.stream().map((extension) -> {
+            for (MarauroaServerExtension extension : ext) {
                 LOG.debug("Loading extension: " + extension.getClass()
                         .getSimpleName());
-                return extension;
-            }).forEach((extension) -> {
                 extension.updateDatabase();
-            });
+            }
             LOG.info("Done!");
             LOG.info("Loading events...");
             Collection<? extends IRPEvent> events
                     = Lookup.getDefault().lookupAll(IRPEvent.class);
             LOG.info("Found " + events.size() + " events to register!");
-            events.stream().map((event) -> {
+            for (IRPEvent event : events) {
                 LOG.debug("Registering event: " + event.getClass()
                         .getSimpleName()
                         + ": " + event.getRPClassName());
-                return event;
-            }).forEach((event) -> {
                 event.generateRPClass();
-            });
+            }
             LOG.info("Done!");
             LOG.info("Creating RPClasses...");
             Collection<? extends RPEntityInterface> classes
                     = Lookup.getDefault().lookupAll(RPEntityInterface.class);
             LOG.info("Found " + classes.size() + " Entities to register!");
-            classes.stream().map((entity) -> {
+            for (RPEntityInterface entity : classes) {
                 LOG.debug("Registering entity: "
                         + entity.getClass().getSimpleName());
-                return entity;
-            }).forEach((entity) -> {
                 entity.generateRPClass();
-            });
+            }
             LOG.info("Done!");
             LOG.info("Loading actions...");
             Collection<? extends ActionProvider> actions
                     = Lookup.getDefault().lookupAll(ActionProvider.class);
             LOG.info("Found " + actions.size() + " Actions to register!");
-            actions.stream().map((action) -> {
+            for (ActionProvider action : actions) {
                 LOG.debug("Registering action: "
                         + action.getClass().getSimpleName());
-                return action;
-            }).forEach((action) -> {
                 action.register();
-            });
+            }
             LOG.info("Done!");
 
             createSystemAccount();
@@ -173,8 +165,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     .stream().forEach((extension) -> {
                         extension.afterWorldInit();
                     });
-        } catch (IOException | SQLException e) {
+        } catch (Exception e) {
             LOG.error("Error initializing the server!", e);
+            System.exit(0);
         }
     }
 
@@ -381,7 +374,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 super.changeZone(zone.getID(), object);
                 Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                         new DelayedPlayerEventSender(new PrivateTextEvent(
-                                        NotificationType.INFORMATION, "Changed to zone: " + newzoneid),
+                                NotificationType.INFORMATION, "Changed to zone: " + newzoneid),
                                 (ClientObjectInterface) object));
             } else {
                 ((ClientObjectInterface) object).sendPrivateText("Zone " + newzoneid + " doesn't exist!");
