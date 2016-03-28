@@ -2,6 +2,7 @@ package simple.server.extension.card;
 
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardField;
+import com.reflexit.magiccards.core.model.ICardType;
 import java.util.Date;
 import java.util.UUID;
 import marauroa.common.game.Definition;
@@ -48,6 +49,8 @@ public class RPCard extends RPEntity implements ICard {
              *
              */
             SET = "set";
+    protected ICardType type = null;
+
     private final InstanceContent content = new InstanceContent();
     /**
      * Lookup instance
@@ -210,10 +213,13 @@ public class RPCard extends RPEntity implements ICard {
         boolean result = true;
         if (obj == null) {
             result = false;
-        }
-        else if (getClass() != obj.getClass()) {
+        } else if (getClass() != obj.getClass()) {
             result = false;
         }
         return result && super.equals(obj);
+    }
+
+    public ICardType getCardType() {
+        return type;
     }
 }
