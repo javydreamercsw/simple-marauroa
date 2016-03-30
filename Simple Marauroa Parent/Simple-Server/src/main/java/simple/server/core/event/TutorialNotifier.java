@@ -9,8 +9,13 @@ import simple.common.game.ClientObjectInterface;
 
 /**
  * Manages the tutorial based on events created all over the game.
+ * 
+ * This class is meant to have generic messages that apply to all games. 
+ * Additional can be created in the specific games to add more messages.
+ * 
+ * Based on code from hendrik
  *
- * @author hendrik
+ * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = ILoginNotifier.class)
 public class TutorialNotifier implements ILoginNotifier {
@@ -63,47 +68,6 @@ public class TutorialNotifier implements ILoginNotifier {
      */
     public static void zoneChange(ClientObjectInterface player, String sourceZone,
             String destinationZone) {
-    }
-
-    /**
-     * player got attacked.
-     *
-     * @param player ClientObjectInterface
-     */
-    public static void attacked(ClientObjectInterface player) {
-    }
-
-    /**
-     * player killed something.
-     *
-     * @param player ClientObjectInterface
-     */
-    public static void killedSomething(ClientObjectInterface player) {
-    }
-
-    /**
-     * player got poisoned.
-     *
-     * @param player ClientObjectInterface
-     */
-    public static void poisoned(ClientObjectInterface player) {
-    }
-
-    /**
-     * a player who stayed another minute in game.
-     *
-     * @param player ClientObjectInterface
-     * @param age playing time
-     */
-    public static void aged(ClientObjectInterface player, int age) {
-    }
-
-    /**
-     * player > level 2 logged in for new release.
-     *
-     * @param player ClientObjectInterface
-     */
-    public static void newrelease(ClientObjectInterface player) {
     }
 
     @Override
