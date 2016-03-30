@@ -15,7 +15,7 @@ import simple.common.game.ClientObjectInterface;
 @ServiceProvider(service = ILoginNotifier.class)
 public class TutorialNotifier implements ILoginNotifier {
 
-    private List<LoginListener> listeners = new ArrayList<>();
+    private final List<LoginListener> listeners = new ArrayList<>();
 
     public TutorialNotifier() {
     }
