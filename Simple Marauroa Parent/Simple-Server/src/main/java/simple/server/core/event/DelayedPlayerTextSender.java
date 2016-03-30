@@ -10,9 +10,9 @@ import simple.common.game.ClientObjectInterface;
  */
 class DelayedPlayerTextSender implements TurnListener {
 
-    private ClientObjectInterface player;
-    private String message;
-    private NotificationType type;
+    private final ClientObjectInterface player;
+    private final String message;
+    private final NotificationType type;
 
     /**
      * Creates a new private message type DelayedPlayerTextSender.
@@ -38,7 +38,8 @@ class DelayedPlayerTextSender implements TurnListener {
      * @param type
      *            logical notificationType
      */
-    DelayedPlayerTextSender(ClientObjectInterface player, String message, NotificationType type) {
+    DelayedPlayerTextSender(ClientObjectInterface player, String message, 
+            NotificationType type) {
         this.player = player;
         this.message = message;
         this.type = type;
