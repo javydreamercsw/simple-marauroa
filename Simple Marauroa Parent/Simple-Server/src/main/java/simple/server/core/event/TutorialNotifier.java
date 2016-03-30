@@ -8,7 +8,7 @@ import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 
 /**
- * manages the tutorial based on events created all over the game.
+ * Manages the tutorial based on events created all over the game.
  *
  * @author hendrik
  */
@@ -32,14 +32,15 @@ public class TutorialNotifier implements ILoginNotifier {
         if (player.getKeyedSlot("!tutorial", key) == null) {
             player.setKeyedSlot("!tutorial", key, "1");
             player.notifyWorldAboutChanges();
-            // we must delay this for 1 turn for technical reasons (like zone
-            // change)
-            // but we delay it for 5 seconds so that the player has some time to
-            // recognize the event
-            DelayedPlayerTextSender dpts = new DelayedPlayerTextSender(player,
-                    "Tutorial: " + type.getMessage(), NotificationType.TUTORIAL);
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInSeconds(5, dpts);
         }
+        // we must delay this for 1 turn for technical reasons (like zone
+        // change)
+        // but we delay it for 5 seconds so that the player has some time to
+        // recognize the event
+        TextEvent event = new TextEvent(NotificationType.TUTORIAL,
+                type.getMessage(), "System");
+        Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
+                new DelayedPlayerEventSender(event, player));
     }
 
     /**
@@ -48,7 +49,9 @@ public class TutorialNotifier implements ILoginNotifier {
      * @param player ClientObjectInterface
      */
     public static void login(ClientObjectInterface player) {
-        process(player, TutorialEventType.FIRST_LOGIN);
+        //Here add the messages to be sent to the user on login.
+        process(player, TutorialEventType.LOGIN);
+        process(player, TutorialEventType.TIMED_PASSWORD);
     }
 
     /**
