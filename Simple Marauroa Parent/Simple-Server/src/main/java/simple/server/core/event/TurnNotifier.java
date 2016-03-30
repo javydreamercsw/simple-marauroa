@@ -16,14 +16,14 @@ import simple.server.core.engine.SimpleRPWorld;
 @ServiceProvider(service = ITurnNotifier.class)
 public final class TurnNotifier implements ITurnNotifier {
 
-    private static final Logger logger = Log4J.getLogger(TurnNotifier.class);
+    private static final Logger LOG = Log4J.getLogger(TurnNotifier.class);
     private int currentTurn = -1;
     /**
      * This Map maps each turn to the set of all events that will take place at
      * this turn. Turns at which no event should take place needn't be
      * registered here.
      */
-    private Map<Integer, Set<TurnListener>> register = new HashMap<Integer, Set<TurnListener>>();
+    private final Map<Integer, Set<TurnListener>> register = new HashMap<>();
     /**
      * Used for multi-threading synchronization. *
      */
@@ -48,19 +48,20 @@ public final class TurnNotifier implements ITurnNotifier {
         this.currentTurn = currentTurn;
 
         // get and remove the set for this turn
-        Set<TurnListener> set = null;
+        Set<TurnListener> set;
         synchronized (sync) {
-            set = register.remove(Integer.valueOf(currentTurn));
+            set = register.remove(currentTurn);
         }
 
         if (set != null) {
             for (TurnListener event : set) {
                 TurnListener turnListener = event;
                 try {
-                    logger.debug("Processing turn listener: " + turnListener.getClass().getName());
+                    LOG.debug("Processing turn listener: "
+                            + turnListener.getClass().getName());
                     turnListener.onTurnReached(currentTurn);
                 } catch (RuntimeException e) {
-                    logger.error(e, e);
+                    LOG.error(e, e);
                 }
             }
         }
@@ -107,22 +108,24 @@ public final class TurnNotifier implements ITurnNotifier {
      */
     @Override
     public void notifyAtTurn(int turn, TurnListener turnListener) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Notify at " + turn + " by " + turnListener.getClass().getName());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Notify at " + turn + " by "
+                    + turnListener.getClass().getName());
         }
 
         if (turn <= currentTurn) {
-            logger.error("requested turn " + turn + " is in the past. Current turn is " + currentTurn,
+            LOG.error("requested turn " + turn
+                    + " is in the past. Current turn is " + currentTurn,
                     new IllegalArgumentException("turn"));
             return;
         }
 
         synchronized (sync) {
             // do we have other events for this turn?
-            Integer turnInt = Integer.valueOf(turn);
+            Integer turnInt = turn;
             Set<TurnListener> set = register.get(turnInt);
             if (set == null) {
-                set = new HashSet<TurnListener>();
+                set = new HashSet<>();
                 register.put(turnInt, set);
             }
             // add it to the list
@@ -140,11 +143,12 @@ public final class TurnNotifier implements ITurnNotifier {
     public void dontNotify(TurnListener turnListener) {
         // all events that are equal to this one should be forgotten.
         // TurnEvent turnEvent = new TurnEvent(turnListener);
-        for (Map.Entry<Integer, Set<TurnListener>> mapEntry : register.entrySet()) {
+        for (Map.Entry<Integer, Set<TurnListener>> mapEntry
+                : register.entrySet()) {
             Set<TurnListener> set = mapEntry.getValue();
             // We don't remove directly, but first store in this
             // set. This is to avoid ConcurrentModificationExceptions.
-            Set<TurnListener> toBeRemoved = new HashSet<TurnListener>();
+            Set<TurnListener> toBeRemoved = new HashSet<>();
             if (set.contains(turnListener)) {
                 toBeRemoved.add(turnListener);
             }
@@ -168,8 +172,9 @@ public final class TurnNotifier implements ITurnNotifier {
         // TurnEvent turnEvent = new TurnEvent(turnListener);
         // the HashMap is unsorted, so we need to run through
         // all of it.
-        List<Integer> matchingTurns = new ArrayList<Integer>();
-        for (Map.Entry<Integer, Set<TurnListener>> mapEntry : register.entrySet()) {
+        List<Integer> matchingTurns = new ArrayList<>();
+        for (Map.Entry<Integer, Set<TurnListener>> mapEntry
+                : register.entrySet()) {
             Set<TurnListener> set = mapEntry.getValue();
             for (TurnListener currentEvent : set) {
                 if (currentEvent.equals(turnListener)) {
@@ -179,7 +184,7 @@ public final class TurnNotifier implements ITurnNotifier {
         }
         if (matchingTurns.size() > 0) {
             Collections.sort(matchingTurns);
-            return matchingTurns.get(0).intValue() - currentTurn;
+            return matchingTurns.get(0) - currentTurn;
         } else {
             return -1;
         }
@@ -195,7 +200,8 @@ public final class TurnNotifier implements ITurnNotifier {
      */
     @Override
     public int getRemainingSeconds(TurnListener turnListener) {
-        return (getRemainingTurns(turnListener) * SimpleRPWorld.MILLISECONDS_PER_TURN) / 1000;
+        return (getRemainingTurns(turnListener)
+                * SimpleRPWorld.MILLISECONDS_PER_TURN) / 1000;
     }
 
     /**

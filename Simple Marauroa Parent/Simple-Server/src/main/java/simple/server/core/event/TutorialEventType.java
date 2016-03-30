@@ -15,7 +15,7 @@ public enum TutorialEventType {
     "Hi, welcome to %g! Enjoy your quest to the Hall of Fame!"),
     TIMED_PASSWORD(
     "Remember to keep your password completely secret, never tell it to another friend, player, or even admin.");
-    private String message;
+    private final String message;
 
     /**
      * Creates a new TutorialEventType.
