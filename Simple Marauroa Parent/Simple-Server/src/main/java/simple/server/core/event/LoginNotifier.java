@@ -20,7 +20,7 @@ public final class LoginNotifier implements ILoginNotifier {
     /**
      * Holds a list of all registered listeners.
      */
-    private List<LoginListener> listeners= new ArrayList<LoginListener>();
+    private final List<LoginListener> listeners= new ArrayList<>();
 
     public LoginNotifier() {
     }
