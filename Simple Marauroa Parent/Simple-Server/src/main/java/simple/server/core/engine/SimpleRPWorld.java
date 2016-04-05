@@ -167,7 +167,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     });
         } catch (Exception e) {
             LOG.error("Error initializing the server!", e);
-            System.exit(0);
         }
     }
 
