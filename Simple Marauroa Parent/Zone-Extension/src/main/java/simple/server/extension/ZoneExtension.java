@@ -37,7 +37,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(ZoneExtension.class);
+    private static final Logger LOG = Log4J.getLogger(ZoneExtension.class);
     public static final String TYPE = "CRUDZone", ROOM = "room",
             DESC = "description", OPERATION = "operation", PASSWORD = "password",
             SEPARATOR = "separator";
@@ -66,7 +66,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                         }
                     }));
         } else {
-            logger.warn("Added a " + object.getClass());
+            LOG.warn("Added a " + object.getClass());
         }
         return object;
     }
@@ -75,7 +75,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            logger.debug("Action requested by: " + rpo + ", action: " + action);
+            LOG.debug("Action requested by: " + rpo + ", action: " + action);
             int op = action.getInt(OPERATION);
             try {
                 switch (op) {
@@ -95,37 +95,37 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                         join(player, action);
                         break;
                     default:
-                        logger.warn("Invalid CRUD operation: " + op);
+                        LOG.warn("Invalid CRUD operation: " + op);
                 }
             } catch (Exception e) {
-                logger.error("Error processing CRUD room operation: " + op + "."
+                LOG.error("Error processing CRUD room operation: " + op + "."
                         + " Action: " + action, e);
             }
         }
     }
 
     private void create(final ClientObjectInterface player, final RPAction action) {
-        logger.debug("Request for zone creation from: "
+        LOG.debug("Request for zone creation from: "
                 + player.getName() + ", zone: " + action.get(ROOM));
         final SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
         //Make sure the zone doesn't exists!
         if (!world.hasRPZone(new ID(action.get(ROOM)))) {
             SimpleRPZone zone = new SimpleRPZone(action.get(ROOM));
             if (action.get(DESC) != null && !action.get(DESC).isEmpty()) {
-                logger.debug("Setting description: " + action.get(DESC));
+                LOG.debug("Setting description: " + action.get(DESC));
                 zone.setDescription(action.get(DESC));
             }
             if (action.get(PASSWORD) != null && !action.get(PASSWORD).isEmpty()) {
                 try {
-                    logger.debug("Setting password: " + action.get(PASSWORD));
+                    LOG.debug("Setting password: " + action.get(PASSWORD));
                     zone.setPassword(action.get(PASSWORD));
                 } catch (IOException ex) {
-                    logger.error(ex);
+                    LOG.error(ex);
                 }
             }
-            logger.debug("Adding zone to the world...");
+            LOG.debug("Adding zone to the world...");
             world.addRPZone(zone);
-            logger.info("Scheduling moving player to created zone...");
+            LOG.info("Scheduling moving player to created zone...");
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
                         private static final long serialVersionUID = -5644390861803492172L;
@@ -153,14 +153,14 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                 //If it's locked it means you need a password, you better have it...
                 if (jZone.isLocked()) {
                     if (action.get(PASSWORD) != null) {
-                        logger.debug("Room is locked but password is provided...");
+                        LOG.debug("Room is locked but password is provided...");
                         if (jZone.isPassword(action.get(PASSWORD))) {
-                            logger.debug("Password correct, changing zone...");
+                            LOG.debug("Password correct, changing zone...");
                             Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
                         } else {
                             ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
-                            logger.debug("Room is locked. " + re);
-                            logger.debug("Wrong password, requesting again...");
+                            LOG.debug("Room is locked. " + re);
+                            LOG.debug("Wrong password, requesting again...");
                             ((RPObject) player).addEvent(re);
                             player.notifyWorldAboutChanges();
                         }
@@ -176,10 +176,10 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     private void update(RPAction action) {
         SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
         if (world.getRPZone(action.get(ROOM)) != null) {
-            logger.debug("Updating description of zone: "
+            LOG.debug("Updating description of zone: "
                     + action.get(ROOM) + " to: " + action.get(DESC));
             SimpleRPZone updated = world.updateRPZoneDescription(action.get(ROOM), action.get(DESC));
-            logger.debug("Updating description done!");
+            LOG.debug("Updating description done!");
             world.applyPublicEvent(null,
                     new ZoneEvent(updated, ZoneEvent.UPDATE));
         }
@@ -211,39 +211,37 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                         NotificationType.INFORMATION, "Command completed"));
                 player.notifyWorldAboutChanges();
             }
-        } else {
-            if (player != null) {
-                ((RPObject) player).addEvent(new PrivateTextEvent(
-                        NotificationType.INFORMATION, "Can't remove the default room!"));
-                player.notifyWorldAboutChanges();
-            }
+        } else if (player != null) {
+            ((RPObject) player).addEvent(new PrivateTextEvent(
+                    NotificationType.INFORMATION, "Can't remove the default room!"));
+            player.notifyWorldAboutChanges();
         }
     }
 
     private void list(ClientObjectInterface player, int option, RPAction a) {
         try {
-            logger.debug("Request for zone list from: " + player.getName());
+            LOG.debug("Request for zone list from: " + player.getName());
             String separator = "#";
             if (a.has(SEPARATOR)) {
                 if (a.get(SEPARATOR) != null && !a.get(SEPARATOR).isEmpty()) {
                     separator = a.get(SEPARATOR);
-                    logger.debug("Separator requested: " + separator);
+                    LOG.debug("Separator requested: " + separator);
                 }
             }
             String list = Lookup.getDefault().lookup(IRPWorld.class).listZones(separator).toString();
-            logger.debug("Zone List: " + list);
+            LOG.debug("Zone List: " + list);
             player.addEvent(new ZoneEvent(list, option));
             player.notifyWorldAboutChanges();
-            logger.debug(player);
+            LOG.debug(player);
         } catch (Exception ex) {
-            logger.fatal(null, ex);
+            LOG.fatal(null, ex);
         }
     }
 
     @Override
     public void onAddRPZone(IRPZone zone) {
         //Let everyone know
-        logger.info("Notifying everyone about the creation of zone: " + zone.getID());
+        LOG.info("Notifying everyone about the creation of zone: " + zone.getID());
         Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(new ZoneEvent((SimpleRPZone) zone, ZoneEvent.ADD));
     }
 
