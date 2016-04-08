@@ -232,7 +232,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             LOG.debug("Zone List: " + list);
             ZoneEvent zoneEvent = new ZoneEvent(list, option);
             //Add a separator if none defined
-            if(!zoneEvent.has(SEPARATOR)){
+            if (!zoneEvent.has(SEPARATOR)) {
                 zoneEvent.put(SEPARATOR, separator);
             }
             player.addEvent(zoneEvent);
