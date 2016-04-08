@@ -13,17 +13,17 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IDefaultZoneProvider.class)
 public class DefaultZoneProvider implements IDefaultZoneProvider {
 
-    private ArrayList<IRPZone> zones = new ArrayList<IRPZone>();
+    private final ArrayList<IRPZone> ZONES = new ArrayList<>();
 
     @Override
     public List<IRPZone> getDefaultZones() {
-        return getZones();
+        return getZONES();
     }
 
     /**
-     * @return the zones
+     * @return the ZONES
      */
-    public ArrayList<IRPZone> getZones() {
-        return zones;
+    public ArrayList<IRPZone> getZONES() {
+        return ZONES;
     }
 }
