@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
@@ -25,11 +27,13 @@ import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.api.RPObjectMonitor;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.api.IRPEvent;
+import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
 
 @ServiceProvider(service = IRPWorld.class)
@@ -47,6 +51,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      * Holds the initialization state of the world
      */
     private static boolean initialized = false;
+
+    private static final Map<RPObject.ID, List<RPObjectMonitor>> MONITORS
+            = new HashMap<>();
 
     @SuppressWarnings({"OverridableMethodCallInConstructor",
         "LeakingThisInConstructor"})
@@ -430,5 +437,46 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     .get("system_password"));
             LOG.info("Done!");
         }
+    }
+
+    @Override
+    public void modify(RPObject object) {
+        super.modify(object);
+        if (MONITORS.containsKey(object.getID())) {
+            for (RPObjectMonitor m : MONITORS.get(object.getID())) {
+                m.modify(object);
+            }
+        }
+    }
+
+    @Override
+    public void registerMonitor(RPObject.ID target, RPObjectMonitor monitor) {
+        if (!MONITORS.containsKey(target)) {
+            MONITORS.put(target, new ArrayList<>());
+        }
+        MONITORS.get(target).add(monitor);
+    }
+
+    @Override
+    public void unregisterMonitor(RPObject.ID target, RPObjectMonitor monitor) {
+        if (MONITORS.containsKey(target)) {
+            MONITORS.get(target).remove(monitor);
+        }
+    }
+
+    @Override
+    public RPObject.ID getID(String name) {
+        RPObject.ID result = null;
+        for (IRPZone z : getZones()) {
+            Iterator<RPObject> zoneIterator = z.iterator();
+            while (zoneIterator.hasNext()) {
+                RPObject next = zoneIterator.next();
+                if (Tool.extractName(next).equals(name)) {
+                    result = next.getID();
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

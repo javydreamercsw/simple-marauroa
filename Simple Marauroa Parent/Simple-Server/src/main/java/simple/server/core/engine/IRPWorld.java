@@ -6,6 +6,7 @@ import java.util.List;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import simple.server.core.entity.api.RPObjectMonitor;
 
 /**
  *
@@ -234,4 +235,28 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @throws IOException
      */
     public void createSystemAccount() throws SQLException, IOException;
+
+    /**
+     * Register RPObject monitors.
+     *
+     * @param target Entity name to monitor
+     * @param monitor
+     */
+    public void registerMonitor(RPObject.ID target, RPObjectMonitor monitor);
+
+    /**
+     * Register RPObject monitors.
+     *
+     * @param target Entity name to monitor
+     * @param monitor
+     */
+    public void unregisterMonitor(RPObject.ID target, RPObjectMonitor monitor);
+
+    /**
+     * Get ID of object by name.
+     *
+     * @param name to look for.
+     * @return ID of the object or null if not found.
+     */
+    public RPObject.ID getID(String name);
 }
