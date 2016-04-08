@@ -1,5 +1,6 @@
 package simple.server.core.entity;
 
+import java.util.Objects;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.common.game.Definition;
@@ -26,7 +27,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * The logger.
      */
-    private static final Logger logger = Log4J.getLogger(Entity.class);
+    private static final Logger LOG = Log4J.getLogger(Entity.class);
     private SimpleRPZone zone = null;
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
@@ -53,15 +54,15 @@ public class Entity extends RPObject implements RPEntityInterface {
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
             Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
-                logger.debug("Processing extension to modify root class "
+                LOG.debug("Processing extension to modify root class "
                         + "definition: " + extension.getClass().getSimpleName());
                 return extension;
             }).map((extension) -> {
                 extension.modifyRootRPClassDefinition(entity);
                 return extension;
-            }).filter((_item) -> (logger.isDebugEnabled())).forEach((_item) -> {
+            }).filter((_item) -> (LOG.isDebugEnabled())).forEach((_item) -> {
                 entity.getDefinitions().stream().forEach((def) -> {
-                    logger.info(def.getName() + ": " + def.getType());
+                    LOG.info(def.getName() + ": " + def.getType());
                 });
             });
         }
@@ -198,7 +199,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (this.zone != null) {
             //Make sure its not in the old zone
             if (this.zone.has(getID())) {
-                logger.error("Entity added while in another zone: "
+                LOG.error("Entity added while in another zone: "
                         + this + " in zone " + zone.getID());
                 this.zone.remove(getID());
             }
@@ -214,7 +215,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void onRemoved(SimpleRPZone zone) {
         if (this.zone != zone) {
-            logger.error("Entity removed from wrong zone: " + this);
+            LOG.error("Entity removed from wrong zone: " + this);
         }
         this.zone = null;
     }
@@ -224,7 +225,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      *
      */
     public void notifyWorldAboutChanges() {
-        logger.debug("Object zone: " + get("zoneid"));
+        LOG.debug("Object zone: " + get("zoneid"));
         Lookup.getDefault().lookup(IRPWorld.class).modify(this);
     }
 
@@ -248,7 +249,7 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     public void update() {
         Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
-            logger.debug("Processing extension to update root class "
+            LOG.debug("Processing extension to update root class "
                     + "definition: " + extension.getClass().getSimpleName());
             return extension;
         }).forEach((extension) -> {
@@ -281,5 +282,34 @@ public class Entity extends RPObject implements RPEntityInterface {
      */
     public String getRPClassName() {
         return RPCLASS_NAME;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.RPCLASS_NAME);
+        hash = 79 * hash + Objects.hashCode(this.zone);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Entity other = (Entity) obj;
+        if (!Objects.equals(this.RPCLASS_NAME, other.RPCLASS_NAME)) {
+            return false;
+        }
+        if (!Objects.equals(this.zone, other.zone)) {
+            return false;
+        }
+        return true;
     }
 }
