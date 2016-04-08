@@ -47,7 +47,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     /**
      * the logger instance.
      */
-    private static final Logger logger
+    private static final Logger LOG
             = Log4J.getLogger(SimpleRPRuleProcessor.class);
     protected static RPServerManager rpman;
     protected PlayerList onlinePlayers;
@@ -65,7 +65,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             config = Configuration.getConfiguration();
         } catch (IOException ex) {
-            logger.error(ex, ex);
+            LOG.error(ex, ex);
         }
         onlinePlayers = new PlayerList();
         entityToKill = new LinkedList<>();
@@ -113,7 +113,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             DAORegister.get().get(GameEventDAO.class).addGameEvent(
                     source, event, params);
         } catch (Exception e) {
-            logger.warn("Can't store game event", e);
+            LOG.warn("Can't store game event", e);
         }
     }
 
@@ -124,12 +124,12 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 /*
                  * Print version information.
                  */
-                logger.info("Running " + getGAMENAME() + " Server version '"
+                LOG.info("Running " + getGAMENAME() + " Server version '"
                         + getVERSION() + "'");
                 SimpleRPRuleProcessor.rpman = rpman;
                 SimpleRPAction.initialize(rpman);
             } catch (Exception e) {
-                logger.error("Cannot set Context. Exiting...", e);
+                LOG.error("Cannot set Context. Exiting...", e);
                 throw new RuntimeException(e);
             }
         }
@@ -137,9 +137,9 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
 
     @Override
     public boolean checkGameVersion(String game, String version) {
-        logger.debug("Comparing " + game + " (client) with " + getGAMENAME()
+        LOG.debug("Comparing " + game + " (client) with " + getGAMENAME()
                 + " (server)");
-        logger.debug("Comparing " + version + " (client) with " + getVERSION()
+        LOG.debug("Comparing " + version + " (client) with " + getVERSION()
                 + " (server)");
         return game.equals(getGAMENAME()) && version.equals(getVERSION());
     }
@@ -181,7 +181,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         if (caster instanceof ClientObjectInterface) {
             CommandCenter.execute((ClientObjectInterface) caster, action);
         } else {
-            logger.error(caster + " tried to execute action: " + action);
+            LOG.error(caster + " tried to execute action: " + action);
         }
     }
 
@@ -198,7 +198,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             logNumberOfPlayersOnline();
         } catch (Exception e) {
-            logger.error("Error in beginTurn.", e);
+            LOG.error("Error in beginTurn.", e);
         }
     }
 
@@ -226,7 +226,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             os.append("players: ").append(getOnlinePlayers().size())
                     .append("\n");
             os.append("objects: ").append(objects).append("\n");
-            logger.info(os);
+            LOG.info(os);
         }
     }
 
@@ -243,7 +243,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             // Run registered object's logic method for this turn
             Lookup.getDefault().lookup(ITurnNotifier.class).logic(currentTurn);
         } catch (Exception e) {
-            logger.error("Error in endTurn", e);
+            LOG.error("Error in endTurn", e);
         }
     }
 
@@ -272,8 +272,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             addGameEvent(player.getName(), "login");
             Lookup.getDefault()
                     .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
-                        ln.onPlayerLoggedIn(player);
-                    });
+                ln.onPlayerLoggedIn(player);
+            });
 
             getOnlinePlayers().add(player);
             if (!player.isGhost()) {
@@ -282,7 +282,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             Lookup.getDefault().lookup(IRPWorld.class)
                     .addPlayer((RPObject) player);
         } catch (Exception e) {
-            logger.error("There has been a severe problem loading player "
+            LOG.error("There has been a severe problem loading player "
                     + object.get("#db_id"), e);
             result = false;
         }
@@ -297,7 +297,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                     .getPlayer(object.get("name"));
             if (player != null) {
                 if (wasKilled((RPEntity) player)) {
-                    logger.info("Logged out shortly before death: "
+                    LOG.info("Logged out shortly before death: "
                             + "Killing it now :)");
                 }
                 if (!player.isGhost()) {
@@ -314,18 +314,18 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                     if (zone.has(((RPObject) player).getID())
                             && !zone.getName().equals(
                                     player.getZone().getName())) {
-                        logger.warn("Another instance of the player found in "
+                        LOG.warn("Another instance of the player found in "
                                 + zone.getName());
                         zone.remove(((RPObject) player).getID());
                     }
                 }
                 addGameEvent(player.getName(), "logout");
 
-                logger.debug("removed player " + player);
+                LOG.debug("removed player " + player);
             }
             return true;
         } catch (Exception e) {
-            logger.error("Error in onExit.", e);
+            LOG.error("Error in onExit.", e);
             return true;
         }
     }
@@ -358,19 +358,19 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
                 .forFilteredPlayersExecute(
                         new Task<ClientObjectInterface>() {
-                            @Override
-                            public void execute(ClientObjectInterface player) {
-                                player.sendPrivateText(message);
-                                player.notifyWorldAboutChanges();
-                            }
-                        },
+                    @Override
+                    public void execute(ClientObjectInterface player) {
+                        player.sendPrivateText(message);
+                        player.notifyWorldAboutChanges();
+                    }
+                },
                         new FilterCriteria<ClientObjectInterface>() {
-                            @Override
-                            public boolean passes(ClientObjectInterface p) {
-                                return p.getAdminLevel()
+                    @Override
+                    public boolean passes(ClientObjectInterface p) {
+                        return p.getAdminLevel()
                                 >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
-                            }
-                        });
+                    }
+                });
     }
 
     /**
