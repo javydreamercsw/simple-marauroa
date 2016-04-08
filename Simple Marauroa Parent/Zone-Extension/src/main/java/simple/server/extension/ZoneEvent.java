@@ -30,6 +30,8 @@ public class ZoneEvent extends SimpleRPEvent {
         rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
         rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+        rpclass.add(DefinitionClass.ATTRIBUTE, ZoneExtension.SEPARATOR,
+                Type.STRING);
         addCommonAttributes(rpclass);
     }
 
