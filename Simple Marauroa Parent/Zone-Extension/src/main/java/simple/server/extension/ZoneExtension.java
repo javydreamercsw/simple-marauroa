@@ -230,7 +230,12 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             }
             String list = Lookup.getDefault().lookup(IRPWorld.class).listZones(separator).toString();
             LOG.debug("Zone List: " + list);
-            player.addEvent(new ZoneEvent(list, option));
+            ZoneEvent zoneEvent = new ZoneEvent(list, option);
+            //Add a separator if none defined
+            if(!zoneEvent.has(SEPARATOR)){
+                zoneEvent.put(SEPARATOR, separator);
+            }
+            player.addEvent(zoneEvent);
             player.notifyWorldAboutChanges();
             LOG.debug(player);
         } catch (Exception ex) {
