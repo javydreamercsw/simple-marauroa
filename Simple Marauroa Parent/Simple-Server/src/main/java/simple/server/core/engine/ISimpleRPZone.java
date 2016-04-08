@@ -8,6 +8,7 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.RPEntityInterface;
 
 /**
  *
@@ -58,6 +59,13 @@ public interface ISimpleRPZone extends IRPZone {
      * @return A list of all players.
      */
     Collection<ClientObjectInterface> getPlayers();
+    
+    /**
+     * Gets all NPCs in this zone.
+     *
+     * @return A list of all NPC's.
+     */
+    Collection<RPEntityInterface> getNPCS();
 
     /**
      * Gets all players in this zone.
