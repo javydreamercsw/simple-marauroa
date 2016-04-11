@@ -266,7 +266,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             final ClientObjectInterface player
                     = Lookup.getDefault().lookup(IRPObjectFactory.class)
                     .createClientObject(object);
-            super.onInit((RPObject) player);
             entry.object = (RPObject) player;
 
             addGameEvent(player.getName(), "login");
