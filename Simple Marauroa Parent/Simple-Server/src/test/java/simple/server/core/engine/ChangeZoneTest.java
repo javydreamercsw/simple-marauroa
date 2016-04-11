@@ -18,7 +18,6 @@ public class ChangeZoneTest extends SimpleServerT {
     /**
      * Test of getGameName method, of class SimpleDatabase.
      *
-     * @throws Exception
      */
     @Test
     public void changeZone() {
@@ -31,15 +30,31 @@ public class ChangeZoneTest extends SimpleServerT {
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone1")));
             assertTrue(MockSimpleRPWorld.get().hasRPZone(new ID("zone2")));
             assertFalse(MockSimpleRPWorld.get().hasRPZone(new ID("zone3")));
+            //Add to zone2
+            assertEquals(0, MockSimpleRPWorld.get().getRPZone("zone2").size());
             MockSimpleRPWorld.get().getRPZone("zone2").add(player1);
-            MockSimpleRPWorld.get().add(player1);
+            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get()
+                    .getRPZone(new ID("zone2"))).has(player1.getID()));
+            assertEquals(1, MockSimpleRPWorld.get().getRPZone("zone2").size());
+            //Change zone to zone 1
+            assertEquals(0, MockSimpleRPWorld.get().getRPZone("zone1").size());
             MockSimpleRPWorld.get().changeZone(new ID("zone1"), player1);
-            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone1"))).has(player1.getID()));
+            assertEquals(0, MockSimpleRPWorld.get().getRPZone("zone2").size());
+            assertEquals(1, MockSimpleRPWorld.get().getRPZone("zone1").size());
+            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get()
+                    .getRPZone(new ID("zone1"))).has(player1.getID()));
+            //Change zone to zone 2
             MockSimpleRPWorld.get().changeZone(new ID("zone2"), player1);
-            assertFalse(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone1"))).has(player1.getID()));
-            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone1"))).isEmpty());
-            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone2"))).has(player1.getID()));
-            assertFalse(((SimpleRPZone) MockSimpleRPWorld.get().getRPZone(new ID("zone2"))).isEmpty());
+            assertEquals(1, MockSimpleRPWorld.get().getRPZone("zone2").size());
+            assertEquals(0, MockSimpleRPWorld.get().getRPZone("zone1").size());
+            assertFalse(((SimpleRPZone) MockSimpleRPWorld.get()
+                    .getRPZone(new ID("zone1"))).has(player1.getID()));
+            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get()
+                    .getRPZone(new ID("zone1"))).isEmpty());
+            assertTrue(((SimpleRPZone) MockSimpleRPWorld.get()
+                    .getRPZone(new ID("zone2"))).has(player1.getID()));
+            assertFalse(((SimpleRPZone) MockSimpleRPWorld.get()
+                    .getRPZone(new ID("zone2"))).isEmpty());
         } catch (NullPointerException e) {
             //Expected when adding player
         } catch (Exception e) {
