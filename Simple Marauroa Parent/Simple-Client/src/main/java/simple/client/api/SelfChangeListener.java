@@ -8,6 +8,13 @@ import marauroa.common.game.RPObject;
  */
 public interface SelfChangeListener {
 
+    /**
+     * Detect changes on myself.
+     *
+     * @param added new things
+     * @param deleted removed things
+     * @return True if successful.
+     */
     public boolean onMyRPObject(RPObject added, RPObject deleted);
 
     /**
