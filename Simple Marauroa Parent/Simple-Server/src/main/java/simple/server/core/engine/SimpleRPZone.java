@@ -225,15 +225,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
              */
             assignRPObjectID(object);
 
-            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                    .stream().map((extension) -> {
-                        LOG.debug("Processing extension: "
-                                + extension.getClass().getSimpleName());
-                        return extension;
-                    }).forEach((extension) -> {
-                extension.onRPObjectAddToZone(object);
-            });
-
             if (object instanceof ClientObjectInterface) {
                 LOG.debug("Processing ClientObjectInterface");
                 try {
@@ -280,6 +271,14 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         + " successfully created!");
             }
             super.add(object);
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .stream().map((extension) -> {
+                        LOG.debug("Processing extension: "
+                                + extension.getClass().getSimpleName());
+                        return extension;
+                    }).forEach((extension) -> {
+                extension.onRPObjectAddToZone(object);
+            });
         }
     }
 
