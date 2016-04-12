@@ -23,4 +23,9 @@ public interface IWorldManager {
      * @return
      */
     public Map<RPObject.ID, RPObject> getWorld();
+    
+    /**
+     * Display the world in a text format.
+     */
+    public void showWorld();
 }
