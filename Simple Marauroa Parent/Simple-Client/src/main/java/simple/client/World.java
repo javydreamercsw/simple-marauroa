@@ -10,8 +10,8 @@ import marauroa.common.game.RPObject;
  */
 public class World {
 
-    private Map<RPObject.ID, RPObject> world_objects = 
-            new HashMap<RPObject.ID, RPObject>();
+    private final Map<RPObject.ID, RPObject> world_objects = 
+            new HashMap<>();
 
     /**
      * @return the world_objects
