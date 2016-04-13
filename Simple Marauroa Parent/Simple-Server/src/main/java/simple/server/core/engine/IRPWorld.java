@@ -242,7 +242,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param target Entity name to monitor
      * @param monitor
      */
-    public void registerMonitor(RPObject.ID target, RPObjectMonitor monitor);
+    public void registerMonitor(String target, RPObjectMonitor monitor);
 
     /**
      * Register RPObject monitors.
@@ -250,7 +250,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param target Entity name to monitor
      * @param monitor
      */
-    public void unregisterMonitor(RPObject.ID target, RPObjectMonitor monitor);
+    public void unregisterMonitor(String target, RPObjectMonitor monitor);
 
     /**
      * Get ID of object by name.
