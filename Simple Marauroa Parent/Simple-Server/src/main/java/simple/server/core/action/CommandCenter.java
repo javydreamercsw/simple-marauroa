@@ -13,7 +13,7 @@ public class CommandCenter {
     //TODO: Replace with Lookup
     private static final UnknownAction UNKNOWN_ACTION = new UnknownAction();
     private static volatile ConcurrentHashMap<String, ActionInterface> actionsMap;
-    private static final Logger logger = Log4J.getLogger(CommandCenter.class);
+    private static final Logger LOG = Log4J.getLogger(CommandCenter.class);
 
     protected static ConcurrentHashMap<String, ActionInterface> getActionsMap() {
         if (actionsMap == null) {
@@ -49,7 +49,7 @@ public class CommandCenter {
             actionInterface.onAction((RPObject) player, action);
             return true;
         } catch (Exception e) {
-            logger.error("Cannot execute action " + action
+            LOG.error("Cannot execute action " + action
                     + " send by " + player, e);
             return false;
         }
@@ -78,7 +78,7 @@ public class CommandCenter {
 
     static class UnknownAction implements ActionInterface {
 
-        private static final Logger logger = Log4J.getLogger(UnknownAction.class);
+        private static final Logger LOG = Log4J.getLogger(UnknownAction.class);
 
         @Override
         public void onAction(RPObject rpo, RPAction action) {
@@ -88,7 +88,7 @@ public class CommandCenter {
                 if (action != null) {
                     type = action.get("type");
                 }
-                logger.warn(player + " tried to execute unknown action " + type);
+                LOG.warn(player + " tried to execute unknown action " + type);
                 player.sendPrivateText("Unknown command '" + type + "'");
             }
         }
