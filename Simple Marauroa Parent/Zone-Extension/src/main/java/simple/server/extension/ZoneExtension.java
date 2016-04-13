@@ -125,7 +125,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             }
             LOG.debug("Adding zone to the world...");
             world.addRPZone(zone);
-            LOG.info("Scheduling moving player to created zone...");
+            LOG.debug("Scheduling moving player to created zone...");
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
                         private static final long serialVersionUID = -5644390861803492172L;
@@ -246,7 +246,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     @Override
     public void onAddRPZone(IRPZone zone) {
         //Let everyone know
-        LOG.info("Notifying everyone about the creation of zone: " + zone.getID());
+        LOG.debug("Notifying everyone about the creation of zone: " + zone.getID());
         Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(new ZoneEvent((SimpleRPZone) zone, ZoneEvent.ADD));
     }
 
