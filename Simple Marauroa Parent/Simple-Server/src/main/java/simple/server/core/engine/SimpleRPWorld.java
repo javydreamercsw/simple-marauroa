@@ -52,7 +52,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      */
     private static boolean initialized = false;
 
-    private static final Map<RPObject.ID, List<RPObjectMonitor>> MONITORS
+    private static final Map<String, List<RPObjectMonitor>> MONITORS
             = new HashMap<>();
 
     @SuppressWarnings({"OverridableMethodCallInConstructor",
@@ -442,15 +442,15 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void modify(RPObject object) {
         super.modify(object);
-        if (MONITORS.containsKey(object.getID())) {
-            for (RPObjectMonitor m : MONITORS.get(object.getID())) {
+        if (MONITORS.containsKey(Tool.extractName(object))) {
+            for (RPObjectMonitor m : MONITORS.get(Tool.extractName(object))) {
                 m.modify(object);
             }
         }
     }
 
     @Override
-    public void registerMonitor(RPObject.ID target, RPObjectMonitor monitor) {
+    public void registerMonitor(String target, RPObjectMonitor monitor) {
         if (!MONITORS.containsKey(target)) {
             MONITORS.put(target, new ArrayList<>());
         }
@@ -458,7 +458,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public void unregisterMonitor(RPObject.ID target, RPObjectMonitor monitor) {
+    public void unregisterMonitor(String target, RPObjectMonitor monitor) {
         if (MONITORS.containsKey(target)) {
             MONITORS.get(target).remove(monitor);
         }
