@@ -26,6 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
+import static simple.server.core.entity.Entity.NAME;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.RPObjectMonitor;
 import simple.server.core.entity.clientobject.ClientObject;
@@ -287,6 +288,15 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 targetCO.notifyWorldAboutChanges();
                 result = true;
                 break;
+            }
+            for (RPEntityInterface npc : z.getNPCS()) {
+                if (((RPObject) npc).has(NAME)
+                        && Tool.extractName(((RPObject) npc)).equals(target)) {
+                    LOG.debug("Adding event to: " + npc + ", " + ((RPObject) npc).getID()
+                            + ", " + npc.getZone());
+                    ((RPObject) npc).addEvent(event);
+                    Lookup.getDefault().lookup(IRPWorld.class).modify((RPObject) npc);
+                }
             }
         }
         if (!result) {

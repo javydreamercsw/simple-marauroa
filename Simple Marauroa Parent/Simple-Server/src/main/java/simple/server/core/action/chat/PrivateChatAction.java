@@ -29,7 +29,7 @@ public class PrivateChatAction implements ActionProvider {
      * the logger instance.
      */
     private static final Logger LOG = Log4J.getLogger(PrivateChatAction.class);
-    public static final String PRIVATE_CHAT = "private-chat";
+    public static final String PRIVATE_CHAT = PrivateTextEvent.RPCLASS_NAME;
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
