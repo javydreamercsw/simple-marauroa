@@ -28,8 +28,8 @@ public class PrivateChatAction implements ActionProvider {
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(PrivateChatAction.class);
-    public static final String _PRIVATE_CHAT = "private-chat";
+    private static final Logger LOG = Log4J.getLogger(PrivateChatAction.class);
+    public static final String PRIVATE_CHAT = "private-chat";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -43,15 +43,15 @@ public class PrivateChatAction implements ActionProvider {
                     String text = action.get(TEXT);
                     String target = action.get(TARGET);
                     String from = rpo.get("name");
-                    logger.info("Processing private text action: " + action);
+                    LOG.info("Processing private text action: " + action);
                     Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
                             new PrivateTextEvent(NotificationType.PRIVMSG, text,
                                     target, from));
                     if ("true".equals(Configuration.getConfiguration().get("log_chat", "false"))) {
-                        logger.info(text);
+                        LOG.info(text);
                     }
                 } catch (IOException ex) {
-                    logger.warn(ex.toString(), ex);
+                    LOG.warn(ex.toString(), ex);
                 }
             } else {
                 StringBuilder mess = new StringBuilder("Action is missing key components:\n");
@@ -61,13 +61,13 @@ public class PrivateChatAction implements ActionProvider {
                 if (!action.has(TARGET)) {
                     mess.append(TARGET).append("\n");
                 }
-                logger.warn(mess.toString());
+                LOG.warn(mess.toString());
             }
         }
     }
 
     @Override
     public void register() {
-        CommandCenter.register(_PRIVATE_CHAT, new PrivateChatAction());
+        CommandCenter.register(PRIVATE_CHAT, new PrivateChatAction());
     }
 }
