@@ -177,6 +177,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                     if (id != null) {
                         RPObject object = Lookup.getDefault().lookup(IWorldManager.class).get(id);
                         if (object != null) {
+                            object.applyDifferences(added, deleted);
                             Collection<? extends SelfChangeListener> listeners
                                     = Lookup.getDefault().lookupAll(SelfChangeListener.class);
                             for (SelfChangeListener listener : listeners) {
