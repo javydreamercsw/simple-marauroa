@@ -101,6 +101,8 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                 LOG.error("Error processing CRUD room operation: " + op + "."
                         + " Action: " + action, e);
             }
+        } else {
+            LOG.warn("Unexpected action from a non-player: " + rpo);
         }
     }
 
@@ -159,11 +161,17 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                             Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
                         } else {
                             ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
-                            LOG.debug("Room is locked. " + re);
+                            LOG.debug("Room is locked.");
                             LOG.debug("Wrong password, requesting again...");
                             ((RPObject) player).addEvent(re);
                             player.notifyWorldAboutChanges();
                         }
+                    } else {
+                        LOG.debug("Room is locked but no password was provided...");
+                        ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
+                        LOG.debug("Room is locked. Requesting password...");
+                        ((RPObject) player).addEvent(re);
+                        player.notifyWorldAboutChanges();
                     }
                 } else {
                     //The room is open so just join it.
