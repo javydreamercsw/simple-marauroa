@@ -6,9 +6,10 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionInterface;
 
 public abstract class SimpleServerExtension implements MarauroaServerExtension,
-        Lookup.Provider {
+        Lookup.Provider, ActionInterface {
 
     private final Lookup lookup = new AbstractLookup(new InstanceContent());
 
