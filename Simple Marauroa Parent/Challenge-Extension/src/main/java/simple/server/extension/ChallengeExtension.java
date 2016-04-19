@@ -13,8 +13,10 @@ import org.openide.util.lookup.ServiceProviders;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
+import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.event.TextEvent;
+import simple.server.core.tool.Tool;
 
 /**
  * This extension covers the challenging aspect of the game. Players challenge
@@ -31,72 +33,80 @@ public class ChallengeExtension extends SimpleServerExtension
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(ChallengeExtension.class);
-    public static final String _CHALLENGE = "Match_Challenge";
-    public static final String _ACCEPT_CHALLENGE = "Accept_Challenge";
-    public static final String _REJECT_CHALLENGE = "Reject_Challenge";
-    public static final String _CANCEL_CHALLENGE = "Cancel_Challenge";
-    private static final String _CHALLENGER = ChallengeEvent.CHALLENGER;
-    private static final String _CHALLENGED = ChallengeEvent.CHALLENGED;
+    private static final Logger LOG = Log4J.getLogger(ChallengeExtension.class);
+    public static final String CHALLENGE = "Match_Challenge";
+    public static final String ACCEPT_CHALLENGE = "Accept_Challenge";
+    public static final String REJECT_CHALLENGE = "Reject_Challenge";
+    public static final String CANCEL_CHALLENGE = "Cancel_Challenge";
+    private static final String CHALLENGER = ChallengeEvent.CHALLENGER;
+    private static final String CHALLENGED = ChallengeEvent.CHALLENGED;
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            logger.debug("Action received: " + action);
-            ClientObjectInterface challenged
-                    = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
-                    .getPlayer(action.get(_CHALLENGED));
+            LOG.debug("Action received: " + action);
+            RPObject challenged
+                    = (RPObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+                    .getPlayer(action.get(CHALLENGED));
+            if (challenged == null) {
+                //Might be a NPC
+                challenged = (RPObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getNPC(action.get(CHALLENGED));
+            }
             ClientObjectInterface challenger
                     = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
-                    .getPlayer(action.get(_CHALLENGER));
-            if (action.get("type").equals(_CHALLENGE)) {
-                logger.debug("Processing Challenge...");
+                    .getPlayer(action.get(CHALLENGER));
+            if (action.get("type").equals(CHALLENGE)) {
+                LOG.debug("Processing Challenge...");
                 //Check both players exist
                 if (challenged != null && challenger != null
-                        && !challenged.getName().equals(challenger.getName())) {
-                    logger.debug("Both players still exist. "
+                        && !Tool.extractName(challenged).equals(challenger.getName())) {
+                    LOG.debug("Both players still exist. "
                             + "Send the Challenge to the challenged.");
                     switch (action.getInt(ChallengeEvent.ACTION)) {
                         case ChallengeEvent.CHALLENGE:
-                            challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
-                                    action.get(_CHALLENGED), ChallengeEvent.CHALLENGE));
+                            challenged.addEvent(new ChallengeEvent(action.get(CHALLENGER),
+                                    action.get(CHALLENGED), ChallengeEvent.CHALLENGE));
                             break;
                         case ChallengeEvent.CANCEL:
-                            logger.info("Processing challenge cancel!");
+                            LOG.info("Processing challenge cancel!");
                             break;
                         case ChallengeEvent.ACCEPT:
-                            logger.info("Processing challenge accept!");
+                            LOG.info("Processing challenge accept!");
                             break;
                         case ChallengeEvent.REJECT:
-                            logger.info("Processing challenge reject!");
+                            LOG.info("Processing challenge reject!");
                             break;
                         default:
-                            logger.warn("Unhandled action: "
+                            LOG.warn("Unhandled action: "
                                     + action.getInt(ChallengeEvent.ACTION));
                     }
                     if (player instanceof RPObject) {
                         ((RPObject) player).addEvent(
                                 new TextEvent("Command completed", "System"));
                     }
-                    challenged.notifyWorldAboutChanges();
-                    logger.debug("Sent!");
+                    if (challenged instanceof ClientObjectInterface) {
+                        ((ClientObjectInterface) challenged).notifyWorldAboutChanges();
+                    } else {
+                        Lookup.getDefault().lookup(IRPWorld.class).modify(challenged);
+                    }
+                    LOG.debug("Sent!");
                 } else {
-                    logger.error("Something's wrong...");
-                    logger.error("Challenged: " + challenged);
-                    logger.error("Challenger: " + challenger);
+                    LOG.error("Something's wrong...");
+                    LOG.error("Challenged: " + challenged);
+                    LOG.error("Challenger: " + challenger);
                     switch (action.getInt(ChallengeEvent.ACTION)) {
                         case ChallengeEvent.CHALLENGE:
-                            logger.warn("Processing challenge challenge!");
+                            LOG.warn("Processing challenge challenge!");
                             break;
                         case ChallengeEvent.CANCEL:
-                            logger.warn("Processing challenge cancel!");
+                            LOG.warn("Processing challenge cancel!");
                             break;
                         case ChallengeEvent.ACCEPT:
-                            logger.warn("Processing challenge accept!");
+                            LOG.warn("Processing challenge accept!");
                             break;
                         case ChallengeEvent.REJECT:
-                            logger.warn("Processing challenge reject!");
+                            LOG.warn("Processing challenge reject!");
                             break;
                     }
                     if (player instanceof RPObject) {
@@ -104,23 +114,27 @@ public class ChallengeExtension extends SimpleServerExtension
                                 new TextEvent("Command not completed", "System"));
                     }
                 }
-            } else if (action.get("type").equals(_ACCEPT_CHALLENGE)) {
-                logger.debug("Processing challenge accept...");
-                challenger.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
-                        action.get(_CHALLENGED), ChallengeEvent.ACCEPT));
+            } else if (action.get("type").equals(ACCEPT_CHALLENGE)) {
+                LOG.debug("Processing challenge accept...");
+                challenger.addEvent(new ChallengeEvent(action.get(CHALLENGER),
+                        action.get(CHALLENGED), ChallengeEvent.ACCEPT));
                 challenger.notifyWorldAboutChanges();
-            } else if (action.get("type").equals(_REJECT_CHALLENGE)) {
-                logger.debug("Processing challenge reject...");
-                challenger.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
-                        action.get(_CHALLENGED), ChallengeEvent.REJECT));
+            } else if (action.get("type").equals(REJECT_CHALLENGE)) {
+                LOG.debug("Processing challenge reject...");
+                challenger.addEvent(new ChallengeEvent(action.get(CHALLENGER),
+                        action.get(CHALLENGED), ChallengeEvent.REJECT));
                 challenger.notifyWorldAboutChanges();
-            } else if (action.get("type").equals(_CANCEL_CHALLENGE)) {
-                logger.debug("Processing challenge cancel...");
+            } else if (action.get("type").equals(CANCEL_CHALLENGE)) {
+                LOG.debug("Processing challenge cancel...");
                 //Notify challenged
                 if (challenged != null) {
-                    challenged.addEvent(new ChallengeEvent(action.get(_CHALLENGER),
-                            action.get(_CHALLENGED), ChallengeEvent.CANCEL));
-                    challenged.notifyWorldAboutChanges();
+                    challenged.addEvent(new ChallengeEvent(action.get(CHALLENGER),
+                            action.get(CHALLENGED), ChallengeEvent.CANCEL));
+                    if (challenged instanceof ClientObjectInterface) {
+                        ((ClientObjectInterface) challenged).notifyWorldAboutChanges();
+                    } else {
+                        Lookup.getDefault().lookup(IRPWorld.class).modify(challenged);
+                    }
                 }
             }
         }
@@ -137,9 +151,9 @@ public class ChallengeExtension extends SimpleServerExtension
     }
 
     public void register() {
-        CommandCenter.register(_CHALLENGE, ChallengeExtension.this);
-        CommandCenter.register(_ACCEPT_CHALLENGE, ChallengeExtension.this);
-        CommandCenter.register(_REJECT_CHALLENGE, ChallengeExtension.this);
-        CommandCenter.register(_CANCEL_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(ACCEPT_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(REJECT_CHALLENGE, ChallengeExtension.this);
+        CommandCenter.register(CANCEL_CHALLENGE, ChallengeExtension.this);
     }
 }
