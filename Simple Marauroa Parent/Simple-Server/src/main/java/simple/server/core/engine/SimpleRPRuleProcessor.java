@@ -29,8 +29,10 @@ import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
+import simple.server.core.tool.Tool;
 
 /**
  *
@@ -168,6 +170,25 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      */
     public ClientObjectInterface getPlayer(String name) {
         return getOnlinePlayers().getOnlinePlayer(name);
+    }
+
+    /**
+     * Finds an NPC.
+     *
+     * @param name NPC's name
+     * @return The NPC, or null if not found.
+     */
+    public RPEntityInterface getNPC(String name) {
+        RPEntityInterface npc = null;
+        for (SimpleRPZone zone : Lookup.getDefault().lookup(IRPWorld.class).getZones()) {
+            for (RPEntityInterface o : zone.getNPCS()) {
+                if (Tool.extractName((RPObject) o).equals(name)) {
+                    npc = o;
+                    break;
+                }
+            }
+        }
+        return npc;
     }
 
     @Override
