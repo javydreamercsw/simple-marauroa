@@ -15,4 +15,11 @@ public interface LoginProvider {
      * Prompt user to provide email.
      */
     void getEmailFromUser();
+
+    /**
+     * Check if the user is already logged in.
+     *
+     * @return true if logged in, false otherwise.
+     */
+    boolean isAuthenticated();
 }

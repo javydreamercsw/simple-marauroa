@@ -353,6 +353,10 @@ public class DefaultClient implements ClientFrameworkProvider {
     @SuppressWarnings("empty-statement")
     public void run() {
         try {
+            LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+            if (!lp.isAuthenticated()) {
+                lp.displayLoginDialog();
+            }
             getClientManager().connect(getHost(), Integer.parseInt(getPort()));
             LOG.log(Level.FINE, "Logging as: {0} with pass: {1} "
                     + "version: ''{2}''", new Object[]{getUsername(),
