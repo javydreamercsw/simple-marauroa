@@ -18,7 +18,7 @@ import simple.server.core.event.api.IRPEvent;
 @ServiceProvider(service = IRPEvent.class)
 public class PrivateTextEvent extends SimpleRPEvent {
 
-    public static final String RPCLASS_NAME = "private_text";
+    public static final String RPCLASS_NAME = "private_text_event";
     public static final String TEXT_TYPE = "texttype";
     public static final String CHANNEL = "channel";
 
