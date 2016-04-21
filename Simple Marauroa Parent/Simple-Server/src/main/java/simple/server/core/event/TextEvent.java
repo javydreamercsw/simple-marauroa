@@ -22,7 +22,7 @@ import simple.server.core.event.api.IRPEvent;
 @ServiceProvider(service = IRPEvent.class)
 public class TextEvent extends SimpleRPEvent {
 
-    public static final String RPCLASS_NAME = "text";
+    public static final String RPCLASS_NAME = "text_event";
     public static final String TEXT_TYPE = "texttype";
     private final SimpleDateFormat defaultFormat
             = new SimpleDateFormat("HH:mm:SS");
