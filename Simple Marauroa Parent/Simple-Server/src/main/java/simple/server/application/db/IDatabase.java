@@ -14,4 +14,11 @@ public interface IDatabase {
      * @throws SQLException
      */
     void initialize() throws SQLException;
+
+    /**
+     * Method to check if the database already got initialized.
+     *
+     * @return true if initialized, false otherwise.
+     */
+    boolean isInitialized();
 }
