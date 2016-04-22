@@ -21,7 +21,7 @@ import simple.server.extension.MarauroaServerExtension;
 @ServiceProvider(service = RPEntityInterface.class, position = 1)
 public class Entity extends RPObject implements RPEntityInterface {
 
-    private static final long serialVersionUID = 1L;
+    public static String DB_ID = "#db_id";
     protected String RPCLASS_NAME = "entity";
     public static final String NAME = "name", DESC = "description";
     /**
