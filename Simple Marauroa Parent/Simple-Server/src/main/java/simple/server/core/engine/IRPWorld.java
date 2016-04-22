@@ -259,4 +259,19 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @return ID of the object or null if not found.
      */
     public RPObject.ID getID(String name);
+
+    /**
+     * Add RPObject to the world.
+     *
+     * @param rpObject Object to add.
+     */
+    public void add(RPObject rpObject);
+
+    /**
+     * Remove RPObject from world.
+     *
+     * @param id Object to remove.
+     * @return Removed object.
+     */
+    public RPObject remove(RPObject.ID id);
 }
