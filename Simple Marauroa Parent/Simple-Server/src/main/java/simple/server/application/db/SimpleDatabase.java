@@ -15,7 +15,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class SimpleDatabase implements IDatabase {
 
     private static final Logger LOG = Log4J.getLogger(SimpleDatabase.class);
-    private static SimpleDatabase instance = null;
+    private boolean initialized = false;
 
     public SimpleDatabase() {
         new DatabaseFactory().initializeDatabase();
@@ -25,6 +25,7 @@ public class SimpleDatabase implements IDatabase {
     public void initialize() throws SQLException {
         //Initialization made in JPADatabaseAdapter
         registerDAOs();
+        initialized = true;
     }
 
     protected void registerDAOs() {
@@ -36,5 +37,10 @@ public class SimpleDatabase implements IDatabase {
         }).forEach((dao) -> {
             dao.register();
         });
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
     }
 }
