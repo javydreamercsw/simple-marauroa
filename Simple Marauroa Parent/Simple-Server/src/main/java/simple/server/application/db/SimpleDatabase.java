@@ -5,12 +5,14 @@ import marauroa.common.Log4J;
 import marauroa.common.Logger;
 import marauroa.server.game.db.DatabaseFactory;
 import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class SimpleDatabase {
+@ServiceProvider(service = IDatabase.class)
+public class SimpleDatabase implements IDatabase {
 
     private static final Logger LOG = Log4J.getLogger(SimpleDatabase.class);
     private static SimpleDatabase instance = null;
@@ -19,13 +21,7 @@ public class SimpleDatabase {
         new DatabaseFactory().initializeDatabase();
     }
 
-    public static SimpleDatabase get() {
-        if (instance == null) {
-            instance = new SimpleDatabase();
-        }
-        return instance;
-    }
-
+    @Override
     public void initialize() throws SQLException {
         //Initialization made in JPADatabaseAdapter
         registerDAOs();
