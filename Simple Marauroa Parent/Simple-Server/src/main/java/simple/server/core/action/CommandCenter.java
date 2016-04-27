@@ -59,7 +59,7 @@ public class CommandCenter {
         if (action == null) {
             return UNKNOWN_ACTION;
         } else {
-            return getAction(action.get("type"));
+            return getAction(action.get(WellKnownActionConstant.TYPE));
         }
     }
 
@@ -86,7 +86,7 @@ public class CommandCenter {
                 ClientObjectInterface player = (ClientObjectInterface) rpo;
                 String type = "null";
                 if (action != null) {
-                    type = action.get("type");
+                    type = action.get(WellKnownActionConstant.TYPE);
                 }
                 LOG.warn(player + " tried to execute unknown action " + type);
                 player.sendPrivateText("Unknown command '" + type + "'");
