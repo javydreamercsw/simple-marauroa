@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
@@ -247,16 +246,14 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         return getRPZone(new IRPZone.ID(zone));
     }
 
-    /**
-     * Finds a zone by its id.
-     *
-     * @param id The zone's id
-     *
-     * @return The matching zone, or <code>null</code> if not found.
-     */
     @Override
     public SimpleRPZone getZone(final String id) {
         return (SimpleRPZone) getRPZone(new IRPZone.ID(id));
+    }
+
+    @Override
+    public SimpleRPZone getZone(final IRPZone.ID id) {
+        return (SimpleRPZone) getRPZone(id);
     }
 
     @Override
@@ -416,10 +413,30 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         try {
             result = removeRPZone(zone.getID());
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(SimpleRPWorld.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error(null, ex);
             result = null;
         }
         return result;
+    }
+
+    @Override
+    public IRPZone removeRPZone(ID zoneid) throws Exception {
+        if (hasRPZone(zoneid)) {
+            /**
+             * Kick everyone to the default zone or they'll end in the limbo!
+             */
+            Iterator i = Lookup.getDefault().lookup(IRPWorld.class).getZone(zoneid).getPlayers().iterator();
+            List<ClientObject> toMove = new ArrayList<>();
+            while (i.hasNext()) {
+                toMove.add((ClientObject) i.next());
+            }
+            for (ClientObject co : toMove) {
+                Lookup.getDefault().lookup(IRPWorld.class).changeZone(
+                        Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
+                        .getID().getID(), co);
+            }
+        }
+        return super.removeRPZone(zoneid);
     }
 
     @Override

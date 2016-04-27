@@ -83,21 +83,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     }
 
     @Override
-    public void onFinish() throws Exception {
-        super.onFinish();
-        /**
-         * Kick everyone to the default zone or they'll end in the limbo!
-         */
-        Iterator i = getPlayers().iterator();
-        while (i.hasNext()) {
-            Lookup.getDefault().lookup(IRPWorld.class).changeZone(
-                    Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
-                    .getID().getID(),
-                    (ClientObject) i.next());
-        }
-    }
-
-    @Override
     public RPObject remove(final RPObject.ID id) {
         return remove(objects.get(id));
     }
