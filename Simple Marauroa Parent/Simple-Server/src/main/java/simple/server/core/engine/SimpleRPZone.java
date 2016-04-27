@@ -230,7 +230,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         welcome(p);
                     }
                     LOG.debug("Object zone: "
-                            + ((RPObject) p).get("zoneid"));
+                            + ((RPObject) p).get(Entity.ZONE_ID));
                     //Let everyone else know
                     applyPublicEvent(new PrivateTextEvent(
                             NotificationType.INFORMATION, p.getName()

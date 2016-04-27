@@ -20,11 +20,13 @@ import simple.common.FeatureList;
 import simple.common.NotificationType;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.Outfit;
 import simple.server.core.entity.RPEntity;
@@ -100,7 +102,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         super(object);
         RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
         setRPClass(RPCLASS_NAME);
-        put("type", RPCLASS_NAME);
+        put(WellKnownActionConstant.TYPE, RPCLASS_NAME);
         awayReplies = new HashMap<>();
         update();
         addEmptySlots("!visited");
@@ -658,7 +660,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         for (RPObject item : objects) {
             try {
                 // We simply ignore corpses...
-                if (item.get("type").equals("item")) {
+                if (item.get(WellKnownActionConstant.TYPE).equals("item")) {
 
                     String name = item.get("name");
                     Item entity = SimpleSingletonRepository
@@ -876,9 +878,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     public static ClientObject createEmptyZeroLevelPlayer(String characterName) {
         ClientObject object = new ClientObject(new RPObject());
         object.setID(RPObject.INVALID_ID);
-        object.put("type", DEFAULT_RP_CLASSNAME);
-        object.put("name", characterName);
-        object.put("zoneid", 
+        object.put(WellKnownActionConstant.TYPE, DEFAULT_RP_CLASSNAME);
+        object.put(Entity.NAME, characterName);
+        object.put(Entity.ZONE_ID,
                 Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;
@@ -887,8 +889,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     public static ClientObject createEmptyZeroLevelPlayer(RPObject template) {
         ClientObject object = new ClientObject(template);
         object.setID(RPObject.INVALID_ID);
-        object.put("type", DEFAULT_RP_CLASSNAME);
-        object.put("zoneid", 
+        object.put(WellKnownActionConstant.TYPE, DEFAULT_RP_CLASSNAME);
+        object.put(Entity.ZONE_ID,
                 Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;

@@ -12,6 +12,7 @@ import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
@@ -26,7 +27,6 @@ import simple.server.core.event.TurnListener;
 @ServiceProvider(service = RPEntityInterface.class, position = 3)
 public class Item extends RPEntity implements TurnListener, EquipListener {
 
-    private static final long serialVersionUID = 1L;
     /**
      * list of possible slots for this item
      */
@@ -40,62 +40,62 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
             try {
                 RPClass entity = new RPClass(RPCLASS_NAME);
                 entity.isA(Entity.class.newInstance().getRPClassName());
-                
+
                 // class, sword/armor/...
                 entity.addAttribute("class", Type.STRING);
-                
+
                 // subclass, long sword/leather/armor/...
                 entity.addAttribute("subclass", Type.STRING);
-                
+
                 // name of item (ie 'Kings Sword')
                 entity.addAttribute("name", Type.STRING);
-                
+
                 // Some items have attack values
                 entity.addAttribute("atk", Type.SHORT);
-                
+
                 // Some items indicate how often you can attack.
                 entity.addAttribute("rate", Type.SHORT);
-                
+
                 // Some items have defense values
                 entity.addAttribute("def", Type.SHORT);
-                
+
                 // Some items(food) have amount of something
                 // (a bottle, a piece of meat).
                 entity.addAttribute("amount", Type.INT);
-                
+
                 // Some items (range weapons, ammunition, missiles)
                 // have a range.
                 entity.addAttribute("range", Type.SHORT);
-                
+
                 // Some items(food) have regeneration
                 entity.addAttribute("regen", Type.INT);
-                
+
                 // Some items(food) have regeneration speed
                 entity.addAttribute("frequency", Type.INT);
-                
+
                 // Some items(Stackable) have quantity
                 entity.addAttribute("quantity", Type.INT);
-                
+
                 // Some items (Stackable) have maximum quantity
                 entity.addAttribute("max_quantity", Type.INT);
-                
+
                 // Some items have minimum level to prevent spoiling
                 // the fun for new players
                 entity.addAttribute("min_level", Type.INT);
-                
+
                 // To store addAttributeitional info with an item
                 entity.addAttribute("infostring", Type.STRING);
-                
+
                 // Some items have individual values
                 entity.addAttribute("persistent", Type.FLAG);
-                
+
                 // Some items have lifesteal values
                 entity.addAttribute("lifesteal", Type.FLOAT);
-                
+
                 // Some items are quest rewards that other players
                 // don't deserve.
                 entity.addAttribute("bound", Type.STRING);
-                
+
                 // Some items should not be dropped on death
                 entity.addAttribute("undroppableondeath", Type.SHORT);
             } catch (InstantiationException | IllegalAccessException ex) {
@@ -117,7 +117,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     public Item(String name, String clazz, String subclass,
             Map<String, String> attributes) {
         setRPClass(RPCLASS_NAME);
-        put("type", "item");
+        put(WellKnownActionConstant.TYPE, "item");
         possibleSlots = new LinkedList<>();
         update();
 
@@ -297,8 +297,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      * Get the player this is bound to. A bound item can only be used by that
      * player.
      *
-     * @return The player name, or
-     * <code>null</code>.
+     * @return The player name, or <code>null</code>.
      */
     public String getBoundTo() {
         if (has("bound")) {
@@ -325,8 +324,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Bind this item to a player. A bound item can only be used by that player.
      *
-     * @param name The player name, or
-     * <code>null</code>.
+     * @param name The player name, or <code>null</code>.
      */
     public void setBoundTo(String name) {
         if (name != null) {
@@ -470,9 +468,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      * Return the name or something that can be used to identify the entity for
      * the player
      *
-     * @param definite
-     * <code>true</code> for "the", and
-     * <code>false</code> for "a/an" in case the entity has no name.
+     * @param definite <code>true</code> for "the", and <code>false</code> for
+     * "a/an" in case the entity has no name.
      *
      * @return	The description name.
      */
@@ -490,8 +487,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
     /**
      * Get the nicely formatted entity title/name.
      *
-     * @return The title, or
-     * <code>null</code> if unknown.
+     * @return The title, or <code>null</code> if unknown.
      */
     @Override
     public String getTitle() {

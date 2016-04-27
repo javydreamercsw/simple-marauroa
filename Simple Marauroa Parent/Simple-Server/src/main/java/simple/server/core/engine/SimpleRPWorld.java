@@ -25,6 +25,7 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
+import simple.server.core.entity.Entity;
 import static simple.server.core.entity.Entity.NAME;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.RPObjectMonitor;
@@ -370,7 +371,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 }
             }
         } else if (object != null) {
-            LOG.debug("addPlayer Zone " + object.get("zoneid")
+            LOG.debug("addPlayer Zone " + object.get(Entity.ZONE_ID)
                     + "not found for Player " + object.get("name"));
         }
         return result;

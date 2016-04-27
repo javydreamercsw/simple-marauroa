@@ -10,6 +10,7 @@ import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.extension.MarauroaServerExtension;
@@ -21,9 +22,9 @@ import simple.server.extension.MarauroaServerExtension;
 @ServiceProvider(service = RPEntityInterface.class, position = 1)
 public class Entity extends RPObject implements RPEntityInterface {
 
-    public static String DB_ID = "#db_id";
     protected String RPCLASS_NAME = "entity";
-    public static final String NAME = "name", DESC = "description";
+    public static final String NAME = "name", DESC = "description",
+            DB_ID = "#db_id", ZONE_ID = "zoneid";
     /**
      * The logger.
      */
@@ -97,8 +98,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             result = Grammar.article_noun(get("class"), definite);
         } else {
             String ret = "something indescribably strange";
-            if (has("type")) {
-                ret += " of type " + get("type");
+            if (has(WellKnownActionConstant.TYPE)) {
+                ret += " of type " + get(WellKnownActionConstant.TYPE);
             }
             if (has("id")) {
                 ret += " with id " + get("id");
@@ -165,8 +166,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             result = get("subclass").replace('_', ' ');
         } else if (has("class")) {
             result = get("class").replace('_', ' ');
-        } else if (has("type")) {
-            result = get("type").replace('_', ' ');
+        } else if (has(WellKnownActionConstant.TYPE)) {
+            result = get(WellKnownActionConstant.TYPE).replace('_', ' ');
         } else {
             result = null;
         }
@@ -184,7 +185,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         // of the zone and save as a local variable.
         if (zone == null) {
             zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
-                    .getRPZone(get("zoneid"));
+                    .getRPZone(get(Entity.ZONE_ID));
         }
         return zone;
     }
@@ -225,7 +226,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      *
      */
     public void notifyWorldAboutChanges() {
-        LOG.debug("Object zone: " + get("zoneid"));
+        LOG.debug("Object zone: " + get(Entity.ZONE_ID));
         Lookup.getDefault().lookup(IRPWorld.class).modify(this);
     }
 

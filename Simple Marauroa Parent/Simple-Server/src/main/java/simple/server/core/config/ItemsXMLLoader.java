@@ -17,6 +17,7 @@ import marauroa.common.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.rule.defaultruleset.DefaultItem;
 
 public class ItemsXMLLoader extends DefaultHandler {
@@ -97,7 +98,7 @@ public class ItemsXMLLoader extends DefaultHandler {
             slots = new LinkedList<String>();
             description = "";
             implementation = null;
-        } else if (qName.equals("type")) {
+        } else if (qName.equals(WellKnownActionConstant.TYPE)) {
             clazz = attrs.getValue("class");
             subclass = attrs.getValue("subclass");
         } else if (qName.equals("implementation")) {

@@ -13,6 +13,7 @@ import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.entity.Entity;
 import simple.server.core.event.LoginListener;
 import simple.server.core.event.TextEvent;
 
@@ -40,7 +41,7 @@ public class PublicChatAction implements ActionProvider {
                     String text = action.get(TEXT);
                     logger.debug("Processing text event: " + text);
                     Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                            Lookup.getDefault().lookup(IRPWorld.class).getZone(((RPObject) player).get("zoneid")),
+                            Lookup.getDefault().lookup(IRPWorld.class).getZone(((RPObject) player).get(Entity.ZONE_ID)),
                             new TextEvent(text, player.getName()));
                     if ("true".equals(Configuration.getConfiguration().get("log_chat", "false"))) {
                         logger.info(text);
