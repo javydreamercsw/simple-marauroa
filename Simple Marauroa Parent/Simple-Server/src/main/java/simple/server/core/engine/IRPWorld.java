@@ -160,6 +160,15 @@ public interface IRPWorld extends Iterable<IRPZone> {
     SimpleRPZone getZone(final String id);
 
     /**
+     * Finds a zone by its id.
+     *
+     * @param id The zone's id
+     *
+     * @return The matching zone, or <code>null</code> if not found.
+     */
+    SimpleRPZone getZone(final IRPZone.ID id);
+
+    /**
      * Get a list of zones
      *
      * @return list of zones
