@@ -7,7 +7,7 @@ public class WellKnownActionConstant {
     public static final String BASEOBJECT = "baseobject";
     public static final String BASEITEM = "baseitem";
     public static final String USE = "use";
-    public static final String TYPE = WellKnownActionConstant.TYPE;
+    public static final String TYPE = "type";
     public static final String X = "x";
     public static final String Y = "y";
     public static final String MINUTES = "minutes";
