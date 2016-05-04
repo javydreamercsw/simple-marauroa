@@ -188,6 +188,13 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     @Override
     public void add(final RPObject object, final ClientObjectInterface player) {
         synchronized (this) {
+            /*
+             * Assign [zone relative] ID info if not already there.
+             */
+            if (!object.has("id")) {
+                assignRPObjectID(object);
+            }
+
             if (object instanceof ClientObjectInterface) {
                 LOG.debug("Processing ClientObjectInterface");
                 try {
