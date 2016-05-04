@@ -243,8 +243,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public IRPZone getRPZone(String zone) {
-        return getRPZone(new IRPZone.ID(zone));
+    public ISimpleRPZone getRPZone(String zone) {
+        return (ISimpleRPZone) getRPZone(new IRPZone.ID(zone));
     }
 
     @Override
