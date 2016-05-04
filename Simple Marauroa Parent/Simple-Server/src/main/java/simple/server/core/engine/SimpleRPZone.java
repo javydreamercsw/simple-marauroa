@@ -179,24 +179,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         return playerList.toString();
     }
 
-    /**
-     * Gets all non-players in this zone.
-     *
-     * @return A list of all non-players.
-     */
-    @Override
-    public List<RPObject> getNonPlayers() {
-        ArrayList<RPObject> contentList = new ArrayList<>();
-        Iterator<RPObject> i = iterator();
-        while (i.hasNext()) {
-            RPObject object = i.next();
-            if (!players.containsKey(object.get("name"))) {
-                contentList.add(object);
-            }
-        }
-        return contentList;
-    }
-
     @Override
     public ClientObjectInterface getPlayer(final String name) {
         return players.get(name);

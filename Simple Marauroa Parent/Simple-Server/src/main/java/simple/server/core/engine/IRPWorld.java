@@ -138,7 +138,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param zone zone's name
      * @return Zone
      */
-    IRPZone getRPZone(String zone);
+    ISimpleRPZone getRPZone(String zone);
 
     /**
      * Gives the number of turns that will take place during a given number of

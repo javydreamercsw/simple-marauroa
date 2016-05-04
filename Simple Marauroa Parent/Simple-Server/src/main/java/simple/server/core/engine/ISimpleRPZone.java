@@ -45,12 +45,11 @@ public interface ISimpleRPZone extends IRPZone {
     String getName();
 
     /**
-     * Gets all non-players in this zone.
+     * Get a player by the specified name.
      *
-     * @return A list of all non-players.
+     * @param name player's name
+     * @return the requested player or null if not found.
      */
-    List<RPObject> getNonPlayers();
-
     ClientObjectInterface getPlayer(final String name);
 
     /**
@@ -59,7 +58,7 @@ public interface ISimpleRPZone extends IRPZone {
      * @return A list of all players.
      */
     Collection<ClientObjectInterface> getPlayers();
-    
+
     /**
      * Gets all NPCs in this zone.
      *
