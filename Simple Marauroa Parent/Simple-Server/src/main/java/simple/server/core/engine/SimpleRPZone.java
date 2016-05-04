@@ -124,12 +124,14 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             } else if (object instanceof Entity) {
                 ((Entity) object).onRemoved(this);
                 npcs.remove(Tool.extractName(object));
+                super.remove(object.getID());
             }
             Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
                     getID().toString());
             return super.remove(object.getID());
         } else {
-            return super.remove(object.getID());
+            LOG.warn("Trying to remove null RPObject!");
+            return null;
         }
     }
 
