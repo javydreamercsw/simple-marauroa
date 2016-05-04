@@ -5,7 +5,7 @@ import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPClass;
 import org.openide.util.lookup.ServiceProvider;
-import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.api.IRPEvent;
 
@@ -74,7 +74,7 @@ public class ZoneEvent extends SimpleRPEvent {
      * @param zone room added/deleted from server
      * @param action either add or remove
      */
-    public ZoneEvent(SimpleRPZone zone, int action) {
+    public ZoneEvent(ISimpleRPZone zone, int action) {
         super(RPCLASS_NAME);
         put(FIELD, zone.getName());
         //Don't add the description if deleting the room...
