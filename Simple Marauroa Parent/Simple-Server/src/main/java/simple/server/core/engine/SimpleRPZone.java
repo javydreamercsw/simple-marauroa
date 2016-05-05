@@ -185,6 +185,10 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         return players.get(name);
     }
 
+    public RPEntityInterface getNPC(String name) {
+        return npcs.get(name);
+    }
+
     @Override
     public void add(final RPObject object, final ClientObjectInterface player) {
         synchronized (this) {

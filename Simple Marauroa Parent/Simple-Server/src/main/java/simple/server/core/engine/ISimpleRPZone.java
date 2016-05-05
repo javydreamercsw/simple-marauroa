@@ -67,6 +67,14 @@ public interface ISimpleRPZone extends IRPZone {
     Collection<RPEntityInterface> getNPCS();
 
     /**
+     * Get a specific NPC.
+     *
+     * @param name NPC's name.
+     * @return NPC or null if not found.
+     */
+    RPEntityInterface getNPC(String name);
+
+    /**
      * Gets all players in this zone.
      *
      * @param separator Character to separate the names in the list.
