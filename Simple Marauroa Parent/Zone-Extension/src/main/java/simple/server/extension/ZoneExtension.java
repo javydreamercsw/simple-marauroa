@@ -66,7 +66,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                         }
                     }));
         } else {
-            LOG.log(Level.WARNING, "Added a {0}", object.getClass());
+            LOG.log(Level.FINE, "Added a {0}", object.getClass());
         }
         return object;
     }
