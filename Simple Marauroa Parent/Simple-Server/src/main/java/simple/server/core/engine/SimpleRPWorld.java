@@ -388,10 +388,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 super.changeZone(zone.getID(), object);
                 Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                         new DelayedPlayerEventSender(new PrivateTextEvent(
-                                NotificationType.INFORMATION, "Changed to zone: " + newzoneid),
+                                NotificationType.INFORMATION,
+                                "Changed to zone: " + newzoneid),
                                 (ClientObjectInterface) object));
             } else {
-                ((ClientObjectInterface) object).sendPrivateText("Zone " + newzoneid + " doesn't exist!");
+                ((ClientObjectInterface) object).sendPrivateText("Zone "
+                        + newzoneid + " doesn't exist!");
             }
         }
         LOG.debug("World after changing zone:");
@@ -470,25 +472,31 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void modify(RPObject object) {
         super.modify(object);
-        if (MONITORS.containsKey(Tool.extractName(object))) {
-            for (RPObjectMonitor m : MONITORS.get(Tool.extractName(object))) {
-                m.modify(object);
+        synchronized (MONITORS) {
+            if (MONITORS.containsKey(Tool.extractName(object))) {
+                for (RPObjectMonitor m : MONITORS.get(Tool.extractName(object))) {
+                    m.modify(object);
+                }
             }
         }
     }
 
     @Override
     public void registerMonitor(String target, RPObjectMonitor monitor) {
-        if (!MONITORS.containsKey(target)) {
-            MONITORS.put(target, new ArrayList<>());
+        synchronized (MONITORS) {
+            if (!MONITORS.containsKey(target)) {
+                MONITORS.put(target, new ArrayList<>());
+            }
+            MONITORS.get(target).add(monitor);
         }
-        MONITORS.get(target).add(monitor);
     }
 
     @Override
     public void unregisterMonitor(String target, RPObjectMonitor monitor) {
-        if (MONITORS.containsKey(target)) {
-            MONITORS.get(target).remove(monitor);
+        synchronized (MONITORS) {
+            if (MONITORS.containsKey(target)) {
+                MONITORS.get(target).remove(monitor);
+            }
         }
     }
 
