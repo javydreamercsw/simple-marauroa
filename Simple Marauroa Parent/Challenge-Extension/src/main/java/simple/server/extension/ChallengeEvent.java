@@ -3,8 +3,8 @@ package simple.server.extension;
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
-import marauroa.common.game.RPEvent;
 import org.openide.util.lookup.ServiceProvider;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.api.IRPEvent;
 
 /**
@@ -13,7 +13,7 @@ import simple.server.core.event.api.IRPEvent;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IRPEvent.class)
-public class ChallengeEvent extends RPEvent implements IRPEvent {
+public class ChallengeEvent extends SimpleRPEvent {
 
     public static final String RPCLASS_NAME = "challenge_event";
     public static final String CHALLENGER = "challenger", ACTION = "action", 
