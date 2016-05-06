@@ -30,6 +30,7 @@ public class ChallengeEvent extends SimpleRPEvent {
             rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGER, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, CHALLENGED, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+            addCommonAttributes(rpclass);
         }
     }
 
