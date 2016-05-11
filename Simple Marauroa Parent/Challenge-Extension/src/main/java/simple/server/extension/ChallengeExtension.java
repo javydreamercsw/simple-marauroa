@@ -51,16 +51,25 @@ public class ChallengeExtension extends SimpleServerExtension
                     .getPlayer(action.get(CHALLENGED));
             if (challenged == null) {
                 //Might be a NPC
-                challenged = (RPObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getNPC(action.get(CHALLENGED));
+                challenged = (RPObject) ((SimpleRPRuleProcessor) Lookup
+                        .getDefault().lookup(IRPRuleProcessor.class))
+                        .getNPC(action.get(CHALLENGED));
             }
-            ClientObjectInterface challenger
-                    = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+            RPObject challenger
+                    = (RPObject) ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class))
                     .getPlayer(action.get(CHALLENGER));
+            if (challenger == null) {
+                //Might be a NPC
+                challenger = (RPObject) ((SimpleRPRuleProcessor) Lookup
+                        .getDefault().lookup(IRPRuleProcessor.class))
+                        .getNPC(action.get(CHALLENGED));
+            }
             if (action.get("type").equals(CHALLENGE)) {
                 LOG.debug("Processing Challenge...");
                 //Check both players exist
                 if (challenged != null && challenger != null
-                        && !Tool.extractName(challenged).equals(challenger.getName())) {
+                        && !Tool.extractName(challenged).equals(Tool.extractName(challenger))) {
                     LOG.debug("Both players still exist. "
                             + "Send the Challenge to the challenged.");
                     switch (action.getInt(ChallengeEvent.ACTION)) {
@@ -118,12 +127,20 @@ public class ChallengeExtension extends SimpleServerExtension
                 LOG.debug("Processing challenge accept...");
                 challenger.addEvent(new ChallengeEvent(action.get(CHALLENGER),
                         action.get(CHALLENGED), ChallengeEvent.ACCEPT));
-                challenger.notifyWorldAboutChanges();
+                if (challenger instanceof ClientObjectInterface) {
+                    ((ClientObjectInterface) challenger).notifyWorldAboutChanges();
+                } else {
+                    Lookup.getDefault().lookup(IRPWorld.class).modify(challenger);
+                }
             } else if (action.get("type").equals(REJECT_CHALLENGE)) {
                 LOG.debug("Processing challenge reject...");
                 challenger.addEvent(new ChallengeEvent(action.get(CHALLENGER),
                         action.get(CHALLENGED), ChallengeEvent.REJECT));
-                challenger.notifyWorldAboutChanges();
+                if (challenger instanceof ClientObjectInterface) {
+                    ((ClientObjectInterface) challenger).notifyWorldAboutChanges();
+                } else {
+                    Lookup.getDefault().lookup(IRPWorld.class).modify(challenger);
+                }
             } else if (action.get("type").equals(CANCEL_CHALLENGE)) {
                 LOG.debug("Processing challenge cancel...");
                 //Notify challenged
