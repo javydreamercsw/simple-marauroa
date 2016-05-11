@@ -24,6 +24,7 @@ import java.util.List;
 
  */
 public class DiceParser {
+
     /* this is a helper class to manage the input "stream"*/
 
     private static class StringStream {
@@ -129,6 +130,8 @@ public class DiceParser {
      * dtail XXXX| FA(die,bonus,N) dtail dtail::= & dice | <nothing>
      * die::= (N)? dN bonus::= + N | -N
      *
+     * @param s String to parse.
+     * @return List of rolls.
      */
     public static List<DieRoll> parseRoll(String s) {
         StringStream ss = new StringStream(s.toLowerCase());
@@ -158,13 +161,11 @@ public class DiceParser {
         int num;
         if (x == null) {
             num = 1;
+        } else if (ss.checkAndEat("x")) {
+            num = x;
         } else {
-            if (ss.checkAndEat("x")) {
-                num = x;
-            } else {
-                num = 1;
-                ss.restore(saved);
-            }
+            num = 1;
+            ss.restore(saved);
         }
         DieRoll dr = parseDice(ss);
         if (dr == null) {
