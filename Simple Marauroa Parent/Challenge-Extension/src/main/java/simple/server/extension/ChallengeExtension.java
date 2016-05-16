@@ -63,7 +63,7 @@ public class ChallengeExtension extends SimpleServerExtension
                 //Might be a NPC
                 challenger = (RPObject) ((SimpleRPRuleProcessor) Lookup
                         .getDefault().lookup(IRPRuleProcessor.class))
-                        .getNPC(action.get(CHALLENGED));
+                        .getNPC(action.get(CHALLENGER));
             }
             if (action.get("type").equals(CHALLENGE)) {
                 LOG.debug("Processing Challenge...");
