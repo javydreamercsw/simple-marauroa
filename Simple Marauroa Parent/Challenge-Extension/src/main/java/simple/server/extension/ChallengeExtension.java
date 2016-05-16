@@ -74,25 +74,40 @@ public class ChallengeExtension extends SimpleServerExtension
                             + "Send the Challenge to the challenged.");
                     switch (action.getInt(ChallengeEvent.ACTION)) {
                         case ChallengeEvent.CHALLENGE:
-                            challenged.addEvent(new ChallengeEvent(action.get(CHALLENGER),
-                                    action.get(CHALLENGED), ChallengeEvent.CHALLENGE));
+                            //Let challenger know.
+                            challenged.addEvent(
+                                    new ChallengeEvent(action.get(CHALLENGER),
+                                            action.get(CHALLENGED),
+                                            ChallengeEvent.CHALLENGE));
+                            for (ChallengeListener cl
+                                    : Lookup.getDefault().lookupAll(ChallengeListener.class)) {
+                                cl.challengeMade(rpo, action);
+                            }
                             break;
                         case ChallengeEvent.CANCEL:
                             LOG.info("Processing challenge cancel!");
+                            for (ChallengeListener cl
+                                    : Lookup.getDefault().lookupAll(ChallengeListener.class)) {
+                                cl.challengeCanceled(rpo, action);
+                            }
                             break;
                         case ChallengeEvent.ACCEPT:
                             LOG.info("Processing challenge accept!");
+                            for (ChallengeListener cl
+                                    : Lookup.getDefault().lookupAll(ChallengeListener.class)) {
+                                cl.challengeAccepted(rpo, action);
+                            }
                             break;
                         case ChallengeEvent.REJECT:
                             LOG.info("Processing challenge reject!");
+                            for (ChallengeListener cl
+                                    : Lookup.getDefault().lookupAll(ChallengeListener.class)) {
+                                cl.challengeRejected(rpo, action);
+                            }
                             break;
                         default:
                             LOG.warn("Unhandled action: "
                                     + action.getInt(ChallengeEvent.ACTION));
-                    }
-                    if (player instanceof RPObject) {
-                        ((RPObject) player).addEvent(
-                                new TextEvent("Command completed", "System"));
                     }
                     if (challenged instanceof ClientObjectInterface) {
                         ((ClientObjectInterface) challenged).notifyWorldAboutChanges();
