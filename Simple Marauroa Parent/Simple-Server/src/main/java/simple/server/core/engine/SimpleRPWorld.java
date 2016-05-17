@@ -82,7 +82,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public void deleteIfEmpty(String zone) {
         SimpleRPZone sZone = (SimpleRPZone) getRPZone(zone);
         if (sZone != null && sZone.isDeleteWhenEmpty()
-                && sZone.getPlayers().isEmpty()) {
+                && sZone.getPlayers().isEmpty()
+                && !getDefaultZone().getID().equals(sZone.getID())) {
             try {
                 LOG.debug("Removing empty zone: " + sZone.getName());
                 removeRPZone(sZone.getID());
@@ -424,7 +425,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public IRPZone removeRPZone(ID zoneid) throws Exception {
-        if (hasRPZone(zoneid)) {
+        if (hasRPZone(zoneid) && !getDefaultZone().getID().equals(zoneid)) {
             /**
              * Kick everyone to the default zone or they'll end in the limbo!
              */
