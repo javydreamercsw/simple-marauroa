@@ -289,6 +289,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                     .createClientObject(object);
             entry.object = (RPObject) player;
 
+            Lookup.getDefault().lookup(IRPWorld.class)
+                    .addPlayer((RPObject) player);
             addGameEvent(player.getName(), "login");
             Lookup.getDefault()
                     .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
@@ -299,8 +301,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             if (!player.isGhost()) {
                 notifyOnlineStatus(true, player.getName());
             }
-            Lookup.getDefault().lookup(IRPWorld.class)
-                    .addPlayer((RPObject) player);
         } catch (Exception e) {
             LOG.error("There has been a severe problem loading player "
                     + object.get("#db_id"), e);

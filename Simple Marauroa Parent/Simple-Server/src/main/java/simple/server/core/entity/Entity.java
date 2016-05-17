@@ -183,10 +183,10 @@ public class Entity extends RPObject implements RPEntityInterface {
     public SimpleRPZone getZone() {
         // Use onAdded()/onRemoved() to grab a copy
         // of the zone and save as a local variable.
-        if (zone == null) {
-            zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
-                    .getRPZone(get(Entity.ZONE_ID));
-        }
+        Lookup.getDefault()
+                .lookup(IRPWorld.class).checkZone(this);
+        zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
+                .getRPZone(get(Entity.ZONE_ID));
         return zone;
     }
 
