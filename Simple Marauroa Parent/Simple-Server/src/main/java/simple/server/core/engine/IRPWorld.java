@@ -31,7 +31,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
 
     /**
      * Remove zone from world (use with caution). Make sure to move all players
-     * in it to another zone.
+     * in it to another zone. This is ignored for the default zone.
      *
      * @param zone Zone to remove
      * @return Removed zone
@@ -40,7 +40,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
 
     /**
      * Remove zone from world (use with caution). Make sure to move all players
-     * in it to another zone.
+     * in it to another zone. This is ignored for the default zone.
      *
      * @param zoneid Id of the zone to remove
      * @return Removed zone
@@ -126,7 +126,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
     void changeZone(IRPZone.ID newzoneid, RPObject object);
 
     /**
-     * Delete zone if empty
+     * Delete zone if empty. This is ignored for the default zone.
      *
      * @param zone Zone to delete
      */
