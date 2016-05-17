@@ -24,7 +24,7 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     protected String RPCLASS_NAME = "entity";
     public static final String NAME = "name", DESC = "description",
-            DB_ID = "#db_id", ZONE_ID = "zoneid";
+            DB_ID = "#db_id", ZONE_ID = "zoneid", ID = "id";
     /**
      * The logger.
      */
