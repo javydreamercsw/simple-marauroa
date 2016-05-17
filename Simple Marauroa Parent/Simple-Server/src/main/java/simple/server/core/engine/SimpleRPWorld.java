@@ -470,7 +470,20 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
+    public void checkZone(RPObject object) {
+        SimpleRPZone zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
+                .getRPZone(object.get(Entity.ZONE_ID));
+        if (zone == null) {
+            //The zone we were no longer exists use default.
+            zone = (SimpleRPZone) Lookup.getDefault()
+                    .lookup(IRPWorld.class).getDefaultZone();
+            object.put(Entity.ZONE_ID, zone.getName());
+        }
+    }
+
+    @Override
     public void modify(RPObject object) {
+        checkZone(object);
         super.modify(object);
         synchronized (MONITORS) {
             if (MONITORS.containsKey(Tool.extractName(object))) {

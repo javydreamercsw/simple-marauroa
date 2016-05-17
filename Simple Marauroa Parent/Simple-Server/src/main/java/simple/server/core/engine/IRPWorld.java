@@ -283,4 +283,13 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @return Removed object.
      */
     public RPObject remove(RPObject.ID id);
+
+    /**
+     * Checks if zone is valid. If not, object is assigned to default zone. This
+     * scenario occurs if Object is stored into database as being on a zone that
+     * no longer exists when it is loaded back from database.
+     *
+     * @param object Object to check zone for.
+     */
+    public void checkZone(RPObject object);
 }
