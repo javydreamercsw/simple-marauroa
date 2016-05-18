@@ -429,7 +429,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             /**
              * Kick everyone to the default zone or they'll end in the limbo!
              */
-            Iterator i = Lookup.getDefault().lookup(IRPWorld.class).getZone(zoneid).getPlayers().iterator();
+            Iterator i = Lookup.getDefault().lookup(IRPWorld.class)
+                    .getZone(zoneid).getPlayers().iterator();
             List<ClientObject> toMove = new ArrayList<>();
             while (i.hasNext()) {
                 toMove.add((ClientObject) i.next());
@@ -438,6 +439,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 Lookup.getDefault().lookup(IRPWorld.class).changeZone(
                         Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
                         .getID().getID(), co);
+            }
+            //Handle NPC's
+            i = Lookup.getDefault().lookup(IRPWorld.class)
+                    .getZone(zoneid).getNPCS().iterator();
+            while (i.hasNext()) {
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .remove(((RPObject) i.next()).getID());
             }
         }
         return super.removeRPZone(zoneid);
@@ -528,5 +536,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             }
         }
         return result;
+    }
+
+    @Override
+    public ISimpleRPZone getDefaultZone() {
+        return (ISimpleRPZone) super.getDefaultZone();
     }
 }

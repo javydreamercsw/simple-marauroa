@@ -235,7 +235,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @return Default Zone
      */
-    public IRPZone getDefaultZone();
+    public ISimpleRPZone getDefaultZone();
 
     /**
      * Create system accounts.
