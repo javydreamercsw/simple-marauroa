@@ -31,12 +31,10 @@ public class SimpleDatabase implements IDatabase {
     protected void registerDAOs() {
         LOG.debug("Loading DAOs from: " + getClass().getSimpleName());
         //Override DAO's here
-        Lookup.getDefault().lookupAll(DAO.class).stream().map((dao) -> {
+        for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
             LOG.debug("Registerig DAO: " + dao.getClass().getSimpleName());
-            return dao;
-        }).forEach((dao) -> {
             dao.register();
-        });
+        }
     }
 
     @Override
