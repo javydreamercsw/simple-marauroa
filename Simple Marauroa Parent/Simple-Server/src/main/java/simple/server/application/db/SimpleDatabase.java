@@ -23,9 +23,11 @@ public class SimpleDatabase implements IDatabase {
 
     @Override
     public void initialize() throws SQLException {
-        //Initialization made in JPADatabaseAdapter
-        registerDAOs();
-        initialized = true;
+        if (!isInitialized()) {
+            //Initialization made in JPADatabaseAdapter
+            initialized = true;
+            registerDAOs();
+        }
     }
 
     protected void registerDAOs() {
