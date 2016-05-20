@@ -37,7 +37,6 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     public AbstractSkill() {
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
-        update();
     }
 
     public AbstractSkill(RPObject object) {
