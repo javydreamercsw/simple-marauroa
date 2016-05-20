@@ -58,13 +58,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @SuppressWarnings({"OverridableMethodCallInConstructor",
         "LeakingThisInConstructor"})
-    public SimpleRPWorld() {
-        super();
-        if (!initialized) {
-            initialize();
-            initialized = true;
-        }
-    }
 
     @Override
     public void setDefaultZone(IRPZone defaultZone) {
@@ -112,6 +105,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void onInit() {
         if (!initialized) {
+            initialize();
             try {
                 LOG.info("Loading extensions...");
                 Collection<? extends MarauroaServerExtension> ext
@@ -175,6 +169,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                         .stream().forEach((extension) -> {
                             extension.afterWorldInit();
                         });
+                initialized = true;
             } catch (Exception e) {
                 LOG.error("Error initializing the server!", e);
             }
