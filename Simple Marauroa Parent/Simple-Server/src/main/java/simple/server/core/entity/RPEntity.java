@@ -17,17 +17,16 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = RPEntityInterface.class, position = 2)
 public class RPEntity extends Entity {
 
-    private static final long serialVersionUID = 1L;
     /**
      * The title attribute name.
      */
     public static final String ATTR_TITLE = "title";
-    protected static final Statistics stats = Statistics.getStatistics();
+    protected static final Statistics STATS = Statistics.getStatistics();
     private int level;
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(RPEntity.class);
+    private static final Logger LOG = Log4J.getLogger(RPEntity.class);
 
     @Override
     public void generateRPClass() {
@@ -39,7 +38,7 @@ public class RPEntity extends Entity {
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
             }
         } catch (SyntaxException e) {
-            logger.error("cannot generateRPClass", e);
+            LOG.error("cannot generateRPClass", e);
         } catch (InstantiationException | IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(RPEntity.class.getName())
                     .log(Level.SEVERE, null, ex);

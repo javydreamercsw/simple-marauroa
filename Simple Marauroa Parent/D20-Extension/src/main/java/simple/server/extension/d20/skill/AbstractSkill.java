@@ -8,13 +8,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
-import static simple.server.extension.d20.skill.D20Skill.modifiers;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
 import simple.server.extension.d20.rpclass.D20Class;
+import static simple.server.extension.d20.skill.D20Skill.modifiers;
 
 /**
  *
@@ -34,6 +35,12 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     public final static String RP_CLASS = "Abstract Skill";
 
     public AbstractSkill() {
+        RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
+        setName(RPCLASS_NAME);
+    }
+
+    public AbstractSkill(RPObject object) {
+        super(object);
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
     }

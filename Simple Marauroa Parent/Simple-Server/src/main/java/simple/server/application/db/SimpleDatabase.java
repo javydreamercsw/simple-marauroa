@@ -16,31 +16,40 @@ public class SimpleDatabase implements IDatabase {
 
     private static final Logger LOG = Log4J.getLogger(SimpleDatabase.class);
     private boolean initialized = false;
-
-    public SimpleDatabase() {
-        new DatabaseFactory().initializeDatabase();
-    }
+    private boolean marauroaInitDisabled;
 
     @Override
     public void initialize() throws SQLException {
-        //Initialization made in JPADatabaseAdapter
-        registerDAOs();
-        initialized = true;
+        if (!isInitialized()) {
+            if (!isMarauroaInitializationDisabled()) {
+                new DatabaseFactory().initializeDatabase();
+            }
+            registerDAOs();
+            initialized = true;
+        }
     }
 
     protected void registerDAOs() {
         LOG.debug("Loading DAOs from: " + getClass().getSimpleName());
         //Override DAO's here
-        Lookup.getDefault().lookupAll(DAO.class).stream().map((dao) -> {
+        for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
             LOG.debug("Registerig DAO: " + dao.getClass().getSimpleName());
-            return dao;
-        }).forEach((dao) -> {
             dao.register();
-        });
+        }
     }
 
     @Override
     public boolean isInitialized() {
         return initialized;
+    }
+
+    @Override
+    public final void setDisableMarauroaInitialization(boolean disable) {
+        marauroaInitDisabled = disable;
+    }
+
+    @Override
+    public final boolean isMarauroaInitializationDisabled() {
+        return marauroaInitDisabled;
     }
 }

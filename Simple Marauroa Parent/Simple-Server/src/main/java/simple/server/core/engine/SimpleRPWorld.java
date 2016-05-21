@@ -58,13 +58,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @SuppressWarnings({"OverridableMethodCallInConstructor",
         "LeakingThisInConstructor"})
-    public SimpleRPWorld() {
-        super();
-        if (!initialized) {
-            initialize();
-            initialized = true;
-        }
-    }
 
     @Override
     public void setDefaultZone(IRPZone defaultZone) {
@@ -111,71 +104,75 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      */
     @Override
     public void onInit() {
-        try {
-            LOG.info("Loading extensions...");
-            Collection<? extends MarauroaServerExtension> ext
-                    = Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
-            LOG.info("Found " + ext.size() + " extensions to register!");
-            for (MarauroaServerExtension extension : ext) {
-                LOG.debug("Loading extension: " + extension.getClass()
-                        .getSimpleName());
-                extension.updateDatabase();
-            }
-            LOG.info("Done!");
-            LOG.info("Loading events...");
-            Collection<? extends IRPEvent> events
-                    = Lookup.getDefault().lookupAll(IRPEvent.class);
-            LOG.info("Found " + events.size() + " events to register!");
-            for (IRPEvent event : events) {
-                LOG.debug("Registering event: " + event.getClass()
-                        .getSimpleName()
-                        + ": " + event.getRPClassName());
-                event.generateRPClass();
-            }
-            LOG.info("Done!");
-            LOG.info("Creating RPClasses...");
-            Collection<? extends RPEntityInterface> classes
-                    = Lookup.getDefault().lookupAll(RPEntityInterface.class);
-            LOG.info("Found " + classes.size() + " Entities to register!");
-            for (RPEntityInterface entity : classes) {
-                LOG.debug("Registering entity: "
-                        + entity.getClass().getSimpleName());
-                entity.generateRPClass();
-            }
-            LOG.info("Done!");
-            LOG.info("Loading actions...");
-            Collection<? extends ActionProvider> actions
-                    = Lookup.getDefault().lookupAll(ActionProvider.class);
-            LOG.info("Found " + actions.size() + " Actions to register!");
-            for (ActionProvider action : actions) {
-                LOG.debug("Registering action: "
-                        + action.getClass().getSimpleName());
-                action.register();
-            }
-            LOG.info("Done!");
+        if (!initialized) {
+            initialize();
+            try {
+                LOG.info("Loading extensions...");
+                Collection<? extends MarauroaServerExtension> ext
+                        = Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
+                LOG.info("Found " + ext.size() + " extensions to register!");
+                for (MarauroaServerExtension extension : ext) {
+                    LOG.debug("Loading extension: " + extension.getClass()
+                            .getSimpleName());
+                    extension.updateDatabase();
+                }
+                LOG.info("Done!");
+                LOG.info("Loading events...");
+                Collection<? extends IRPEvent> events
+                        = Lookup.getDefault().lookupAll(IRPEvent.class);
+                LOG.info("Found " + events.size() + " events to register!");
+                for (IRPEvent event : events) {
+                    LOG.debug("Registering event: " + event.getClass()
+                            .getSimpleName()
+                            + ": " + event.getRPClassName());
+                    event.generateRPClass();
+                }
+                LOG.info("Done!");
+                LOG.info("Creating RPClasses...");
+                Collection<? extends RPEntityInterface> classes
+                        = Lookup.getDefault().lookupAll(RPEntityInterface.class);
+                LOG.info("Found " + classes.size() + " Entities to register!");
+                for (RPEntityInterface entity : classes) {
+                    LOG.debug("Registering entity: "
+                            + entity.getClass().getSimpleName());
+                    entity.generateRPClass();
+                }
+                LOG.info("Done!");
+                LOG.info("Loading actions...");
+                Collection<? extends ActionProvider> actions
+                        = Lookup.getDefault().lookupAll(ActionProvider.class);
+                LOG.info("Found " + actions.size() + " Actions to register!");
+                for (ActionProvider action : actions) {
+                    LOG.debug("Registering action: "
+                            + action.getClass().getSimpleName());
+                    action.register();
+                }
+                LOG.info("Done!");
 
-            createSystemAccount();
-            //Empty right now but just in case
-            super.onInit();
-            boolean needDefault = true;
-            for (IDefaultZoneProvider provider
-                    : Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)) {
-                for (IRPZone zone : provider.getDefaultZones()) {
-                    if (needDefault) {
-                        setDefaultZone(zone);
-                        needDefault = false;
-                    } else {
-                        //setDefaultZone adds the zone
-                        addRPZone(zone);
+                createSystemAccount();
+                //Empty right now but just in case
+                super.onInit();
+                boolean needDefault = true;
+                for (IDefaultZoneProvider provider
+                        : Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)) {
+                    for (IRPZone zone : provider.getDefaultZones()) {
+                        if (needDefault) {
+                            setDefaultZone(zone);
+                            needDefault = false;
+                        } else {
+                            //setDefaultZone adds the zone
+                            addRPZone(zone);
+                        }
                     }
                 }
+                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                        .stream().forEach((extension) -> {
+                            extension.afterWorldInit();
+                        });
+                initialized = true;
+            } catch (Exception e) {
+                LOG.error("Error initializing the server!", e);
             }
-            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                    .stream().forEach((extension) -> {
-                        extension.afterWorldInit();
-                    });
-        } catch (Exception e) {
-            LOG.error("Error initializing the server!", e);
         }
     }
 
