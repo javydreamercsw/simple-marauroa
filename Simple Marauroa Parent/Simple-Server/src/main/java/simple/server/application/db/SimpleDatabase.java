@@ -16,14 +16,11 @@ public class SimpleDatabase implements IDatabase {
 
     private static final Logger LOG = Log4J.getLogger(SimpleDatabase.class);
     private boolean initialized = false;
-    private boolean marauroaInitDisabled;
 
     @Override
     public void initialize() throws SQLException {
         if (!isInitialized()) {
-            if (!isMarauroaInitializationDisabled()) {
-                new DatabaseFactory().initializeDatabase();
-            }
+            new DatabaseFactory().initializeDatabase();
             registerDAOs();
             initialized = true;
         }
@@ -41,15 +38,5 @@ public class SimpleDatabase implements IDatabase {
     @Override
     public boolean isInitialized() {
         return initialized;
-    }
-
-    @Override
-    public final void setDisableMarauroaInitialization(boolean disable) {
-        marauroaInitDisabled = disable;
-    }
-
-    @Override
-    public final boolean isMarauroaInitializationDisabled() {
-        return marauroaInitDisabled;
     }
 }
