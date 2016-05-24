@@ -2,8 +2,8 @@ package simple.server.extension.d20.skill;
 
 import java.util.HashMap;
 import java.util.Map;
-import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.D20Characteristic;
+import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.requirement.D20Requirement;
 
 /**
@@ -15,7 +15,7 @@ public interface D20Skill extends D20Characteristic, D20Requirement {
     /**
      * Allows to have dice equations as modifier.
      */
-    Map<Class<? extends D20Ability>, String> modifiers = new HashMap<>();
+    Map<Class<? extends D20Ability>, String> MODS = new HashMap<>();
 
     /**
      * Check if it modifies the attribute.
@@ -36,7 +36,7 @@ public interface D20Skill extends D20Characteristic, D20Requirement {
     /**
      * Get the ability tied to this skill.
      *
-     * @return
+     * @return ability for this skill.
      */
     public Class<? extends D20Ability> getAbility();
 

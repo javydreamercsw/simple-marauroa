@@ -32,14 +32,14 @@ public interface D20Class extends D20Characteristic, D20Level {
     /**
      * Feats awarded as a bonus.
      *
-     * @return
+     * @return map of bonus feats.
      */
     public Map<Class<? extends D20Feat>, Integer> getBonusFeats();
-    
+
     /**
      * Skills awarded as a bonus.
      *
-     * @return
+     * @return map of bonus skills.
      */
     public Map<Class<? extends D20Skill>, Integer> getBonusSkills();
 
@@ -56,7 +56,7 @@ public interface D20Class extends D20Characteristic, D20Level {
      * @return Equation for getting HP for each level
      */
     public String getHPDice();
-    
+
     /**
      * Bonus points per level.
      *
