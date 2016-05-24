@@ -1,8 +1,8 @@
 package simple.server.extension.d20.feat;
 
-import simple.server.extension.d20.requirement.D20Requirement;
 import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
+import simple.server.extension.d20.requirement.D20Requirement;
 import simple.server.extension.d20.weapon.D20Weapon;
 
 /**
@@ -22,10 +22,9 @@ public interface D20Feat extends D20Characteristic, D20Requirement {
     /**
      * Get the bonuses for this feat.
      *
-     * @return
+     * @return map of bonuses for this feat.
      */
     Map<Class<? extends D20Characteristic>, String> getBonuses();
-
 
     /**
      * Can the player have multiple instances of this Feat.

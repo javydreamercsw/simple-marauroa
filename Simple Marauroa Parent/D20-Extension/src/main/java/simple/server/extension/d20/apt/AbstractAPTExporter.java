@@ -26,9 +26,9 @@ public abstract class AbstractAPTExporter implements IAPTExporter {
     }
 
     /**
-     * THe name of the menu file without extension.
+     * The name of the menu file without extension.
      *
-     * @return
+     * @return file name without extension.
      */
     public abstract String getFileName();
 }

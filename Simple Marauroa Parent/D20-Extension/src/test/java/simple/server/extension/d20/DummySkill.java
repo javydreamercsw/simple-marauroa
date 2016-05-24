@@ -10,9 +10,9 @@ import simple.server.extension.d20.skill.AbstractSkill;
 public class DummySkill extends AbstractSkill {
 
     public DummySkill() {
-        modifiers.clear();
-        modifiers.put(DummyAbility.class, "1");
-        modifiers.put(DummyAbility2.class, "2d4+1");
+        MODS.clear();
+        MODS.put(DummyAbility.class, "1");
+        MODS.put(DummyAbility2.class, "2d4+1");
     }
 
     @Override

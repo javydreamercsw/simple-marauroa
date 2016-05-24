@@ -15,7 +15,7 @@ import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
 import simple.server.extension.d20.rpclass.D20Class;
-import static simple.server.extension.d20.skill.D20Skill.modifiers;
+import static simple.server.extension.d20.skill.D20Skill.MODS;
 
 /**
  *
@@ -47,14 +47,14 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
     @Override
     public boolean isModifiesAttribute(Class<? extends D20Ability> attr) {
-        return modifiers.containsKey(attr);
+        return MODS.containsKey(attr);
     }
 
     @Override
     public int getModifier(Class<? extends D20Ability> attr) {
         int result = 0;
-        if (modifiers.containsKey(attr)) {
-            String eq = modifiers.get(attr);
+        if (MODS.containsKey(attr)) {
+            String eq = MODS.get(attr);
             if (eq.contains("d")) {
                 List<DieRoll> parseRoll = DiceParser.parseRoll(eq);
                 for (DieRoll roll : parseRoll) {
