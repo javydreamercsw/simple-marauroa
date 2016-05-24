@@ -26,7 +26,6 @@ import java.util.List;
 public class DiceParser {
 
     /* this is a helper class to manage the input "stream"*/
-
     private static class StringStream {
 
         StringBuffer buff;
@@ -127,8 +126,8 @@ public class DiceParser {
 
     /**
      * roll::= ndice ; roll | ndice xdice::= dice | N X dice dice::= die bonus?
-     * dtail XXXX| FA(die,bonus,N) dtail dtail::= & dice | <nothing>
-     * die::= (N)? dN bonus::= + N | -N
+     * dtail XXXX| FA(die,bonus,N) dtail dtail::= & dice | nothing die::= (N)?
+     * dN bonus::= + N | -N
      *
      * @param s String to parse.
      * @return List of rolls.
