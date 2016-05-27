@@ -32,7 +32,7 @@ public class PrivateTextEvent extends SimpleRPEvent {
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT_TYPE, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, CHANNEL, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TARGET, Type.STRING);
-            rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.VERY_LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, FROM, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TIME, Type.LONG_STRING);
             addCommonAttributes(rpclass);
