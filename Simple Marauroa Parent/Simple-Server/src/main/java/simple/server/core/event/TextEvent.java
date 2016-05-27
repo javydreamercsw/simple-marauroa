@@ -36,7 +36,7 @@ public class TextEvent extends SimpleRPEvent {
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass rpclass = new RPClass(RPCLASS_NAME);
-            rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, TEXT, Type.VERY_LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, FROM, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TIME, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, TEXT_TYPE, Type.STRING);
