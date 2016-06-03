@@ -32,6 +32,7 @@ public class SimpleDatabase implements IDatabase {
         for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
             LOG.debug("Registerig DAO: " + dao.getClass().getSimpleName());
             dao.register();
+            dao.init();
         }
     }
 

@@ -9,4 +9,8 @@ public interface DAO {
      * Register yourself in DAORegister.
      */
     void register();
+    /**
+     * Perform any initialization needed. Called after the database is initialized.
+     */
+    void init();
 }
