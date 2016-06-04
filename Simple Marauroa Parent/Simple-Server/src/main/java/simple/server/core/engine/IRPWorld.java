@@ -292,4 +292,18 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param object Object to check zone for.
      */
     public void checkZone(RPObject object);
+
+    /**
+     * Remove all players and NPC's from the specified zone.
+     *
+     * @param zone Zone to clean.
+     */
+    public void emptyZone(IRPZone zone);
+
+    /**
+     * Remove all players and NPC's from the specified zone.
+     *
+     * @param zoneid Zone to clean.
+     */
+    public void emptyZone(IRPZone.ID zoneid);
 }

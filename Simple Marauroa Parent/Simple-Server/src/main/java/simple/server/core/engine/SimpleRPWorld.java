@@ -170,7 +170,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                             extension.afterWorldInit();
                         });
                 initialized = true;
-            } catch (Exception e) {
+            } catch (SQLException | IOException e) {
                 LOG.error("Error initializing the server!", e);
             }
         }
@@ -446,6 +446,32 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             }
         }
         return super.removeRPZone(zoneid);
+    }
+
+    @Override
+    public void emptyZone(IRPZone zone) {
+        emptyZone(zone.getID());
+    }
+
+    @Override
+    public void emptyZone(ID zoneid) {
+        Iterator i = Lookup.getDefault().lookup(IRPWorld.class)
+                .getZone(zoneid).getPlayers().iterator();
+        List<ClientObject> toRemove = new ArrayList<>();
+        while (i.hasNext()) {
+            toRemove.add((ClientObject) i.next());
+        }
+        for (ClientObject co : toRemove) {
+            Lookup.getDefault().lookup(IRPWorld.class)
+                    .remove(co.getID());
+        }
+        //Handle NPC's
+        i = Lookup.getDefault().lookup(IRPWorld.class)
+                .getZone(zoneid).getNPCS().iterator();
+        while (i.hasNext()) {
+            Lookup.getDefault().lookup(IRPWorld.class)
+                    .remove(((RPObject) i.next()).getID());
+        }
     }
 
     @Override
