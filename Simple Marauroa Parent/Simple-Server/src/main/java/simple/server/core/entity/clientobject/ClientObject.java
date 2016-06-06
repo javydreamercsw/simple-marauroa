@@ -106,7 +106,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         setRPClass(RPCLASS_NAME);
         put(WellKnownActionConstant.TYPE, RPCLASS_NAME);
         awayReplies = new HashMap<>();
-        update();
         addEmptySlots("!visited");
     }
 
