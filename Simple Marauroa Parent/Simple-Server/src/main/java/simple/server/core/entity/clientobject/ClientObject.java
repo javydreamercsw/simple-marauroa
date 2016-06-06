@@ -23,6 +23,7 @@ import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
@@ -32,6 +33,7 @@ import simple.server.core.entity.Outfit;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.item.Item;
+import simple.server.core.entity.item.Stackable;
 import simple.server.core.entity.item.StackableItem;
 import simple.server.core.entity.slot.PlayerSlot;
 import simple.server.core.event.PrivateTextEvent;
@@ -604,8 +606,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                             + extension.getClass().getSimpleName());
                     return extension;
                 }).forEach((extension) -> {
-                    extension.modifyClientObjectDefinition(player);
-                });
+            extension.modifyClientObjectDefinition(player);
+        });
         LOG.debug("ClientObject attributes:");
         player.getDefinitions().stream().forEach((def) -> {
             LOG.debug(def.getName() + ": " + def.getType());
@@ -690,7 +692,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                         entity.fill(item);
                         entity.setRPClass(rpclass);
 
-                        // If we've updated the item name we don't 
+                        // If we've updated the item name we don't
                         //want persistent reverting it
                         entity.put("name", name);
                     }
@@ -704,7 +706,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                                     + item + ". Most likely cause is that "
                                     + "this item was not stackable in the past");
                         }
-                        ((StackableItem) entity).setQuantity(quantity);
+                        ((Stackable) entity).setQuantity(quantity);
 
                         if (quantity <= 0) {
                             LOG.warn("Ignoring item " + name
@@ -931,11 +933,11 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     @Override
     public void onAdded(IRPZone zone) {
-        String zoneName = ((SimpleRPZone) zone).getName();
+        String zoneName = ((ISimpleRPZone) zone).getName();
         /*
          * Remember zones we've been in
          */
-        put("zoneid", ((SimpleRPZone) zone).getName());
+        put("zoneid", ((ISimpleRPZone) zone).getName());
         setKeyedSlot("!visited", zoneName,
                 Long.toString(System.currentTimeMillis()));
         super.onAdded((SimpleRPZone) zone);
