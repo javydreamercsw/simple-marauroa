@@ -1,7 +1,7 @@
 package simple.server.extension;
 
 import marauroa.common.game.RPClass;
-import marauroa.common.game.RPObject;
+import marauroa.common.game.SlotOwner;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
@@ -27,8 +27,8 @@ public class TutorialExtension extends SimpleServerExtension {
 
     @Override
     public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
-        if (!((RPObject) client).hasSlot(TUTORIAL)) {
-            ((RPObject) client).addSlot(TUTORIAL);
+        if (!((SlotOwner) client).hasSlot(TUTORIAL)) {
+            ((SlotOwner) client).addSlot(TUTORIAL);
         }
     }
 }
