@@ -41,7 +41,8 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected ChatScreenInterface mainFrame;
     protected RPObjectChangeDispatcher rpobjDispatcher;
     protected final PerceptionDispatcher dispatch = new PerceptionDispatcher();
-    private static final Logger logger = Logger.getLogger(SimpleClient.class.getSimpleName());
+    private static final Logger LOG
+            = Logger.getLogger(SimpleClient.class.getSimpleName());
     protected String gameName, versionNumber;
     protected World world;
 
@@ -76,8 +77,8 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     protected void registerListeners() {
         ChatListener cl = new ChatListener();
         if (getUserContext() != null) {
-            getUserContext().registerRPEventListener(new TextEvent(), cl);
-            getUserContext().registerRPEventListener(new PrivateTextEvent(), cl);
+            getUserContext().registerClientRPEventListener(TextEvent.class, cl);
+            getUserContext().registerClientRPEventListener(PrivateTextEvent.class, cl);
         }
     }
 
@@ -192,7 +193,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
             handler.apply(message, world.getWorldObjects());
         } catch (java.lang.Exception e) {
             // Something weird happened while applying perception
-            logger.log(Level.SEVERE, message.toString(), e);
+            LOG.log(Level.SEVERE, message.toString(), e);
         }
     }
 
@@ -203,9 +204,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     @Override
     protected void onTransfer(List<TransferContent> items) {
-        logger.log(Level.FINE, "Transfering ----");
+        LOG.log(Level.FINE, "Transfering ----");
         for (TransferContent item : items) {
-            logger.log(Level.FINE, item.toString());
+            LOG.log(Level.FINE, item.toString());
         }
     }
 
@@ -216,9 +217,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     @Override
     protected void onServerInfo(String[] info) {
-        logger.log(Level.FINE, "Server info");
+        LOG.log(Level.FINE, "Server info");
         for (String info_string : info) {
-            logger.log(Level.FINE, info_string);
+            LOG.log(Level.FINE, info_string);
         }
     }
 
@@ -234,9 +235,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     @Override
     protected void onPreviousLogins(List<String> previousLogins) {
-        logger.log(Level.FINE, "Previous logins");
+        LOG.log(Level.FINE, "Previous logins");
         for (String FINE_string : previousLogins) {
-            logger.log(Level.FINE, FINE_string);
+            LOG.log(Level.FINE, FINE_string);
         }
     }
 
@@ -260,62 +261,62 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
 
     @Override
     public boolean onAdded(RPObject rpo) {
-        logger.log(Level.FINE, "onAdded {0}", rpo.toString());
+        LOG.log(Level.FINE, "onAdded {0}", rpo.toString());
         return true;
     }
 
     @Override
     public boolean onModifiedAdded(RPObject object, RPObject changes) {
-        logger.log(Level.FINE, "onModifiedAdded {0}: {1}", new Object[]{object, changes});
+        LOG.log(Level.FINE, "onModifiedAdded {0}: {1}", new Object[]{object, changes});
         return true;
     }
 
     @Override
     public boolean onModifiedDeleted(RPObject object, RPObject changes) {
-        logger.log(Level.FINE, "onModifiedDeleted {0}: {1}", new Object[]{object, changes});
+        LOG.log(Level.FINE, "onModifiedDeleted {0}: {1}", new Object[]{object, changes});
         return true;
     }
 
     @Override
     public boolean onDeleted(RPObject object) {
-        logger.log(Level.FINE, "onDeleted {0}", new Object[]{object});
+        LOG.log(Level.FINE, "onDeleted {0}", new Object[]{object});
         return true;
     }
 
     @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
-        logger.log(Level.FINE, "onMyRPObject {0}: {1}", new Object[]{added, deleted});
+        LOG.log(Level.FINE, "onMyRPObject {0}: {1}", new Object[]{added, deleted});
         return true;
     }
 
     @Override
     public boolean onClear() {
-        logger.log(Level.FINE, "onClear");
+        LOG.log(Level.FINE, "onClear");
         return true;
     }
 
     @Override
     public void onSynced() {
-        logger.log(Level.FINE, "onSynced");
+        LOG.log(Level.FINE, "onSynced");
     }
 
     @Override
     public void onUnsynced() {
-        logger.log(Level.FINE, "onUnsynced");
+        LOG.log(Level.FINE, "onUnsynced");
     }
 
     @Override
     public void onPerceptionBegin(byte b, int i) {
-        logger.log(Level.FINE, "onPerceptionBegin {0}: {1}", new Object[]{b, i});
+        LOG.log(Level.FINE, "onPerceptionBegin {0}: {1}", new Object[]{b, i});
     }
 
     @Override
     public void onPerceptionEnd(byte b, int i) {
-        logger.log(Level.FINE, "onPerceptionEnd {0}: {1}", new Object[]{b, i});
+        LOG.log(Level.FINE, "onPerceptionEnd {0}: {1}", new Object[]{b, i});
     }
 
     @Override
     public void onException(Exception excptn, MessageS2CPerception mscp) {
-        logger.log(Level.FINE, "onException {0}: {1}", new Object[]{excptn, mscp});
+        LOG.log(Level.FINE, "onException {0}: {1}", new Object[]{excptn, mscp});
     }
 }
