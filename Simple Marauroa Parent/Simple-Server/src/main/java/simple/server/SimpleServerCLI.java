@@ -20,6 +20,7 @@ class SimpleServerCLI extends Thread {
 
     private static final Logger LOG
             = Logger.getLogger(SimpleServerCLI.class.getSimpleName());
+    private BufferedReader input;
 
     public SimpleServerCLI() {
         super("Simple Server CLI");
@@ -29,8 +30,7 @@ class SimpleServerCLI extends Thread {
     public void run() {
         try {
             LOG.info("Starting Simple Server CLI...");
-            BufferedReader input
-                    = new BufferedReader(new InputStreamReader(System.in));
+            input = new BufferedReader(new InputStreamReader(System.in));
             String line;
             line = input.readLine();
             while (!line.equals("")) {
@@ -49,8 +49,32 @@ class SimpleServerCLI extends Thread {
             String temp;//Used to hold temporary values
             switch (token) {
                 case "help":
+                    LOG.info("Valid commands include: create, delete, quit.");
                     break;
                 case "quit":
+                    LOG.info("Are you sure you want to quit? (Y/N)");
+                    try {
+                        line = input.readLine();
+                        OUTER:
+                        while (!line.trim().toLowerCase().equals("")) {
+                            switch (line) {
+                                case "y":
+                                    SimpleServer.server.finish();
+                                    LOG.info("Server stopped!");
+                                    System.exit(0);
+                                    break;
+                                case "n":
+                                    break OUTER;
+                                default:
+                                    LOG.info("Invalid option. Are you sure you want"
+                                            + " to quit? (Y/N)");
+                                    line = input.readLine();
+                                    break;
+                            }
+                        }
+                    } catch (IOException ex) {
+                        LOG.log(Level.SEVERE, null, ex);
+                    }
                     break;
                 case "create":
                     if (st.hasMoreTokens()) {
