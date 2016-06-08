@@ -2,7 +2,7 @@ package simple.client.entity;
 
 import marauroa.common.game.RPEvent;
 import simple.client.RPObjectChangeListener;
-import simple.client.event.listener.RPEventListener;
+import simple.client.event.listener.ClientRPEventListener;
 
 /**
  *
@@ -33,8 +33,10 @@ public interface IUserContext extends RPObjectChangeListener {
 
     /**
      * Register an RPEvent listener
-     * @param event     event to listen for
-     * @param listener  listener
+     *
+     * @param event event to listen for
+     * @param listener listener
      */
-    void registerRPEventListener(RPEvent event, RPEventListener listener);
+    void registerClientRPEventListener(Class<? extends RPEvent> event,
+            ClientRPEventListener listener);
 }

@@ -3,16 +3,16 @@ package simple.client.event;
 import marauroa.common.game.RPEvent;
 import simple.client.ChatScreenInterface;
 import simple.client.SimpleClient;
-import simple.client.event.listener.RPEventListener;
 import simple.common.NotificationType;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
+import simple.client.event.listener.ClientRPEventListener;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class ChatListener implements RPEventListener {
+public class ChatListener implements ClientRPEventListener {
 
     /**
      *

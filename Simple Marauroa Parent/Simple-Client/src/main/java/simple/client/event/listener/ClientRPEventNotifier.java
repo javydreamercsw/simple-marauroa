@@ -16,33 +16,34 @@ import marauroa.common.game.RPEvent;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public final class RPEventNotifier {
+public final class ClientRPEventNotifier {
 
-    private static final Logger logger = Log4J.getLogger(RPEventNotifier.class);
+    private static final Logger LOG
+            = Log4J.getLogger(ClientRPEventNotifier.class);
     /**
      * The Singleton instance.
      */
-    private static RPEventNotifier instance;
+    private static ClientRPEventNotifier instance;
     /**
      * This HashMap maps each RPEvent to the set of all event listeners waiting
      * for this RPEvent. RPEvents with no listener shouldn't be registered here.
      */
-    private HashMap<String, Set<RPEventListener>> register = new HashMap<String, Set<RPEventListener>>();
+    private HashMap<String, Set<ClientRPEventListener>> register = new HashMap<>();
     /**
      * Used for multi-threading synchronization.
      */
     private final Object sync = new Object();
 
-    private RPEventNotifier() {
+    private ClientRPEventNotifier() {
         // singleton
     }
 
     /**
      * @return the instance
      */
-    public static RPEventNotifier get() {
+    public static ClientRPEventNotifier get() {
         if (instance == null) {
-            instance = new RPEventNotifier();
+            instance = new ClientRPEventNotifier();
         }
         return instance;
     }
@@ -50,18 +51,19 @@ public final class RPEventNotifier {
     /**
      * Notifies the <i>eventListener</i> when RPEvent <i>event</i> is received.
      *
-     * @param event the RPEvent that triggers the RPEventListener
+     * @param event the RPEvent that triggers the ClientRPEventListener
      * @param eventListener the object to notify
      */
-    public void notifyAtEvent(RPEvent event, RPEventListener eventListener) {
-        logger.info("Notify when " + event.getClass().getSimpleName()
+    public void notifyAtEvent(Class<? extends RPEvent> event,
+            ClientRPEventListener eventListener) {
+        LOG.info("Notify when " + event.getClass().getSimpleName()
                 + "(" + event.getName() + ")" + " is detected to " + eventListener);
 
         synchronized (sync) {
             // Do we have other listeners for this event?
-            Set<RPEventListener> set = register.get(event.getName());
+            Set<ClientRPEventListener> set = register.get(event.getName());
             if (set == null) {
-                set = new HashSet<RPEventListener>();
+                set = new HashSet<>();
                 register.put(event.getName(), set);
             }
             // add it to the list
@@ -76,34 +78,34 @@ public final class RPEventNotifier {
      * @return Unprocessed RPEvents. Events without listeners registered.
      */
     public HashMap<RPEvent, Boolean> logic(List<RPEvent> events) {
-        HashMap<RPEvent, Boolean> result = new HashMap<RPEvent, Boolean>();
+        HashMap<RPEvent, Boolean> result = new HashMap<>();
         for (RPEvent event : events) {
-            Set<RPEventListener> set = register.get(event.getName());
+            Set<ClientRPEventListener> set = register.get(event.getName());
 
-            if (logger.isDebugEnabled()) {
+            if (LOG.isDebugEnabled()) {
                 StringBuilder os = new StringBuilder();
                 os.append("event: ").append(event.getName()).append(", ");
                 os.append("event contents: ").append(event).append(", ");
                 os.append("registered listeners: ").append(set == null ? 0 : set.size());
-                logger.info(os);
+                LOG.info(os);
                 System.out.println(os.toString());
             }
 
             if (set != null) {
                 result.put(event, true);
-                for (RPEventListener currentEvent : set) {
-                    RPEventListener eventListener = currentEvent;
+                for (ClientRPEventListener currentEvent : set) {
+                    ClientRPEventListener eventListener = currentEvent;
                     try {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(eventListener);
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug(eventListener);
                         }
                         try {
                             eventListener.onRPEventReceived(event);
                         } catch (Exception ex) {
-                            logger.fatal(null, ex);
+                            LOG.fatal(null, ex);
                         }
                     } catch (RuntimeException e) {
-                        logger.error(e, e);
+                        LOG.error(e, e);
                     }
                 }
             } else {

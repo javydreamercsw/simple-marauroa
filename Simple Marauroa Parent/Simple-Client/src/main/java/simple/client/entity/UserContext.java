@@ -8,8 +8,8 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import simple.client.event.listener.RPEventListener;
-import simple.client.event.listener.RPEventNotifier;
+import simple.client.event.listener.ClientRPEventListener;
+import simple.client.event.listener.ClientRPEventNotifier;
 import simple.client.gui.IGameObjects;
 
 /**
@@ -26,7 +26,7 @@ public class UserContext implements IUserContext {
     /**
      * The logger.
      */
-    private static final Logger logger = Log4J.getLogger(UserContext.class);
+    private static final Logger LOG = Log4J.getLogger(UserContext.class);
     /**
      * The currently known buddies.
      */
@@ -38,7 +38,7 @@ public class UserContext implements IUserContext {
     /**
      * The RPEvent listeners.
      */
-    protected RPEventNotifier eventNotifier;
+    protected ClientRPEventNotifier eventNotifier;
     /**
      * The administrator level.
      */
@@ -51,14 +51,13 @@ public class UserContext implements IUserContext {
     /**
      * Constructor.
      *
-     * @param client Client using this user context
      */
     public UserContext() {
         adminlevel = 0;
-        eventNotifier = RPEventNotifier.get();
+        eventNotifier = ClientRPEventNotifier.get();
         name = null;
-        buddies = new HashMap<String, Boolean>();
-        features = new HashMap<String, String>();
+        buddies = new HashMap<>();
+        features = new HashMap<>();
     }
 
     /**
@@ -68,8 +67,9 @@ public class UserContext implements IUserContext {
      * @param listener listener
      */
     @Override
-    public void registerRPEventListener(RPEvent event, RPEventListener listener) {
-        logger.debug("Adding event: " + event.getName()
+    public void registerClientRPEventListener(Class<? extends RPEvent> event,
+            ClientRPEventListener listener) {
+        LOG.debug("Adding event: " + event.getName()
                 + " to the listener list with listener: "
                 + listener.getClass().getSimpleName());
         eventNotifier.notifyAtEvent(event, listener);
@@ -116,8 +116,7 @@ public class UserContext implements IUserContext {
     /**
      * Determine if the user is an admin.
      *
-     * @return
-     * <code>true</code> is the user is an admin.
+     * @return <code>true</code> is the user is an admin.
      */
     @Override
     public boolean isAdmin() {
@@ -209,9 +208,9 @@ public class UserContext implements IUserContext {
                 if (entity != null) {
                     ClientEntity parent = Lookup.getDefault().lookup(IGameObjects.class).get(object);
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Added: " + entity);
-                        logger.debug("   To: " + parent + "  [" + slotName + "]");
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Added: " + entity);
+                        LOG.debug("   To: " + parent + "  [" + slotName + "]");
                     }
                 }
             }
@@ -263,9 +262,9 @@ public class UserContext implements IUserContext {
                 if (entity != null) {
                     ClientEntity parent = Lookup.getDefault().lookup(IGameObjects.class).get(object);
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Removed: " + entity);
-                        logger.debug("   From: " + parent + "  [" + slotName + "]");
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("Removed: " + entity);
+                        LOG.debug("   From: " + parent + "  [" + slotName + "]");
                     }
                 }
             }
@@ -274,6 +273,7 @@ public class UserContext implements IUserContext {
 
     /**
      * Be aware that this gets rid of all events after its done!
+     *
      * @param object Object to process events from
      * @return Modified object
      */
@@ -281,17 +281,15 @@ public class UserContext implements IUserContext {
     public RPObject onRPEvent(RPObject object) {
         HashMap<RPEvent, Boolean> result = eventNotifier.logic(object.events());
         if (!result.entrySet().isEmpty()) {
-            logger.info("Here are the processed events. A false means "
+            LOG.info("Here are the processed events. A false means "
                     + "that probably RPEventListeners not registered.\n");
             for (Entry e : result.entrySet()) {
-                logger.debug(e.getKey() + " Processed? " + e.getValue());
+                LOG.debug(e.getKey() + " Processed? " + e.getValue());
             }
-        } else {
-            if (!object.events().isEmpty()) {
-                logger.info("Unable to process events:");
-                for (RPEvent e : object.events()) {
-                    logger.info(e);
-                }
+        } else if (!object.events().isEmpty()) {
+            LOG.info("Unable to process events:");
+            for (RPEvent e : object.events()) {
+                LOG.info(e);
             }
         }
         object.clearEvents();
