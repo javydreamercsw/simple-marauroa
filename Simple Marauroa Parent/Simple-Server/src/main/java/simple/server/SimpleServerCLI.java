@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.crypto.Hash;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 
@@ -136,7 +137,7 @@ class SimpleServerCLI extends Thread {
                             username);
                 } else {
                     dao.addPlayer(username,
-                            password.getBytes(), email);
+                            Hash.hash(password), email);
                     LOG.log(Level.INFO,
                             "Account: {0} succesfully created!",
                             username);
