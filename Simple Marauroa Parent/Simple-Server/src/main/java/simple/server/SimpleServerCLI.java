@@ -10,6 +10,11 @@ import java.util.logging.Logger;
 import marauroa.common.crypto.Hash;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
+import org.openide.util.Lookup;
+import simple.server.core.action.ActionProvider;
+import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.event.api.IRPEvent;
+import simple.server.extension.MarauroaServerExtension;
 
 /**
  * This provides a command line interface with the server.
@@ -49,7 +54,7 @@ class SimpleServerCLI extends Thread {
             String temp;//Used to hold temporary values
             switch (token) {
                 case "help":
-                    LOG.info("Valid commands include: create, delete, quit.");
+                    LOG.info("Valid commands include: create, delete, quit, show.");
                     break;
                 case "quit":
                     LOG.info("Are you sure you want to quit? (Y/N)");
@@ -103,6 +108,56 @@ class SimpleServerCLI extends Thread {
                             case "account":
                                 processDeleteAccountCommand(st);
                                 break;
+                            default:
+                                LOG.log(Level.WARNING, "Unknown parameter: {0}", temp);
+                        }
+                    } else {
+                        LOG.warning("Missing parameters for create command!\n"
+                                + "Usage: create <option> <parameters>\n"
+                                + "Options: account\n"
+                                + "Parameters:\n"
+                                + "-u <username>\n"
+                                + "-p <password>\n"
+                                + "-e <email>");
+                    }
+                    break;
+                case "show":
+                    if (st.hasMoreTokens()) {
+                        temp = st.nextToken();
+                        StringBuilder sb = new StringBuilder();
+                        switch (temp) {
+                            case "entity":
+                                for (RPEntityInterface e : Lookup.getDefault()
+                                        .lookupAll(RPEntityInterface.class)) {
+                                    sb.append(e.getClass().getSimpleName()).append("\n");
+                                }
+                                LOG.info(sb.toString());
+                                break;
+                            case "extension":
+                                for (MarauroaServerExtension e
+                                        : Lookup.getDefault()
+                                        .lookupAll(MarauroaServerExtension.class)) {
+                                    sb.append(e.getName()).append("\n");
+                                }
+                                LOG.info(sb.toString());
+                                break;
+                            case "action":
+                                for (ActionProvider e
+                                        : Lookup.getDefault()
+                                        .lookupAll(ActionProvider.class)) {
+                                    sb.append(e.getClass().getSimpleName()).append("\n");
+                                }
+                                LOG.info(sb.toString());
+                                break;
+                            case "event":
+                                for (IRPEvent e
+                                        : Lookup.getDefault()
+                                        .lookupAll(IRPEvent.class)) {
+                                    sb.append(e.getName()).append("\n");
+                                }
+                                LOG.info(sb.toString());
+                                break;
+
                             default:
                                 LOG.log(Level.WARNING, "Unknown parameter: {0}", temp);
                         }
