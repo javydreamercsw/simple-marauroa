@@ -403,7 +403,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         if (LOG.isDebugEnabled()) {
             Iterator it = iterator();
             while (it.hasNext()) {
-                ((SimpleRPZone) it.next()).showZone();
+                ((ISimpleRPZone) it.next()).showZone();
             }
         }
     }
