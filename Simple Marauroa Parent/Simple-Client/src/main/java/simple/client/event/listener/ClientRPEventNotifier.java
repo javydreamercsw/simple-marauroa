@@ -60,14 +60,19 @@ public final class ClientRPEventNotifier {
                 + "(" + event.getName() + ")" + " is detected to " + eventListener);
 
         synchronized (sync) {
-            // Do we have other listeners for this event?
-            Set<ClientRPEventListener> set = register.get(event.getName());
-            if (set == null) {
-                set = new HashSet<>();
-                register.put(event.getName(), set);
+            try {
+                RPEvent temp = event.newInstance();
+                // Do we have other listeners for this event?
+                Set<ClientRPEventListener> set = register.get(temp.getName());
+                if (set == null) {
+                    set = new HashSet<>();
+                    register.put(temp.getName(), set);
+                }
+                // add it to the list
+                set.add(eventListener);
+            } catch (InstantiationException | IllegalAccessException ex) {
+                LOG.error(null, ex);
             }
-            // add it to the list
-            set.add(eventListener);
         }
     }
 
