@@ -3,6 +3,7 @@ package simple.server.core.action.chat;
 import java.util.StringTokenizer;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
+import marauroa.common.game.SlotOwner;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -27,14 +28,15 @@ public class TellAction implements ActionProvider {
     protected String receiverName;
     protected ClientObjectInterface sender;
     protected ClientObjectInterface receiver;
-    public static final String _TELL = "tell";
+    public static final String TELL = "tell";
 
     protected void init(ClientObjectInterface player, RPAction action) {
         text = action.get(TEXT).trim();
         senderName = player.getName();
         receiverName = action.get(TARGET);
         sender = player;
-        receiver = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(receiverName);
+        receiver = ((SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class)).getPlayer(receiverName);
     }
 
     protected boolean validateAction(RPAction action) {
@@ -42,8 +44,11 @@ public class TellAction implements ActionProvider {
     }
 
     protected boolean checkOnline() {
-        if ((receiver == null) || (receiver.isGhost() && (sender.getAdminLevel() < AdministrationAction.getLevelForCommand("ghostmode")))) {
-            sender.sendPrivateText("No player named \"" + receiverName + "\" is currently active.");
+        if ((receiver == null) || (receiver.isGhost()
+                && (sender.getAdminLevel() < AdministrationAction
+                .getLevelForCommand("ghostmode")))) {
+            sender.sendPrivateText("No player named \"" + receiverName
+                    + "\" is currently active.");
             return false;
         }
         return true;
@@ -55,9 +60,12 @@ public class TellAction implements ActionProvider {
         if (reply != null) {
             // sender is on ignore list
             if (reply.length() == 0) {
-                tellIgnorePostman(player, Grammar.suffix_s(receiverName) + " mind is not attuned to yours, so you cannot reach them.");
+                tellIgnorePostman(player, Grammar.suffix_s(receiverName)
+                        + " mind is not attuned to yours, so you cannot "
+                        + "reach them.");
             } else {
-                tellIgnorePostman(player, receiverName + " is ignoring you: " + reply);
+                tellIgnorePostman(player, receiverName
+                        + " is ignoring you: " + reply);
             }
             return false;
         }
@@ -95,7 +103,8 @@ public class TellAction implements ActionProvider {
         }
     }
 
-    protected void tellIgnorePostman(ClientObjectInterface receiver, String message) {
+    protected void tellIgnorePostman(ClientObjectInterface receiver,
+            String message) {
         if (!receiver.getName().equals("postman")) {
             receiver.sendPrivateText(message);
         }
@@ -105,7 +114,8 @@ public class TellAction implements ActionProvider {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            if (Lookup.getDefault().lookup(LoginListener.class).checkIsGaggedAndInformPlayer(player)) {
+            if (Lookup.getDefault().lookup(LoginListener.class)
+                    .checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
 
@@ -139,22 +149,27 @@ public class TellAction implements ActionProvider {
             receiver.sendPrivateText(message);
 
             if (!senderName.equals(receiverName)) {
-                player.sendPrivateText("You tell " + receiverName + ": " + text);
+                player.sendPrivateText("You tell " + receiverName + ": "
+                        + text);
             }
 
             tellAboutAwayStatusIfNeccessary();
 
             receiver.setLastPrivateChatter(senderName);
-            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(), "chat",
-                    receiverName, Integer.toString(text.length()),
-                    text.substring(0, Math.min(text.length(), 1000)));
+            ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class))
+                    .addGameEvent(player.getName(), "chat",
+                            receiverName, Integer.toString(text.length()),
+                            text.substring(0, Math.min(text.length(), 1000)));
         }
     }
 
     protected boolean checkGrumpy() {
         String grumpy = receiver.getGrumpyMessage();
-        if (grumpy != null && ((RPObject) receiver).getSlot("!buddy").size() > 0) {
-            RPObject buddies = ((RPObject) receiver).getSlot("!buddy").iterator().next();
+        if (grumpy != null && ((SlotOwner) receiver).getSlot("!buddy")
+                .size() > 0) {
+            RPObject buddies = ((SlotOwner) receiver).getSlot("!buddy")
+                    .iterator().next();
             boolean senderFound = false;
             for (String buddyName : buddies) {
                 if (buddyName.charAt(0) == '_') {
@@ -169,10 +184,12 @@ public class TellAction implements ActionProvider {
                 // sender is not a buddy
                 if (grumpy.length() == 0) {
                     tellIgnorePostman(sender,
-                            receiverName + " has a closed mind, and is seeking solitude from all but close friends");
+                            receiverName + " has a closed mind, and is seeking"
+                            + " solitude from all but close friends");
                 } else {
                     tellIgnorePostman(sender,
-                            receiverName + " is seeking solitude from all but close friends: " + grumpy);
+                            receiverName + " is seeking solitude from all but "
+                            + "close friends: " + grumpy);
                 }
                 return false;
             }
@@ -182,6 +199,6 @@ public class TellAction implements ActionProvider {
 
     @Override
     public void register() {
-        CommandCenter.register(_TELL, new TellAction());
+        CommandCenter.register(TELL, new TellAction());
     }
 }

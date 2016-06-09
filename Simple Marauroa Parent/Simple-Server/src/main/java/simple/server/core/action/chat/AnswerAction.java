@@ -14,7 +14,7 @@ import static simple.server.core.action.WellKnownActionConstant.*;
 @ServiceProvider(service = ActionProvider.class)
 public class AnswerAction implements ActionProvider {
 
-    private static final String _ANSWER = "answer";
+    private static final String ANSWER = "answer";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -33,7 +33,8 @@ public class AnswerAction implements ActionProvider {
         }
     }
 
+    @Override
     public void register() {
-        CommandCenter.register(_ANSWER, new AnswerAction());
+        CommandCenter.register(ANSWER, new AnswerAction());
     }
 }
