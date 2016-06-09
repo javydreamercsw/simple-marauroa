@@ -4,6 +4,7 @@ import java.io.IOException;
 import marauroa.common.Configuration;
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
+import marauroa.common.game.Attributes;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -26,41 +27,46 @@ public class PublicChatAction implements ActionProvider {
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(PublicChatAction.class);
-    public static final String _CHAT = "chat";
+    private static final Logger LOG = Log4J.getLogger(PublicChatAction.class);
+    public static final String CHAT = "chat";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            if (Lookup.getDefault().lookup(LoginListener.class).checkIsGaggedAndInformPlayer(player)) {
+            if (Lookup.getDefault().lookup(LoginListener.class).
+                    checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
             if (action.has(TEXT)) {
                 try {
                     String text = action.get(TEXT);
-                    logger.debug("Processing text event: " + text);
+                    LOG.debug("Processing text event: " + text);
                     Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                            Lookup.getDefault().lookup(IRPWorld.class).getZone(((RPObject) player).get(Entity.ZONE_ID)),
+                            Lookup.getDefault().lookup(IRPWorld.class)
+                            .getZone(((Attributes) player)
+                                    .get(Entity.ZONE_ID)),
                             new TextEvent(text, player.getName()));
-                    if ("true".equals(Configuration.getConfiguration().get("log_chat", "false"))) {
-                        logger.info(text);
+                    if ("true".equals(Configuration.getConfiguration()
+                            .get("log_chat", "false"))) {
+                        LOG.info(text);
                     }
                 } catch (IOException ex) {
-                    logger.warn(ex.toString(), ex);
+                    LOG.warn(ex.toString(), ex);
                 }
             } else {
-                StringBuilder mess = new StringBuilder("Action is missing key components:\n");
+                StringBuilder mess
+                        = new StringBuilder("Action is missing key components:\n");
                 if (!action.has(TEXT)) {
                     mess.append(TEXT).append("\n");
                 }
-                logger.warn(mess.toString());
+                LOG.warn(mess.toString());
             }
         }
     }
 
     @Override
     public void register() {
-        CommandCenter.register(_CHAT, new PublicChatAction());
+        CommandCenter.register(CHAT, new PublicChatAction());
     }
 }

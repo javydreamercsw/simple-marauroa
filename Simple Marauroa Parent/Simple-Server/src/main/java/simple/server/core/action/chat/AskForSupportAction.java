@@ -19,8 +19,8 @@ import simple.server.core.engine.SimpleRPRuleProcessor;
 @ServiceProvider(service = ActionProvider.class)
 public class AskForSupportAction implements ActionProvider {
 
-    protected Map<String, Long> lastMsg = new HashMap<String, Long>();
-    protected static final String _SUPPORT = "support";
+    protected Map<String, Long> lastMsg = new HashMap<>();
+    protected static final String SUPPORT = "support";
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
@@ -43,7 +43,8 @@ public class AskForSupportAction implements ActionProvider {
         }
     }
 
+    @Override
     public void register() {
-        CommandCenter.register(_SUPPORT, new AskForSupportAction());
+        CommandCenter.register(SUPPORT, new AskForSupportAction());
     }
 }

@@ -35,7 +35,8 @@ public class PrivateChatAction implements ActionProvider {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            if (Lookup.getDefault().lookup(LoginListener.class).checkIsGaggedAndInformPlayer(player)) {
+            if (Lookup.getDefault().lookup(LoginListener.class)
+                    .checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
             if (action.has(TEXT) && action.has(TARGET)) {
@@ -47,14 +48,16 @@ public class PrivateChatAction implements ActionProvider {
                     Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
                             new PrivateTextEvent(NotificationType.PRIVMSG, text,
                                     target, from));
-                    if ("true".equals(Configuration.getConfiguration().get("log_chat", "false"))) {
+                    if ("true".equals(Configuration.getConfiguration()
+                            .get("log_chat", "false"))) {
                         LOG.info(text);
                     }
                 } catch (IOException ex) {
                     LOG.warn(ex.toString(), ex);
                 }
             } else {
-                StringBuilder mess = new StringBuilder("Action is missing key components:\n");
+                StringBuilder mess
+                        = new StringBuilder("Action is missing key components:\n");
                 if (!action.has(TEXT)) {
                     mess.append(TEXT).append("\n");
                 }
