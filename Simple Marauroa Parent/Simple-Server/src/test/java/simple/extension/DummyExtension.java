@@ -1,5 +1,6 @@
 package simple.extension;
 
+import marauroa.common.game.Attributes;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
@@ -33,11 +34,11 @@ public class DummyExtension extends SimpleServerExtension {
 
     @Override
     public void clientObjectUpdate(ClientObjectInterface client) {
-        if (!((RPObject) client).has(testAttr2)) {
-            ((RPObject) client).put(testAttr2, 1);
+        if (!((Attributes) client).has(testAttr2)) {
+            ((Attributes) client).put(testAttr2, 1);
         }
-        if (!((RPObject) client).has(testAttr3)) {
-            ((RPObject) client).put(testAttr3, 1);
+        if (!((Attributes) client).has(testAttr3)) {
+            ((Attributes) client).put(testAttr3, 1);
         }
     }
 
@@ -45,9 +46,8 @@ public class DummyExtension extends SimpleServerExtension {
     public void modifyClientObjectDefinition(RPClass client) {
         client.addAttribute(testAttr3, Definition.Type.INT);
     }
-    
-    
 
+    @Override
     public String getName() {
         return "Dummy";
     }
