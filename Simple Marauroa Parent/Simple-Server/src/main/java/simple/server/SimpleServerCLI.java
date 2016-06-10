@@ -8,12 +8,17 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.crypto.Hash;
+import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import org.openide.util.Lookup;
+import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
+import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.api.IRPEvent;
+import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
@@ -157,7 +162,38 @@ class SimpleServerCLI extends Thread {
                                 }
                                 LOG.info(sb.toString());
                                 break;
-
+                            case "zone":
+                                boolean detail = st.hasMoreTokens();
+                                IRPWorld world = Lookup.getDefault()
+                                        .lookup(IRPWorld.class);
+                                if (detail) {
+                                    String z = "";
+                                    while (st.hasMoreTokens()) {
+                                        z += st.nextToken() + " ";
+                                    }
+                                    SimpleRPZone zone = world.getZone(z.trim());
+                                    if (zone == null) {
+                                        LOG.log(Level.WARNING,
+                                                "Unable to find zone: {0}", z);
+                                    } else {
+                                        sb.append("Players--------------------"
+                                                + "---------------").append("\n");
+                                        for (ClientObjectInterface p : zone.getPlayers()) {
+                                            sb.append(p.getName()).append("\n");
+                                        }
+                                        sb.append("NPC------------------------"
+                                                + "-----------").append("\n");
+                                        for (RPEntityInterface npc : zone.getNPCS()) {
+                                            sb.append(Tool.extractName((RPObject) npc)).append("\n");
+                                        }
+                                    }
+                                } else {
+                                    for (SimpleRPZone zone : world.getZones()) {
+                                        sb.append(zone.getName()).append("\n");
+                                    }
+                                }
+                                LOG.info(sb.toString());
+                                break;
                             default:
                                 LOG.log(Level.WARNING, "Unknown parameter: {0}", temp);
                         }
