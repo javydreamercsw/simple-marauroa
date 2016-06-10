@@ -63,6 +63,8 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             list(player, ZoneEvent.LISTZONES, action);
+                            player.addEvent(new ZoneEvent(player.getZone(),
+                                    ZoneEvent.JOIN));
                         }
                     }));
         } else {
