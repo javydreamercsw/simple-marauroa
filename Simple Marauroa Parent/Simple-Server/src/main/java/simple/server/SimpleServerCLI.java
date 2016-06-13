@@ -314,11 +314,14 @@ class SimpleServerCLI extends Thread {
 
     private void processDeleteZoneCommand(StringTokenizer st) {
         if (st.hasMoreTokens()) {
-            String zone = st.nextToken();
+            String zone = "";
+            while (st.hasMoreTokens()) {
+                zone += st.nextToken() + " ";
+            }
             IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
-            if (world.hasRPZone(zone)) {
+            if (world.hasRPZone(zone.trim())) {
                 try {
-                    world.removeRPZone(zone);
+                    world.removeRPZone(zone.trim());
                     LOG.log(Level.INFO, "Zone: {0} succesfully deleted!", zone);
                 } catch (Exception ex) {
                     LOG.log(Level.SEVERE, "Unable to delete zone!", ex);
@@ -331,12 +334,15 @@ class SimpleServerCLI extends Thread {
 
     private void processCreateZoneCommand(StringTokenizer st) {
         if (st.hasMoreTokens()) {
-            String zone = st.nextToken();
+            String zone = "";
+            while (st.hasMoreTokens()) {
+                zone += st.nextToken() + " ";
+            }
             IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
-            if (world.hasRPZone(zone)) {
+            if (world.hasRPZone(zone.trim())) {
                 LOG.log(Level.INFO, "Zone: {0} already exists!", zone);
             } else {
-                world.addZone(zone);
+                world.addZone(zone.trim());
                 LOG.log(Level.INFO, "Zone: {0} succesfully created!", zone);
             }
         }
