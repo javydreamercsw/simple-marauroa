@@ -84,4 +84,5 @@ import simple.server.extension.d20.iD20Definition;
  */
 public interface D20Alignment extends D20Characteristic, iD20Definition {
 
+    public static final String ALIGNMENT = "alignment";
 }
