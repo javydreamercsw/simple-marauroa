@@ -365,7 +365,6 @@ public class DefaultClient implements ClientFrameworkProvider {
             getClientManager().login(getUsername(), password);
             connected = true;
         } catch (ConnectException ex) {
-            LOG.log(Level.WARNING, null, ex);
             Lookup.getDefault().lookup(MessageProvider.class).displayWarning(
                     "Unable to connect",
                     "Unable to connect to the server: " + getHost());
@@ -415,7 +414,6 @@ public class DefaultClient implements ClientFrameworkProvider {
                             break;
                     }
                 } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
-                    LOG.log(Level.SEVERE, null, ex);
                     if (ex instanceof LoginFailedException) {
                         Lookup.getDefault().lookup(MessageProvider.class)
                                 .displayWarning("Login Failed!",
@@ -424,8 +422,6 @@ public class DefaultClient implements ClientFrameworkProvider {
                                         + "your account. Check your provided email.");
                     }
                 } catch (InvalidVersionException ex) {
-                    LOG.log(Level.SEVERE, "Invalid version: " + ex.getVersion()
-                            + " vs. protocol version: " + ex.getProtocolVersion(), ex);
                     Lookup.getDefault().lookup(MessageProvider.class)
                             .displayError("Invalid version!",
                                     "Invalid version: " + ex.getVersion()
@@ -434,12 +430,10 @@ public class DefaultClient implements ClientFrameworkProvider {
                     Logger.getLogger(DefaultClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                LOG.log(Level.SEVERE, null, e);
                 Lookup.getDefault().lookup(MessageProvider.class)
                         .displayWarning("Login Failed!", e.getLocalizedMessage());
             }
         } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
-            LOG.log(Level.SEVERE, null, ex);
             System.exit(1);
         }
         while (isConnected()) {
