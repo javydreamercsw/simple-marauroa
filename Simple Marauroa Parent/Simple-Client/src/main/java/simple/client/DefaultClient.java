@@ -196,30 +196,34 @@ public class DefaultClient implements ClientFrameworkProvider {
 
                 @Override
                 public void onPerceptionBegin(byte type, int timestamp) {
-                    Lookup.getDefault().lookupAll(PerceptionListener.class).stream().forEach((listener) -> {
-                        listener.onPerceptionBegin(type, timestamp);
-                    });
+                    Lookup.getDefault().lookupAll(PerceptionListener.class)
+                            .stream().forEach((listener) -> {
+                                listener.onPerceptionBegin(type, timestamp);
+                            });
                 }
 
                 @Override
                 public void onPerceptionEnd(byte type, int timestamp) {
-                    Lookup.getDefault().lookupAll(PerceptionListener.class).stream().forEach((listener) -> {
-                        listener.onPerceptionEnd(type, timestamp);
-                    });
+                    Lookup.getDefault().lookupAll(PerceptionListener.class)
+                            .stream().forEach((listener) -> {
+                                listener.onPerceptionEnd(type, timestamp);
+                            });
                 }
 
                 @Override
                 public void onSynced() {
-                    Lookup.getDefault().lookupAll(SyncListener.class).stream().forEach((listener) -> {
-                        listener.onSynced();
-                    });
+                    Lookup.getDefault().lookupAll(SyncListener.class).stream()
+                            .forEach((listener) -> {
+                                listener.onSynced();
+                            });
                 }
 
                 @Override
                 public void onUnsynced() {
-                    Lookup.getDefault().lookupAll(SyncListener.class).stream().forEach((listener) -> {
-                        listener.onUnsynced();
-                    });
+                    Lookup.getDefault().lookupAll(SyncListener.class).stream()
+                            .forEach((listener) -> {
+                                listener.onUnsynced();
+                            });
                 }
             });
         }
@@ -267,7 +271,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                         LOG.log(Level.FINE, "<World contents ------------------------------------->");
                         int j = 0;
                         for (RPObject object
-                                : Lookup.getDefault().lookup(IWorldManager.class).getWorld().values()) {
+                                : Lookup.getDefault().lookup(IWorldManager.class)
+                                .getWorld().values()) {
                             j++;
                             LOG.log(Level.FINE, "{0}. {1}",
                                     new Object[]{j, object});
@@ -310,7 +315,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                             + "to create character {0}", getCharacter());
                     final ClientObject template = new ClientObject();
                     try {
-                        final CharacterResult result = createCharacter(getCharacter(), template);
+                        final CharacterResult result = createCharacter(getCharacter(),
+                                template);
                         if (result.getResult().failed()) {
                             LOG.log(Level.WARNING, result.getResult().getText());
                         }
