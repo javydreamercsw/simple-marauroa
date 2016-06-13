@@ -349,13 +349,19 @@ public class DefaultClient implements ClientFrameworkProvider {
         });
     }
 
+    private void showLoginDialog() {
+        LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+        if (lp != null) {
+            lp.displayLoginDialog();
+        }
+    }
+
     @Override
     @SuppressWarnings("empty-statement")
     public void run() {
         try {
-            LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
-            if (!lp.isAuthenticated()) {
-                lp.displayLoginDialog();
+            if (!Lookup.getDefault().lookup(LoginProvider.class).isAuthenticated()) {
+                showLoginDialog();
             }
             getClientManager().connect(getHost(), Integer.parseInt(getPort()));
             LOG.log(Level.FINE, "Logging as: {0} with pass: {1} "
@@ -368,10 +374,7 @@ public class DefaultClient implements ClientFrameworkProvider {
             Lookup.getDefault().lookup(MessageProvider.class).displayWarning(
                     "Unable to connect",
                     "Unable to connect to the server: " + getHost());
-            LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
-            if (lp != null) {
-                lp.displayLoginDialog();
-            }
+            showLoginDialog();
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
@@ -420,6 +423,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                                         ex.getLocalizedMessage()
                                         + "\nMake sure you have verified "
                                         + "your account. Check your provided email.");
+                        showLoginDialog();
                     }
                 } catch (InvalidVersionException ex) {
                     Lookup.getDefault().lookup(MessageProvider.class)
@@ -432,6 +436,7 @@ public class DefaultClient implements ClientFrameworkProvider {
             } else {
                 Lookup.getDefault().lookup(MessageProvider.class)
                         .displayWarning("Login Failed!", e.getLocalizedMessage());
+                showLoginDialog();
             }
         } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
             System.exit(1);
