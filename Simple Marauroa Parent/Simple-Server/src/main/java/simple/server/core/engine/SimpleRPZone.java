@@ -122,7 +122,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         NotificationType.INFORMATION, player.getName()
                         + " left " + getName()));
             } else if (object instanceof Entity) {
-                ((Entity) object).onRemoved(this);
+                ((RPEntityInterface) object).onRemoved(this);
                 npcs.remove(Tool.extractName(object));
                 super.remove(object.getID());
             }
