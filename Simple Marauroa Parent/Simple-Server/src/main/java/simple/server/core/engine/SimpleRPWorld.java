@@ -565,4 +565,14 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public ISimpleRPZone getDefaultZone() {
         return (ISimpleRPZone) super.getDefaultZone();
     }
+
+    @Override
+    public boolean hasRPZone(String zone) {
+        return hasRPZone(new IRPZone.ID(zone));
+    }
+
+    @Override
+    public IRPZone removeRPZone(String zone) throws Exception {
+        return removeRPZone(new IRPZone.ID(zone));
+    }
 }
