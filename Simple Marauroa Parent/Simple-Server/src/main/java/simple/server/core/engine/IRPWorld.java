@@ -35,8 +35,19 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @param zone Zone to remove
      * @return Removed zone
+     * @throws java.lang.Exception if something goes wrong.
      */
-    IRPZone removeRPZone(IRPZone zone);
+    IRPZone removeRPZone(IRPZone zone) throws Exception;
+
+    /**
+     * Remove zone from world (use with caution). Make sure to move all players
+     * in it to another zone. This is ignored for the default zone.
+     *
+     * @param zone Zone to remove
+     * @return Removed zone
+     * @throws java.lang.Exception if something goes wrong.
+     */
+    IRPZone removeRPZone(String zone) throws Exception;
 
     /**
      * Remove zone from world (use with caution). Make sure to move all players
@@ -229,6 +240,14 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @return true if exists
      */
     public boolean hasRPZone(IRPZone.ID zoneid);
+
+    /**
+     * Does the zone exist?
+     *
+     * @param zone zone to check
+     * @return true if exists
+     */
+    public boolean hasRPZone(String zone);
 
     /**
      * Get the default zone

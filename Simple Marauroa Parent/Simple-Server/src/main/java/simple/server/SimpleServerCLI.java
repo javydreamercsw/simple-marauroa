@@ -93,6 +93,9 @@ class SimpleServerCLI extends Thread {
                             case "account":
                                 processCreateAccountCommand(st);
                                 break;
+                            case "zone":
+                                processCreateZoneCommand(st);
+                                break;
                             default:
                                 LOG.log(Level.WARNING, "Unknown parameter: {0}", temp);
                         }
@@ -112,6 +115,9 @@ class SimpleServerCLI extends Thread {
                         switch (temp) {
                             case "account":
                                 processDeleteAccountCommand(st);
+                                break;
+                            case "zone":
+                                processDeleteZoneCommand(st);
                                 break;
                             default:
                                 LOG.log(Level.WARNING, "Unknown parameter: {0}", temp);
@@ -302,6 +308,36 @@ class SimpleServerCLI extends Thread {
                 LOG.log(Level.SEVERE,
                         "Error deleting account: "
                         + username, ex);
+            }
+        }
+    }
+
+    private void processDeleteZoneCommand(StringTokenizer st) {
+        if (st.hasMoreTokens()) {
+            String zone = st.nextToken();
+            IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
+            if (world.hasRPZone(zone)) {
+                try {
+                    world.removeRPZone(zone);
+                    LOG.log(Level.INFO, "Zone: {0} succesfully deleted!", zone);
+                } catch (Exception ex) {
+                    LOG.log(Level.SEVERE, "Unable to delete zone!", ex);
+                }
+            } else {
+                LOG.log(Level.INFO, "Unable to find zone: {0}", zone);
+            }
+        }
+    }
+
+    private void processCreateZoneCommand(StringTokenizer st) {
+        if (st.hasMoreTokens()) {
+            String zone = st.nextToken();
+            IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
+            if (world.hasRPZone(zone)) {
+                LOG.log(Level.INFO, "Zone: {0} already exists!", zone);
+            } else {
+                world.addZone(zone);
+                LOG.log(Level.INFO, "Zone: {0} succesfully created!", zone);
             }
         }
     }
