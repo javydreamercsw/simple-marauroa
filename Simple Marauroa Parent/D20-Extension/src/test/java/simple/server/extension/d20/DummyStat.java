@@ -1,9 +1,9 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.stat.D20Stat;
 import marauroa.common.game.Definition;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.d20.stat.AbstractStat;
+import simple.server.extension.d20.stat.D20Stat;
 
 /**
  *
@@ -36,7 +36,7 @@ public class DummyStat extends AbstractStat {
 
     @Override
     public Definition.Type getDefinitionType() {
-        return Definition.Type.values()[counter++];
+        return Definition.Type.values()[counter++ % Definition.Type.values().length];
     }
 
     @Override
