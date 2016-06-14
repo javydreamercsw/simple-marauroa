@@ -14,8 +14,16 @@ import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.ability.D20Ability;
+import simple.server.extension.d20.check.Charisma_Check;
+import simple.server.extension.d20.check.Constitution_Check;
+import simple.server.extension.d20.check.Dexterity_Check;
+import simple.server.extension.d20.check.Initiative_Check;
+import simple.server.extension.d20.check.Intelligence_Check;
+import simple.server.extension.d20.check.Strength_Check;
+import simple.server.extension.d20.check.Wisdom_Check;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
+import simple.server.extension.d20.dice.RollResult;
 import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.FeatList;
@@ -252,5 +260,40 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
             result = (int) Math.floor((getInt(a.getCharacteristicName()) - 10) / 2);
         }
         return result;
+    }
+
+    public RollResult getInitCheck() {
+        return Lookup.getDefault().lookup(Initiative_Check.class)
+                .getCheckRoll(this);
+    }
+
+    public RollResult getDexterityCheck() {
+        return Lookup.getDefault().lookup(Dexterity_Check.class)
+                .getCheckRoll(this);
+    }
+
+    public RollResult getCharismaCheck() {
+        return Lookup.getDefault().lookup(Charisma_Check.class)
+                .getCheckRoll(this);
+    }
+
+    public RollResult getConstitutionCheck() {
+        return Lookup.getDefault().lookup(Constitution_Check.class)
+                .getCheckRoll(this);
+    }
+
+    public RollResult getIntelligenceCheck() {
+        return Lookup.getDefault().lookup(Intelligence_Check.class)
+                .getCheckRoll(this);
+    }
+
+    public RollResult getStrengthCheck() {
+        return Lookup.getDefault().lookup(Strength_Check.class)
+                .getCheckRoll(this);
+    }
+
+    public RollResult getWisdomCheck() {
+        return Lookup.getDefault().lookup(Wisdom_Check.class)
+                .getCheckRoll(this);
     }
 }
