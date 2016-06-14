@@ -22,7 +22,6 @@ import java.util.Random;
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
  */
-
 public class DieRoll {
 
     private int ndice;
@@ -57,7 +56,7 @@ public class DieRoll {
         if (bonus > 0) {
             ans = ans + "+" + bonus;
         } else if (bonus < 0) {
-            ans = ans + bonus;
+            ans += bonus;
         }
         return ans;
     }
