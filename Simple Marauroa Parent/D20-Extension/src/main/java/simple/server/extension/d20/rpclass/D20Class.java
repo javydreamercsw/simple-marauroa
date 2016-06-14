@@ -72,4 +72,9 @@ public interface D20Class extends D20Characteristic, D20Level {
      * @return Bonus points for level
      */
     public int getBonusFeatPoints(int level);
+
+    /**
+     * Do the initial rolls for this class abilities and other stats.
+     */
+    public void initialRolls();
 }

@@ -1,10 +1,10 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.rpclass.AbstractClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.extension.d20.rpclass.AbstractClass;
 import simple.server.extension.d20.rpclass.D20Class;
 
 /**
@@ -17,6 +17,7 @@ import simple.server.extension.d20.rpclass.D20Class;
 public class DummyClass extends AbstractClass {
 
     public DummyClass() {
+        super(new RPObject());
         RPCLASS_NAME = "Dummy_Class";
     }
 
