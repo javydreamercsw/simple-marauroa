@@ -13,6 +13,7 @@ import simple.server.core.entity.RPEntity;
 import simple.server.extension.MarauroaServerExtension;
 import simple.server.extension.SimpleServerExtension;
 import simple.server.extension.d20.ability.D20Ability;
+import simple.server.extension.d20.check.D20Check;
 import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.D20List;
@@ -38,6 +39,12 @@ public class D20Extension extends SimpleServerExtension {
     @Override
     public String getName() {
         return "D20 Extension";
+    }
+
+    @Override
+    public void afterWorldInit() {
+        //Load all Checks by default
+        Lookup.getDefault().lookupAll(D20Check.class);
     }
 
     @Override
