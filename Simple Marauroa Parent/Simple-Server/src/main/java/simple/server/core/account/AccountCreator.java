@@ -1,8 +1,8 @@
 package simple.server.core.account;
 
-
-
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.Result;
@@ -10,7 +10,6 @@ import marauroa.server.db.DBTransaction;
 import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
-import org.apache.log4j.Logger;
 import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
@@ -18,7 +17,8 @@ import simple.server.core.engine.SimpleSingletonRepository;
  */
 public class AccountCreator {
 
-    private static Logger logger = Logger.getLogger(AccountCreator.class);
+    private static Logger LOG
+            = Logger.getLogger(AccountCreator.class.getSimpleName());
     private final String username;
     private final String password;
     private final String email;
@@ -26,12 +26,9 @@ public class AccountCreator {
     /**
      * creates a new AccountCreator.
      *
-     * @param username
-     *            name of the user
-     * @param password
-     *            password for this account
-     * @param email
-     *            email contact
+     * @param username name of the user
+     * @param password password for this account
+     * @param email email contact
      */
     public AccountCreator(final String username, final String password, final String email) {
         this.username = username.trim();
@@ -57,7 +54,7 @@ public class AccountCreator {
      * Checks the user provide parameters.
      *
      * @return null in case everything is ok, a Resul in case some validator
-     *         failed
+     * failed
      */
     private Result validate() {
         final AccountCreationRules rules = new AccountCreationRules(username,
@@ -73,13 +70,14 @@ public class AccountCreator {
      * @return Result.OK_CREATED on success
      */
     private AccountResult insertIntoDatabase() {
-        final TransactionPool transactionPool = SimpleSingletonRepository.getTransactionPool();
+        final TransactionPool transactionPool
+                = SimpleSingletonRepository.getTransactionPool();
         final DBTransaction transaction = transactionPool.beginWork();
         final AccountDAO accountDAO = DAORegister.get().get(AccountDAO.class);
 
         try {
             if (accountDAO.hasPlayer(transaction, username)) {
-                logger.warn("Account already exist: " + username);
+                LOG.log(Level.WARNING, "Account already exist: {0}", username);
                 transactionPool.commit(transaction);
                 return new AccountResult(Result.FAILED_PLAYER_EXISTS, username);
             }
@@ -89,7 +87,8 @@ public class AccountCreator {
             transactionPool.commit(transaction);
             return new AccountResult(Result.OK_CREATED, username);
         } catch (final SQLException e) {
-            logger.warn("SQL exception while trying to create a new account", e);
+            LOG.log(Level.WARNING,
+                    "SQL exception while trying to create a new account", e);
             transactionPool.rollback(transaction);
             return new AccountResult(Result.FAILED_EXCEPTION, username);
         }
