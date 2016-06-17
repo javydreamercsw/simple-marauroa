@@ -1,41 +1,57 @@
-
 package simple.server.core.rule.defaultruleset;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import simple.server.core.entity.item.Item;
 
 /**
  * All default items which can be reduced to stuff that increase the attack
  * point and stuff that increase the defense points.
- * 
+ *
  * @author Matthias Totz, chad3f
  */
 public class DefaultItem {
 
-    private static final Logger logger = Log4J.getLogger(DefaultItem.class);
-    /** items class. */
+    private static final Logger LOG
+            = Logger.getLogger(DefaultItem.class.getSimpleName());
+    /**
+     * items class.
+     */
     private String clazz;
-    /** items sub class. */
+    /**
+     * items sub class.
+     */
     private String subclazz;
-    /** items type. */
+    /**
+     * items type.
+     */
     private String name;
-    /** optional item description. */
+    /**
+     * optional item description.
+     */
     private String description;
     // weight system is not yet implemented.
     @SuppressWarnings("unused")
     private double weight;
-    /** slots where this item can be equipped. */
+    /**
+     * slots where this item can be equipped.
+     */
     private List<String> slots;
-    /** Map Tile Id. */
+    /**
+     * Map Tile Id.
+     */
     private int tileid;
-    /** Attributes of the item .*/
+    /**
+     * Attributes of the item .
+     */
     private Map<String, String> attributes;
-    /** Implementation creator. */
+    /**
+     * Implementation creator.
+     */
     protected Creator creator;
     private Class<?> implementation;
     private int value;
@@ -99,8 +115,7 @@ public class DefaultItem {
      * <li><em>Class</em>()
      * </ul>
      *
-     * @param implementation
-     *            The implementation class.
+     * @param implementation The implementation class.
      *
      * @return A creator, or <code>null</code> if none found.
      */
@@ -112,7 +127,7 @@ public class DefaultItem {
          */
         try {
             construct = implementation.getConstructor(new Class[]{
-                        String.class, String.class, String.class, Map.class});
+                String.class, String.class, String.class, Map.class});
 
             return new FullCreator(construct);
         } catch (NoSuchMethodException ex) {
@@ -169,6 +184,7 @@ public class DefaultItem {
 
     /**
      * Return the tile id .
+     *
      * @return
      */
     public int getTileId() {
@@ -189,6 +205,7 @@ public class DefaultItem {
 
     /**
      * Return the class.
+     *
      * @return
      */
     public String getItemClass() {
@@ -201,6 +218,7 @@ public class DefaultItem {
 
     /**
      * Return the subclass.
+     *
      * @return
      */
     public String getItemSubClass() {
@@ -221,23 +239,26 @@ public class DefaultItem {
 
     public String toXML() {
         StringBuilder os = new StringBuilder();
-        os.append("  <item name=\"" + name + "\">\n");
-        os.append("    <type class=\"" + clazz + "\" subclass=\"" + subclazz + "\" tileid=\"" + tileid + "\"/>\n");
+        os.append("  <item name=\"").append(name).append("\">\n");
+        os.append("    <type class=\"").append(clazz).append("\" subclass=\"")
+                .append(subclazz).append("\" tileid=\"").append(tileid).append("\"/>\n");
         if (description != null) {
-            os.append("    <description>" + description + "</description>\n");
+            os.append("    <description>").append(description).append("</description>\n");
         }
-        os.append("    <implementation class-name=\"" + implementation.getCanonicalName() + "\"/>");
+        os.append("    <implementation class-name=\"")
+                .append(implementation.getCanonicalName()).append("\"/>");
         os.append("    <attributes>\n");
-        for (Map.Entry<String, String> entry : attributes.entrySet()) {
-            os.append("      <" + entry.getKey() + " value=\"" + entry.getValue() + "\"/>\n");
-        }
+        attributes.entrySet().stream().forEach((entry) -> {
+            os.append("      <").append(entry.getKey()).append(" value=\"")
+                    .append(entry.getValue()).append("\"/>\n");
+        });
 
         os.append("    </attributes>\n");
-        os.append("    <weight value=\"" + weight + "\"/>\n");
-        os.append("    <value value=\"" + value + "\"/>\n");
+        os.append("    <weight value=\"").append(weight).append("\"/>\n");
+        os.append("    <value value=\"").append(value).append("\"/>\n");
         os.append("    <equipable>\n");
         for (String slot : slots) {
-            os.append("      <slot name=\"" + slot + "\"/>\n");
+            os.append("      <slot name=\"").append(slot).append("\"/>\n");
         }
         os.append("    </equipable>\n");
         os.append("  </item>\n");
@@ -261,17 +282,14 @@ public class DefaultItem {
         public Item createItem() {
             try {
                 return (Item) create();
-            } catch (IllegalAccessException ex) {
-                logger.error("Error creating item: " + name, ex);
-            } catch (InstantiationException ex) {
-                logger.error("Error creating item: " + name, ex);
-            } catch (InvocationTargetException ex) {
-                logger.error("Error creating item: " + name, ex);
+            } catch (IllegalAccessException | InstantiationException | InvocationTargetException ex) {
+                LOG.log(Level.SEVERE, "Error creating item: " + name, ex);
             } catch (ClassCastException ex) {
                 /*
                  * Wrong type (i.e. not [subclass of] Item)
                  */
-                logger.error("Implementation for " + name + " is not an Item class");
+                LOG.log(Level.SEVERE,
+                        "Implementation for {0} is not an Item class", name);
             }
 
             return null;
@@ -311,9 +329,8 @@ public class DefaultItem {
     }
 
     /**
-     * Create an item class via the full arguments (<em>name, clazz,
-     * subclazz, attributes</em>)
-     * constructor.
+     * Create an item class via the full arguments (<em>name, clazz, subclazz,
+     * attributes</em>) constructor.
      */
     protected class FullCreator extends Creator {
 
@@ -325,7 +342,7 @@ public class DefaultItem {
         protected Object create() throws IllegalAccessException,
                 InstantiationException, InvocationTargetException {
             return construct.newInstance(new Object[]{name, clazz, subclazz,
-                        attributes});
+                attributes});
         }
     }
 }

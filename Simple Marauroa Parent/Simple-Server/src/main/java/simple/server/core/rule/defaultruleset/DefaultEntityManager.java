@@ -1,14 +1,16 @@
-
 package simple.server.core.rule.defaultruleset;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.xml.sax.SAXException;
 import simple.server.core.config.ItemGroupsXMLLoader;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.item.Item;
@@ -16,27 +18,38 @@ import simple.server.core.rule.EntityManager;
 
 /**
  * entity manager for the default ruleset.
- * 
+ *
  * @author Matthias Totz
  */
 public class DefaultEntityManager implements EntityManager {
 
-    /** the logger instance. */
-    private static final Logger logger = Log4J.getLogger(DefaultEntityManager.class);
-    /** maps the tile ids to the classes. */
+    /**
+     * the logger instance.
+     */
+    private static final Logger logger
+            = Logger.getLogger(DefaultEntityManager.class.getSimpleName());
+    /**
+     * maps the tile ids to the classes.
+     */
     private Map<String, String> idToClass;
-    /** maps the item names to the actual item enums. */
+    /**
+     * maps the item names to the actual item enums.
+     */
     private Map<String, DefaultItem> classToItem;
-    /** lists all items that are being used at least once .*/
+    /**
+     * lists all items that are being used at least once .
+     */
     private Map<String, Item> createdItem;
 
-    /** no public constructor. */
+    /**
+     * no public constructor.
+     */
     public DefaultEntityManager() {
-        idToClass = new HashMap<String, String>();
+        idToClass = new HashMap<>();
 
         // Build the items tables
-        classToItem = new HashMap<String, DefaultItem>();
-        createdItem = new HashMap<String, Item>();
+        classToItem = new HashMap<>();
+        createdItem = new HashMap<>();
 
         try {
             if (new File("/data/conf/items.xml").exists()) {
@@ -48,14 +61,14 @@ public class DefaultEntityManager implements EntityManager {
                     String clazz = item.getItemName();
 
                     if (classToItem.containsKey(clazz)) {
-                        logger.warn("Repeated item name: " + clazz);
+                        logger.log(Level.WARNING, "Repeated item name: {0}", clazz);
                     }
 
                     classToItem.put(clazz, item);
                 }
             }
-        } catch (Exception e) {
-            logger.error("items.xml could not be loaded", e);
+        } catch (URISyntaxException | SAXException | IOException e) {
+            logger.log(Level.SEVERE, "items.xml could not be loaded", e);
         }
     }
 
@@ -64,7 +77,7 @@ public class DefaultEntityManager implements EntityManager {
         String clazz = item.getItemName();
 
         if (classToItem.containsKey(clazz)) {
-            logger.warn("Repeated item name: " + clazz);
+            logger.log(Level.WARNING, "Repeated item name: {0}", clazz);
             return false;
         }
 
@@ -84,8 +97,7 @@ public class DefaultEntityManager implements EntityManager {
     /**
      * @return the entity or <code>null</code> if the id is unknown.
      *
-     * @throws NullPointerException
-     *             if clazz is <code>null</code>
+     * @throws NullPointerException if clazz is <code>null</code>
      */
     @Override
     public Entity getEntity(String clazz) {
@@ -104,7 +116,9 @@ public class DefaultEntityManager implements EntityManager {
         return null;
     }
 
-    /** return true if the Entity is a creature. */
+    /**
+     * return true if the Entity is a creature.
+     */
     @Override
     public boolean isItem(String clazz) {
         if (clazz == null) {
@@ -117,8 +131,7 @@ public class DefaultEntityManager implements EntityManager {
     /**
      * @return the item or <code>null</code> if the clazz is unknown.
      *
-     * @throws NullPointerException
-     *             if clazz is <code>null</code>
+     * @throws NullPointerException if clazz is <code>null</code>
      */
     @Override
     public Item getItem(String clazz) {

@@ -1,7 +1,7 @@
 package simple.server.core.engine;
 
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.RPObjectFactory;
@@ -18,16 +18,17 @@ import simple.common.game.ClientObjectInterface;
 public class SimpleRPObjectFactory extends RPObjectFactory
         implements IRPObjectFactory {
 
-    private static final Logger LOG = 
-            Log4J.getLogger(SimpleRPObjectFactory.class);
+    private static final Logger LOG
+            = Logger.getLogger(SimpleRPObjectFactory.class.getSimpleName());
 
     @Override
     public RPObject transform(RPObject object) {
         RPObject result;
         RPClass clazz = object.getRPClass();
         if (clazz == null) {
-            LOG.error("Cannot create concrete object for " + object
-                    + " because it does not have an SimpleRPClass.");
+            LOG.log(Level.SEVERE,
+                    "Cannot create concrete object for {0} because it does not "
+                    + "have an SimpleRPClass.", object);
             result = super.transform(object);
         } else {
             // fallback

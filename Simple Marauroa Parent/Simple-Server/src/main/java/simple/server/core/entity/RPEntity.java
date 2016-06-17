@@ -1,8 +1,7 @@
 package simple.server.core.entity;
 
 import java.util.logging.Level;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Logger;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
@@ -26,7 +25,8 @@ public class RPEntity extends Entity {
     /**
      * the logger instance.
      */
-    private static final Logger LOG = Log4J.getLogger(RPEntity.class);
+    private static final Logger LOG
+            = Logger.getLogger(RPEntity.class.getSimpleName());
 
     @Override
     public void generateRPClass() {
@@ -38,7 +38,7 @@ public class RPEntity extends Entity {
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
             }
         } catch (SyntaxException e) {
-            LOG.error("cannot generateRPClass", e);
+            LOG.log(Level.SEVERE, "Cannot generateRPClass", e);
         } catch (InstantiationException | IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(RPEntity.class.getName())
                     .log(Level.SEVERE, null, ex);

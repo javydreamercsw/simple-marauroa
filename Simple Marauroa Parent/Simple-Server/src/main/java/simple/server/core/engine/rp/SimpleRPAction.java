@@ -1,7 +1,7 @@
 package simple.server.core.engine.rp;
 
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.game.rp.RPServerManager;
@@ -18,7 +18,8 @@ public class SimpleRPAction {
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(SimpleRPAction.class);
+    private static final Logger LOG
+            = Logger.getLogger(SimpleRPAction.class.getSimpleName());
     /**
      * server manager.
      */
@@ -40,14 +41,14 @@ public class SimpleRPAction {
     public static boolean placeAt(SimpleRPZone zone, Entity entity) {
         // check in case of players that that they are still in game
         // because the entity is added to the world again otherwise.
-        if (entity instanceof ClientObjectInterface 
+        if (entity instanceof ClientObjectInterface
                 && Lookup.getDefault().lookup(IRPObjectFactory.class)
-                        .createDefaultClientObject(entity).isDisconnected()) {
+                .createDefaultClientObject(entity).isDisconnected()) {
             return true;
         }
 
         SimpleRPZone oldZone = entity.getZone();
-        boolean zoneChanged = ( oldZone != zone );
+        boolean zoneChanged = (oldZone != zone);
 
         /*
          * Remove from old zone (if any) during zone change
@@ -76,9 +77,9 @@ public class SimpleRPAction {
          * ClientObjectInterface specific post-change handling
          */
         if (entity instanceof ClientObjectInterface) {
-            ClientObjectInterface player =
-                    Lookup.getDefault().lookup(IRPObjectFactory.class)
-                            .createDefaultClientObject(entity);
+            ClientObjectInterface player
+                    = Lookup.getDefault().lookup(IRPObjectFactory.class)
+                    .createDefaultClientObject(entity);
 
             if (zoneChanged) {
                 /*
@@ -90,8 +91,8 @@ public class SimpleRPAction {
                     String source = oldZone.getName();
                     String destination = zone.getName();
 
-                    ( (SimpleRPRuleProcessor) Lookup.getDefault()
-                            .lookup(IRPRuleProcessor.class) ).addGameEvent(
+                    ((SimpleRPRuleProcessor) Lookup.getDefault()
+                            .lookup(IRPRuleProcessor.class)).addGameEvent(
                             player.getName(), "change zone", destination);
 
                     TutorialNotifier.zoneChange(player, source, destination);
@@ -99,9 +100,9 @@ public class SimpleRPAction {
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Placed " + entity.getTitle() + " at " 
-                    + zone.getName());
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.log(Level.FINE, "Placed {0} at {1}",
+                    new Object[]{entity.getTitle(), zone.getName()});
         }
         return true;
     }
@@ -118,7 +119,7 @@ public class SimpleRPAction {
                 rpman.transferContent((RPObject) player, zone.getContents());
             }
         } else {
-            logger.warn("rpmanager not found");
+            LOG.warning("rpmanager not found");
         }
     }
 

@@ -1,8 +1,14 @@
 package simple.server.core.event;
 
-import java.util.*;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.engine.IRPWorld;
@@ -16,7 +22,8 @@ import simple.server.core.engine.SimpleRPWorld;
 @ServiceProvider(service = ITurnNotifier.class)
 public final class TurnNotifier implements ITurnNotifier {
 
-    private static final Logger LOG = Log4J.getLogger(TurnNotifier.class);
+    private static final Logger LOG
+            = Logger.getLogger(TurnNotifier.class.getSimpleName());
     private int currentTurn = -1;
     /**
      * This Map maps each turn to the set of all events that will take place at
@@ -57,11 +64,12 @@ public final class TurnNotifier implements ITurnNotifier {
             for (TurnListener event : set) {
                 TurnListener turnListener = event;
                 try {
-                    LOG.debug("Processing turn listener: "
-                            + turnListener.getClass().getName());
+                    LOG.log(Level.FINE,
+                            "Processing turn listener: {0}",
+                            turnListener.getClass().getName());
                     turnListener.onTurnReached(currentTurn);
                 } catch (RuntimeException e) {
-                    LOG.error(e, e);
+                    LOG.log(Level.SEVERE, null, e);
                 }
             }
         }
@@ -108,13 +116,11 @@ public final class TurnNotifier implements ITurnNotifier {
      */
     @Override
     public void notifyAtTurn(int turn, TurnListener turnListener) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Notify at " + turn + " by "
-                    + turnListener.getClass().getName());
-        }
+        LOG.log(Level.FINE, "Notify at {0} by {1}",
+                new Object[]{turn, turnListener.getClass().getName()});
 
         if (turn <= currentTurn) {
-            LOG.error("requested turn " + turn
+            LOG.log(Level.SEVERE, "requested turn " + turn
                     + " is in the past. Current turn is " + currentTurn,
                     new IllegalArgumentException("turn"));
             return;

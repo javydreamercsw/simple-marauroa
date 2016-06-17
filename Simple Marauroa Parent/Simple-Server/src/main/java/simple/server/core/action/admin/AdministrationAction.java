@@ -1,15 +1,15 @@
 package simple.server.core.action.admin;
 
-import simple.server.core.action.ActionProvider;
 import java.util.HashMap;
 import java.util.Map;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionProvider;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPZone;
@@ -18,13 +18,15 @@ import simple.server.core.entity.Entity;
 /**
  * Most /commands for admins are handled here.
  */
-public abstract class AdministrationAction implements ActionProvider{
+public abstract class AdministrationAction implements ActionProvider {
 
-    private static final String _TARGETID = "targetid";
-    protected static final Logger logger = Log4J.getLogger(AdministrationAction.class);
+    private static final String TARGETID = "targetid";
+    protected static final Logger LOG
+            = Logger.getLogger(AdministrationAction.class.getSimpleName());
     public static final int REQUIRED_ADMIN_LEVEL_FOR_SUPPORT = 100;
     public static final int REQUIRED_ADMIN_LEVEL_FOR_SUPER = 5000;
-    protected static final Map<String, Integer> REQUIRED_ADMIN_LEVELS = new HashMap<String, Integer>();
+    protected static final Map<String, Integer> REQUIRED_ADMIN_LEVELS
+            = new HashMap<>();
 
     static {
         REQUIRED_ADMIN_LEVELS.put("support", 100);
@@ -51,7 +53,7 @@ public abstract class AdministrationAction implements ActionProvider{
 
         // check that we know this command
         if (required == null) {
-            logger.error("Unknown command " + command);
+            LOG.log(Level.SEVERE, "Unknown command {0}", command);
             if (verbose) {
                 player.sendPrivateText("Sorry, command \"" + command + "\" is unknown.");
             }
@@ -60,16 +62,23 @@ public abstract class AdministrationAction implements ActionProvider{
 
         if (adminlevel < required) {
             // not allowed
-            logger.warn("Player " + player.getName() + " with admin level " + adminlevel + " tried to run admin command " + command + " which requires level " + required + ".");
+            LOG.log(Level.WARNING,
+                    "Player {0} with admin level {1} tried to run admin "
+                    + "command {2} which requires level {3}.",
+                    new Object[]{player.getName(), adminlevel, command,
+                        required});
 
             // Notify the player if verbose is set.
             if (verbose) {
 
                 // is this player an admin at all?
                 if (adminlevel == 0) {
-                    player.sendPrivateText("Sorry, you need to be an admin to run \"" + command + "\".");
+                    player.sendPrivateText("Sorry, you need to be an admin to "
+                            + "run \"" + command + "\".");
                 } else {
-                    player.sendPrivateText("Your admin level is only " + adminlevel + ", but a level of " + required + " is required to run \"" + command + "\".");
+                    player.sendPrivateText("Your admin level is only "
+                            + adminlevel + ", but a level of " + required
+                            + " is required to run \"" + command + "\".");
                 }
             }
             return false;
@@ -89,7 +98,8 @@ public abstract class AdministrationAction implements ActionProvider{
         }
     }
 
-    protected abstract void perform(ClientObjectInterface player, RPAction action);
+    protected abstract void perform(ClientObjectInterface player,
+            RPAction action);
 
     /**
      * get the Entity-object of the specified target.
@@ -98,7 +108,8 @@ public abstract class AdministrationAction implements ActionProvider{
      * @param action
      * @return the Entity or null if it does not exist
      */
-    protected final Entity getTarget(ClientObjectInterface player, RPAction action) {
+    protected final Entity getTarget(ClientObjectInterface player,
+            RPAction action) {
 
         String id = null;
         Entity target = null;
@@ -111,14 +122,15 @@ public abstract class AdministrationAction implements ActionProvider{
             if (id.startsWith("#")) {
                 id = id.substring(1);
             } else {
-                target = (Entity) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(id);
+                target = (Entity) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+                        .getPlayer(id);
                 return target;
             }
         }
 
         // either target started with a # or it was not specified
-        if (action.has(_TARGETID)) {
-            id = action.get(_TARGETID);
+        if (action.has(TARGETID)) {
+            id = action.get(TARGETID);
         }
 
         // go for the id

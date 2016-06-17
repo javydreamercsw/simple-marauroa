@@ -1,9 +1,9 @@
 package simple.server.core.action.chat;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.Configuration;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
 import marauroa.common.game.Attributes;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
@@ -27,7 +27,8 @@ public class PublicChatAction implements ActionProvider {
     /**
      * the logger instance.
      */
-    private static final Logger LOG = Log4J.getLogger(PublicChatAction.class);
+    private static final Logger LOG
+            = Logger.getLogger(PublicChatAction.class.getSimpleName());
     public static final String CHAT = "chat";
 
     @Override
@@ -41,7 +42,7 @@ public class PublicChatAction implements ActionProvider {
             if (action.has(TEXT)) {
                 try {
                     String text = action.get(TEXT);
-                    LOG.debug("Processing text event: " + text);
+                    LOG.log(Level.FINE, "Processing text event: {0}", text);
                     Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
                             Lookup.getDefault().lookup(IRPWorld.class)
                             .getZone(((Attributes) player)
@@ -52,7 +53,7 @@ public class PublicChatAction implements ActionProvider {
                         LOG.info(text);
                     }
                 } catch (IOException ex) {
-                    LOG.warn(ex.toString(), ex);
+                    LOG.log(Level.WARNING, ex.toString(), ex);
                 }
             } else {
                 StringBuilder mess
@@ -60,7 +61,7 @@ public class PublicChatAction implements ActionProvider {
                 if (!action.has(TEXT)) {
                     mess.append(TEXT).append("\n");
                 }
-                LOG.warn(mess.toString());
+                LOG.warning(mess.toString());
             }
         }
     }

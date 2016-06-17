@@ -21,7 +21,7 @@ import simple.server.core.engine.SimpleSingletonRepository;
  */
 public class CharacterCreator {
 
-    private static Logger LOG
+    private static final Logger LOG
             = Logger.getLogger(CharacterCreator.class.getSimpleName());
     private final ValidatorList validators = new ValidatorList();
     private final String username;

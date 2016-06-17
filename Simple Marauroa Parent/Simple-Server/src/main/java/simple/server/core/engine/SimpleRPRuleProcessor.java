@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.Configuration;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
 import marauroa.common.Pair;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPAction;
@@ -47,10 +47,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     private static String GAMENAME;
     private static boolean log_chat = false;
     /**
-     * the logger instance.
+     * the LOG instance.
      */
     private static final Logger LOG
-            = Log4J.getLogger(SimpleRPRuleProcessor.class);
+            = Logger.getLogger(SimpleRPRuleProcessor.class.getSimpleName());
     protected static RPServerManager rpman;
     protected PlayerList onlinePlayers;
     /**
@@ -67,7 +67,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             config = Configuration.getConfiguration();
         } catch (IOException ex) {
-            LOG.error(ex, ex);
+            LOG.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
         onlinePlayers = new PlayerList();
         entityToKill = new LinkedList<>();
@@ -115,7 +115,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             DAORegister.get().get(GameEventDAO.class).addGameEvent(
                     source, event, params);
         } catch (Exception e) {
-            LOG.warn("Can't store game event", e);
+            LOG.log(Level.WARNING, "Can't store game event", e);
         }
     }
 
@@ -126,12 +126,12 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 /*
                  * Print version information.
                  */
-                LOG.info("Running " + getGAMENAME() + " Server version '"
-                        + getVERSION() + "'");
+                LOG.log(Level.INFO, "Running {0} Server version ''{1}''",
+                        new Object[]{getGAMENAME(), getVERSION()});
                 SimpleRPRuleProcessor.rpman = rpman;
                 SimpleRPAction.initialize(rpman);
             } catch (Exception e) {
-                LOG.error("Cannot set Context. Exiting...", e);
+                LOG.log(Level.SEVERE, "Cannot set Context. Exiting...", e);
                 throw new RuntimeException(e);
             }
         }
@@ -139,9 +139,9 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
 
     @Override
     public boolean checkGameVersion(String game, String version) {
-        LOG.debug("Comparing " + game + " (client) with " + getGAMENAME()
+        LOG.fine("Comparing " + game + " (client) with " + getGAMENAME()
                 + " (server)");
-        LOG.debug("Comparing " + version + " (client) with " + getVERSION()
+        LOG.fine("Comparing " + version + " (client) with " + getVERSION()
                 + " (server)");
         return game.equals(getGAMENAME()) && version.equals(getVERSION());
     }
@@ -202,7 +202,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         if (caster instanceof ClientObjectInterface) {
             CommandCenter.execute((ClientObjectInterface) caster, action);
         } else {
-            LOG.error(caster + " tried to execute action: " + action);
+            LOG.severe(caster + " tried to execute action: " + action);
         }
     }
 
@@ -219,7 +219,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             logNumberOfPlayersOnline();
         } catch (Exception e) {
-            LOG.error("Error in beginTurn.", e);
+            LOG.log(Level.SEVERE, "Error in beginTurn.", e);
         }
     }
 
@@ -247,7 +247,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             os.append("players: ").append(getOnlinePlayers().size())
                     .append("\n");
             os.append("objects: ").append(objects).append("\n");
-            LOG.info(os);
+            LOG.info(os.toString());
         }
     }
 
@@ -264,7 +264,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             // Run registered object's logic method for this turn
             Lookup.getDefault().lookup(ITurnNotifier.class).logic(currentTurn);
         } catch (Exception e) {
-            LOG.error("Error in endTurn", e);
+            LOG.log(Level.SEVERE, "Error in endTurn", e);
         }
     }
 
@@ -302,7 +302,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 notifyOnlineStatus(true, player.getName());
             }
         } catch (Exception e) {
-            LOG.error("There has been a severe problem loading player "
+            LOG.log(Level.SEVERE, "There has been a severe problem loading player "
                     + object.get("#db_id"), e);
             result = false;
         }
@@ -334,18 +334,19 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                     if (zone.has(((RPObject) player).getID())
                             && !zone.getName().equals(
                                     player.getZone().getName())) {
-                        LOG.warn("Another instance of the player found in "
-                                + zone.getName());
+                        LOG.log(Level.WARNING,
+                                "Another instance of the player found in {0}",
+                                zone.getName());
                         zone.remove(((RPObject) player).getID());
                     }
                 }
                 addGameEvent(player.getName(), "logout");
 
-                LOG.debug("removed player " + player);
+                LOG.log(Level.FINE, "removed player {0}", player);
             }
             return true;
         } catch (Exception e) {
-            LOG.error("Error in onExit.", e);
+            LOG.log(Level.SEVERE, "Error in onExit.", e);
             return true;
         }
     }

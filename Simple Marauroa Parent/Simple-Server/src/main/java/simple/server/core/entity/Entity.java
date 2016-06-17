@@ -1,8 +1,8 @@
 package simple.server.core.entity;
 
 import java.util.Objects;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
@@ -28,7 +28,8 @@ public class Entity extends RPObject implements RPEntityInterface {
     /**
      * The logger.
      */
-    private static final Logger LOG = Log4J.getLogger(Entity.class);
+    private static final Logger LOG
+            = Logger.getLogger(Entity.class.getSimpleName());
     private SimpleRPZone zone = null;
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
@@ -55,15 +56,15 @@ public class Entity extends RPObject implements RPEntityInterface {
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
             Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
-                LOG.debug("Processing extension to modify root class "
-                        + "definition: " + extension.getClass().getSimpleName());
+                LOG.log(Level.FINE, "Processing extension to modify root class " + "definition: {0}", extension.getClass().getSimpleName());
                 return extension;
             }).map((extension) -> {
                 extension.modifyRootRPClassDefinition(entity);
                 return extension;
-            }).filter((_item) -> (LOG.isDebugEnabled())).forEach((_item) -> {
+            }).filter((_item) -> (LOG.isLoggable(Level.FINE))).forEach((_item) -> {
                 entity.getDefinitions().stream().forEach((def) -> {
-                    LOG.info(def.getName() + ": " + def.getType());
+                    LOG.log(Level.INFO, "{0}: {1}",
+                            new Object[]{def.getName(), def.getType()});
                 });
             });
         }
@@ -200,8 +201,9 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (this.zone != null) {
             //Make sure its not in the old zone
             if (this.zone.has(getID())) {
-                LOG.error("Entity added while in another zone: "
-                        + this + " in zone " + zone.getID());
+                LOG.log(Level.SEVERE,
+                        "Entity added while in another zone: {0} in zone {1}",
+                        new Object[]{this, zone.getID()});
                 this.zone.remove(getID());
             }
         }
@@ -216,7 +218,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void onRemoved(SimpleRPZone zone) {
         if (this.zone != zone) {
-            LOG.error("Entity removed from wrong zone: " + this);
+            LOG.log(Level.SEVERE, "Entity removed from wrong zone: {0}", this);
         }
         this.zone = null;
     }
@@ -226,7 +228,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      *
      */
     public void notifyWorldAboutChanges() {
-        LOG.debug("Object zone: " + get(Entity.ZONE_ID));
+        LOG.log(Level.FINE, "Object zone: {0}", get(Entity.ZONE_ID));
         Lookup.getDefault().lookup(IRPWorld.class).modify(this);
     }
 
@@ -249,11 +251,12 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     public void update() {
-        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
-            LOG.debug("Processing extension to update root class "
-                    + "definition: " + extension.getClass().getSimpleName());
-            return extension;
-        }).forEach((extension) -> {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream()
+                .map((extension) -> {
+                    LOG.log(Level.FINE, "Processing extension to update root class "
+                            + "definition: {0}", extension.getClass().getSimpleName());
+                    return extension;
+                }).forEach((extension) -> {
             extension.rootRPClassUpdate(this);
         });
     }
@@ -308,9 +311,6 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (!Objects.equals(this.RPCLASS_NAME, other.RPCLASS_NAME)) {
             return false;
         }
-        if (!Objects.equals(this.zone, other.zone)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.zone, other.zone);
     }
 }

@@ -1,8 +1,8 @@
 package simple.server.core.entity.item;
 
 import java.util.Map;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import simple.server.core.engine.IRPWorld;
@@ -10,9 +10,9 @@ import simple.server.core.engine.SimpleSingletonRepository;
 
 public final class StackableItem extends Item implements Stackable {
 
-    private static final long serialVersionUID = 1L;
     private int quantity = 1;
-    private static Logger logger = Log4J.getLogger(StackableItem.class);
+    private static final Logger LOG
+            = Logger.getLogger(StackableItem.class.getSimpleName());
 
     public StackableItem(String name, String clazz, String subclass,
             Map<String, String> attributes) {
@@ -47,7 +47,7 @@ public final class StackableItem extends Item implements Stackable {
     @Override
     public void setQuantity(int amount) {
         if (amount < 0) {
-            logger.error("Trying to set invalid quantity: " + amount,
+            LOG.log(Level.SEVERE, "Trying to set invalid quantity: " + amount,
                     new Throwable());
             put("quantity", 1);
             quantity = 1;
@@ -103,7 +103,9 @@ public final class StackableItem extends Item implements Stackable {
                     try {
                         notifyWorldAboutChanges();
                     } catch (Exception e) {
-                        logger.warn("isContained() returned false on contained object (bank chest bug): " + e);
+                        LOG.log(Level.WARNING,
+                                "isContained() returned false on contained "
+                                + "object (bank chest bug): {0}", e);
                     }
                 }
             } else {

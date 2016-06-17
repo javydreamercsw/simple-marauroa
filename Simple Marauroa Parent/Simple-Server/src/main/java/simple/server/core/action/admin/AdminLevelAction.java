@@ -1,5 +1,6 @@
 package simple.server.core.action.admin;
 
+import java.util.logging.Level;
 import marauroa.common.game.RPAction;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
@@ -11,7 +12,8 @@ import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
 @ServiceProvider(service = ActionProvider.class)
-public class AdminLevelAction extends AdministrationAction implements ActionProvider {
+public class AdminLevelAction extends AdministrationAction
+        implements ActionProvider {
 
     private static final String ADMINLEVEL = "adminlevel";
     private static final String NEWLEVEL = "newlevel";
@@ -30,7 +32,7 @@ public class AdminLevelAction extends AdministrationAction implements ActionProv
                     = ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getPlayer(name);
             if (target == null || (target.isGhost() && !isAllowedtoSeeGhosts(player))) {
-                logger.debug("Player \"" + name + "\" not found");
+                LOG.log(Level.FINE, "Player \"{0}\" not found", name);
                 player.sendPrivateText("Player \"" + name + "\" not found");
                 return;
             }
