@@ -1,14 +1,12 @@
-
 package simple.server.core.engine.dbcommand;
 
-
-
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import marauroa.server.db.DBTransaction;
 import marauroa.server.db.StringChecker;
 import marauroa.server.db.command.AbstractDBCommand;
-import org.apache.log4j.Logger;
 import simple.common.game.ClientObjectInterface;
 
 /**
@@ -19,7 +17,8 @@ import simple.common.game.ClientObjectInterface;
 public abstract class AbstractLogItemEventCommand extends AbstractDBCommand {
 
     public static final String ATTR_ITEM_LOGID = "logid";
-    private static final Logger logger = Logger.getLogger(AbstractLogItemEventCommand.class);
+    private static final Logger LOG
+            = Logger.getLogger(AbstractLogItemEventCommand.class.getSimpleName());
 
     @Override
     public void execute(DBTransaction transaction) throws SQLException {
@@ -37,13 +36,15 @@ public abstract class AbstractLogItemEventCommand extends AbstractDBCommand {
     }
 
     /**
-     * Assigns the next logid to the specified item in case it does not already have one.
+     * Assigns the next logid to the specified item in case it does not already
+     * have one.
      *
      * @param transaction database transaction
      * @param item item
      * @throws SQLException in case of a database error
      */
-    protected void itemLogAssignIDIfNotPresent(final DBTransaction transaction, final RPObject item) throws SQLException {
+    protected void itemLogAssignIDIfNotPresent(final DBTransaction transaction,
+            final RPObject item) throws SQLException {
         if (item.has(ATTR_ITEM_LOGID)) {
             return;
         }
@@ -51,14 +52,17 @@ public abstract class AbstractLogItemEventCommand extends AbstractDBCommand {
         // increment the last_id value (or initialize it in case that table has 0 rows).
         final int count = transaction.execute("UPDATE itemid SET last_id = last_id+1;", null);
         if (count < 0) {
-            logger.error("Unexpected return value of execute method: " + count);
+            LOG.log(Level.SEVERE,
+                    "Unexpected return value of execute method: {0}", count);
         } else if (count == 0) {
             // Note: This is just a workaround in case the itemid table is empty.
             // In case itemlog was emptied, too; this workaround does not work because
             // there are still items with higher ids out there.
-            logger.warn("Initializing itemid table, this may take a few minutes in case this database is not empty.");
-            transaction.execute("INSERT INTO itemid (last_id) SELECT max(itemid) + 1 FROM itemlog;", null);
-            logger.warn("itemid initialized.");
+            LOG.warning("Initializing itemid table, this may take a few "
+                    + "minutes in case this database is not empty.");
+            transaction.execute("INSERT INTO itemid (last_id) "
+                    + "SELECT max(itemid) + 1 FROM itemlog;", null);
+            LOG.warning("itemid initialized.");
         }
 
         // read last_id from database
@@ -69,6 +73,7 @@ public abstract class AbstractLogItemEventCommand extends AbstractDBCommand {
 
     /**
      * Logs the name of the item on first.
+     *
      * @param transaction
      * @param item
      * @throws SQLException
