@@ -2,8 +2,8 @@ package simple.server.core.tool;
 
 import java.io.File;
 import java.util.Locale;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import static simple.server.core.entity.Entity.NAME;
 
@@ -14,7 +14,8 @@ import static simple.server.core.entity.Entity.NAME;
  */
 public class Tool {
 
-    private static final Logger LOGGER = Log4J.getLogger(Tool.class);
+    private static final Logger LOG
+            = Logger.getLogger(Tool.class.getSimpleName());
 
     /**
      * Encrypt string with provided key.
@@ -65,12 +66,12 @@ public class Tool {
     public static String removeUnderscores(final String value) {
         String result = value;
         while (result.contains("_")) {
-            LOGGER.debug("Changing value from " + value + "...");
+            LOG.log(Level.FINE, "Changing value from {0}...", value);
             //This will be the index of the character to turn upper case
             int underscoreIndex = value.indexOf('_');
             result = value.replaceFirst("_", "");
             changeToUpperCase(result, underscoreIndex);
-            LOGGER.debug("to " + result);
+            LOG.log(Level.FINE, "to {0}", result);
         }
         return result;
     }
@@ -84,12 +85,12 @@ public class Tool {
      */
     public static String changeToUpperCase(final String value,
             final int index) {
-        LOGGER.debug("Changing value from " + value + "...");
+        LOG.fine("Changing value from " + value + "...");
         String result = value.substring(0, index)
                 + value.substring(index, index + 1)
                 .toUpperCase(Locale.getDefault())
                 + value.substring(index + 1);
-        LOGGER.debug("to " + result);
+        LOG.fine("to " + result);
         return result;
     }
 
@@ -120,7 +121,7 @@ public class Tool {
 
     protected Tool() {
     }
-    
+
     public static String extractName(RPObject obj) {
         return obj.has(NAME) ? obj.get(NAME).replace("_", " ")
                 : obj.toString();

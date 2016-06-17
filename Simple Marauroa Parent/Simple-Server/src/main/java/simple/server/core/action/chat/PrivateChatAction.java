@@ -1,9 +1,9 @@
 package simple.server.core.action.chat;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.Configuration;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -28,7 +28,8 @@ public class PrivateChatAction implements ActionProvider {
     /**
      * the logger instance.
      */
-    private static final Logger LOG = Log4J.getLogger(PrivateChatAction.class);
+    private static final Logger LOG
+            = Logger.getLogger(PrivateChatAction.class.getSimpleName());
     public static final String PRIVATE_CHAT = PrivateTextEvent.RPCLASS_NAME;
 
     @Override
@@ -44,7 +45,7 @@ public class PrivateChatAction implements ActionProvider {
                     String text = action.get(TEXT);
                     String target = action.get(TARGET);
                     String from = rpo.get("name");
-                    LOG.info("Processing private text action: " + action);
+                    LOG.log(Level.INFO, "Processing private text action: {0}", action);
                     Lookup.getDefault().lookup(IRPWorld.class).applyPrivateEvent(target,
                             new PrivateTextEvent(NotificationType.PRIVMSG, text,
                                     target, from));
@@ -53,7 +54,7 @@ public class PrivateChatAction implements ActionProvider {
                         LOG.info(text);
                     }
                 } catch (IOException ex) {
-                    LOG.warn(ex.toString(), ex);
+                    LOG.log(Level.WARNING, ex.toString(), ex);
                 }
             } else {
                 StringBuilder mess
@@ -64,7 +65,7 @@ public class PrivateChatAction implements ActionProvider {
                 if (!action.has(TARGET)) {
                     mess.append(TARGET).append("\n");
                 }
-                LOG.warn(mess.toString());
+                LOG.warning(mess.toString());
             }
         }
     }

@@ -9,11 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -25,7 +24,8 @@ public class ItemsXMLLoader extends DefaultHandler {
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(ItemsXMLLoader.class);
+    private static final Logger LOG
+            = Logger.getLogger(ItemsXMLLoader.class.getSimpleName());
     private String name;
     private String clazz;
     private String subclass;
@@ -46,7 +46,7 @@ public class ItemsXMLLoader extends DefaultHandler {
     protected Class<?> implementation;
 
     public List<DefaultItem> load(URI uri) throws SAXException {
-        list = new LinkedList<DefaultItem>();
+        list = new LinkedList<>();
         // Use the default (non-validating) parser
         SAXParserFactory factory = SAXParserFactory.newInstance();
         InputStream is = null;
@@ -61,16 +61,16 @@ public class ItemsXMLLoader extends DefaultHandler {
             }
             saxParser.parse(is, this);
         } catch (ParserConfigurationException t) {
-            logger.error(t);
+            LOG.log(Level.SEVERE, null, t);
         } catch (IOException e) {
-            logger.error(e);
+            LOG.log(Level.SEVERE, null, e);
             throw new SAXException(e);
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(ItemsXMLLoader.class.getName()).log(Level.SEVERE, null, ex);
+                    LOG.log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -94,8 +94,8 @@ public class ItemsXMLLoader extends DefaultHandler {
         text = "";
         if (qName.equals("item")) {
             name = attrs.getValue("name");
-            attributes = new LinkedHashMap<String, String>();
-            slots = new LinkedList<String>();
+            attributes = new LinkedHashMap<>();
+            slots = new LinkedList<>();
             description = "";
             implementation = null;
         } else if (qName.equals(WellKnownActionConstant.TYPE)) {
@@ -108,7 +108,7 @@ public class ItemsXMLLoader extends DefaultHandler {
             try {
                 implementation = Class.forName(className);
             } catch (ClassNotFoundException ex) {
-                logger.error("Unable to load class: " + className);
+                LOG.log(Level.SEVERE, "Unable to load class: {0}", className);
             }
         } else if (qName.equals("weight")) {
             weight = Double.parseDouble(attrs.getValue("value"));
@@ -125,34 +125,38 @@ public class ItemsXMLLoader extends DefaultHandler {
 
     @Override
     public void endElement(String namespaceURI, String sName, String qName) {
-        if (qName.equals("item")) {
-            DefaultItem item = new DefaultItem(clazz, subclass, name, -1);
-            item.setWeight(weight);
-            item.setEquipableSlots(slots);
-            item.setAttributes(attributes);
-            item.setDescription(description);
-            item.setValue(value);
-
-            if (implementation == null) {
-                logger.error("Item without defined implementation: " + name);
-                return;
-            }
-
-            item.setImplementation(implementation);
-
-            list.add(item);
-        } else if (qName.equals("attributes")) {
-            attributesTag = false;
-        } else if (qName.equals("description")) {
-            if (text != null) {
-                description = text.trim();
-                description = description.replaceAll(" +", " ");
-            }
+        switch (qName) {
+            case "item":
+                DefaultItem item = new DefaultItem(clazz, subclass, name, -1);
+                item.setWeight(weight);
+                item.setEquipableSlots(slots);
+                item.setAttributes(attributes);
+                item.setDescription(description);
+                item.setValue(value);
+                if (implementation == null) {
+                    LOG.log(Level.SEVERE,
+                            "Item without defined implementation: {0}", name);
+                    return;
+                }
+                item.setImplementation(implementation);
+                list.add(item);
+                break;
+            case "attributes":
+                attributesTag = false;
+                break;
+            case "description":
+                if (text != null) {
+                    description = text.trim();
+                    description = description.replaceAll(" +", " ");
+                }
+                break;
+            default:
+                break;
         }
     }
 
     @Override
     public void characters(char[] buf, int offset, int len) {
-        text = text + (new String(buf, offset, len)).trim();
+        text += (new String(buf, offset, len)).trim();
     }
 }

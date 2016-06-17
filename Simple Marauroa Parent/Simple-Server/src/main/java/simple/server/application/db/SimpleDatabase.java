@@ -1,8 +1,8 @@
 package simple.server.application.db;
 
 import java.sql.SQLException;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.server.game.db.DatabaseFactory;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -14,7 +14,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = IDatabase.class)
 public class SimpleDatabase implements IDatabase {
 
-    private static final Logger LOG = Log4J.getLogger(SimpleDatabase.class);
+    private static final Logger LOG
+            = Logger.getLogger(SimpleDatabase.class.getSimpleName());
     private boolean initialized = false;
 
     @Override
@@ -27,10 +28,12 @@ public class SimpleDatabase implements IDatabase {
     }
 
     protected void registerDAOs() {
-        LOG.debug("Loading DAOs from: " + getClass().getSimpleName());
+        LOG.log(Level.FINE, "Loading DAOs from: {0}",
+                getClass().getSimpleName());
         //Override DAO's here
         for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
-            LOG.debug("Registerig DAO: " + dao.getClass().getSimpleName());
+            LOG.log(Level.FINE, "Registerig DAO: {0}",
+                    dao.getClass().getSimpleName());
             dao.register();
             dao.init();
         }

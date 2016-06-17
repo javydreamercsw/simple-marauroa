@@ -7,10 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import marauroa.common.game.Attributes;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
@@ -34,7 +35,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     /**
      * the logger instance.
      */
-    private static final Logger LOG = Log4J.getLogger(SimpleRPZone.class);
+    private static final Logger LOG
+            = Logger.getLogger(SimpleRPZone.class.getSimpleName());
     private final List<TransferContent> contents;
     private final HashMap<String, ClientObjectInterface> players;
     public final HashMap<String, RPEntityInterface> npcs;
@@ -65,7 +67,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         TransferContent content = new TransferContent();
         content.name = name;
         content.cacheable = true;
-        LOG.debug("Layer timestamp: " + Integer.toString(content.timestamp));
+        LOG.log(Level.FINE, "Layer timestamp: {0}", Integer.toString(content.timestamp));
         content.data = byteContents;
         content.timestamp = CRC.cmpCRC(content.data);
 
@@ -115,7 +117,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                             .getDeclaredMethod("onRemoved", types);
                     localSingleton.invoke(clientObjectClass.cast(object), this);
                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
-                    LOG.error(ex, ex);
+                    LOG.log(Level.SEVERE, null, ex);
                 }
                 //Let everyone else know
                 applyPublicEvent(new PrivateTextEvent(
@@ -130,7 +132,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     getID().toString());
             return super.remove(object.getID());
         } else {
-            LOG.warn("Trying to remove null RPObject!");
+            LOG.warning("Trying to remove null RPObject!");
             return null;
         }
     }
@@ -185,6 +187,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         return players.get(name);
     }
 
+    @Override
     public RPEntityInterface getNPC(String name) {
         return npcs.get(name);
     }
@@ -200,7 +203,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             }
 
             if (object instanceof ClientObjectInterface) {
-                LOG.debug("Processing ClientObjectInterface");
+                LOG.fine("Processing ClientObjectInterface");
                 try {
                     //Make sure that the correct onAdded method is called
                     Configuration conf = Configuration.getConfiguration();
@@ -218,22 +221,22 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         players.put(p.getName(), p);
                         welcome(p);
                     }
-                    LOG.debug("Object zone: "
-                            + ((RPObject) p).get(Entity.ZONE_ID));
+                    LOG.log(Level.FINE, "Object zone: {0}",
+                            ((Attributes) p).get(Entity.ZONE_ID));
                     //Let everyone else know
                     applyPublicEvent(new PrivateTextEvent(
                             NotificationType.INFORMATION, p.getName()
                             + " joined " + getName()));
                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException | IOException ex) {
-                    LOG.error(ex, ex);
+                    LOG.log(Level.SEVERE, null, ex);
                 } catch (NoSuchMethodException ex) {
                     /**
                      * Method not implemented,fallback
                      */
-                    ((ClientObjectInterface) object).onAdded(this);
+                    ((RPEntityInterface) object).onAdded(this);
                 }
             } else if (object instanceof RPEntityInterface) {
-                LOG.debug("Processing RPEntityInterface");
+                LOG.fine("Processing RPEntityInterface");
                 ((RPEntityInterface) object).onAdded(this);
                 npcs.put(Tool.extractName(object), (RPEntityInterface) object);
             }
@@ -247,8 +250,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             super.add(object);
             Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                     .stream().map((extension) -> {
-                        LOG.debug("Processing extension: "
-                                + extension.getClass().getSimpleName());
+                        LOG.log(Level.FINE, "Processing extension: {0}",
+                                extension.getClass().getSimpleName());
                         return extension;
                     }).forEach((extension) -> {
                 extension.onRPObjectAddToZone(object);
@@ -258,32 +261,32 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void showZone() {
-        LOG.debug("Zone " + getName() + " contents:");
-        LOG.debug("Players: " + (getPlayers().isEmpty() ? "Empty" : ""));
+        LOG.log(Level.FINE, "Zone {0} contents:", getName());
+        LOG.log(Level.FINE, "Players: {0}", (getPlayers().isEmpty() ? "Empty" : ""));
         getPlayers().stream().forEach((co) -> {
-            LOG.debug(co);
+            LOG.fine(co.toString());
         });
-        LOG.debug("Objects: " + (objects.entrySet().isEmpty()
+        LOG.log(Level.FINE, "Objects: {0}", (objects.entrySet().isEmpty()
                 ? "Empty" : ""));
         objects.entrySet().stream().forEach((co) -> {
-            LOG.debug(co);
+            LOG.fine(co.toString());
         });
     }
 
     @Override
     public Perception getPerception(final RPObject player, final byte type) {
         Perception p = super.getPerception(player, type);
-        if (LOG.isDebugEnabled() && p.size() > 0) {
+        if (LOG.isLoggable(Level.FINE) && p.size() > 0) {
             showZone();
         }
         if (!visited) {
-            LOG.debug("Modifying perception for: " + player);
-            LOG.debug("Before:");
-            LOG.debug(p.toString());
+            LOG.log(Level.FINE, "Modifying perception for: {0}", player);
+            LOG.fine("Before:");
+            LOG.fine(p.toString());
             visited = true;
-            LOG.debug("Modification Done!");
-            LOG.debug("After:");
-            LOG.debug(p.toString());
+            LOG.fine("Modification Done!");
+            LOG.fine("After:");
+            LOG.fine(p.toString());
             visited = false;
         }
         return p;
@@ -315,7 +318,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 }
             }
         } catch (Exception e) {
-            LOG.error(null, e);
+            LOG.log(Level.SEVERE, null, e);
         }
         TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
         if (msg != null && !msg.isEmpty()) {
@@ -324,8 +327,9 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         new DelayedPlayerEventSender(new PrivateTextEvent(
                                 NotificationType.TUTORIAL, msg), player));
             } else {
-                LOG.warn("Unable to send message: '" + msg
-                        + "' to player: " + player.getName());
+                LOG.log(Level.WARNING,
+                        "Unable to send message: ''{0}'' to player: {1}",
+                        new Object[]{msg, player.getName()});
             }
         }
     }
@@ -365,21 +369,21 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     @Override
     public void applyPublicEvent(final RPEvent event, final int delay) {
         for (ClientObjectInterface p : getPlayers()) {
-            LOG.debug("Adding event to: " + p + ", " + ((RPObject) p).getID()
-                    + ", " + p.getZone());
+            LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
+                    new Object[]{p, ((RPObject) p).getID(), p.getZone()});
             if (delay <= 0) {
                 ((RPObject) p).addEvent(event);
                 p.notifyWorldAboutChanges();
             } else {
-                LOG.debug("With a delay of " + delay + " turns");
+                LOG.log(Level.FINE, "With a delay of {0} turns", delay);
                 Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
                         delay,
                         new DelayedPlayerEventSender(event, p));
             }
         }
         for (RPEntityInterface npc : getNPCS()) {
-            LOG.debug("Adding event to: " + npc + ", " + ((RPObject) npc).getID()
-                    + ", " + npc.getZone());
+            LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
+                    new Object[]{npc, ((RPObject) npc).getID(), npc.getZone()});
             ((RPObject) npc).addEvent(event);
             Lookup.getDefault().lookup(IRPWorld.class).modify((RPObject) npc);
         }
@@ -459,7 +463,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             result = Tool.encrypt(pass,
                     Configuration.getConfiguration().get("d")).equals(password);
         } catch (IOException ex) {
-            LOG.error(ex);
+            LOG.log(Level.SEVERE, null, ex);
             result = false;
         }
         return result;
