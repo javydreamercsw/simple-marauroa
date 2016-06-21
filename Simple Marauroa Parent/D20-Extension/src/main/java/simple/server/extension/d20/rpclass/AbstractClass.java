@@ -25,7 +25,11 @@ import simple.server.extension.d20.dice.DieRoll;
 import simple.server.extension.d20.dice.RollResult;
 import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.level.D20Level;
+import simple.server.extension.d20.list.AttributeBonusList;
+import simple.server.extension.d20.list.BonusFeatList;
+import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.list.FeatList;
+import simple.server.extension.d20.list.PrefferedSkillList;
 import simple.server.extension.d20.list.SkillList;
 import simple.server.extension.d20.misc.D20Misc;
 import simple.server.extension.d20.skill.D20Skill;
@@ -51,9 +55,15 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     @Override
     public void update() {
         super.update();
+        //In case the extension doesn't behave and doesn't do it.
         for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
             if (!has(a.getCharacteristicName())) {
                 put(a.getCharacteristicName(), 0);
+            }
+        }
+        for (D20List a : Lookup.getDefault().lookupAll(D20List.class)) {
+            if (!hasSlot(a.getCharacteristicName())) {
+                addSlot(a.getCharacteristicName());
             }
         }
     }
@@ -80,22 +90,22 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
 
     @Override
     public RPSlot getAttributeBonuses() {
-        return getSlot("");
+        return getSlot(AttributeBonusList.NAME);
     }
 
     @Override
     public RPSlot getBonusFeats() {
-        return getSlot("");
+        return getSlot(BonusFeatList.NAME);
     }
 
     @Override
     public RPSlot getPrefferedFeats() {
-        return getSlot("");
+        return getSlot(BonusFeatList.NAME);
     }
 
     @Override
     public RPSlot getPrefferedSkills() {
-        return getSlot("");
+        return getSlot(PrefferedSkillList.NAME);
     }
 
     @Override
