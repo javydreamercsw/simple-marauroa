@@ -10,6 +10,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = D20Ability.class)
 public class Intelligence extends AbstractAbility {
 
+    public Intelligence(int level) {
+        super(level);
+    }
+
+    public Intelligence() {
+    }
+
     @Override
     public String getCharacteristicName() {
         return "Intelligence";

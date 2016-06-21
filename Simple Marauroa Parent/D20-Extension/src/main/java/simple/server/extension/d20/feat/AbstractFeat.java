@@ -9,10 +9,11 @@ import java.util.logging.Logger;
 import marauroa.common.game.RPClass;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
-import simple.server.extension.d20.weapon.D20Weapon;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
+import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.rpclass.D20Class;
+import simple.server.extension.d20.weapon.D20Weapon;
 
 /**
  *
@@ -39,6 +40,12 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
     public AbstractFeat() {
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
+    }
+
+    public AbstractFeat(int level) {
+        RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
+        setName(RPCLASS_NAME);
+        put(D20Level.LEVEL, level);
     }
 
     @Override

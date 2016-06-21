@@ -2,6 +2,7 @@ package simple.server.extension.d20.ability;
 
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPObject;
+import simple.server.extension.d20.level.D20Level;
 
 /**
  *
@@ -9,7 +10,15 @@ import marauroa.common.game.RPObject;
  */
 public abstract class AbstractAbility extends RPObject implements D20Ability {
 
-    protected int score = 0;
+    public AbstractAbility() {
+        super(new RPObject());
+        put(D20Level.LEVEL, 0);
+    }
+
+    public AbstractAbility(int level) {
+        super(new RPObject());
+        put(D20Level.LEVEL, level);
+    }
 
     @Override
     public int getDefaultValue() {

@@ -10,6 +10,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = D20Ability.class)
 public class Constitution extends AbstractAbility {
 
+    public Constitution() {
+    }
+
+    public Constitution(int level) {
+        super(level);
+    }
+
     @Override
     public String getCharacteristicName() {
         return "Constitution";

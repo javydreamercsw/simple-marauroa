@@ -1,18 +1,17 @@
 package simple.server.extension.d20.rpclass;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
+import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
 import simple.server.core.entity.RPEntity;
+import simple.server.extension.d20.D20Tool;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.check.Charisma_Check;
 import simple.server.extension.d20.check.Constitution_Check;
@@ -41,20 +40,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
 
     public final static String RP_CLASS = "Abstract Class";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
-    //Ability, Bonus
-    private final Map<Class<? extends D20Ability>, Integer> bonuses
-            = new HashMap<>();
-    //Feat, level when is available.
-    private final List<Class<? extends D20Feat>> preferredFeats = new ArrayList<>();
-    //Feat, level when is gained.
-    private final Map<Class<? extends D20Feat>, Integer> bonusFeats
-            = new HashMap<>();
-    private final List<Class<? extends D20Skill>> preferredSkills
-            = new ArrayList<>();
     private static final Logger LOG
             = Logger.getLogger(AbstractClass.class.getSimpleName());
-    private final Map<Class<? extends D20Skill>, Integer> bonusSkills
-            = new HashMap<>();
 
     public AbstractClass(RPObject object) {
         super(object);
@@ -92,23 +79,23 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     }
 
     @Override
-    public Map<Class<? extends D20Ability>, Integer> getAttributeBonuses() {
-        return bonuses;
+    public RPSlot getAttributeBonuses() {
+        return getSlot("");
     }
 
     @Override
-    public Map<Class<? extends D20Feat>, Integer> getBonusFeats() {
-        return bonusFeats;
+    public RPSlot getBonusFeats() {
+        return getSlot("");
     }
 
     @Override
-    public List<Class<? extends D20Feat>> getPrefferedFeats() {
-        return preferredFeats;
+    public RPSlot getPrefferedFeats() {
+        return getSlot("");
     }
 
     @Override
-    public List<Class<? extends D20Skill>> getPrefferedSkills() {
-        return preferredSkills;
+    public RPSlot getPrefferedSkills() {
+        return getSlot("");
     }
 
     @Override
@@ -122,8 +109,8 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     }
 
     @Override
-    public Map<Class<? extends D20Skill>, Integer> getBonusSkills() {
-        return bonusSkills;
+    public RPSlot getBonusSkills() {
+        return getSlot("");
     }
 
     @Override
@@ -182,13 +169,19 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                         LOG.log(Level.FINE, "Using result:{0}", rolls[i]);
                         r += rolls[i];
                     }
-                    Integer bonus = getAttributeBonuses().get(ability.getClass());
-                    //Apply any race bonuses
-                    if (getAttributeBonuses().containsKey(ability.getClass())) {
-                        LOG.log(Level.FINE, "Adding race {0} to: {1} ({2})",
-                                new Object[]{bonus > 0 ? "bonus" : "penalty",
-                                    ability.getCharacteristicName(), bonus});
-                        r += bonus;
+                    RPObject val
+                            = D20Tool.getValueFromSlot(getAttributeBonuses(),
+                                    ability);
+                    if (val != null) {
+                        Integer bonus = val.getInt(D20Level.LEVEL);
+                        //Apply any race bonuses
+                        if (D20Tool.slotContainsCharacteristic(getAttributeBonuses(),
+                                ability)) {
+                            LOG.log(Level.FINE, "Adding race {0} to: {1} ({2})",
+                                    new Object[]{bonus > 0 ? "bonus" : "penalty",
+                                        ability.getCharacteristicName(), bonus});
+                            r += bonus;
+                        }
                     }
                     //Make sure penalties didn't get it lower than 0.
                     if (r < 0) {
