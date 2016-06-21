@@ -27,6 +27,7 @@ import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.AttributeBonusList;
 import simple.server.extension.d20.list.BonusFeatList;
+import simple.server.extension.d20.list.BonusSkillList;
 import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.list.FeatList;
 import simple.server.extension.d20.list.PrefferedSkillList;
@@ -120,7 +121,7 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
 
     @Override
     public RPSlot getBonusSkills() {
-        return getSlot("");
+        return getSlot(BonusSkillList.NAME);
     }
 
     @Override
