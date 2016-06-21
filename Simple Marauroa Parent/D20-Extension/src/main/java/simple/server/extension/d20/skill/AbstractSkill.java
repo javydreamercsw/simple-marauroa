@@ -14,6 +14,7 @@ import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
+import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.rpclass.D20Class;
 import static simple.server.extension.d20.skill.D20Skill.MODS;
 
@@ -37,12 +38,20 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     public AbstractSkill() {
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
+        put(D20Level.LEVEL, 0);
+    }
+
+    public AbstractSkill(int level) {
+        RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
+        setName(RPCLASS_NAME);
+        put(D20Level.LEVEL, level);
     }
 
     public AbstractSkill(RPObject object) {
         super(object);
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
+        put(D20Level.LEVEL, 0);
     }
 
     @Override
@@ -126,7 +135,7 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     public int levelRequirement() {
         return 0;
     }
-    
+
     @Override
     public Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements() {
         return opponentRequirements;

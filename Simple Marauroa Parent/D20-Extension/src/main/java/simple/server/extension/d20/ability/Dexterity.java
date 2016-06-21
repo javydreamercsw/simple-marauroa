@@ -10,6 +10,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = D20Ability.class)
 public class Dexterity extends AbstractAbility {
 
+    public Dexterity() {
+    }
+
+    public Dexterity(int level) {
+        super(level);
+    }
+
     @Override
     public String getCharacteristicName() {
         return "Dexterity";

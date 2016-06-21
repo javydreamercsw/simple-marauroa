@@ -10,6 +10,13 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = D20Ability.class)
 public class Strength extends AbstractAbility {
 
+    public Strength() {
+    }
+
+    public Strength(int level) {
+        super(level);
+    }
+
     @Override
     public String getCharacteristicName() {
         return "Strength";
