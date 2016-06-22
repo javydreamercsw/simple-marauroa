@@ -40,8 +40,7 @@ public class RPEntity extends Entity {
         } catch (SyntaxException e) {
             LOG.log(Level.SEVERE, "Cannot generateRPClass", e);
         } catch (InstantiationException | IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RPEntity.class.getName())
-                    .log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
