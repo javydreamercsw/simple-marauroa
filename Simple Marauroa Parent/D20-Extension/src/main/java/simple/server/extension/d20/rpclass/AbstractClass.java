@@ -11,6 +11,7 @@ import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
 import simple.server.core.entity.RPEntity;
+import simple.server.core.tool.Tool;
 import simple.server.extension.d20.D20Tool;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.check.Charisma_Check;
@@ -23,7 +24,6 @@ import simple.server.extension.d20.check.Wisdom_Check;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
 import simple.server.extension.d20.dice.RollResult;
-import simple.server.extension.d20.feat.D20Feat;
 import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.AttributeBonusList;
 import simple.server.extension.d20.list.BonusFeatList;
@@ -33,7 +33,7 @@ import simple.server.extension.d20.list.FeatList;
 import simple.server.extension.d20.list.PrefferedSkillList;
 import simple.server.extension.d20.list.SkillList;
 import simple.server.extension.d20.misc.D20Misc;
-import simple.server.extension.d20.skill.D20Skill;
+import static simple.server.extension.d20.skill.AbstractSkill.RANK;
 import simple.server.extension.d20.stat.D20Stat;
 import simple.server.extension.d20.stat.Hit_Point;
 
@@ -43,7 +43,7 @@ import simple.server.extension.d20.stat.Hit_Point;
  */
 public abstract class AbstractClass extends RPEntity implements D20Class {
 
-    public final static String RP_CLASS = "Abstract Class";
+    public final static String RP_CLASS = "Configurable Class";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
     private static final Logger LOG
             = Logger.getLogger(AbstractClass.class.getSimpleName());
@@ -51,6 +51,10 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     public AbstractClass(RPObject object) {
         super(object);
         update();
+    }
+
+    public AbstractClass() {
+        super();
     }
 
     @Override
@@ -77,7 +81,12 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                 clazz.isA(RPEntity.class.newInstance().getRPClassName());
                 for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
                     clazz.addAttribute(a.getCharacteristicName(),
-                            Definition.Type.INT);
+                            a.getDefinitionType());
+                }
+                for (D20List a : Lookup.getDefault().lookupAll(D20List.class)) {
+                    if (!hasSlot(a.getCharacteristicName())) {
+                        clazz.addRPSlot(a.getCharacteristicName(), a.getSize());
+                    }
                 }
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
@@ -239,17 +248,15 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
         if (hasSlot(FeatList.FEAT) && getSlot(FeatList.FEAT).size() > 0) {
             sb.append("Feats----------------------------------------").append("\n");
             for (RPObject o : getSlot(FeatList.FEAT)) {
-                D20Feat feat = (D20Feat) o;
-                sb.append(feat.getShortName()).append("\n");
+                sb.append(Tool.extractName(o)).append("\n");
             }
         }
         if (hasSlot(SkillList.SKILL) && getSlot(SkillList.SKILL).size() > 0) {
             sb.append("Skills----------------------------------------").append("\n");
             for (RPObject o : getSlot(SkillList.SKILL)) {
-                D20Skill skill = (D20Skill) o;
-                sb.append(skill.getShortName())
+                sb.append(Tool.extractName(o))
                         .append(" Rank: ")
-                        .append(skill.getRank())
+                        .append(o.getDouble(RANK))
                         .append("\n");
             }
         }

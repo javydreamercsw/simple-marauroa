@@ -68,6 +68,17 @@ public interface MarauroaServerExtension {
     public void modifyRootRPClassDefinition(RPClass root);
 
     /**
+     * Plug into the definition of the root Entity RPClass. The root class is
+     * considered the base class from all others inherit attributes from. Use
+     * this for attributes that will be common among all entities in the
+     * application. Use modifyClientObjectDefinition for attributes only to be
+     * common among client objects.
+     *
+     * @param root
+     */
+    public void modifyRootEntityRPClassDefinition(RPClass root);
+
+    /**
      * Action to perform after the world is initialized (all classes are
      * defined).
      */
@@ -111,6 +122,15 @@ public interface MarauroaServerExtension {
      * @param entity
      */
     public void rootRPClassUpdate(RPObject entity);
+
+    /**
+     * Entity RPClass object update. This initializes attributes on the
+     * RPClasses extending Entity. Useful when adding new attributes to existing
+     * objects so they get populated with valid initial values.
+     *
+     * @param entity
+     */
+    public void entityRPClassUpdate(RPObject entity);
 
     /**
      * Do something when an attribute is added to a RPClass
