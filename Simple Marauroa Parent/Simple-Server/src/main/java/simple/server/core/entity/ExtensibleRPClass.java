@@ -14,6 +14,9 @@ import simple.server.extension.MarauroaServerExtension;
  */
 public class ExtensibleRPClass extends RPClass {
 
+    private static final Logger LOG
+            = Logger.getLogger(ExtensibleRPClass.class.getName());
+
     public ExtensibleRPClass(String RPCLASS_NAME) {
         super(RPCLASS_NAME);
     }
@@ -23,8 +26,9 @@ public class ExtensibleRPClass extends RPClass {
 
     @Override
     public void addAttribute(String name, Type type, byte b) {
-        for (MarauroaServerExtension extension : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-            Logger.getLogger(ExtensibleRPClass.class.getSimpleName()).log(Level.FINE,
+        for (MarauroaServerExtension extension : Lookup.getDefault()
+                .lookupAll(MarauroaServerExtension.class)) {
+            LOG.log(Level.FINE,
                     "Processing extension to add attribute: {0}",
                     extension.getClass().getSimpleName());
             extension.onRPClassAddAttribute(this, name, type, b);
@@ -34,8 +38,9 @@ public class ExtensibleRPClass extends RPClass {
 
     @Override
     public void addAttribute(String name, Type type) {
-        for (MarauroaServerExtension extension : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-            Logger.getLogger(ExtensibleRPClass.class.getSimpleName()).log(Level.FINE,
+        for (MarauroaServerExtension extension : Lookup.getDefault()
+                .lookupAll(MarauroaServerExtension.class)) {
+            LOG.log(Level.FINE,
                     "Processing extension to add attribute: {0}",
                     extension.getClass().getSimpleName());
             extension.onRPClassAddAttribute(this, name, type);
