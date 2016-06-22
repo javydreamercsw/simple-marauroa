@@ -30,7 +30,7 @@ public class Level extends AbstractStat implements D20Level {
 
     @Override
     public String getCharacteristicName() {
-        return "Level";
+        return D20Level.LEVEL;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Level extends AbstractStat implements D20Level {
 
     @Override
     public String getDescription() {
-        return "Level";
+        return D20Level.LEVEL;
     }
 
     @Override

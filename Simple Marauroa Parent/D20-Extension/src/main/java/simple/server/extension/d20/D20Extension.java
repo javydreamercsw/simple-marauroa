@@ -129,8 +129,6 @@ public class D20Extension extends SimpleServerExtension {
         clazz.addAttribute(CLASS, Definition.Type.STRING);
         clazz.addAttribute(SUBCLASS, Definition.Type.STRING);
         clazz.addAttribute(TITLE, Definition.Type.STRING);
-        //Level attribute
-        clazz.addAttribute(D20Level.LEVEL, Definition.Type.INT);
         for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
             LOG.log(Level.FINE, "Adding attribute: {0}",
                     attr.getCharacteristicName());

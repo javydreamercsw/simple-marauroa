@@ -1,7 +1,5 @@
 package simple.server.extension.d20;
 
-import simple.server.extension.d20.list.D20List;
-import simple.server.extension.d20.stat.D20Stat;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -21,8 +19,10 @@ import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.d20.ability.D20Ability;
+import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.misc.D20Misc;
 import simple.server.extension.d20.rpclass.D20Class;
+import simple.server.extension.d20.stat.D20Stat;
 import simple.server.mock.MockSimpleRPWorld;
 
 /**
@@ -49,8 +49,8 @@ public class D20ExtensionTest {
                             entity.getClass().getSimpleName());
                     return entity;
                 }).forEach((entity) -> {
-                    entity.generateRPClass();
-                });
+            entity.generateRPClass();
+        });
     }
 
     /**
