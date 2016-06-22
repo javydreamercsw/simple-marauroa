@@ -1,5 +1,7 @@
 package simple.client;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -9,6 +11,9 @@ import org.junit.Test;
  * @author Javier A. Ortiz Bultron<javier.ortiz.78@gmail.com>
  */
 public class RPObjectChangeDispatcherTest {
+
+    private static final Logger LOG
+            = Logger.getLogger(RPObjectChangeDispatcherTest.class.getSimpleName());
 
     @Test
     public void testDispatchModifyRemoved() {
@@ -59,10 +64,15 @@ public class RPObjectChangeDispatcherTest {
                 return null;
             }
         };
-        final RPObjectChangeDispatcher dispatcher
-                = new RPObjectChangeDispatcher(listener, listener);
-        dispatcher.dispatchModifyRemoved(null, null, false);
-        dispatcher.dispatchModifyRemoved(null, null, true);
-        assertTrue("make sure we have no NPE", true);
+        try {
+            final RPObjectChangeDispatcher dispatcher
+                    = new RPObjectChangeDispatcher(listener, listener);
+            dispatcher.dispatchModifyRemoved(null, null, false);
+            dispatcher.dispatchModifyRemoved(null, null, true);
+            assertTrue("make sure we have no NPE", true);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            fail();
+        }
     }
 }
