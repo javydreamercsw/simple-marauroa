@@ -1,7 +1,7 @@
 package simple.server.extension.d20.feat;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 import simple.server.extension.d20.DummySavingThrow;
 
 /**
@@ -9,9 +9,6 @@ import simple.server.extension.d20.DummySavingThrow;
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public class AbstractFeatTest {
-
-    public AbstractFeatTest() {
-    }
 
     /**
      * Test of getBonus method, of class AbstractFeat.
