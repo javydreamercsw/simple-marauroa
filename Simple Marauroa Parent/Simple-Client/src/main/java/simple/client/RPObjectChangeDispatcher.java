@@ -115,18 +115,18 @@ public class RPObjectChangeDispatcher {
     public void dispatchModifyRemoved(RPObject object, RPObject changes,
             boolean user) {
         try {
-            if (object != null) {
+            if (object != null && changes != null) {
                 LOG.log(Level.FINE, "Object({0}) modified in client", object.getID());
                 LOG.log(Level.FINE, "Original({0}) modified in client", object);
+
+                fixContainers(object);
+                fixContainers(changes);
+                fireChangedRemoved(object, changes, user);
+                object.applyDifferences(null, changes);
+
+                LOG.log(Level.FINE, "Modified({0}) modified in client", object);
+                LOG.log(Level.FINE, "Changes({0}) modified in client", changes);
             }
-
-            fixContainers(object);
-            fixContainers(changes);
-            fireChangedRemoved(object, changes, user);
-            object.applyDifferences(null, changes);
-
-            LOG.log(Level.FINE, "Modified({0}) modified in client", object);
-            LOG.log(Level.FINE, "Changes({0}) modified in client", changes);
         } catch (Exception e) {
             LOG.log(Level.SEVERE,
                     "dispatchModifyRemoved failed, object is " + object
@@ -186,7 +186,7 @@ public class RPObjectChangeDispatcher {
         for (RPSlot slot : object.slots()) {
             for (RPObject sobject : slot) {
                 if (!sobject.isContained()) {
-                    LOG.fine("Fixing container: " + slot);
+                    LOG.log(Level.FINE, "Fixing container: {0}", slot);
                     sobject.setContainer(object, slot);
                 }
 
@@ -391,7 +391,7 @@ public class RPObjectChangeDispatcher {
             RPObject sobject = slot.get(schanges.getID());
 
             if (sobject == null) {
-                LOG.fine("Unable to find existing: " + schanges);
+                LOG.log(Level.FINE, "Unable to find existing: {0}", schanges);
                 continue;
             }
 
