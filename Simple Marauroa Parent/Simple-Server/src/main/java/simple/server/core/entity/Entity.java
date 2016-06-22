@@ -225,7 +225,10 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void onRemoved(SimpleRPZone zone) {
         if (this.zone != zone) {
-            LOG.log(Level.SEVERE, "Entity removed from wrong zone: {0}", this);
+            LOG.log(Level.SEVERE, "Entity removed from wrong zone.\n"
+                    + "Current zone: {0}\n"
+                    + "Requested zone: {1}\n{2}",
+                    new Object[]{this.zone, zone, this});
         }
         this.zone = null;
     }
