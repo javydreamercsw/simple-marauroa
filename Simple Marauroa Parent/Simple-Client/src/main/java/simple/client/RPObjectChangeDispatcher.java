@@ -115,8 +115,10 @@ public class RPObjectChangeDispatcher {
     public void dispatchModifyRemoved(RPObject object, RPObject changes,
             boolean user) {
         try {
-            LOG.log(Level.FINE, "Object({0}) modified in client", object.getID());
-            LOG.log(Level.FINE, "Original({0}) modified in client", object);
+            if (object != null) {
+                LOG.log(Level.FINE, "Object({0}) modified in client", object.getID());
+                LOG.log(Level.FINE, "Original({0}) modified in client", object);
+            }
 
             fixContainers(object);
             fixContainers(changes);

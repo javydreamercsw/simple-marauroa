@@ -1,9 +1,7 @@
 package simple.client;
 
-import static org.junit.Assert.*;
-
 import marauroa.common.game.RPObject;
-
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
@@ -21,11 +19,13 @@ public class RPObjectChangeDispatcherTest {
             }
 
             @Override
-            public void onChangedAdded(final RPObject object, final RPObject changes) {
+            public void onChangedAdded(final RPObject object,
+                    final RPObject changes) {
             }
 
             @Override
-            public void onChangedRemoved(final RPObject object, final RPObject changes) {
+            public void onChangedRemoved(final RPObject object,
+                    final RPObject changes) {
             }
 
             @Override
@@ -33,19 +33,25 @@ public class RPObjectChangeDispatcherTest {
             }
 
             @Override
-            public void onSlotAdded(final RPObject object, final String slotName, final RPObject sobject) {
+            public void onSlotAdded(final RPObject object,
+                    final String slotName, final RPObject sobject) {
             }
 
             @Override
-            public void onSlotChangedAdded(final RPObject object, final String slotName, final RPObject sobject, final RPObject schanges) {
+            public void onSlotChangedAdded(final RPObject object,
+                    final String slotName, final RPObject sobject,
+                    final RPObject schanges) {
             }
 
             @Override
-            public void onSlotChangedRemoved(final RPObject object, final String slotName, final RPObject sobject, final RPObject schanges) {
+            public void onSlotChangedRemoved(final RPObject object,
+                    final String slotName, final RPObject sobject,
+                    final RPObject schanges) {
             }
 
             @Override
-            public void onSlotRemoved(final RPObject object, final String slotName, final RPObject sobject) {
+            public void onSlotRemoved(final RPObject object,
+                    final String slotName, final RPObject sobject) {
             }
 
             @Override
@@ -53,7 +59,8 @@ public class RPObjectChangeDispatcherTest {
                 return null;
             }
         };
-        final RPObjectChangeDispatcher dispatcher = new RPObjectChangeDispatcher(listener, listener);
+        final RPObjectChangeDispatcher dispatcher
+                = new RPObjectChangeDispatcher(listener, listener);
         dispatcher.dispatchModifyRemoved(null, null, false);
         dispatcher.dispatchModifyRemoved(null, null, true);
         assertTrue("make sure we have no NPE", true);
