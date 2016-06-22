@@ -603,15 +603,17 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     protected static void extendClass(RPClass player) {
         Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                 .stream().map((extension) -> {
-                    LOG.fine("Processing extension to modify client definition: "
-                            + extension.getClass().getSimpleName());
+                    LOG.log(Level.FINE, "Processing extension to modify "
+                            + "client definition: {0}",
+                            extension.getClass().getSimpleName());
                     return extension;
                 }).forEach((extension) -> {
             extension.modifyClientObjectDefinition(player);
         });
         LOG.fine("ClientObject attributes:");
         player.getDefinitions().stream().forEach((def) -> {
-            LOG.fine(def.getName() + ": " + def.getType());
+            LOG.log(Level.FINE, "{0}: {1}",
+                    new Object[]{def.getName(), def.getType()});
         });
         LOG.fine("-------------------------------");
     }
