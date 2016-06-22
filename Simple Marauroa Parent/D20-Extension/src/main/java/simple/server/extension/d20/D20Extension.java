@@ -92,7 +92,7 @@ public class D20Extension extends SimpleServerExtension {
             RPSlot slot = entity.getSlot(FeatList.FEAT);
             Lookup.getDefault().lookupAll(D20Feat.class).stream().forEach((feat) -> {
                 for (RPObject rpo : slot) {
-                    if (rpo.get(Entity.NAME).equals(((RPEntity) feat).getRPClassName())
+                    if (rpo.get(Entity.NAME).equals(((Entity) feat).getRPClassName())
                             && !rpo.get(Entity.DESC).equals(feat.getDescription())) {
                         LOG.log(java.util.logging.Level.INFO,
                                 "Updating {0} from ''{1}'' to ''{2}''",
@@ -109,7 +109,7 @@ public class D20Extension extends SimpleServerExtension {
             RPSlot slot = entity.getSlot(SkillList.SKILL);
             Lookup.getDefault().lookupAll(D20Skill.class).stream().forEach((skill) -> {
                 for (RPObject rpo : slot) {
-                    if (rpo.get(Entity.NAME).equals(((RPEntity) skill).getRPClassName())
+                    if (rpo.get(Entity.NAME).equals(((Entity) skill).getRPClassName())
                             && !rpo.get(Entity.DESC).equals(skill.getDescription())) {
                         LOG.log(java.util.logging.Level.INFO,
                                 "Updating {0} from ''{1}'' to ''{2}''",
