@@ -43,20 +43,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa</artifactId>
             <version>3.9.3-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.python</groupId>
-                    <artifactId>jython</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jnlp</groupId>
-                    <artifactId>jnlp-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
     <properties>
