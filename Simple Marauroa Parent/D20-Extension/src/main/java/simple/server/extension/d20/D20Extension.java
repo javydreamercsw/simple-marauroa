@@ -48,10 +48,54 @@ public class D20Extension extends SimpleServerExtension {
     }
 
     @Override
-    public void rootRPClassUpdate(RPObject entity) {
-        if (!entity.has(D20Level.LEVEL)) {
-            entity.put(D20Level.LEVEL, 0);
+    public void modifyRootEntityRPClassDefinition(RPClass clazz) {
+        clazz.addAttribute(TYPE, Definition.Type.STRING);
+        clazz.addAttribute(CLASS, Definition.Type.STRING);
+        clazz.addAttribute(SUBCLASS, Definition.Type.STRING);
+        clazz.addAttribute(TITLE, Definition.Type.STRING);
+        for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+            LOG.log(Level.FINE, "Adding attribute: {0}",
+                    attr.getCharacteristicName());
+            clazz.addAttribute(attr.getCharacteristicName(),
+                    attr.getDefinitionType(),
+                    attr.getDefinition());
         }
+        //Stats
+        for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+            LOG.log(Level.FINE, "Adding stat: {0}",
+                    stat.getCharacteristicName());
+            clazz.addAttribute(stat.getCharacteristicName(),
+                    stat.getDefinitionType(),
+                    stat.getDefinition());
+        }
+        //Maps
+        for (D20Map map : Lookup.getDefault().lookupAll(D20Map.class)) {
+            LOG.log(Level.FINE, "Adding map: {0}",
+                    map.getCharacteristicName());
+            clazz.addAttribute(map.getCharacteristicName(),
+                    Definition.Type.MAP,
+                    map.getDefinition());
+        }
+        //Misc fields
+        for (D20Misc misc : Lookup.getDefault().lookupAll(D20Misc.class)) {
+            LOG.log(Level.FINE, "Adding miscellaneous field: {0}",
+                    misc.getCharacteristicName());
+            clazz.addAttribute(misc.getCharacteristicName(),
+                    misc.getDefinitionType(),
+                    misc.getDefinition());
+        }
+        //Other attributes
+        for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+            LOG.log(Level.FINE, "Adding slot attribute: {0}",
+                    attr.getCharacteristicName());
+            clazz.addRPSlot(attr.getCharacteristicName(),
+                    attr.getSize(),
+                    attr.getDefinition());
+        }
+    }
+
+    @Override
+    public void entityRPClassUpdate(RPObject entity) {
         Lookup.getDefault().lookupAll(D20Ability.class).stream()
                 .forEach((attr) -> {
                     if (!entity.has(attr.getCharacteristicName())) {
@@ -124,49 +168,9 @@ public class D20Extension extends SimpleServerExtension {
     }
 
     @Override
-    public void modifyRootRPClassDefinition(RPClass clazz) {
-        clazz.addAttribute(TYPE, Definition.Type.STRING);
-        clazz.addAttribute(CLASS, Definition.Type.STRING);
-        clazz.addAttribute(SUBCLASS, Definition.Type.STRING);
-        clazz.addAttribute(TITLE, Definition.Type.STRING);
-        for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
-            LOG.log(Level.FINE, "Adding attribute: {0}",
-                    attr.getCharacteristicName());
-            clazz.addAttribute(attr.getCharacteristicName(),
-                    attr.getDefinitionType(),
-                    attr.getDefinition());
-        }
-        //Stats
-        for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
-            LOG.log(Level.FINE, "Adding stat: {0}",
-                    stat.getCharacteristicName());
-            clazz.addAttribute(stat.getCharacteristicName(),
-                    stat.getDefinitionType(),
-                    stat.getDefinition());
-        }
-        //Maps
-        for (D20Map map : Lookup.getDefault().lookupAll(D20Map.class)) {
-            LOG.log(Level.FINE, "Adding map: {0}",
-                    map.getCharacteristicName());
-            clazz.addAttribute(map.getCharacteristicName(),
-                    Definition.Type.MAP,
-                    map.getDefinition());
-        }
-        //Misc fields
-        for (D20Misc misc : Lookup.getDefault().lookupAll(D20Misc.class)) {
-            LOG.log(Level.FINE, "Adding miscellaneous field: {0}",
-                    misc.getCharacteristicName());
-            clazz.addAttribute(misc.getCharacteristicName(),
-                    misc.getDefinitionType(),
-                    misc.getDefinition());
-        }
-        //Other attributes
-        for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
-            LOG.log(Level.FINE, "Adding slot attribute: {0}",
-                    attr.getCharacteristicName());
-            clazz.addRPSlot(attr.getCharacteristicName(),
-                    attr.getSize(),
-                    attr.getDefinition());
+    public void rootRPClassUpdate(RPObject entity) {
+        if (!entity.has(D20Level.LEVEL)) {
+            entity.put(D20Level.LEVEL, 0);
         }
     }
 }

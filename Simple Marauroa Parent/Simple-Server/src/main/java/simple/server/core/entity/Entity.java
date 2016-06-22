@@ -46,6 +46,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass entity = new RPClass(getRPClassName());
+            entity.addAttribute(NAME, Type.LONG_STRING);
 
             // Some things may have a textual description
             entity.addAttribute(DESC, Type.LONG_STRING,
@@ -55,11 +56,17 @@ public class Entity extends RPObject implements RPEntityInterface {
              */
             entity.addAttribute("server-only", Type.FLAG, Definition.VOLATILE);
 
-            Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream().map((extension) -> {
-                LOG.log(Level.FINE, "Processing extension to modify root class " + "definition: {0}", extension.getClass().getSimpleName());
-                return extension;
-            }).map((extension) -> {
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream()
+                    .map((extension) -> {
+                        LOG.log(Level.FINE, "Processing extension to modify root class "
+                                + "definition: {0}",
+                                extension.getClass().getSimpleName());
+                        return extension;
+                    }).map((extension) -> {
                 extension.modifyRootRPClassDefinition(entity);
+                if (entity.subclassOf("entity")) {
+                    extension.modifyRootEntityRPClassDefinition(entity);
+                }
                 return extension;
             }).filter((_item) -> (LOG.isLoggable(Level.FINE))).forEach((_item) -> {
                 entity.getDefinitions().stream().forEach((def) -> {
@@ -258,6 +265,7 @@ public class Entity extends RPObject implements RPEntityInterface {
                     return extension;
                 }).forEach((extension) -> {
             extension.rootRPClassUpdate(this);
+            extension.entityRPClassUpdate(this);
         });
     }
 

@@ -609,6 +609,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     return extension;
                 }).forEach((extension) -> {
             extension.modifyClientObjectDefinition(player);
+            if (player.subclassOf("entity")) {
+                extension.modifyRootEntityRPClassDefinition(player);
+            }
         });
         LOG.fine("ClientObject attributes:");
         player.getDefinitions().stream().forEach((def) -> {

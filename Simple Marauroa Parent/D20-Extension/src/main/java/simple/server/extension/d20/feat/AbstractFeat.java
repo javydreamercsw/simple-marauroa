@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPObject;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.dice.DiceParser;
@@ -33,7 +35,7 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
     protected D20Weapon focusWeapon = null;
     protected D20Characteristic focusCharacteristic = null;
     protected int minimumLevel = 0;
-    public final static String RP_CLASS = "Abstract Feat";
+    public final static String RP_CLASS = "Feat";
     private static final Logger LOG
             = Logger.getLogger(AbstractFeat.class.getSimpleName());
 
@@ -42,10 +44,20 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
         setName(RPCLASS_NAME);
     }
 
+    public AbstractFeat(RPObject object) {
+        super(object);
+        RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
+        setName(RPCLASS_NAME);
+        setRPClass(RPCLASS_NAME);
+        update();
+    }
+
     public AbstractFeat(int level) {
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
         put(D20Level.LEVEL, level);
+        setRPClass(RPCLASS_NAME);
+        update();
     }
 
     @Override
@@ -115,7 +127,7 @@ public abstract class AbstractFeat extends RPEntity implements D20Feat {
         if (!RPClass.hasRPClass(RP_CLASS)) {
             try {
                 RPClass clazz = new RPClass(RP_CLASS);
-                clazz.isA(RPEntity.class.newInstance().getRPClassName());
+                clazz.isA(Entity.class.newInstance().getRPClassName());
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
