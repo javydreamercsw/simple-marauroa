@@ -26,6 +26,19 @@
         </activatedProfiles>
     </action>
     <action>
+        <actionName>CUSTOM-OOSS Release Rollback</actionName>
+        <displayName>OSS Release Rollback</displayName>
+        <goals>
+            <goal>release:rollback</goal>
+        </goals>
+        <properties>
+            <pushChanges>false</pushChanges>
+        </properties>
+        <activatedProfiles>
+            <activatedProfile>netbeans-release-sign-artifacts</activatedProfile>
+        </activatedProfiles>
+    </action>
+    <action>
         <actionName>CUSTOM-OOSS Release Perform</actionName>
         <displayName>OSS Release Perform</displayName>
         <goals>
