@@ -10,14 +10,14 @@
     <artifactId>Dimension-Extension</artifactId>
     <version>0.02.06</version>
     <name>Dimension Extension</name>
-    
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${unit.test.version}</version>
             <scope>test</scope>
-        </dependency> 
+        </dependency>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>

@@ -32,7 +32,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Client</artifactId>
-            <version>0.02.06</version>
+            <version>0.02.06-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
