@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>Simple-Marauroa</artifactId>
-    <version>0.02.06-SNAPSHOT</version>
+    <version>0.02.06</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -43,7 +43,7 @@
         <url>https://bitbucket.org/javydreamercsw/simple-marauroa-java/src</url>
         <connection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-java/src</connection>
         <developerConnection>scm:hg:ssh://hg@bitbucket.org/javydreamercsw/simple-marauroa-java</developerConnection>
-        <tag>HEAD</tag>
+        <tag>Simple-Marauroa-0.02.06</tag>
     </scm>
     <ciManagement>
         <system>Jenkins</system>
