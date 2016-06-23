@@ -58,6 +58,7 @@
         <marauroa.version>3.9.3-JW</marauroa.version>
         <h2.version>1.4.192</h2.version>
         <unit.test.version>4.12</unit.test.version>
+        <project.scm.id>my-scm-server</project.scm.id>
     </properties>
     <modules>
         <module>Card Game Interface</module>
