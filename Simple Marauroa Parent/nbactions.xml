@@ -5,7 +5,8 @@
         <displayName>OSS Deploy</displayName>
         <goals>
             <goal>clean</goal>
-            <goal>deploy</goal>
+            <goal>install</goal>
+            <goal>deploy:deploy</goal>
         </goals>
         <activatedProfiles>
             <activatedProfile>release</activatedProfile>
@@ -44,6 +45,21 @@
         <goals>
             <goal>release:perform</goal>
         </goals>
+        <activatedProfiles>
+            <activatedProfile>release</activatedProfile>
+        </activatedProfiles>
+    </action>
+    <action>
+        <actionName>CUSTOM-Deploy Files</actionName>
+        <displayName>Deploy Files</displayName>
+        <goals>
+            <goal>deploy:deploy-file</goal>
+        </goals>
+        <properties>
+            <repositoryId>ossrh</repositoryId>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <file></file>
+        </properties>
         <activatedProfiles>
             <activatedProfile>release</activatedProfile>
         </activatedProfiles>

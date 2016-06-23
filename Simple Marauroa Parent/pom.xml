@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>Simple-Marauroa</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
+    <version>0.02.06</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -49,6 +49,10 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
 
     <properties>
@@ -58,7 +62,6 @@
         <marauroa.version>3.9.3-JW</marauroa.version>
         <h2.version>1.4.192</h2.version>
         <unit.test.version>4.12</unit.test.version>
-        <project.scm.id>my-scm-server</project.scm.id>
     </properties>
     <modules>
         <module>Card Game Interface</module>
