@@ -136,12 +136,11 @@ public class D20Extension extends SimpleServerExtension {
             RPSlot slot = entity.getSlot(FeatList.FEAT);
             Lookup.getDefault().lookupAll(D20Feat.class).stream().forEach((feat) -> {
                 for (RPObject rpo : slot) {
-                    if (rpo.get(Entity.NAME).equals(((Entity) feat).getRPClassName())
-                            && !rpo.get(Entity.DESC).equals(feat.getDescription())) {
+                    if (rpo.get(Entity.NAME).equals(((Entity) feat).getRPClassName())) {
                         LOG.log(java.util.logging.Level.INFO,
                                 "Updating {0} from ''{1}'' to ''{2}''",
                                 new Object[]{((RPEntity) feat).get(Entity.NAME),
-                                    rpo.get(Entity.DESC),
+                                    rpo.has(Entity.DESC) ? rpo.get(Entity.DESC) : "",
                                     feat.getDescription()});
                         rpo.put(Entity.DESC, feat.getDescription());
                     }
@@ -153,12 +152,11 @@ public class D20Extension extends SimpleServerExtension {
             RPSlot slot = entity.getSlot(SkillList.SKILL);
             Lookup.getDefault().lookupAll(D20Skill.class).stream().forEach((skill) -> {
                 for (RPObject rpo : slot) {
-                    if (rpo.get(Entity.NAME).equals(((Entity) skill).getRPClassName())
-                            && !rpo.get(Entity.DESC).equals(skill.getDescription())) {
+                    if (rpo.get(Entity.NAME).equals(((Entity) skill).getRPClassName())) {
                         LOG.log(java.util.logging.Level.INFO,
                                 "Updating {0} from ''{1}'' to ''{2}''",
                                 new Object[]{((RPEntity) skill).get(Entity.NAME),
-                                    rpo.get(Entity.DESC),
+                                    rpo.has(Entity.DESC) ? rpo.get(Entity.DESC) : "",
                                     skill.getDescription()});
                         rpo.put(Entity.DESC, skill.getDescription());
                     }

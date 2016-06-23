@@ -3,6 +3,7 @@ package simple.server.extension.d20;
 import java.util.Iterator;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
+import simple.server.core.tool.Tool;
 
 /**
  *
@@ -22,7 +23,7 @@ public class D20Tool {
         Iterator it = slot.iterator();
         boolean contained = false;
         while (it.hasNext()) {
-            if (((D20Characteristic) it.next()).getCharacteristicName()
+            if ((Tool.extractName((RPObject) it.next()))
                     .equals(c.getCharacteristicName())) {
                 contained = true;
                 break;
