@@ -4,11 +4,11 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.06</version>
+        <version>0.02.06-SNAPSHOT</version>
     </parent>
-
+    
     <artifactId>Card-Game-Interface</artifactId>
-    <version>0.02.06</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Card Game Interface</name>
@@ -44,14 +44,14 @@
             <type>jar</type>
         </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <!-- Disable annotation processors during normal compilation-->
+                    <!-- Disable annotation processors during normal compilation--> 
                     <compilerArgument>-proc:none</compilerArgument>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
