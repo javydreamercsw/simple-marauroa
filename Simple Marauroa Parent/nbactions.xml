@@ -8,7 +8,7 @@
             <goal>deploy</goal>
         </goals>
         <activatedProfiles>
-            <activatedProfile>netbeans-release-sign-artifacts</activatedProfile>
+            <activatedProfile>release</activatedProfile>
         </activatedProfiles>
     </action>
     <action>
@@ -22,7 +22,7 @@
             <pushChanges>false</pushChanges>
         </properties>
         <activatedProfiles>
-            <activatedProfile>netbeans-release-sign-artifacts</activatedProfile>
+            <activatedProfile>release</activatedProfile>
         </activatedProfiles>
     </action>
     <action>
@@ -35,7 +35,7 @@
             <pushChanges>false</pushChanges>
         </properties>
         <activatedProfiles>
-            <activatedProfile>netbeans-release-sign-artifacts</activatedProfile>
+            <activatedProfile>release</activatedProfile>
         </activatedProfiles>
     </action>
     <action>
@@ -45,7 +45,7 @@
             <goal>release:perform</goal>
         </goals>
         <activatedProfiles>
-            <activatedProfile>netbeans-release-sign-artifacts</activatedProfile>
+            <activatedProfile>release</activatedProfile>
         </activatedProfiles>
     </action>
 </actions>

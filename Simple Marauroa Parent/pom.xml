@@ -317,7 +317,7 @@
 
     <profiles>
         <profile>
-            <id>netbeans-release-sign-artifacts</id>
+            <id>release</id>
             <activation>
                 <property>
                     <name>performRelease</name>
