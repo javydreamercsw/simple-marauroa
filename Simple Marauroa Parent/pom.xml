@@ -6,12 +6,6 @@
     <version>0.02.06-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-
     <prerequisites>
         <maven>3.0.4</maven>
     </prerequisites>
