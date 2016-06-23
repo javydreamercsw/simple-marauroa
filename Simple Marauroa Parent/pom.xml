@@ -61,7 +61,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <netbeans.version>RELEASE80</netbeans.version>
-        <marauroa.version>3.9.3-SNAPSHOT</marauroa.version>
+        <marauroa.version>3.9.3-JW</marauroa.version>
         <h2.version>1.4.192</h2.version>
         <unit.test.version>4.12</unit.test.version>
     </properties>
