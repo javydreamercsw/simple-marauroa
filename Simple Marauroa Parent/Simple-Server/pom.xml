@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.06-SNAPSHOT</version>
+        <version>0.02.06</version>
     </parent>
     <artifactId>Marauroa-Simple-Server</artifactId>
     <packaging>jar</packaging>
