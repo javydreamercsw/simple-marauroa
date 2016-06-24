@@ -3,6 +3,7 @@
     <action>
         <actionName>CUSTOM-OSS Deploy</actionName>
         <displayName>OSS Deploy</displayName>
+        <preAction>build-with-dependencies</preAction>
         <goals>
             <goal>clean</goal>
             <goal>install</goal>
