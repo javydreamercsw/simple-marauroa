@@ -35,18 +35,21 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     public static final String RANK = "rank";
     public final static String RP_CLASS = "Abstract Skill";
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public AbstractSkill() {
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
         put(D20Level.LEVEL, 0);
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public AbstractSkill(int level) {
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
         setName(RPCLASS_NAME);
         put(D20Level.LEVEL, level);
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public AbstractSkill(RPObject object) {
         super(object);
         RPCLASS_NAME = getClass().getSimpleName().replaceAll("_", " ");
@@ -108,6 +111,7 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
 
     @Override
     public void generateRPClass() {
+        super.generateRPClass();
         if (!RPClass.hasRPClass(RP_CLASS)) {
             try {
                 RPClass clazz = new RPClass(RP_CLASS);
