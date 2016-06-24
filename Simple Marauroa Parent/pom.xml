@@ -49,6 +49,10 @@
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <site>
+            <id>simple-marauroa.sf.net</id>
+            <url>scp://shell.sourceforge.net/home/project-web/simple-marauroa/htdocs</url>
+        </site>
     </distributionManagement>
 
     <properties>
@@ -389,6 +393,13 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-site-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.wagon</groupId>
+                                <artifactId>wagon-ssh</artifactId>
+                                <version>1.0</version>
+                            </dependency>
+                        </dependencies>
                         <configuration>
                             <reportPlugins>
                                 <plugin>

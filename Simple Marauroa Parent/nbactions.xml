@@ -55,19 +55,5 @@
             <activatedProfile>release</activatedProfile>
         </activatedProfiles>
     </action>
-    <action>
-        <actionName>CUSTOM-Deploy Files</actionName>
-        <displayName>Deploy Files</displayName>
-        <goals>
-            <goal>deploy:deploy-file</goal>
-        </goals>
-        <properties>
-            <repositoryId>ossrh</repositoryId>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <file></file>
-        </properties>
-        <activatedProfiles>
-            <activatedProfile>release</activatedProfile>
-        </activatedProfiles>
-    </action>
+    
 </actions>
