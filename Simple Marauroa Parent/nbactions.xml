@@ -8,6 +8,11 @@
             <goal>install</goal>
             <goal>deploy:deploy</goal>
         </goals>
+        <properties>
+            <keystore>target/jwrestling.ks</keystore>
+            <keystorepass>jwrestling4ever</keystorepass>
+            <keystorealias>jwrestling</keystorealias>
+        </properties>
         <activatedProfiles>
             <activatedProfile>release</activatedProfile>
         </activatedProfiles>
