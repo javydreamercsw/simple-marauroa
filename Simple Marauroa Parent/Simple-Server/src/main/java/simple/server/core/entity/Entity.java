@@ -22,7 +22,8 @@ import simple.server.extension.MarauroaServerExtension;
 @ServiceProvider(service = RPEntityInterface.class, position = 1)
 public class Entity extends RPObject implements RPEntityInterface {
 
-    protected String RPCLASS_NAME = "entity";
+    private final String MY_CLASS = "entity";
+    protected String RPCLASS_NAME = MY_CLASS;
     public static final String NAME = "name", DESC = "description",
             DB_ID = "#db_id", ZONE_ID = "zoneid", ID = "id";
     /**
@@ -44,8 +45,8 @@ public class Entity extends RPObject implements RPEntityInterface {
 
     @Override
     public void generateRPClass() {
-        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
-            RPClass entity = new RPClass(getRPClassName());
+        if (!RPClass.hasRPClass(MY_CLASS)) {
+            RPClass entity = new RPClass(MY_CLASS);
             entity.addAttribute(NAME, Type.LONG_STRING);
 
             // Some things may have a textual description
@@ -64,7 +65,7 @@ public class Entity extends RPObject implements RPEntityInterface {
                         return extension;
                     }).map((extension) -> {
                 extension.modifyRootRPClassDefinition(entity);
-                if (entity.subclassOf("entity")) {
+                if (entity.subclassOf(MY_CLASS)) {
                     extension.modifyRootEntityRPClassDefinition(entity);
                 }
                 return extension;
@@ -74,6 +75,9 @@ public class Entity extends RPObject implements RPEntityInterface {
                             new Object[]{def.getName(), def.getType()});
                 });
             });
+        } else if (!RPClass.hasRPClass(getRPClassName())) {
+            RPClass entity = new RPClass(getRPClassName());
+            entity.isA(MY_CLASS);
         }
     }
 

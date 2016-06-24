@@ -20,6 +20,7 @@ public class RPEntity extends Entity {
      * The title attribute name.
      */
     public static final String ATTR_TITLE = "title";
+    private final String MY_CLASS = "rpentity";
     protected static final Statistics STATS = Statistics.getStatistics();
     private int level;
     /**
@@ -30,12 +31,16 @@ public class RPEntity extends Entity {
 
     @Override
     public void generateRPClass() {
+        super.generateRPClass();
         try {
-            if (!RPClass.hasRPClass(RPCLASS_NAME)) {
-                RPClass entity = new RPClass(getRPClassName());
+            if (!RPClass.hasRPClass(MY_CLASS)) {
+                RPClass entity = new RPClass(MY_CLASS);
                 entity.isA(Entity.class.newInstance().getRPClassName());
                 entity.addAttribute(NAME, Type.STRING);
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
+            } else if (!RPClass.hasRPClass(getRPClassName())) {
+                RPClass entity = new RPClass(getRPClassName());
+                entity.isA(MY_CLASS);
             }
         } catch (SyntaxException e) {
             LOG.log(Level.SEVERE, "Cannot generateRPClass", e);
