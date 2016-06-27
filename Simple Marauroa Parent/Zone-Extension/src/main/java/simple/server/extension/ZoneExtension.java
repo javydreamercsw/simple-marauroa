@@ -201,9 +201,12 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     }
 
     private void remove(ClientObjectInterface player, RPAction action) {
-        if (!action.get(ROOM).equals(Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID())) {
-            SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
-            SimpleRPZone zone = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
+        if (!action.get(ROOM).equals(Lookup.getDefault()
+                .lookup(IRPWorld.class).getDefaultZone().getID().getID())) {
+            SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault()
+                    .lookup(IRPWorld.class);
+            SimpleRPZone zone
+                    = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
             Collection<ClientObjectInterface> players = zone.getPlayers();
             for (ClientObjectInterface clientObject : players) {
                 world.changeZone(Lookup.getDefault().lookup(
@@ -213,7 +216,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             try {
                 world.removeRPZone(new ID(action.get(ROOM)));
             } catch (Exception ex) {
-                java.util.logging.Logger.getLogger(ZoneExtension.class.getSimpleName()).log(Level.SEVERE, null, ex);
+                LOG.log(Level.SEVERE, null, ex);
             }
             world.applyPublicEvent(null,
                     new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
@@ -228,7 +231,8 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             }
         } else if (player != null) {
             ((RPObject) player).addEvent(new PrivateTextEvent(
-                    NotificationType.INFORMATION, "Can't remove the default room!"));
+                    NotificationType.INFORMATION,
+                    "Can't remove the default room!"));
             player.notifyWorldAboutChanges();
         }
     }
