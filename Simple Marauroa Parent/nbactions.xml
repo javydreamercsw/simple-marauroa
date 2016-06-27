@@ -55,5 +55,16 @@
             <activatedProfile>release</activatedProfile>
         </activatedProfiles>
     </action>
+    <action>
+            <actionName>CUSTOM-Create Site</actionName>
+            <displayName>Create Site</displayName>
+            <goals>
+                <goal>site:site</goal>
+            </goals>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+        </action>
+    
     
 </actions>
