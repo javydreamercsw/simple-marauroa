@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import marauroa.common.game.Attributes;
 import marauroa.common.game.Definition;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.IRPZone.ID;
@@ -20,6 +21,7 @@ import simple.server.core.action.ActionInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.DelayedAction;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.event.ITurnNotifier;
@@ -151,11 +153,11 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     private void join(ClientObjectInterface player, RPAction action) {
         if (player != null && action != null) {
             //If in same room, tell the player. The client should handle this but just in case...
-            if (player instanceof RPObject && action.get(ROOM).equals(((RPObject) player).get("zoneid"))) {
+            if (player instanceof RPObject && action.get(ROOM).equals(((Attributes) player).get("zoneid"))) {
                 player.sendPrivateText("You already are in " + action.get(ROOM) + " room.");
             } //Make sure the zone exists...
             else if (Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(new ID(action.get(ROOM)))) {
-                SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(((RPObject) player).get("zoneid"));
+                SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(((Attributes) player).get("zoneid"));
                 //If it's locked it means you need a password, you better have it...
                 if (jZone.isLocked()) {
                     if (action.get(PASSWORD) != null) {
@@ -264,7 +266,7 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
         LOG.log(Level.FINE, "Notifying everyone about the creation of zone: {0}",
                 zone.getID());
         Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                new ZoneEvent((SimpleRPZone) zone, ZoneEvent.ADD));
+                new ZoneEvent((ISimpleRPZone) zone, ZoneEvent.ADD));
     }
 
     @Override
