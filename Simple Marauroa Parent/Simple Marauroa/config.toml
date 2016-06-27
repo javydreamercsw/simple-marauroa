@@ -1,0 +1,58 @@
+baseurl = "http://replace-this-with-your-hugo-site.com/"
+languageCode = "en-us"
+title = "Simple Marauroa Docs"
+theme = "hugo-material-docs"
+metadataformat = "yaml"
+canonifyurls = true
+# Enable Google Analytics by entering your tracking id
+googleAnalytics = ""
+
+[params]
+	# General information
+	author = "Digitalcraftsman"
+	description = "A material design theme for documentations."
+	copyright = "Released under the MIT license"
+
+	version = "1.0.0"
+	logo = "images/logo.png"
+	favicon = ""
+
+	permalink = "#"
+
+	# Custom assets
+	custom_css = []
+	custom_js  = []
+
+	# Syntax highlighting theme
+	highlight_css  = ""
+
+	[params.palette]
+    	primary = "red"
+    	accent  = "light green"
+
+    [params.font]
+    	text = "Ubuntu"
+    	code = "Ubuntu Mono"
+
+
+[social]
+	twitter = "javydreamercsw"
+	github  = "javydreamercsw"
+
+
+[[menu.main]]
+	name   = "Welcome"
+	url    = "post/welcome"
+	weight = 0
+
+[[menu.main]]
+	name   = "Developer"
+	url    = "post/developer/start"
+	weight = 10
+
+
+[blackfriday]
+	smartypants	= true
+	fractions = true
+	smartDashes = true
+	plainIDAnchors = true

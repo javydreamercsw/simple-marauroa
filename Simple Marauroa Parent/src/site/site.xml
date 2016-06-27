@@ -1,0 +1,25 @@
+<project xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd" name="Simple Marauroa">
+    <!--<skin>
+        <groupId>lt.velykis.maven.skins</groupId>
+        <artifactId>reflow-maven-skin</artifactId>
+        <version>1.1.1</version>
+    </skin>-->
+    <poweredBy>
+        <logo name="Marauroa" href="https://sourceforge.net/projects/arianne/"
+              img="https://a.fsdn.com/allura/p/arianne/icon"/>
+    </poweredBy>
+    <body>
+        <menu name="Overview">
+            <item name="Introduction" href="index.html"/>
+            <item name="License" href="http://www.opensource.org/licenses/cddl1.php"/>
+            <item name="Download" href="http://sourceforge.net/projects/simple-marauroa/"/>
+        </menu>
+        <menu name="Developers">
+            <item name="Introduction" href="developer/start.html"/>
+            <item name="Marauroa" href="developer/Marauroa.html"/>
+            <item name="Simple Server" href="developer/Simple_Server.html"/>
+        </menu>
+        <!--Add the reports menu-->
+        <menu ref="reports"/>
+    </body>
+</project>
