@@ -18,8 +18,6 @@ Terms:
 What Simple-Server does?
 ===
 
-----
-
 * Connect to Marauroa engine
 * Implement Player entity extension
 * Implement Private and Normal text
