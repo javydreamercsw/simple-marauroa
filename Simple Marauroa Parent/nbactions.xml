@@ -54,7 +54,7 @@
         <actionName>CUSTOM-Create Site</actionName>
         <displayName>Create Site</displayName>
         <goals>
-            <goal>site:clean</goal>
+            <goal>clean</goal>
             <goal>site:site</goal>
         </goals>
     </action>
