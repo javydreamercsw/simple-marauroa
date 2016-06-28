@@ -21,9 +21,13 @@
         <developer>
             <id>javydreamercsw</id>
             <name>Javier A. Ortiz Bultron</name>
+            <email>javier.ortiz.78@gmail.com</email>
             <roles>
                 <role>admin</role>
+                <role>architect</role>
+                <role>developer</role>
             </roles>
+            <timezone>America/Chicago</timezone>
         </developer>
     </developers>
     <licenses>
@@ -39,16 +43,20 @@
         <developerConnection>scm:hg:https://bitbucket.org/javydreamercsw/simple-marauroa-java</developerConnection>
         <tag>Simple-Marauroa-0.02.06</tag>
     </scm>
-    <ciManagement>
+    <!--<ciManagement>
         <system>Jenkins</system>
         <url>https://xinco.ci.cloudbees.com/</url>
-    </ciManagement>
+    </ciManagement>-->
 
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <site>
+            <id>simple-marauroa.sf.net</id>
+            <url>scp://shell.sourceforge.net/home/project-web/simple-marauroa/htdocs</url>
+        </site>
     </distributionManagement>
 
     <properties>
@@ -215,7 +223,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <configuration>
-                    <locales>en,fr,es</locales>
+                    <locales>en</locales>
                 </configuration>
             </plugin>
             <plugin>
@@ -250,12 +258,19 @@
                 <reportSets>
                     <reportSet>
                         <reports>
+                            <report>cim</report>
+                            <!--For version 3+ <report>ci-management</report>-->
+                            <report>project-team</report>
+                            <!--For version 3+ <report>team</report>-->
                             <report>dependencies</report>
                             <report>scm</report>
                             <report>issue-tracking</report>
+                            <!--For version 3+ <report>issue-management</report>-->
                             <report>license</report>
+                            <!--For version 3+ <report>licenses</report>-->
                             <report>modules</report>
                             <report>project-team</report>
+                            <!--For version 3+ <report>team</report>-->
                             <report>summary</report>
                         </reports>
                     </reportSet>
