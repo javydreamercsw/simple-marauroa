@@ -5,8 +5,6 @@ title: Public Events
 Public Events
 ====
 
-----
-
 This is a concept introduced with Simple Server to the Marauroa picture. The Event system is currently on diapers in Stendhal. As part of the implementation of normal chat as an event the Public Event system was created.
 
 How it works?
