@@ -5,7 +5,6 @@ title: RPEvent
 Sending events back
 ===
 
-----
 So our action have been executed in the server so now we need to inform the user(s) about the outcome.
 
 For this purpose we use Events by extending RPEvent as defined within Marauroa.
