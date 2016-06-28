@@ -301,4 +301,4 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
 ~~~~~
 **Note**: See the [Zone Extension](https://bitbucket.org/javydreamercsw/simple-marauroa-java/src/45975ccd19d641bf285ffd502290a75e011a815e/Simple%20Marauroa%20Parent/Zone-Extension/src/main/java/simple/server/extension/?at=default) for details.
 
-Back to [Public Events](/developer/Public_Events/)
+Back to [Public Events](/developer/Public_Events)

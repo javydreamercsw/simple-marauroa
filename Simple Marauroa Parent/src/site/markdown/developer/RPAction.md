@@ -197,8 +197,8 @@ private void remove(Player player, RPAction action) {
 
 Basically change the player's zone and remove the zone from the world making sure to move everyone in the zone as well. Otherwise someone might end in the [limbo](http://en.wikipedia.org/wiki/Limbo).
 
-Next: [RPEvent](/developer/RPEvent/)
+Next: [RPEvent](/developer/RPEvent)
 
-[Home](/developer/start/)
+[Home](/developer/start)
 
 

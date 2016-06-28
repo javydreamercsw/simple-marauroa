@@ -13,6 +13,6 @@ If you want more detail (that is if you really want to code a game using Marauro
 
 You can skip the Role-Playing link if your application is not intended to be a [MMORPG](http://en.wikipedia.org/wiki/MMORPG)
 
-Next: [Simple Server](/developer/Simple_Server/)
+Next: [Simple Server](/developer/Simple_Server)
 
 [Back to Learning Trail](/developer/start)

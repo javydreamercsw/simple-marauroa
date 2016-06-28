@@ -99,7 +99,7 @@ By stating that is a client_object everything defined in the client object's gen
 
 Now we'll turn this new server functionality in a server extension!
 
-Next: [Server Extension](/developer/Server_Extension/)
+Next: [Server Extension](/developer/Server_Extension)
 
-Back to [Events](/developer/RPEvent/)
+Back to [Events](/developer/RPEvent)
 

@@ -1,9 +1,4 @@
 <project xsi:schemaLocation="http://maven.apache.org/DECORATION/1.6.0 http://maven.apache.org/xsd/decoration-1.6.0.xsd" name="Simple Marauroa">
-    <!--<skin>
-        <groupId>lt.velykis.maven.skins</groupId>
-        <artifactId>reflow-maven-skin</artifactId>
-        <version>1.1.1</version>
-    </skin>-->
     <poweredBy>
         <logo name="Marauroa" href="https://sourceforge.net/projects/arianne/"
               img="https://a.fsdn.com/allura/p/arianne/icon"/>
