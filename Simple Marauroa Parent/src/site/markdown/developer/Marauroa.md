@@ -1,7 +1,6 @@
 Marauroa
 ===
 
-----
 You can learn more from Marauroa [here](https://stendhalgame.org/wiki/Marauroa).
 
 If you want more detail (that is if you really want to code a game using Marauroa) check the following also:
