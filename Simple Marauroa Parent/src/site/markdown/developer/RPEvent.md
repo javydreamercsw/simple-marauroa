@@ -133,7 +133,7 @@ First we call the parent's method and place the proper values for it's parameter
 
 Now we need to send it...
 
-Next: [Public Events](/developer/Public_Events/)
+Next: [Public Events](/developer/Public_Events)
 
 Back to [RPAction](/developer/RPAction)
 

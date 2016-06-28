@@ -26,7 +26,7 @@ What Simple-Server does?
 
 It might not be much but it's the most basic stuff.
 
-Next: [Simple Client](/developer/Simple_Client/)
+Next: [Simple Client](/developer/Simple_Client)
 
-[Back to Learning Trail](developer/start/)
+[Back to Learning Trail](/developer/start)
 

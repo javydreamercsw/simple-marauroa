@@ -1,11 +1,11 @@
 Basic Building Blocks
 ======
 
-Engine: [Marauroa](/developer/Marauroa/)
+Engine: [Marauroa](/developer/Marauroa)
 
-Server: [Simple Server](/developer/Simple_Server/)
+Server: [Simple Server](/developer/Simple_Server)
 
-Client: [Simple Client](/developer/Simple_Client/)
+Client: [Simple Client](/developer/Simple_Client)
 
 Specialized Chapters (We'll get there, they might be too complicated now)
 
@@ -219,4 +219,4 @@ The client does something like request a zone description change. This is done b
 
 So with that clear let's create our first action!
 
-Next: [RPActions](/developer/RPAction/)
+Next: [RPActions](/developer/RPAction)
