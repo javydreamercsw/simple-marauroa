@@ -32,13 +32,13 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      */
     private List<String> possibleSlots;
     public static final int DEGRADATION_TIMEOUT = 10 * 60; // 10 minutes
-    public static final String RPCLASS_NAME = "item";
+    public static final String DEFAULT_RPCLASS_NAME = "item";
 
     @Override
     public void generateRPClass() {
-        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+        if (!RPClass.hasRPClass(DEFAULT_RPCLASS_NAME)) {
             try {
-                RPClass entity = new RPClass(RPCLASS_NAME);
+                RPClass entity = new RPClass(DEFAULT_RPCLASS_NAME);
                 entity.isA(Entity.class.newInstance().getRPClassName());
 
                 // class, sword/armor/...
@@ -98,7 +98,8 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
 
                 // Some items should not be dropped on death
                 entity.addAttribute("undroppableondeath", Type.SHORT);
-            } catch (InstantiationException | IllegalAccessException ex) {
+            }
+            catch (InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(Item.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -116,7 +117,7 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
      */
     public Item(String name, String clazz, String subclass,
             Map<String, String> attributes) {
-        setRPClass(RPCLASS_NAME);
+        setRPClass(DEFAULT_RPCLASS_NAME);
         put(WellKnownActionConstant.TYPE, "item");
         possibleSlots = new LinkedList<>();
         update();
@@ -265,16 +266,6 @@ public class Item extends RPEntity implements TurnListener, EquipListener {
         }
 
         throw new IllegalStateException("the item does not have a subclass: " + this);
-    }
-
-    /**
-     * Get the name of the item.
-     *
-     * @return	The programatic item name.
-     */
-    @Override
-    public String getName() {
-        return get("name");
     }
 
     /**
