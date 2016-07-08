@@ -3,7 +3,6 @@ package simple.server.application.db;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import marauroa.server.game.db.DatabaseFactory;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -21,7 +20,6 @@ public class SimpleDatabase implements IDatabase {
     @Override
     public void initialize() throws SQLException {
         if (!isInitialized()) {
-            new DatabaseFactory().initializeDatabase();
             registerDAOs();
             initialized = true;
         }
