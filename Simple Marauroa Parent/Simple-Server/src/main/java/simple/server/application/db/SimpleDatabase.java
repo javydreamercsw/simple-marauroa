@@ -3,6 +3,7 @@ package simple.server.application.db;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.server.game.db.DatabaseFactory;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -29,11 +30,16 @@ public class SimpleDatabase implements IDatabase {
         LOG.log(Level.FINE, "Loading DAOs from: {0}",
                 getClass().getSimpleName());
         //Override DAO's here
+        boolean custom = false;
         for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
             LOG.log(Level.FINE, "Registerig DAO: {0}",
                     dao.getClass().getSimpleName());
             dao.register();
             dao.init();
+            custom = true;
+        }
+        if (!custom) {
+            new DatabaseFactory().initializeDatabase();
         }
     }
 
