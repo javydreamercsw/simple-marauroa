@@ -81,7 +81,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             try {
                 LOG.log(Level.FINE, "Removing empty zone: {0}", sZone.getName());
                 removeRPZone(sZone.getID());
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
@@ -175,7 +176,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                             extension.afterWorldInit();
                         });
                 initialized = true;
-            } catch (SQLException | IOException e) {
+            }
+            catch (SQLException | IOException e) {
                 LOG.log(Level.SEVERE, "Error initializing the server!", e);
             }
         }
@@ -423,7 +425,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         IRPZone result;
         try {
             result = removeRPZone(zone.getID());
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             result = null;
         }
