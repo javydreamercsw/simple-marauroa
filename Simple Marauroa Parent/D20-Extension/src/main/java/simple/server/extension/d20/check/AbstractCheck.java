@@ -31,7 +31,7 @@ public abstract class AbstractCheck implements D20Check {
                 D20Ability ability = a.newInstance();
                 if (((Attributes) clazz).has(ability.getCharacteristicName())) {
                     int temp = ((AbstractClass) clazz).getAbilityModifier(a);
-                    LOG.log(Level.INFO, "Adding modifier from: {0} = {1}",
+                    LOG.log(Level.FINE, "Adding modifier from: {0} = {1}",
                             new Object[]{ability.getCharacteristicName(), temp});
                     mod += temp;
                 }
