@@ -481,9 +481,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         //Handle NPC's
         i = Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(zoneid).getNPCS().iterator();
+        List<RPObject> toRemove2 = new ArrayList<>();
         while (i.hasNext()) {
+            toRemove2.add((RPObject) i.next());
+        }
+        for (RPObject co : toRemove2) {
             Lookup.getDefault().lookup(IRPWorld.class)
-                    .remove(((RPObject) i.next()).getID());
+                    .remove(co.getID());
         }
     }
 
