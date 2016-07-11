@@ -99,22 +99,22 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     }
 
     @Override
-    public RPSlot getAttributeBonuses() {
+    public final RPSlot getAttributeBonuses() {
         return getSlot(AttributeBonusList.NAME);
     }
 
     @Override
-    public RPSlot getBonusFeats() {
+    public final RPSlot getBonusFeats() {
         return getSlot(BonusFeatList.NAME);
     }
 
     @Override
-    public RPSlot getPrefferedFeats() {
+    public final RPSlot getPrefferedFeats() {
         return getSlot(BonusFeatList.NAME);
     }
 
     @Override
-    public RPSlot getPrefferedSkills() {
+    public final RPSlot getPrefferedSkills() {
         return getSlot(PrefferedSkillList.NAME);
     }
 
@@ -129,7 +129,7 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     }
 
     @Override
-    public RPSlot getBonusSkills() {
+    public final RPSlot getBonusSkills() {
         return getSlot(BonusSkillList.NAME);
     }
 
