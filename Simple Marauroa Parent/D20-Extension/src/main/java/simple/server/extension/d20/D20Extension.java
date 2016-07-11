@@ -137,7 +137,7 @@ public class D20Extension extends SimpleServerExtension {
             Lookup.getDefault().lookupAll(D20Feat.class).stream().forEach((feat) -> {
                 for (RPObject rpo : slot) {
                     if (rpo.get(Entity.NAME).equals(((Entity) feat).getRPClassName())) {
-                        LOG.log(java.util.logging.Level.INFO,
+                        LOG.log(java.util.logging.Level.FINE,
                                 "Updating {0} from ''{1}'' to ''{2}''",
                                 new Object[]{((RPEntity) feat).get(Entity.NAME),
                                     rpo.has(Entity.DESC) ? rpo.get(Entity.DESC) : "",
@@ -153,7 +153,7 @@ public class D20Extension extends SimpleServerExtension {
             Lookup.getDefault().lookupAll(D20Skill.class).stream().forEach((skill) -> {
                 for (RPObject rpo : slot) {
                     if (rpo.get(Entity.NAME).equals(((Entity) skill).getRPClassName())) {
-                        LOG.log(java.util.logging.Level.INFO,
+                        LOG.log(java.util.logging.Level.FINE,
                                 "Updating {0} from ''{1}'' to ''{2}''",
                                 new Object[]{((RPEntity) skill).get(Entity.NAME),
                                     rpo.has(Entity.DESC) ? rpo.get(Entity.DESC) : "",
