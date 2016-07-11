@@ -51,7 +51,7 @@ public class SkillAPTExporter extends AbstractAPTExporter {
                         + System.getProperty("file.separator")
                         + a.getCharacteristicName().replaceAll(" ", "_") + ".apt");
                 temp.getParentFile().mkdirs();
-                LOG.log(Level.INFO, "Processing: {0}", a.getCharacteristicName());
+                LOG.log(Level.FINE, "Processing: {0}", a.getCharacteristicName());
                 StringBuilder sb2 = new StringBuilder();
                 sb2.append(BLOCK);
                 sb2.append(a.getCharacteristicName()).append("\n");
