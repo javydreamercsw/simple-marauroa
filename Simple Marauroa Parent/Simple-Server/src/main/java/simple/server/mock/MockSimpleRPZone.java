@@ -10,6 +10,7 @@ import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntityInterface;
 
 /**
  *
@@ -36,7 +37,8 @@ public class MockSimpleRPZone extends SimpleRPZone {
         add(object, null, true);
     }
 
-    private synchronized void add(final RPObject object, final ClientObjectInterface player, final boolean expire) {
+    private synchronized void add(final RPObject object,
+            final ClientObjectInterface player, final boolean expire) {
         /*
          * Assign [zone relative] ID info.
          */
@@ -48,16 +50,18 @@ public class MockSimpleRPZone extends SimpleRPZone {
             objects.put(object.getID(), (RPObject) p);
         }
         if (object instanceof Entity) {
-            ((Entity) object).onAdded(this);
+            ((RPEntityInterface) object).onAdded(this);
         }
         Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
     }
 
     @Override
     public boolean has(RPObject.ID id) {
-        System.out.println("Zone: " + getID() + " has " + objects.size() + " objects in it.");
+        System.out.println("Zone: " + getID() + " has " + objects.size()
+                + " objects in it.");
         for (RPObject o : objects.values()) {
-            System.out.println((o instanceof ClientObjectInterface ? "Player: " : "Object: ") + o);
+            System.out.println((o instanceof ClientObjectInterface
+                    ? "Player: " : "Object: ") + o);
         }
         return super.has(id);
     }
