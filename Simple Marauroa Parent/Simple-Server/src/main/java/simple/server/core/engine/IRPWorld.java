@@ -6,6 +6,7 @@ import java.util.List;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.api.RPObjectMonitor;
 
 /**
@@ -325,4 +326,12 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param zoneid Zone to clean.
      */
     public void emptyZone(IRPZone.ID zoneid);
+
+    /**
+     * Get a player from the world.
+     *
+     * @param name Name of the player.
+     * @return Player or null if not found.
+     */
+    public ClientObjectInterface getPlayer(String name);
 }
