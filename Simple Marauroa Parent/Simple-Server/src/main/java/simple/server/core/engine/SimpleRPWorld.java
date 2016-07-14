@@ -592,4 +592,11 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public IRPZone removeRPZone(String zone) throws Exception {
         return removeRPZone(new IRPZone.ID(zone));
     }
+
+    @Override
+    public ClientObjectInterface getPlayer(String name) {
+        return ((SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class))
+                .getPlayer(name);
+    }
 }
