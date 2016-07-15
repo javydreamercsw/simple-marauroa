@@ -58,7 +58,7 @@ public class PrivateTextEvent extends SimpleRPEvent {
         super(RPCLASS_NAME);
         put(TEXT_TYPE, type.name());
         put(TEXT, text);
-        put(TIME, new Date().toString());
+        put(TIME, formatDate(new Date()));
     }
 
     /**
