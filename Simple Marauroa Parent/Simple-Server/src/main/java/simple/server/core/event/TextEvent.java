@@ -1,8 +1,5 @@
 package simple.server.core.event;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.Definition.Type;
@@ -24,10 +21,6 @@ public class TextEvent extends SimpleRPEvent {
 
     public static final String RPCLASS_NAME = "text_event";
     public static final String TEXT_TYPE = "texttype";
-    private final SimpleDateFormat defaultFormat
-            = new SimpleDateFormat("HH:mm:SS");
-    private final SimpleDateFormat extendedFormat
-            = new SimpleDateFormat("dd-MM-yy:HH:mm:SS");
 
     /**
      * Creates the rpclass.
@@ -64,6 +57,7 @@ public class TextEvent extends SimpleRPEvent {
         put(TEXT, text);
         put(FROM, from);
         put(TIME, formatDate(new Date()));
+        put(TEXT_TYPE, NotificationType.NORMAL.name());
     }
 
     /**
@@ -79,42 +73,5 @@ public class TextEvent extends SimpleRPEvent {
         put(TEXT, text);
         put(FROM, from);
         put(TIME, formatDate(new Date()));
-    }
-
-    /**
-     * Format date.
-     *
-     * @param date date to format
-     * @return formatted date
-     */
-    private String formatDate(Date date) {
-        return formatDate(date, defaultFormat);
-    }
-
-    /**
-     * Format date.
-     *
-     * @param date date to format
-     * @param format format for the date
-     * @return formatted date
-     */
-    private String formatDate(Date date, DateFormat format) {
-        if (format == null) {
-            format = defaultFormat;
-        }
-        if (isYesterday(date)) {
-            //Message was sent yesterday, add the date
-            format = extendedFormat;
-        }
-        return format.format(date);
-    }
-
-    private boolean isYesterday(Date date) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        int day = c.get(Calendar.DAY_OF_WEEK);
-        c.setTime(new Date());
-        int now = c.get(Calendar.DAY_OF_WEEK);
-        return day < now;
     }
 }

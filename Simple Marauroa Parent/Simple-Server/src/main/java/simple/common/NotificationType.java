@@ -1,4 +1,3 @@
-
 package simple.common;
 
 import java.awt.Color;
@@ -16,21 +15,21 @@ public enum NotificationType {
             return COLOR_CLIENT;
         }
     },
-    ERROR("error") {
+    ERROR("error", true, false) {
 
         @Override
         public Color getColor() {
             return COLOR_ERROR;
         }
     },
-    INFORMATION("information") {
+    INFORMATION("information", false, true) {
 
         @Override
         public Color getColor() {
             return COLOR_INFORMATION;
         }
     },
-    NEGATIVE("negative") {
+    NEGATIVE("negative", true, false) {
 
         @Override
         public Color getColor() {
@@ -44,42 +43,42 @@ public enum NotificationType {
             return COLOR_NORMAL;
         }
     },
-    POSITIVE("positive") {
+    POSITIVE("positive", true, false) {
 
         @Override
         public Color getColor() {
             return COLOR_POSITIVE;
         }
     },
-    PRIVMSG("privmsg") {
+    PRIVMSG("privmsg", false, true) {
 
         @Override
         public Color getColor() {
             return COLOR_PRIVMSG;
         }
     },
-    RESPONSE("response") {
+    RESPONSE("response", true, true) {
 
         @Override
         public Color getColor() {
             return COLOR_RESPONSE;
         }
     },
-    SIGNIFICANT_NEGATIVE("significant_negative") {
+    SIGNIFICANT_NEGATIVE("significant_negative", true, false) {
 
         @Override
         public Color getColor() {
             return COLOR_SIGNIFICANT_NEGATIVE;
         }
     },
-    SIGNIFICANT_POSITIVE("significant_positive") {
+    SIGNIFICANT_POSITIVE("significant_positive", true, false) {
 
         @Override
         public Color getColor() {
             return COLOR_SIGNIFICANT_POSITIVE;
         }
     },
-    TUTORIAL("tutorial") {
+    TUTORIAL("tutorial", false, true) {
 
         @Override
         public Color getColor() {
@@ -91,19 +90,31 @@ public enum NotificationType {
      */
     protected String mnemonic;
 
+    protected boolean bold = false, italic = false;
+
     /**
      * Create a notification type.
      *
-     * @param mnemonic
-     *            The mapping mnemonic.
+     * @param mnemonic The mapping mnemonic.
      */
     private NotificationType(final String mnemonic) {
         this.mnemonic = mnemonic;
     }
 
-    //
-    // NotificationType
-    //
+    /**
+     * Create a notification type.
+     *
+     * @param mnemonic The mapping mnemonic.
+     * @param bold is the text bold
+     * @param italic is the text italic
+     */
+    private NotificationType(final String mnemonic, boolean bold,
+            boolean italic) {
+        this.mnemonic = mnemonic;
+        this.bold = bold;
+        this.italic = italic;
+    }
+
     /**
      * Get the mapping mnemonic (programatic name).
      *
@@ -121,6 +132,15 @@ public enum NotificationType {
     public Color getColor() {
         return COLOR_NORMAL;
     }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public boolean isItalic() {
+        return italic;
+    }
+
     public static final Color COLOR_CLIENT = Color.gray;
     public static final Color COLOR_ERROR = Color.red;
     public static final Color COLOR_INFORMATION = Color.orange;
