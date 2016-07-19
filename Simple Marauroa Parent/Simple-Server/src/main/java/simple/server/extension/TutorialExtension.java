@@ -26,7 +26,8 @@ public class TutorialExtension extends SimpleServerExtension {
     }
 
     @Override
-    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
+    public void clientObjectUpdate(ClientObjectInterface client)
+            throws SimpleException {
         if (!((SlotOwner) client).hasSlot(TUTORIAL)) {
             ((SlotOwner) client).addSlot(TUTORIAL);
         }
