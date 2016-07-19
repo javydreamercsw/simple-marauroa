@@ -1,7 +1,13 @@
 package simple.server.core.tool;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
@@ -117,6 +123,50 @@ public class Tool {
                 }
             }
         }
+    }
+
+    /**
+     * Sort a map by value in ascending order.
+     *
+     * @param <K> Key
+     * @param <V> Comparable value
+     * @param map Map to sort
+     * @return sorted list
+     */
+    public static <K, V extends Comparable<? super V>> Map<K, V>
+            sortByValue(Map<K, V> map) {
+        return sortByValue(map, true);
+    }
+
+    /**
+     * Sort a map by value in ascending order.
+     *
+     * @param <K> Key
+     * @param <V> Comparable value
+     * @param map Map to sort
+     * @param asc true for ascending sort, false otherwise.
+     * @return sorted list
+     */
+    public static <K, V extends Comparable<? super V>> Map<K, V>
+            sortByValue(Map<K, V> map, boolean asc) {
+        List<Map.Entry<K, V>> list
+                = new LinkedList<>(map.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+            @Override
+            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+                if (asc) {
+                    return (o1.getValue()).compareTo(o2.getValue());
+                } else {
+                    return (o2.getValue()).compareTo(o1.getValue());
+                }
+            }
+        });
+
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 
     protected Tool() {
