@@ -81,11 +81,12 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
                 clazz.isA(RPEntity.class.newInstance().getRPClassName());
                 for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
                     clazz.addAttribute(a.getCharacteristicName(),
-                            a.getDefinitionType());
+                            a.getDefinitionType(), a.getDefinition());
                 }
                 for (D20List a : Lookup.getDefault().lookupAll(D20List.class)) {
                     if (!hasSlot(a.getCharacteristicName())) {
-                        clazz.addRPSlot(a.getCharacteristicName(), a.getSize());
+                        clazz.addRPSlot(a.getCharacteristicName(), a.getSize(),
+                                a.getDefinition());
                     }
                 }
             } catch (InstantiationException | IllegalAccessException ex) {
