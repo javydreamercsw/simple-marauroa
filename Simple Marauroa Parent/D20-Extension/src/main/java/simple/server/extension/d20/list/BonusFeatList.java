@@ -14,11 +14,6 @@ public class BonusFeatList extends AbstractList {
             DESC = "List of bonus feats for this character.";
 
     @Override
-    public int getSize() {
-        return -1;
-    }
-
-    @Override
     public String getCharacteristicName() {
         return NAME;
     }

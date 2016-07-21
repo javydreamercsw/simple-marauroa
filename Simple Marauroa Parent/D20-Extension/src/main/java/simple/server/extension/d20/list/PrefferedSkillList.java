@@ -14,11 +14,6 @@ public class PrefferedSkillList extends AbstractList {
             DESC = "List of preffered skills for this character.";
 
     @Override
-    public int getSize() {
-        return -1;
-    }
-
-    @Override
     public String getCharacteristicName() {
         return NAME;
     }
