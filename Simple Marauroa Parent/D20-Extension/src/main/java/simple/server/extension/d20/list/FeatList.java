@@ -13,11 +13,6 @@ public class FeatList extends AbstractList {
     public static final String FEAT = "feats";
 
     @Override
-    public int getSize() {
-        return -1;
-    }
-
-    @Override
     public String getCharacteristicName() {
         return FEAT;
     }

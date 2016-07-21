@@ -14,11 +14,6 @@ public class PrefferedFeatList extends AbstractList {
             DESC = "List of preffered feats for this character.";
 
     @Override
-    public int getSize() {
-        return -1;
-    }
-
-    @Override
     public String getCharacteristicName() {
         return NAME;
     }

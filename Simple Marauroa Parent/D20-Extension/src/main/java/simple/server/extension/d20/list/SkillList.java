@@ -13,11 +13,6 @@ public class SkillList extends AbstractList {
     public static final String SKILL = "skills";
 
     @Override
-    public int getSize() {
-        return -1;
-    }
-
-    @Override
     public String getCharacteristicName() {
         return SKILL;
     }
@@ -31,7 +26,7 @@ public class SkillList extends AbstractList {
     public String getDescription() {
         return "List of skills for this wrestler.";
     }
-    
+
     @Override
     public Byte getDefinition() {
         return Definition.PRIVATE;

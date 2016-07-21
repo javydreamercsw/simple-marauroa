@@ -14,11 +14,6 @@ public class BonusSkillList extends AbstractList {
             DESC = "List of bonus skills for this character.";
 
     @Override
-    public int getSize() {
-        return -1;
-    }
-
-    @Override
     public String getCharacteristicName() {
         return NAME;
     }
