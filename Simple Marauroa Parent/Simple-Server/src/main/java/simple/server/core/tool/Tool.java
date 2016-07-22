@@ -91,12 +91,12 @@ public class Tool {
      */
     public static String changeToUpperCase(final String value,
             final int index) {
-        LOG.fine("Changing value from " + value + "...");
+        LOG.log(Level.FINE, "Changing value from {0}...", value);
         String result = value.substring(0, index)
                 + value.substring(index, index + 1)
                 .toUpperCase(Locale.getDefault())
                 + value.substring(index + 1);
-        LOG.fine("to " + result);
+        LOG.log(Level.FINE, "to {0}", result);
         return result;
     }
 
@@ -175,5 +175,38 @@ public class Tool {
     public static String extractName(RPObject obj) {
         return obj.has(NAME) ? obj.get(NAME).replace("_", " ")
                 : obj.toString();
+    }
+
+    /**
+     * types of Operating Systems
+     */
+    public enum OSType {
+        Windows, MacOS, Linux, Other
+    };
+
+    // cached result of OS detection
+    protected static OSType detectedOS;
+
+    /**
+     * detect the operating system from the os.name System property and cache
+     * the result
+     *
+     * @return - the operating system detected
+     */
+    public static OSType getOperatingSystemType() {
+        if (detectedOS == null) {
+            String OS = System.getProperty("os.name",
+                    "generic").toLowerCase(Locale.ENGLISH);
+            if ((OS.contains("mac")) || (OS.contains("darwin"))) {
+                detectedOS = OSType.MacOS;
+            } else if (OS.contains("win")) {
+                detectedOS = OSType.Windows;
+            } else if (OS.contains("nux")) {
+                detectedOS = OSType.Linux;
+            } else {
+                detectedOS = OSType.Other;
+            }
+        }
+        return detectedOS;
     }
 }

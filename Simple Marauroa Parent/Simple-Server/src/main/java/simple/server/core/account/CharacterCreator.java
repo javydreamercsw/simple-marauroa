@@ -14,7 +14,6 @@ import marauroa.server.game.db.DAORegister;
 import org.openide.util.Lookup;
 import simple.server.core.engine.IRPObjectFactory;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * Creates a new character as requested by a client.
@@ -64,7 +63,7 @@ public class CharacterCreator {
         }
 
         final TransactionPool transactionPool
-                = SimpleSingletonRepository.getTransactionPool();
+                = TransactionPool.get();
         final DBTransaction trans = transactionPool.beginWork();
         final CharacterDAO characterDAO
                 = DAORegister.get().get(CharacterDAO.class);
@@ -94,7 +93,8 @@ public class CharacterCreator {
             transactionPool.commit(trans);
 
             return new CharacterResult(Result.OK_CREATED, character, object);
-        } catch (final SQLException | IOException e) {
+        }
+        catch (final SQLException | IOException e) {
             transactionPool.rollback(trans);
             LOG.log(Level.SEVERE, "Can't create character", e);
             return new CharacterResult(Result.FAILED_EXCEPTION, character,

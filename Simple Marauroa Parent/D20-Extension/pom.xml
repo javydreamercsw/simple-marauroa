@@ -8,7 +8,6 @@
     </parent>
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>D20-Extension</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
     <name>D20 Extension</name>
     <build>
         <plugins>
@@ -63,7 +62,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>0.02.07-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -71,6 +70,13 @@
             <groupId>org.netbeans.api</groupId>
             <type>jar</type>
             <version>${netbeans.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Simple-Server</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

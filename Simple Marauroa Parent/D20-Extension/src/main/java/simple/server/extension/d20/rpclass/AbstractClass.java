@@ -28,7 +28,6 @@ import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.AttributeBonusList;
 import simple.server.extension.d20.list.BonusFeatList;
 import simple.server.extension.d20.list.BonusSkillList;
-import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.list.FeatList;
 import simple.server.extension.d20.list.PrefferedSkillList;
 import simple.server.extension.d20.list.SkillList;
@@ -50,7 +49,6 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
 
     public AbstractClass(RPObject object) {
         super(object);
-        update();
     }
 
     public AbstractClass() {
@@ -58,37 +56,12 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
     }
 
     @Override
-    public void update() {
-        super.update();
-        //In case the extension doesn't behave and doesn't do it.
-        for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
-            if (!has(a.getCharacteristicName())) {
-                put(a.getCharacteristicName(), 0);
-            }
-        }
-        for (D20List a : Lookup.getDefault().lookupAll(D20List.class)) {
-            if (!hasSlot(a.getCharacteristicName())) {
-                addSlot(a.getCharacteristicName());
-            }
-        }
-    }
-
-    @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RP_CLASS)) {
             try {
                 RPClass clazz = new RPClass(RP_CLASS);
-                clazz.isA(RPEntity.class.newInstance().getRPClassName());
-                for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
-                    clazz.addAttribute(a.getCharacteristicName(),
-                            a.getDefinitionType(), a.getDefinition());
-                }
-                for (D20List a : Lookup.getDefault().lookupAll(D20List.class)) {
-                    if (!hasSlot(a.getCharacteristicName())) {
-                        clazz.addRPSlot(a.getCharacteristicName(), a.getSize(),
-                                a.getDefinition());
-                    }
-                }
+                clazz.isA(simple.server.core.entity.character.Character.class
+                        .newInstance().getRPClassName());
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }

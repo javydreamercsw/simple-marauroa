@@ -10,7 +10,6 @@ import marauroa.server.db.DBTransaction;
 import marauroa.server.db.TransactionPool;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
-import simple.server.core.engine.SimpleSingletonRepository;
 
 /**
  * Creates a new account as requested by a client.
@@ -71,7 +70,7 @@ public class AccountCreator {
      */
     private AccountResult insertIntoDatabase() {
         final TransactionPool transactionPool
-                = SimpleSingletonRepository.getTransactionPool();
+                = TransactionPool.get();
         final DBTransaction transaction = transactionPool.beginWork();
         final AccountDAO accountDAO = DAORegister.get().get(AccountDAO.class);
 
@@ -86,7 +85,8 @@ public class AccountCreator {
 
             transactionPool.commit(transaction);
             return new AccountResult(Result.OK_CREATED, username);
-        } catch (final SQLException e) {
+        }
+        catch (final SQLException e) {
             LOG.log(Level.WARNING,
                     "SQL exception while trying to create a new account", e);
             transactionPool.rollback(transaction);

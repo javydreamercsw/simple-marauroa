@@ -23,7 +23,6 @@ public class ChangeZoneTest extends SimpleServerT {
     public void changeZone() {
         try {
             System.out.println("changeZone");
-            SimpleSingletonRepository.getEntityManager();
             player1 = new ClientObject(ClientObject.createEmptyZeroLevelPlayer("player1"));
             MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone1"));
             MockSimpleRPWorld.get().addRPZone(new SimpleRPZone("zone2"));
