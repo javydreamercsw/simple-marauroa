@@ -60,12 +60,30 @@ public interface MarauroaServerExtension {
      * Plug into the definition of the root RPClass. The root class is
      * considered the base class from all others inherit attributes from. Use
      * this for attributes that will be common among all entities in the
-     * application. Use modifyClientObjectDefinition for attributes only to be
-     * common among client objects.
+     * application.
      *
-     * @param root
+     * @param root root class to modify.
      */
     public void modifyRootRPClassDefinition(RPClass root);
+
+    /**
+     * Plug into the definition of the item RPClass. The item class is as
+     * special type of entity meant to be consumed. Use this for attributes that
+     * will be common among all items in the application.
+     *
+     * @param item Item to modify.
+     */
+    public void modifyItemRPClassDefinition(RPClass item);
+
+    /**
+     * Plug into the definition of the character RPClass. The character class is
+     * as special type of entity meant to be for both players and NPC's. Use
+     * this for attributes that will be common among all characters in the
+     * application.
+     *
+     * @param character Character to modify.
+     */
+    public void modifyCharacterRPClassDefinition(RPClass character);
 
     /**
      * Plug into the definition of the root Entity RPClass. The root class is
@@ -131,6 +149,24 @@ public interface MarauroaServerExtension {
      * @param entity
      */
     public void entityRPClassUpdate(RPObject entity);
+
+    /**
+     * Item RPClass object update. This initializes attributes on the RPClasses
+     * extending Entity. Useful when adding new attributes to existing objects
+     * so they get populated with valid initial values.
+     *
+     * @param entity
+     */
+    public void itemRPClassUpdate(RPObject entity);
+
+    /**
+     * Character RPClass object update. This initializes attributes on the
+     * RPClasses extending Entity. Useful when adding new attributes to existing
+     * objects so they get populated with valid initial values.
+     *
+     * @param entity
+     */
+    public void characterRPClassUpdate(RPObject entity);
 
     /**
      * Do something when an attribute is added to a RPClass

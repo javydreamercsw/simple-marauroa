@@ -1,6 +1,5 @@
 package simple.server.extension.d20.feat;
 
-import simple.server.extension.d20.apt.AbstractAPTExporter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,6 +12,7 @@ import java.util.logging.Logger;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.extension.d20.D20Characteristic;
+import simple.server.extension.d20.apt.AbstractAPTExporter;
 import simple.server.extension.d20.apt.IAPTExporter;
 
 /**
@@ -68,15 +68,15 @@ public class FeatAPTExporter extends AbstractAPTExporter {
             }
             if (a.getFocusWeapon() != null) {
                 sb2.append(INDENT).append("Focus: ")
-                        .append(a.getFocusWeapon().getCharacteristicName()).append("\n");
+                        .append(a.getFocusWeapon().getName()).append("\n");
             }
             if (a.getRequirements().size() > 0) {
                 sb2.append("Requirements:").append("\n").append("\n");
                 for (Entry<Class<? extends D20Characteristic>, Integer> entry
                         : a.getRequirements().entrySet()) {
                     try {
-                        D20Characteristic feat =
-                                (D20Characteristic) entry.getKey().newInstance();
+                        D20Characteristic feat
+                                = entry.getKey().newInstance();
                         sb2.append(INDENT + INDENT + "* ")
                                 .append(feat.getCharacteristicName())
                                 .append("\n");
@@ -101,11 +101,11 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                             if (!Modifier.isAbstract(entry.getKey().getModifiers())) {
                                 try {
                                     sb2.append(INDENT + INDENT + "* ")
-                                    .append(entry.getKey().newInstance().getCharacteristicName())
-                                    .append(": ")
-                                    .append(entry.getValue())
-                                    .append("\n")
-                                    .append("\n");
+                                            .append(entry.getKey().newInstance().getCharacteristicName())
+                                            .append(": ")
+                                            .append(entry.getValue())
+                                            .append("\n")
+                                            .append("\n");
                                 } catch (InstantiationException | IllegalAccessException ex) {
                                     LOG.log(Level.SEVERE, null, ex);
                                 }
@@ -117,29 +117,29 @@ public class FeatAPTExporter extends AbstractAPTExporter {
                     .append(a.isMultiple() ? "Yes" : "No").append("\n");
             try (BufferedWriter output
                     = new BufferedWriter((new OutputStreamWriter(
-                                    new FileOutputStream(temp), "UTF-8")))) {
-                                output.write(sb2.toString());
-                            } catch (IOException ex) {
-                                LOG.log(Level.SEVERE, null, ex);
-                            }
-                            //Add link to the main page
-                            sb.append("\n").append(INDENT + INDENT + "* ")
-                                    .append("{{{./")
-                                    .append(getFileName().toLowerCase())
-                                    .append("/")
-                                    .append(a.getCharacteristicName().replaceAll(" ", "_"))
-                                    .append(".html}")
-                                    .append(a.getCharacteristicName())
-                                    .append("}}")
-                                    .append("\n");
+                            new FileOutputStream(temp), "UTF-8")))) {
+                output.write(sb2.toString());
+            } catch (IOException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+            //Add link to the main page
+            sb.append("\n").append(INDENT + INDENT + "* ")
+                    .append("{{{./")
+                    .append(getFileName().toLowerCase())
+                    .append("/")
+                    .append(a.getCharacteristicName().replaceAll(" ", "_"))
+                    .append(".html}")
+                    .append(a.getCharacteristicName())
+                    .append("}}")
+                    .append("\n");
         }
         try (BufferedWriter output
                 = new BufferedWriter((new OutputStreamWriter(
-                                new FileOutputStream(file), "UTF-8")))) {
-                            output.write(sb.toString());
-                        } catch (IOException ex) {
-                            LOG.log(Level.SEVERE, null, ex);
-                        }
+                        new FileOutputStream(file), "UTF-8")))) {
+            output.write(sb.toString());
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

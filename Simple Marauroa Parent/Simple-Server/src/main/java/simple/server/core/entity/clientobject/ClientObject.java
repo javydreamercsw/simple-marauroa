@@ -24,17 +24,12 @@ import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.engine.SimpleSingletonRepository;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.Outfit;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.core.entity.item.Item;
-import simple.server.core.entity.item.Stackable;
-import simple.server.core.entity.item.StackableItem;
-import simple.server.core.entity.slot.PlayerSlot;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 import simple.server.extension.MarauroaServerExtension;
@@ -119,9 +114,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     .getSimpleName());
             try {
                 extension.clientObjectUpdate(this);
-            } catch (SimpleException ex) {
-                java.util.logging.Logger.getLogger(ClientObject.class.getName())
-                        .log(Level.SEVERE, null, ex);
+            }
+            catch (SimpleException ex) {
+                LOG.log(Level.SEVERE, null, ex);
             }
         }
         super.update();
@@ -371,7 +366,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             addEvent(new TextEvent(text,
                     Configuration.getConfiguration().get("system_account_name")));
             notifyWorldAboutChanges();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             java.util.logging.Logger.getLogger(ClientObject.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -521,7 +517,8 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     while ((line = in.readLine()) != null) {
                         adminNames.add(line);
                     }
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     LOG.log(Level.SEVERE, "Error loading admin names from: "
                             + adminFilename, e);
                 }
@@ -619,137 +616,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     new Object[]{def.getName(), def.getType()});
         });
         LOG.fine("-------------------------------");
-    }
-
-    /**
-     * Loads the items into the slots of the player on login.
-     *
-     * @param player ClientObject
-     */
-    //TODO: Move to configurable code
-    protected static void loadItemsIntoSlots(ClientObject player) {
-
-        // load items
-        String[] slotsItems = {"bag", "rhand", "lhand", "head", "armor",
-            "legs", "feet", "finger", "cloak", "keyring"
-        };
-
-        try {
-            for (String slotName : slotsItems) {
-                RPSlot slot = player.getSlot(slotName);
-                RPSlot newSlot = new PlayerSlot(slotName);
-                loadSlotContent(player, slot, newSlot);
-            }
-        } catch (RuntimeException e) {
-            LOG.log(Level.SEVERE, "Cannot create player", e);
-        }
-    }
-
-    /**
-     * Loads the items into the slots of the player on login.
-     *
-     * @param player ClientObject
-     * @param slot original slot
-     * @param newSlot new Simple specific slot
-     */
-    private static void loadSlotContent(ClientObject player, RPSlot slot,
-            RPSlot newSlot) {
-        if (slot == null) {
-            return;
-        }
-        List<RPObject> objects = new LinkedList<>();
-        for (RPObject objectInSlot : slot) {
-            objects.add(objectInSlot);
-        }
-        slot.clear();
-        player.removeSlot(slot.getName());
-        player.addSlot(newSlot);
-
-        for (RPObject item : objects) {
-            try {
-                // We simply ignore corpses...
-                if (item.get(WellKnownActionConstant.TYPE).equals("item")) {
-
-                    String name = item.get("name");
-                    Item entity = SimpleSingletonRepository
-                            .getEntityManager().getItem(name);
-
-                    // log removed items
-                    if (entity == null) {
-                        int quantity = 1;
-                        if (item.has("quantity")) {
-                            quantity = item.getInt("quantity");
-                        }
-                        LOG.log(Level.WARNING, "Cannot restore {0} {1} on "
-                                + "login of {2}"
-                                + " because this item"
-                                + " was removed from items.xml",
-                                new Object[]{quantity, name, player.getName()});
-                        continue;
-                    }
-
-                    entity.setID(item.getID());
-
-                    if (item.has("persistent")
-                            && (item.getInt("persistent") == 1)) {
-                        /*
-                         * Keep [new] rpclass
-                         */
-                        RPClass rpclass = entity.getRPClass();
-                        entity.fill(item);
-                        entity.setRPClass(rpclass);
-
-                        // If we've updated the item name we don't
-                        //want persistent reverting it
-                        entity.put("name", name);
-                    }
-
-                    if (entity instanceof StackableItem) {
-                        int quantity = 1;
-                        if (item.has("quantity")) {
-                            quantity = item.getInt("quantity");
-                        } else {
-                            LOG.log(Level.WARNING, "Adding quantity=1 to {0}"
-                                    + ". Most likely cause is that "
-                                    + "this item was not stackable in the past", item);
-                        }
-                        ((Stackable) entity).setQuantity(quantity);
-
-                        if (quantity <= 0) {
-                            LOG.log(Level.WARNING, "Ignoring item {0} on "
-                                    + "login of player {1}"
-                                    + " because this item has an invalid "
-                                    + "quantity: {2}",
-                                    new Object[]{name, player.getName(), quantity});
-                            continue;
-                        }
-                    }
-
-                    // make sure saved individual information is
-                    // restored
-                    String[] individualAttributes = {"infostring",
-                        "description", "bound", "undroppableondeath"
-                    };
-                    for (String attribute : individualAttributes) {
-                        if (item.has(attribute)) {
-                            entity.put(attribute, item.get(attribute));
-                        }
-                    }
-
-                    if (item.has("logid")) {
-                        entity.put("logid", item.get("logid"));
-                    }
-                    newSlot.add(entity);
-                } else {
-                    LOG.log(Level.WARNING,
-                            "Non-item object found in {0}[{1}]: {2}",
-                            new Object[]{player.getName(), slot.getName(), item});
-                }
-            } catch (Exception e) {
-                LOG.log(Level.SEVERE, "Error adding " + item
-                        + " to player slot" + slot, e);
-            }
-        }
     }
 
     /**

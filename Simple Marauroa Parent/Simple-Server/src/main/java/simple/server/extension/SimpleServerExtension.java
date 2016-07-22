@@ -69,7 +69,8 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     }
 
     @Override
-    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
+    public void clientObjectUpdate(ClientObjectInterface client)
+            throws SimpleException {
         //Do nothing by default
     }
 
@@ -97,6 +98,26 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
 
     @Override
     public void entityRPClassUpdate(RPObject entity) {
+        //Do nothing by default
+    }
+
+    @Override
+    public void modifyItemRPClassDefinition(RPClass item) {
+        //Do nothing by default
+    }
+
+    @Override
+    public void modifyCharacterRPClassDefinition(RPClass character) {
+        //Do nothing by default
+    }
+
+    @Override
+    public void itemRPClassUpdate(RPObject entity) {
+        //Do nothing by default
+    }
+
+    @Override
+    public void characterRPClassUpdate(RPObject entity) {
         //Do nothing by default
     }
 }
