@@ -12,9 +12,6 @@ import simple.test.AbstractSystemTest;
  */
 public class ItemTest extends AbstractSystemTest {
 
-    public ItemTest() {
-    }
-
     @Test
     public void checkAttributes() {
         int i = 1;
@@ -34,5 +31,7 @@ public class ItemTest extends AbstractSystemTest {
         assertFalse(item.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From character object extension
+        //Check the fill operation
+        new RPObject().fill(item);
     }
 }
