@@ -1,16 +1,17 @@
 package simple.server.extension.d20.skill;
 
 import marauroa.common.game.Definition;
-import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
-import simple.server.extension.d20.DummySkill;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.d20.DummyAbility;
 import simple.server.extension.d20.DummyAbility2;
+import simple.server.extension.d20.DummySkill;
 import simple.server.extension.d20.ability.AbstractAbility;
 import simple.server.extension.d20.ability.D20Ability;
 
@@ -22,13 +23,13 @@ public class D20SkillTest {
 
     public D20SkillTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
         new Entity().generateRPClass();
         new RPEntity().generateRPClass();
         Lookup.getDefault().lookupAll(D20Skill.class).stream().forEach((skill) -> {
-            ((RPEntity) skill).generateRPClass();
+            ((RPEntityInterface) skill).generateRPClass();
         });
     }
 
