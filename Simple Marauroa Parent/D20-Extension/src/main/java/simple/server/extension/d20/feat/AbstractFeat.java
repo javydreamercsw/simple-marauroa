@@ -34,6 +34,7 @@ public abstract class AbstractFeat extends Entity implements D20Feat {
     protected D20Weapon focusWeapon = null;
     protected D20Characteristic focusCharacteristic = null;
     protected int minimumLevel = 0;
+    protected int maximumLevel = 0;
     public final static String RP_CLASS = "Feat";
     private static final Logger LOG
             = Logger.getLogger(AbstractFeat.class.getSimpleName());
@@ -140,5 +141,15 @@ public abstract class AbstractFeat extends Entity implements D20Feat {
     @Override
     public Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements() {
         return opponentRequirements;
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return maximumLevel;
+    }
+
+    @Override
+    public void setMaxLevel(int max) {
+        maximumLevel = max;
     }
 }
