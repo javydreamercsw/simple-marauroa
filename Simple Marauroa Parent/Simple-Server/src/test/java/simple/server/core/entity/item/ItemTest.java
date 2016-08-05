@@ -22,7 +22,7 @@ public class ItemTest extends AbstractSystemTest {
         assertTrue(item.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From entity extension
-        assertFalse(item.getRPClass()
+        assertTrue(item.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From rootRPClass extension
         assertFalse(item.getRPClass()
