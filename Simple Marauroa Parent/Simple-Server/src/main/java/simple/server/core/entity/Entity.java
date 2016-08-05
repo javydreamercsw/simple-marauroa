@@ -64,10 +64,7 @@ public class Entity extends RPObject implements RPEntityInterface {
                                 extension.getClass().getSimpleName());
                         return extension;
                     }).map((extension) -> {
-                extension.modifyRootRPClassDefinition(entity);
-                if (entity.subclassOf(MY_CLASS)) {
-                    extension.modifyRootEntityRPClassDefinition(entity);
-                }
+                extension.modifyRootEntityRPClassDefinition(entity);
                 return extension;
             }).filter((_item) -> (LOG.isLoggable(Level.FINE))).forEach((_item) -> {
                 entity.getDefinitions().stream().forEach((def) -> {

@@ -7,12 +7,13 @@ import org.openide.util.Lookup;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.dice.RollResult;
 import simple.server.extension.d20.rpclass.AbstractClass;
+import simple.test.AbstractSystemTest;
 
 /**
  *
  * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
  */
-public class D20CheckTest {
+public class D20CheckTest extends AbstractSystemTest {
 
     /**
      * Test of getAbilities method, of class D20Check.

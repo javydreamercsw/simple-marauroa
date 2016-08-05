@@ -20,6 +20,9 @@ public class D20Tool {
      */
     public static boolean slotContainsCharacteristic(RPSlot slot,
             D20Characteristic c) {
+        if (slot == null) {
+            return false;
+        }
         Iterator it = slot.iterator();
         boolean contained = false;
         while (it.hasNext()) {

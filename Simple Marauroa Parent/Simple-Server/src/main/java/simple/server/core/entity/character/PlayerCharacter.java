@@ -15,12 +15,12 @@ import simple.server.extension.MarauroaServerExtension;
  *
  * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
  */
-@ServiceProvider(service = RPEntityInterface.class, position = 200)
-public class Character extends RPEntity {
+@ServiceProvider(service = RPEntityInterface.class, position = 10)
+public class PlayerCharacter extends RPEntity {
 
     public static final String DEFAULT_RP_CLASSNAME = "character";
 
-    public Character(RPObject object) {
+    public PlayerCharacter(RPObject object) {
         super(object);
         RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
         setRPClass(RPCLASS_NAME);
@@ -28,7 +28,7 @@ public class Character extends RPEntity {
         update();
     }
 
-    public Character() {
+    public PlayerCharacter() {
         RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
     }
 
@@ -41,7 +41,6 @@ public class Character extends RPEntity {
                 for (MarauroaServerExtension ext
                         : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                     ext.modifyCharacterRPClassDefinition(entity);
-                    ext.modifyRootEntityRPClassDefinition(entity);
                 }
             }
             catch (InstantiationException | IllegalAccessException ex) {

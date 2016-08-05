@@ -17,7 +17,6 @@ import simple.server.extension.d20.rpclass.D20Class;
 public class DummyClass extends AbstractClass {
 
     public DummyClass() {
-        super(new RPObject());
         RPCLASS_NAME = "Dummy_Class";
     }
 

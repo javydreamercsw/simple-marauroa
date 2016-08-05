@@ -49,18 +49,6 @@ public class D20Extension extends SimpleServerExtension {
     }
 
     @Override
-    public void modifyRootEntityRPClassDefinition(RPClass clazz) {
-        //Stats
-        for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
-            LOG.log(Level.FINE, "Adding stat: {0}",
-                    stat.getCharacteristicName());
-            clazz.addAttribute(stat.getCharacteristicName(),
-                    stat.getDefinitionType(),
-                    stat.getDefinition());
-        }
-    }
-
-    @Override
     public void modifyCharacterRPClassDefinition(RPClass clazz) {
         clazz.addAttribute(TYPE, Definition.Type.STRING);
         clazz.addAttribute(CLASS, Definition.Type.STRING);
@@ -96,6 +84,14 @@ public class D20Extension extends SimpleServerExtension {
             clazz.addRPSlot(attr.getCharacteristicName(),
                     attr.getSize(),
                     attr.getDefinition());
+        }
+        //Stats
+        for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+            LOG.log(Level.FINE, "Adding stat: {0}",
+                    stat.getCharacteristicName());
+            clazz.addAttribute(stat.getCharacteristicName(),
+                    stat.getDefinitionType(),
+                    stat.getDefinition());
         }
     }
 
