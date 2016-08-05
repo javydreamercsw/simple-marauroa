@@ -2,6 +2,7 @@ package simple.server.extension.d20.feat;
 
 import java.util.Map;
 import simple.server.extension.d20.D20Characteristic;
+import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.requirement.D20Requirement;
 import simple.server.extension.d20.weapon.D20Weapon;
 
@@ -9,7 +10,7 @@ import simple.server.extension.d20.weapon.D20Weapon;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public interface D20Feat extends D20Characteristic, D20Requirement {
+public interface D20Feat extends D20Characteristic, D20Requirement, D20Level {
 
     /**
      * Get bonus for this throw.
