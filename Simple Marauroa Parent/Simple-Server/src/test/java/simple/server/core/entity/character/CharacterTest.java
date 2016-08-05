@@ -15,16 +15,16 @@ public class CharacterTest extends AbstractSystemTest {
     @Test
     public void checkAttributes() {
         int i = 1;
-        Character character = new Character(new RPObject());
+        PlayerCharacter character = new PlayerCharacter(new RPObject());
         assertFalse(character.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From item extension
         assertTrue(character.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From entity extension
-        assertTrue(character.getRPClass()
+        assertFalse(character.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
-                        "" + (i++)));//From root extension
+                        "" + (i++)));//From rootRPClass extension
         assertFalse(character.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From client object extension

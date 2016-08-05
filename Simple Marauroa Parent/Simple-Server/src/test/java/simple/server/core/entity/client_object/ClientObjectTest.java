@@ -29,9 +29,9 @@ public class ClientObjectTest extends AbstractSystemTest {
         assertTrue(co.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From entity extension
-        assertTrue(co.getRPClass()
+        assertFalse(co.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
-                        "" + (i++)));//From root extension
+                        "" + (i++)));//From rootRPClass extension
         assertTrue(co.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From client object extension

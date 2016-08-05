@@ -72,12 +72,12 @@ public class D20ExtensionTest extends AbstractSystemTest {
     @Test
     public void testRPCharacterDefinition() {
         try {
-            Constructor<?> cons = simple.server.core.entity.character.Character.class
+            Constructor<?> cons = simple.server.core.entity.character.PlayerCharacter.class
                     .getConstructor(RPObject.class);
             RPEntity test = (RPEntity) cons.newInstance(new RPObject());
             test.update();
             assertTrue(test.instanceOf(RPClass.getRPClass(
-                    simple.server.core.entity.character.Character.class
+                    simple.server.core.entity.character.PlayerCharacter.class
                     .newInstance().getRPClassName())));
             boolean pass = false;
             LOG.log(Level.INFO, "Checking abilities:");
@@ -161,7 +161,6 @@ public class D20ExtensionTest extends AbstractSystemTest {
                 RPEntity test = (RPEntity) cons.newInstance(new RPObject());
                 test.update();
                 test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
-                assertTrue(test.instanceOf(RPClass.getRPClass(((Entity) r).getRPClassName())));
                 boolean pass = false;
                 LOG.log(Level.INFO, "Checking abilities:");
                 for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {

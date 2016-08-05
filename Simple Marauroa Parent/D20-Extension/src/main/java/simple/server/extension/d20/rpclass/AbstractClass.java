@@ -10,7 +10,7 @@ import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
-import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.character.PlayerCharacter;
 import simple.server.core.tool.Tool;
 import simple.server.extension.d20.D20Tool;
 import simple.server.extension.d20.ability.D20Ability;
@@ -40,7 +40,7 @@ import simple.server.extension.d20.stat.Hit_Point;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public abstract class AbstractClass extends RPEntity implements D20Class {
+public abstract class AbstractClass extends PlayerCharacter implements D20Class {
 
     public final static String RP_CLASS = "Configurable Class";
     protected int bonusSkillPoints = 0, bonusFeatPoints = 0;
@@ -60,8 +60,7 @@ public abstract class AbstractClass extends RPEntity implements D20Class {
         if (!RPClass.hasRPClass(RP_CLASS)) {
             try {
                 RPClass clazz = new RPClass(RP_CLASS);
-                clazz.isA(simple.server.core.entity.character.Character.class
-                        .newInstance().getRPClassName());
+                clazz.isA(PlayerCharacter.class.newInstance().getRPClassName());
             } catch (InstantiationException | IllegalAccessException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
