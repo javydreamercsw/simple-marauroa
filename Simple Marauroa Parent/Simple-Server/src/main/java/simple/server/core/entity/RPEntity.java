@@ -24,7 +24,6 @@ public class RPEntity extends Entity {
     public static final String ATTR_TITLE = "title";
     private final String MY_CLASS = "rpentity";
     protected static final Statistics STATS = Statistics.getStatistics();
-    private int level;
     /**
      * the logger instance.
      */
@@ -77,17 +76,6 @@ public class RPEntity extends Entity {
     @Override
     public Outfit getOutfit() {
         return has("outfit") ? new Outfit(getInt("outfit")) : null;
-    }
-
-    @Override
-    public void setLevel(int level) {
-        this.level = level;
-        put("level", level);
-    }
-
-    @Override
-    public int getLevel() {
-        return level;
     }
 
     @Override

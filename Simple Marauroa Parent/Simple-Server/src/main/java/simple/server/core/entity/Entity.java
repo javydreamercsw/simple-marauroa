@@ -26,6 +26,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     protected String RPCLASS_NAME = MY_CLASS;
     public static final String NAME = "name", DESC = "description",
             DB_ID = "#db_id", ZONE_ID = "zoneid", ID = "id";
+    private int level;
     /**
      * The logger.
      */
@@ -272,17 +273,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     @Override
-    public int getLevel() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public Outfit getOutfit() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setLevel(int level) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -322,5 +313,16 @@ public class Entity extends RPObject implements RPEntityInterface {
             return false;
         }
         return Objects.equals(this.zone, other.zone);
+    }
+
+    @Override
+    public void setLevel(int level) {
+        this.level = level;
+        put("level", level);
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
     }
 }
