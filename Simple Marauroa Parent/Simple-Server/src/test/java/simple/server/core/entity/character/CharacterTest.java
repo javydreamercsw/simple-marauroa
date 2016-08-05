@@ -22,7 +22,7 @@ public class CharacterTest extends AbstractSystemTest {
         assertTrue(character.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From entity extension
-        assertFalse(character.getRPClass()
+        assertTrue(character.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.ATTRIBUTE,
                         "" + (i++)));//From rootRPClass extension
         assertFalse(character.getRPClass()

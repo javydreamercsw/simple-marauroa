@@ -7,7 +7,9 @@ import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.SyntaxException;
 import marauroa.server.game.Statistics;
+import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import simple.server.extension.MarauroaServerExtension;
 
 /**
  *
@@ -38,13 +40,19 @@ public class RPEntity extends Entity {
                 entity.isA(Entity.class.newInstance().getRPClassName());
                 entity.addAttribute(NAME, Type.STRING);
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
+                for (MarauroaServerExtension ext
+                        : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+                    ext.modifyRootEntityRPClassDefinition(entity);
+                }
             } else if (!RPClass.hasRPClass(getRPClassName())) {
                 RPClass entity = new RPClass(getRPClassName());
                 entity.isA(MY_CLASS);
             }
-        } catch (SyntaxException e) {
+        }
+        catch (SyntaxException e) {
             LOG.log(Level.SEVERE, "Cannot generateRPClass", e);
-        } catch (InstantiationException | IllegalAccessException ex) {
+        }
+        catch (InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
