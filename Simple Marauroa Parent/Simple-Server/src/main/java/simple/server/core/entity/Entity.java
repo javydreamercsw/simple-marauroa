@@ -49,6 +49,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (!RPClass.hasRPClass(MY_CLASS)) {
             RPClass entity = new RPClass(MY_CLASS);
             entity.addAttribute(NAME, Type.LONG_STRING);
+            entity.addAttribute(WellKnownActionConstant.TYPE, Type.STRING);
 
             // Some things may have a textual description
             entity.addAttribute(DESC, Type.LONG_STRING,
