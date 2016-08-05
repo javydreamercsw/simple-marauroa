@@ -9,7 +9,6 @@ import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.entity.Entity;
-import simple.server.core.entity.RPEntity;
 import simple.server.extension.MarauroaServerExtension;
 import simple.server.extension.SimpleServerExtension;
 import simple.server.extension.d20.ability.D20Ability;
@@ -168,7 +167,7 @@ public class D20Extension extends SimpleServerExtension {
                     if (rpo.get(Entity.NAME).equals(((Entity) skill).getRPClassName())) {
                         LOG.log(java.util.logging.Level.FINE,
                                 "Updating {0} from ''{1}'' to ''{2}''",
-                                new Object[]{((RPEntity) skill).get(Entity.NAME),
+                                new Object[]{((Entity) skill).get(Entity.NAME),
                                     rpo.has(Entity.DESC) ? rpo.get(Entity.DESC) : "",
                                     skill.getDescription()});
                         rpo.put(Entity.DESC, skill.getDescription());
