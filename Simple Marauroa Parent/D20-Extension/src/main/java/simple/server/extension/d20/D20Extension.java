@@ -152,7 +152,7 @@ public class D20Extension extends SimpleServerExtension {
                     if (rpo.get(Entity.NAME).equals(((Entity) feat).getRPClassName())) {
                         LOG.log(java.util.logging.Level.FINE,
                                 "Updating {0} from ''{1}'' to ''{2}''",
-                                new Object[]{((RPEntity) feat).get(Entity.NAME),
+                                new Object[]{((Entity) feat).get(Entity.NAME),
                                     rpo.has(Entity.DESC) ? rpo.get(Entity.DESC) : "",
                                     feat.getDescription()});
                         rpo.put(Entity.DESC, feat.getDescription());
@@ -179,30 +179,16 @@ public class D20Extension extends SimpleServerExtension {
     }
 
     @Override
-    public void rootRPClassUpdate(RPObject entity) {
-        if (!entity.has(D20Level.LEVEL)) {
-            entity.put(D20Level.LEVEL, 0);
-        }
+    public void modifyRootRPClassDefinition(RPClass client) {
+        client.addAttribute(D20Level.LEVEL,
+                Definition.Type.INT,
+                Definition.STANDARD);
     }
 
     @Override
-    public void entityRPClassUpdate(RPObject entity) {
-        for (D20Ability a : Lookup.getDefault().lookupAll(D20Ability.class)) {
-            if (!entity.has(a.getCharacteristicName())) {
-                entity.put(a.getCharacteristicName(), a.getDefaultValue());
-            }
-        }
-        for (D20List a : Lookup.getDefault().lookupAll(D20List.class)) {
-            if (!entity.hasSlot(a.getCharacteristicName())) {
-                RPSlot slot = new RPSlot(a.getCharacteristicName());
-                slot.setCapacity(a.getSize());
-                entity.addSlot(slot);
-            }
-        }
-        for (D20Stat a : Lookup.getDefault().lookupAll(D20Stat.class)) {
-            if (!entity.has(a.getCharacteristicName())) {
-                entity.put(a.getCharacteristicName(), a.getDefaultValue());
-            }
+    public void rootRPClassUpdate(RPObject entity) {
+        if (!entity.has(D20Level.LEVEL)) {
+            entity.put(D20Level.LEVEL, 0);
         }
     }
 
