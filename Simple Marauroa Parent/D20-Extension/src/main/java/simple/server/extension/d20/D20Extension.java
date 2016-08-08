@@ -129,7 +129,7 @@ public class D20Extension extends SimpleServerExtension {
         Lookup.getDefault().lookupAll(D20List.class).stream()
                 .forEach((stat) -> {
                     if (!entity.hasSlot(stat.getCharacteristicName())) {
-                        LOG.log(Level.INFO, "Updating slot: {0}",
+                        LOG.log(Level.FINE, "Updating slot: {0}",
                                 stat.getCharacteristicName());
                         RPSlot slot = new RPSlot(stat.getCharacteristicName());
                         slot.setCapacity(stat.getSize());
