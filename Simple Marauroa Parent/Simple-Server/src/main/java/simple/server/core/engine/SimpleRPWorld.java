@@ -536,7 +536,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         super.modify(object);
         synchronized (MONITORS) {
             if (MONITORS.containsKey(Tool.extractName(object))) {
-                for (RPObjectMonitor m : MONITORS.get(Tool.extractName(object))) {
+                Iterator<RPObjectMonitor> iter
+                        = MONITORS.get(Tool.extractName(object)).iterator();
+                while (iter.hasNext()) {
+                    RPObjectMonitor m = iter.next();
                     m.modify(object);
                 }
             }
