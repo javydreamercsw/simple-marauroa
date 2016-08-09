@@ -41,7 +41,7 @@ import simple.server.core.entity.clientobject.ClientObject;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = ClientFrameworkProvider.class, position = 1)
+@ServiceProvider(service = ClientFrameworkProvider.class)
 public class DefaultClient implements ClientFrameworkProvider {
 
     private String port;
@@ -279,7 +279,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                         }
                         LOG.log(Level.FINE, "</World contents ------------------------------------->");
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     LOG.log(Level.SEVERE, null, e);
                 }
             }
@@ -320,7 +321,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                         if (result.getResult().failed()) {
                             LOG.log(Level.WARNING, result.getResult().getText());
                         }
-                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                    }
+                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                     return;
@@ -331,7 +333,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                         && isCreateDefaultCharacter()) {
                     try {
                         chooseCharacter(getCharacter());
-                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                    }
+                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                 }
@@ -376,15 +379,18 @@ public class DefaultClient implements ClientFrameworkProvider {
             setEmail("dummy@dummy.com");
             getClientManager().login(getUsername(), password);
             connected = true;
-        } catch (ConnectException ex) {
+        }
+        catch (ConnectException ex) {
             Lookup.getDefault().lookup(MessageProvider.class).displayWarning(
                     "Unable to connect",
                     "Unable to connect to the server: " + getHost());
             showLoginDialog();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
-        } catch (LoginFailedException e) {
+        }
+        catch (LoginFailedException e) {
             if (e.getReason().equals(Reasons.USERNAME_WRONG) && isAutoCreation()) {
                 try {
                     if (getEmail() == null) {
@@ -422,7 +428,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                                     "Unable to create account: " + result.getResult().getText());
                             break;
                     }
-                } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
+                }
+                catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
                     if (ex instanceof LoginFailedException) {
                         Lookup.getDefault().lookup(MessageProvider.class)
                                 .displayWarning("Login Failed!",
@@ -431,12 +438,14 @@ public class DefaultClient implements ClientFrameworkProvider {
                                         + "your account. Check your provided email.");
                         showLoginDialog();
                     }
-                } catch (InvalidVersionException ex) {
+                }
+                catch (InvalidVersionException ex) {
                     Lookup.getDefault().lookup(MessageProvider.class)
                             .displayError("Invalid version!",
                                     "Invalid version: " + ex.getVersion()
                                     + " vs. protocol version: " + ex.getProtocolVersion());
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                     Logger.getLogger(DefaultClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -444,14 +453,16 @@ public class DefaultClient implements ClientFrameworkProvider {
                         .displayWarning("Login Failed!", e.getLocalizedMessage());
                 showLoginDialog();
             }
-        } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
+        }
+        catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
             System.exit(1);
         }
         while (isConnected()) {
             getClientManager().loop(0);
             try {
                 sleep(100);
-            } catch (InterruptedException e) {
+            }
+            catch (InterruptedException e) {
                 LOG.log(Level.SEVERE, null, e);
                 connected = false;
             }
