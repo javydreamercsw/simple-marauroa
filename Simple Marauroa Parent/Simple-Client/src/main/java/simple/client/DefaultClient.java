@@ -130,9 +130,10 @@ public class DefaultClient implements ClientFrameworkProvider {
                 @Override
                 public void onException(Exception exception,
                         MessageS2CPerception perception) {
-                    Lookup.getDefault().lookupAll(ExceptionListener.class).stream().forEach((listener) -> {
-                        listener.onException(exception, perception);
-                    });
+                    Lookup.getDefault().lookupAll(ExceptionListener.class)
+                            .stream().forEach((listener) -> {
+                                listener.onException(exception, perception);
+                            });
                     LOG.log(Level.SEVERE, getPort(), exception);
                 }
 
