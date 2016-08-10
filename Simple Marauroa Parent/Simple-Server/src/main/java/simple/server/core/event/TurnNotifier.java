@@ -68,7 +68,8 @@ public final class TurnNotifier implements ITurnNotifier {
                             "Processing turn listener: {0}",
                             turnListener.getClass().getName());
                     turnListener.onTurnReached(currentTurn);
-                } catch (RuntimeException e) {
+                }
+                catch (RuntimeException e) {
                     LOG.log(Level.SEVERE, null, e);
                 }
             }
