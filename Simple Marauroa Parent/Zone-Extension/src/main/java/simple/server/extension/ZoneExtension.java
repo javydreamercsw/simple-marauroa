@@ -20,6 +20,7 @@ import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.DelayedAction;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPWorld;
@@ -54,11 +55,11 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             //Send the list to the user
             final ClientObjectInterface player = (ClientObjectInterface) object;
             final RPAction action = new RPAction();
-            action.put("type", ZoneExtension.TYPE);
+            action.put(WellKnownActionConstant.TYPE, ZoneExtension.TYPE);
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
             //Just wait a little bit...
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
+            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                     new DelayedAction(new AbstractAction() {
                         private static final long serialVersionUID = -5644390861803492172L;
 
@@ -249,7 +250,8 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                             separator);
                 }
             }
-            String list = Lookup.getDefault().lookup(IRPWorld.class).listZones(separator).toString();
+            String list = Lookup.getDefault().lookup(IRPWorld.class)
+                    .listZones(separator).toString();
             LOG.log(Level.FINE, "Zone List: {0}", list);
             ZoneEvent zoneEvent = new ZoneEvent(list, option);
             //Add a separator if none defined
