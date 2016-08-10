@@ -1,11 +1,7 @@
 package simple.server.core.engine;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -220,7 +216,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                             = ((ClientObjectInterface) object);
                     if (!players.containsKey(p.getName())) {
                         players.put(p.getName(), p);
-                        welcome(p);
                     }
                     LOG.log(Level.FINE, "Object zone: {0}",
                             ((Attributes) p).get(Entity.ZONE_ID));
@@ -291,49 +286,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             visited = false;
         }
         return p;
-    }
-
-    /**
-     * Send a welcome message to the player which can be configured in
-     * server.ini file as "server_welcome". If the value is an http:// address,
-     * the first line of that address is read and used as the message
-     *
-     * @param player ClientObjectInterface
-     */
-    protected static void welcome(final ClientObjectInterface player) {
-        String msg = "";
-        try {
-            Configuration config = Configuration.getConfiguration();
-            if (config.has("server_welcome")) {
-                msg = config.get("server_welcome");
-                if (msg.startsWith("http://")) {
-                    URL url = new URL(msg);
-                    HttpURLConnection.setFollowRedirects(false);
-                    HttpURLConnection connection
-                            = (HttpURLConnection) url.openConnection();
-                    try (BufferedReader br = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()))) {
-                        msg = br.readLine();
-                    }
-                    connection.disconnect();
-                }
-            }
-        }
-        catch (Exception e) {
-            LOG.log(Level.SEVERE, null, e);
-        }
-        TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
-        if (msg != null && !msg.isEmpty()) {
-            if (notifier != null) {
-                notifier.notifyInTurns(2,
-                        new DelayedPlayerEventSender(new PrivateTextEvent(
-                                NotificationType.TUTORIAL, msg), player));
-            } else {
-                LOG.log(Level.WARNING,
-                        "Unable to send message: ''{0}'' to player: {1}",
-                        new Object[]{msg, player.getName()});
-            }
-        }
     }
 
     /**
