@@ -1,6 +1,10 @@
 package simple.server.core.engine;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +37,7 @@ import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TurnNotifier;
 import simple.server.core.event.api.IRPEvent;
 import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
@@ -377,6 +382,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                                 .add(player);
                     }
                     result = true;
+                    welcome(player);
                     break;
                 }
             }
@@ -387,24 +393,71 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         return result;
     }
 
+    /**
+     * Send a welcome message to the player which can be configured in
+     * server.ini file as "server_welcome". If the value is an http:// address,
+     * the first line of that address is read and used as the message
+     *
+     * @param player ClientObjectInterface
+     */
+    protected static void welcome(final ClientObjectInterface player) {
+        String msg = "";
+        try {
+            Configuration config = Configuration.getConfiguration();
+            if (config.has("server_welcome")) {
+                msg = config.get("server_welcome");
+                if (msg.startsWith("http://")) {
+                    URL url = new URL(msg);
+                    HttpURLConnection.setFollowRedirects(false);
+                    HttpURLConnection connection
+                            = (HttpURLConnection) url.openConnection();
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()))) {
+                        msg = br.readLine();
+                    }
+                    connection.disconnect();
+                }
+            }
+        }
+        catch (Exception e) {
+            LOG.log(Level.SEVERE, null, e);
+        }
+        TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
+        if (msg != null && !msg.isEmpty()) {
+            if (notifier != null) {
+                notifier.notifyInTurns(2,
+                        new DelayedPlayerEventSender(new PrivateTextEvent(
+                                NotificationType.TUTORIAL, msg), player));
+            } else {
+                LOG.log(Level.WARNING,
+                        "Unable to send message: ''{0}'' to player: {1}",
+                        new Object[]{msg, player.getName()});
+            }
+        }
+    }
+
+    @Override
+    public void changeZone(IRPZone.ID newzoneid, RPObject object) {
+        changeZone(newzoneid.getID(), object);
+    }
+
     @Override
     public void changeZone(String newzoneid, RPObject object) {
         LOG.fine("World before changing zone:");
         showWorld();
-        if (object instanceof ClientObjectInterface) {
-            SimpleRPZone zone = getZone(newzoneid);
-            if (zone != null) {
-                //ChangeZone takes care of removing from current zone
-                super.changeZone(zone.getID(), object);
+        SimpleRPZone zone = getZone(newzoneid);
+        if (zone != null) {
+            //ChangeZone takes care of removing from current zone
+            super.changeZone(zone.getID(), object);
+            if (object instanceof ClientObjectInterface) {
                 Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                         new DelayedPlayerEventSender(new PrivateTextEvent(
                                 NotificationType.INFORMATION,
                                 "Changed to zone: " + newzoneid),
                                 (ClientObjectInterface) object));
-            } else {
-                ((ClientObjectInterface) object).sendPrivateText("Zone "
-                        + newzoneid + " doesn't exist!");
             }
+        } else {
+            LOG.log(Level.SEVERE, "Zone {0} doesn''t exist!", newzoneid);
         }
         LOG.fine("World after changing zone:");
         showWorld();
