@@ -51,7 +51,8 @@ public class GenerateINI {
         String ret = "";
         try {
             ret = input.readLine();
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
@@ -74,7 +75,8 @@ public class GenerateINI {
         String ret = "";
         try {
             ret = input.readLine();
-        } catch (final IOException e) {
+        }
+        catch (final IOException e) {
             LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
@@ -241,9 +243,7 @@ public class GenerateINI {
         out.println("server_name=" + gameName + " Marauroa server");
         out.println("server_version=" + version);
         out.println("server_contact=http://sourceforge.net/tracker/?atid=945763&group_id=193525&func=browse");
-        out.println("server_welcome=This release is EXPERIMENTAL.\n "
-                + "Remember to keep your password completely secret, "
-                + "never tell to another friend, player, or admin.");
+        out.println("This release is EXPERIMENTAL.\\n Enjoy your stay!");
         out.println();
         out.println("# Extensions configured on the server. Enable at will.");
         out.println("#server_extension=groovy,http");
