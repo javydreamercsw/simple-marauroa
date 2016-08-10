@@ -116,7 +116,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     java.lang.reflect.Method localSingleton = clientObjectClass
                             .getDeclaredMethod("onRemoved", types);
                     localSingleton.invoke(clientObjectClass.cast(object), this);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
+                }
+                catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                 }
                 //Let everyone else know
@@ -227,9 +228,11 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     applyPublicEvent(new PrivateTextEvent(
                             NotificationType.INFORMATION, p.getName()
                             + " joined " + getName()));
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException | IOException ex) {
+                }
+                catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException | IOException ex) {
                     LOG.log(Level.SEVERE, null, ex);
-                } catch (NoSuchMethodException ex) {
+                }
+                catch (NoSuchMethodException ex) {
                     /**
                      * Method not implemented,fallback
                      */
@@ -248,14 +251,12 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         + " successfully created!");
             }
             super.add(object);
-            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                    .stream().map((extension) -> {
-                        LOG.log(Level.FINE, "Processing extension: {0}",
-                                extension.getClass().getSimpleName());
-                        return extension;
-                    }).forEach((extension) -> {
+            for (MarauroaServerExtension extension
+                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+                LOG.log(Level.FINE, "Processing extension: {0}",
+                        extension.getClass().getSimpleName());
                 extension.onRPObjectAddToZone(object);
-            });
+            }
         }
     }
 
@@ -317,7 +318,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     connection.disconnect();
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.SEVERE, null, e);
         }
         TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
@@ -462,7 +464,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         try {
             result = Tool.encrypt(pass,
                     Configuration.getConfiguration().get("d")).equals(password);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             result = false;
         }
