@@ -83,9 +83,146 @@ public class DefaultClient implements ClientFrameworkProvider {
         chat = aChat;
     }
 
-    public DefaultClient() {
-        if (handler == null) {
-            handler = new PerceptionHandler(new IPerceptionListener() {
+    protected void createClientManager(String name, String gversion) {
+        setGameName(name);
+        setVersion(gversion);
+        setClientManager(new ClientFramework("log4j.properties") {
+            @Override
+            protected String getGameName() {
+                return DefaultClient.this.getGameName();
+            }
+
+            @Override
+            protected String getVersionNumber() {
+                return getVersion();
+            }
+
+            @Override
+            protected void onPerception(MessageS2CPerception message) {
+                try {
+                    LOG.log(Level.FINE, "Received perception {0}",
+                            message.getPerceptionTimestamp());
+                    getPerceptionHandler().apply(message,
+                            Lookup.getDefault().lookup(IWorldManager.class).getWorld());
+                    int i = message.getPerceptionTimestamp();
+                    if (isChat()) {
+                        RPAction action = new RPAction();
+                        if (i % 50 == 0) {
+                            action.put("type", "chat");
+                            action.put("text", "Hi!");
+                            send(action);
+                        } else if (i % 50 == 20) {
+                            action.put("type", "chat");
+                            action.put("text", "How are you?");
+                            send(action);
+                        }
+                    }
+                    if (isShowWorld()) {
+                        LOG.log(Level.FINE, "<World contents ------------------------------------->");
+                        int j = 0;
+                        for (RPObject object
+                                : Lookup.getDefault().lookup(IWorldManager.class)
+                                .getWorld().values()) {
+                            j++;
+                            LOG.log(Level.FINE, "{0}. {1}",
+                                    new Object[]{j, object});
+                        }
+                        LOG.log(Level.FINE, "</World contents ------------------------------------->");
+                    }
+                }
+                catch (Exception e) {
+                    LOG.log(Level.SEVERE, null, e);
+                }
+            }
+
+            @Override
+            protected List<TransferContent> onTransferREQ(List<TransferContent> items) {
+                items.stream().forEach((item) -> {
+                    item.ack = true;
+                });
+                return items;
+            }
+
+            @Override
+            protected void onTransfer(List<TransferContent> items) {
+                LOG.log(Level.FINE, "Transfering ----");
+                items.stream().forEach((item) -> {
+                    LOG.log(Level.FINE, item.toString());
+                });
+            }
+
+            @Override
+            protected void onAvailableCharacters(String[] characters) {
+                //See onAvailableCharacterDetails
+            }
+
+            @Override
+            protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
+                Lookup.getDefault().lookup(ClientFrameworkProvider.class)
+                        .getCharacters().clear();
+                Lookup.getDefault().lookup(ClientFrameworkProvider.class)
+                        .getCharacters().putAll(characters);
+                // If there are no characters, create one with the specified name automatically
+                if (characters.isEmpty() && isCreateDefaultCharacter()) {
+                    LOG.log(Level.WARNING,
+                            "The requested character is not available, trying "
+                            + "to create character {0}", getCharacter());
+                    final ClientObject template = new ClientObject();
+                    try {
+                        final CharacterResult result = createCharacter(getCharacter(),
+                                template);
+                        if (result.getResult().failed()) {
+                            LOG.log(Level.WARNING, result.getResult().getText());
+                        }
+                    }
+                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                        LOG.log(Level.SEVERE, null, e);
+                    }
+                    return;
+                }
+                // Autologin if a valid character was specified.
+                if ((getCharacter() != null)
+                        && (characters.keySet().contains(getCharacter()))
+                        && isCreateDefaultCharacter()) {
+                    try {
+                        chooseCharacter(getCharacter());
+                    }
+                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                        LOG.log(Level.SEVERE, null, e);
+                    }
+                }
+            }
+
+            @Override
+            protected void onServerInfo(String[] info) {
+                LOG.log(Level.FINE, "Server info");
+                for (String info_string : info) {
+                    LOG.log(Level.FINE, info_string);
+                }
+            }
+
+            @Override
+            protected void onPreviousLogins(List<String> previousLogins) {
+                LOG.log(Level.FINE, "Previous logins");
+                previousLogins.stream().forEach((info_string) -> {
+                    LOG.log(Level.FINE, info_string);
+                });
+            }
+        });
+    }
+
+    private void showLoginDialog() {
+        LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+        if (lp != null) {
+            lp.displayLoginDialog();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("empty-statement")
+    public void run() {
+        if (getPerceptionHandler() == null) {
+            setPerceptionHandler(new PerceptionHandler(new IPerceptionListener() {
                 @Override
                 public boolean onAdded(RPObject object) {
                     boolean result = false;
@@ -226,149 +363,12 @@ public class DefaultClient implements ClientFrameworkProvider {
                                 listener.onUnsynced();
                             });
                 }
-            });
+            }));
         }
-        if (clientManager == null) {
+        if (getClientManager() == null) {
             createClientManager(gameName != null ? gameName : "jWrestling",
                     version != null ? version : "1.0");
         }
-    }
-
-    protected void createClientManager(String name, String gversion) {
-        setGameName(name);
-        setVersion(gversion);
-        setClientManager(new ClientFramework("log4j.properties") {
-            @Override
-            protected String getGameName() {
-                return DefaultClient.this.getGameName();
-            }
-
-            @Override
-            protected String getVersionNumber() {
-                return getVersion();
-            }
-
-            @Override
-            protected void onPerception(MessageS2CPerception message) {
-                try {
-                    LOG.log(Level.FINE, "Received perception {0}",
-                            message.getPerceptionTimestamp());
-                    getPerceptionHandler().apply(message,
-                            Lookup.getDefault().lookup(IWorldManager.class).getWorld());
-                    int i = message.getPerceptionTimestamp();
-                    if (isChat()) {
-                        RPAction action = new RPAction();
-                        if (i % 50 == 0) {
-                            action.put("type", "chat");
-                            action.put("text", "Hi!");
-                            send(action);
-                        } else if (i % 50 == 20) {
-                            action.put("type", "chat");
-                            action.put("text", "How are you?");
-                            send(action);
-                        }
-                    }
-                    if (isShowWorld()) {
-                        LOG.log(Level.FINE, "<World contents ------------------------------------->");
-                        int j = 0;
-                        for (RPObject object
-                                : Lookup.getDefault().lookup(IWorldManager.class)
-                                .getWorld().values()) {
-                            j++;
-                            LOG.log(Level.FINE, "{0}. {1}",
-                                    new Object[]{j, object});
-                        }
-                        LOG.log(Level.FINE, "</World contents ------------------------------------->");
-                    }
-                }
-                catch (Exception e) {
-                    LOG.log(Level.SEVERE, null, e);
-                }
-            }
-
-            @Override
-            protected List<TransferContent> onTransferREQ(List<TransferContent> items) {
-                items.stream().forEach((item) -> {
-                    item.ack = true;
-                });
-                return items;
-            }
-
-            @Override
-            protected void onTransfer(List<TransferContent> items) {
-                LOG.log(Level.FINE, "Transfering ----");
-                items.stream().forEach((item) -> {
-                    LOG.log(Level.FINE, item.toString());
-                });
-            }
-
-            @Override
-            protected void onAvailableCharacters(String[] characters) {
-                //See onAvailableCharacterDetails
-            }
-
-            @Override
-            protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
-                DefaultClient.this.characters = characters;
-                // If there are no characters, create one with the specified name automatically
-                if (characters.isEmpty() && isCreateDefaultCharacter()) {
-                    LOG.log(Level.WARNING,
-                            "The requested character is not available, trying "
-                            + "to create character {0}", getCharacter());
-                    final ClientObject template = new ClientObject();
-                    try {
-                        final CharacterResult result = createCharacter(getCharacter(),
-                                template);
-                        if (result.getResult().failed()) {
-                            LOG.log(Level.WARNING, result.getResult().getText());
-                        }
-                    }
-                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    }
-                    return;
-                }
-                // Autologin if a valid character was specified.
-                if ((getCharacter() != null)
-                        && (characters.keySet().contains(getCharacter()))
-                        && isCreateDefaultCharacter()) {
-                    try {
-                        chooseCharacter(getCharacter());
-                    }
-                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    }
-                }
-            }
-
-            @Override
-            protected void onServerInfo(String[] info) {
-                LOG.log(Level.FINE, "Server info");
-                for (String info_string : info) {
-                    LOG.log(Level.FINE, info_string);
-                }
-            }
-
-            @Override
-            protected void onPreviousLogins(List<String> previousLogins) {
-                LOG.log(Level.FINE, "Previous logins");
-                previousLogins.stream().forEach((info_string) -> {
-                    LOG.log(Level.FINE, info_string);
-                });
-            }
-        });
-    }
-
-    private void showLoginDialog() {
-        LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
-        if (lp != null) {
-            lp.displayLoginDialog();
-        }
-    }
-
-    @Override
-    @SuppressWarnings("empty-statement")
-    public void run() {
         try {
             if (!Lookup.getDefault().lookup(LoginProvider.class).isAuthenticated()) {
                 showLoginDialog();
@@ -486,7 +486,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     }
 
     @Override
-    public marauroa.client.ClientFramework getClientManager() {
+    public final marauroa.client.ClientFramework getClientManager() {
         return clientManager;
     }
 
@@ -499,7 +499,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     }
 
     @Override
-    public PerceptionHandler getPerceptionHandler() {
+    public final PerceptionHandler getPerceptionHandler() {
         return handler;
     }
 
@@ -521,7 +521,7 @@ public class DefaultClient implements ClientFrameworkProvider {
     }
 
     @Override
-    public void setPerceptionHandler(PerceptionHandler handler) {
+    public final void setPerceptionHandler(PerceptionHandler handler) {
         this.handler = handler;
     }
 
