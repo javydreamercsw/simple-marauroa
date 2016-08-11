@@ -54,7 +54,7 @@ public class ZoneEvent extends SimpleRPEvent {
     }
 
     /**
-     * Creates a new room event.
+     * Creates a new zone event.
      *
      * @param a action containing all the info so it can be resent from client
      * with the password
@@ -69,7 +69,7 @@ public class ZoneEvent extends SimpleRPEvent {
     }
 
     /**
-     * Creates a new room event.
+     * Creates a new zone event.
      *
      * @param zone room added/deleted from server
      * @param action either add or remove
@@ -86,7 +86,7 @@ public class ZoneEvent extends SimpleRPEvent {
     }
 
     /**
-     * Creates a new room event.
+     * Creates a new zone event.
      *
      * @param s string to be sent
      * @param action either add or remove
