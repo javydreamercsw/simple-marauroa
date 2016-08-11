@@ -1,7 +1,14 @@
 package simple.test;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.IRPZone;
@@ -36,6 +43,7 @@ public abstract class AbstractSystemTest {
         try {
             if (!DB.isInitialized()) {
                 LOG.log(Level.INFO, "Initializing test database environment...");
+                checkINIFile();
                 DB.initialize();
             }
             WORLD.onInit();
@@ -43,6 +51,51 @@ public abstract class AbstractSystemTest {
         catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
+        }
+    }
+
+    private static void checkINIFile() {
+        File ini = new File("server.ini");
+        if (!ini.exists()) {
+            try {
+                LOG.warning("INI file not found, generating default for "
+                        + "testing purposes!");
+                ini.deleteOnExit();
+                List<String> lines = Arrays.asList(
+                        "database_implementation=simple.server.application.db.SimpleDatabase",
+                        "factory_implementation=simple.server.core.engine.SimpleRPObjectFactory",
+                        "world=simple.server.core.engine.SimpleRPWorld",
+                        "ruleprocessor=simple.server.core.engine.SimpleRPRuleProcessor",
+                        "client_object=simple.server.core.entity.clientobject.ClientObject",
+                        "log4j_url=simple/server/log4j.properties",
+                        "jdbc_url=jdbc\\:h2\\:~/simple;CREATE=TRUE;AUTO_SERVER=TRUE;LOCK_TIMEOUT=10000;MVCC=true;DB_CLOSE_ON_EXIT=FALSE",
+                        "jdbc_class=org.h2.Driver", "database_adapter=marauroa.server.db.adapter.H2DatabaseAdapter",
+                        "jdbc_user=simple_user",
+                        "jdbc_pwd=password",
+                        "tcp_port=32180",
+                        "turn_length=100",
+                        "server_typeGame=Simple",
+                        "server_name=Simple",
+                        "server_version = 0.02.07",
+                        "statistics_filename=./simple.server_stats.xml",
+                        "system_account_name=System",
+                        "system_password=system",
+                        "system_email=email@email.com",
+                        "n = 24083767696329668268912537536174127468626867947407"
+                        + "231757744234300439278504980856392206847956297"
+                        + "47326949838501777926669337171495421818563824"
+                        + "539329224927899179237",
+                        "e = 15",
+                        "d = 2247818318324102371765170170042918563738507675091"
+                        + "3416307227952013743326604648798383322370040"
+                        + "7625284965452796321477265264173527901632535"
+                        + "4691167883850414929419335");
+                Path file = Paths.get(ini.getAbsolutePath());
+                Files.write(file, lines, Charset.forName("UTF-8"));
+            }
+            catch (IOException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
         }
     }
 
