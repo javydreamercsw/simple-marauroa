@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPClass;
@@ -56,6 +57,10 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
         this.listeners = new HashMap<>();
         try {
             //Create account
+            if (getName() == null || getName().trim().isEmpty()) {
+                //Assign a random name
+                setName(UUID.randomUUID().toString());
+            }
             DAORegister.get().get(AccountDAO.class).addPlayer(getName(),
                     "password".getBytes("UTF-8"), "dummy@email.com");
             //Add it to the world so it has an ID
