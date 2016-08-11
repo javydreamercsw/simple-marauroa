@@ -16,10 +16,27 @@ import simple.server.core.entity.RPEntityInterface;
  */
 public interface ISimpleRPZone extends IRPZone {
 
+    /**
+     * Add object to the zone.
+     *
+     * @param object object to add
+     * @param player player adding the object
+     */
     void add(final RPObject object, final ClientObjectInterface player);
 
+    /**
+     * Apply a public event to the zone.
+     *
+     * @param event event to apply
+     */
     void applyPublicEvent(RPEvent event);
 
+    /**
+     * Apply a public event to the zone with a delay.
+     *
+     * @param event event to apply
+     * @param delay delay in turns
+     */
     void applyPublicEvent(final RPEvent event, final int delay);
 
     /**
@@ -95,10 +112,16 @@ public interface ISimpleRPZone extends IRPZone {
     boolean isEmpty();
 
     /**
-     * @return the locked
+     * @return if zone is locked
      */
     boolean isLocked();
 
+    /**
+     * Check if the password is the right one.
+     *
+     * @param pass password to check
+     * @return true if correct, false otherwise
+     */
     boolean isPassword(final String pass);
 
     /**
@@ -119,9 +142,28 @@ public interface ISimpleRPZone extends IRPZone {
      */
     void setDescription(String description);
 
+    /**
+     * Set password for the zone.
+     *
+     * @param pass password to set
+     * @throws IOException
+     */
     void setPassword(final String pass) throws IOException;
 
+    /**
+     * Output the contents of the zone.
+     */
     void showZone();
 
+    /**
+     * Unlock zone.
+     */
     void unlock();
+
+    /**
+     * Get a list of both players and non-players currently on the zone.
+     *
+     * @return list of both players and non-players currently on the zone
+     */
+    Collection<RPObject> getZoneContents();
 }

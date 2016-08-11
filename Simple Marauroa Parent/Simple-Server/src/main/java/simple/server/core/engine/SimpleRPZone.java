@@ -34,8 +34,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     private static final Logger LOG
             = Logger.getLogger(SimpleRPZone.class.getSimpleName());
     private final List<TransferContent> contents;
-    private final HashMap<String, ClientObjectInterface> players;
-    public final HashMap<String, RPEntityInterface> npcs;
+    private final Map<String, RPObject> players;
     private String description = "";
     private boolean deleteWhenEmpty = false;
     private boolean visited = false;
@@ -45,7 +44,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         super(name);
         contents = new LinkedList<>();
         players = new HashMap<>();
-        npcs = new HashMap<>();
     }
 
     //Stuff to do at the end of a turn
@@ -122,7 +120,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         + " left " + getName()));
             } else if (object instanceof Entity) {
                 ((RPEntityInterface) object).onRemoved(this);
-                npcs.remove(Tool.extractName(object));
+                players.remove(Tool.extractName(object));
                 super.remove(object.getID());
             }
             Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
@@ -157,7 +155,13 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      */
     @Override
     public Collection<ClientObjectInterface> getPlayers() {
-        return players.values();
+        List<ClientObjectInterface> result = new ArrayList<>();
+        for (RPObject o : players.values()) {
+            if (o instanceof ClientObjectInterface) {
+                result.add((ClientObjectInterface) o);
+            }
+        }
+        return result;
     }
 
     /**
@@ -181,12 +185,22 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public ClientObjectInterface getPlayer(final String name) {
-        return players.get(name);
+        RPObject result = players.get(name);
+        if (result instanceof ClientObjectInterface) {
+            return (ClientObjectInterface) players.get(name);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public RPEntityInterface getNPC(String name) {
-        return npcs.get(name);
+        RPObject result = players.get(name);
+        if (result instanceof RPEntityInterface) {
+            return (RPEntityInterface) players.get(name);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -215,7 +229,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     final ClientObjectInterface p
                             = ((ClientObjectInterface) object);
                     if (!players.containsKey(p.getName())) {
-                        players.put(p.getName(), p);
+                        players.put(p.getName(), (RPObject) p);
                     }
                     LOG.log(Level.FINE, "Object zone: {0}",
                             ((Attributes) p).get(Entity.ZONE_ID));
@@ -236,7 +250,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             } else if (object instanceof RPEntityInterface) {
                 LOG.fine("Processing RPEntityInterface");
                 ((RPEntityInterface) object).onAdded(this);
-                npcs.put(Tool.extractName(object), (RPEntityInterface) object);
+                players.put(Tool.extractName(object), object);
             }
             //Request sync previous to any modification
             Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
@@ -429,6 +443,17 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      */
     @Override
     public Collection<RPEntityInterface> getNPCS() {
-        return npcs.values();
+        List<RPEntityInterface> result = new ArrayList<>();
+        for (RPObject o : players.values()) {
+            if (o instanceof RPEntityInterface) {
+                result.add((RPEntityInterface) o);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Collection<RPObject> getZoneContents() {
+        return players.values();
     }
 }
