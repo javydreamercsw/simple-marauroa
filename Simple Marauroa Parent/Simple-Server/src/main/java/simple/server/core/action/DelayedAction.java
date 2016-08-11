@@ -13,8 +13,8 @@ import simple.server.core.event.TurnListener;
 public class DelayedAction implements TurnListener {
 
     private Action action;
-    private static final Logger logger =
-            Logger.getLogger(DelayedAction.class.getSimpleName());
+    private static final Logger LOG
+            = Logger.getLogger(DelayedAction.class.getSimpleName());
 
     public DelayedAction(Action action) {
         this.action = action;
@@ -22,9 +22,9 @@ public class DelayedAction implements TurnListener {
 
     @Override
     public void onTurnReached(int currentTurn) {
-        if(action !=null){
+        if (action != null) {
             //Perform the action
-            logger.log(Level.FINE, "Executing action");
+            LOG.log(Level.FINE, "Executing action");
             action.actionPerformed(null);
         }
     }
