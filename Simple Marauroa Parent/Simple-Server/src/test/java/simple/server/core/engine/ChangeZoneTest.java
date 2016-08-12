@@ -3,15 +3,15 @@ package simple.server.core.engine;
 import marauroa.common.game.IRPZone.ID;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import simple.SimpleServerT;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.mock.MockSimpleRPWorld;
+import simple.test.AbstractSystemTest;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class ChangeZoneTest extends SimpleServerT {
+public class ChangeZoneTest extends AbstractSystemTest {
 
     private static ClientObject player1;
 
