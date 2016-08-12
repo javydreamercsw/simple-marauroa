@@ -445,7 +445,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     public Collection<RPEntityInterface> getNPCS() {
         List<RPEntityInterface> result = new ArrayList<>();
         for (RPObject o : players.values()) {
-            if (o instanceof RPEntityInterface) {
+            if ((o instanceof RPEntityInterface)
+                    && !(o instanceof ClientObjectInterface)) {
                 result.add((RPEntityInterface) o);
             }
         }
