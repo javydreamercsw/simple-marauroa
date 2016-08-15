@@ -1,10 +1,8 @@
 package simple.server;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,7 +30,8 @@ public class SimpleServer {
             conf.load(in);
             LOG.log(Level.INFO, "Loaded local properties from: {0}",
                     config.getName());
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             LOG.log(Level.SEVERE, "Error reading properties from disk!",
                     ex);
         }
