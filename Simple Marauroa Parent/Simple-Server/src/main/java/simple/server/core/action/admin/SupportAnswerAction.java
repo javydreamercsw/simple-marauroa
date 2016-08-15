@@ -1,12 +1,12 @@
 package simple.server.core.action.admin;
 
-import simple.server.core.action.ActionProvider;
 import marauroa.common.game.RPAction;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;

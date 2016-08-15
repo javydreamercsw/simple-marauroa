@@ -28,6 +28,10 @@ public abstract class SimpleRPEvent extends RPEvent implements IRPEvent {
 
     public SimpleRPEvent(RPEvent event) {
         fill(event);
+        update();
+    }
+
+    public void update() {
         //Add the event id if not already there
         if (!has(EVENT_ID)) {
             put(EVENT_ID, UUID.randomUUID().toString());
