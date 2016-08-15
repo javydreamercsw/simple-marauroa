@@ -7,13 +7,12 @@ import marauroa.common.game.RPObject;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public interface IRPEvent extends IAttribute{
+public interface IRPEvent extends IAttribute {
 
     /**
      * Copy constructor
      *
-     * @param event
-     *            the object that is going to be copied.
+     * @param event the object that is going to be copied.
      */
     public void fill(RPEvent event);
 
@@ -30,9 +29,10 @@ public interface IRPEvent extends IAttribute{
      * @return name of the event
      */
     public String getName();
-    
+
     /**
      * Get RPClass name
+     *
      * @return RPClass name
      */
     public String getRPClassName();
