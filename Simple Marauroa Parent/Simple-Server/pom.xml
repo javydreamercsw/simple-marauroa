@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <goals>
@@ -52,9 +52,9 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa</artifactId>
-            <version>${marauroa.version}</version>
+            <version>3.9.3-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>
