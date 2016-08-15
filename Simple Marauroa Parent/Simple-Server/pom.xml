@@ -54,7 +54,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa</artifactId>
-            <version>3.9.3-SNAPSHOT</version>
+            <version>${marauroa.version}</version>
         </dependency>
     </dependencies>
     <properties>
