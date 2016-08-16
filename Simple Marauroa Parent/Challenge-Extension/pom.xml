@@ -8,7 +8,6 @@
     </parent>
 
     <artifactId>Challenge-Extension</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
     <name>Challenge Extension</name>
 
     <dependencies>
@@ -21,7 +20,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Marauroa</artifactId>
-            <version>3.9.3-JW</version>
+            <version>${marauroa.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>jnlp</artifactId>
@@ -32,7 +31,7 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Client</artifactId>
-            <version>0.02.07-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>
