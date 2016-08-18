@@ -1,5 +1,7 @@
 package simple.server.extension.d20.skill;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.ability.D20Ability;
@@ -143,5 +147,21 @@ public abstract class AbstractSkill extends RPEntity implements D20Skill {
     @Override
     public Map<Class<? extends D20Characteristic>, Integer> getOpponentRequirements() {
         return opponentRequirements;
+    }
+
+    public static D20Skill extract(RPObject obj) {
+        D20Skill result = null;
+        for (D20Skill m : Lookup.getDefault().lookupAll(D20Skill.class)) {
+            if (m.getCharacteristicName().equals(obj.get(Entity.NAME))) {
+                try {
+                    Constructor c = m.getClass().getConstructor(RPObject.class);
+                    result = (D20Skill) c.newInstance(obj);
+                    break;
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    LOG.log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return result;
     }
 }
