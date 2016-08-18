@@ -106,10 +106,12 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
 
     @Override
     public void modify(RPObject obj) {
-        for (RPEvent event : obj.events()) {
-            if (listeners.containsKey(event.getName())) {
-                for (RPEventListener l : listeners.get(event.getName())) {
-                    l.onRPEvent(event);
+        synchronized (listeners) {
+            for (RPEvent event : obj.events()) {
+                if (listeners.containsKey(event.getName())) {
+                    for (RPEventListener l : listeners.get(event.getName())) {
+                        l.onRPEvent(event);
+                    }
                 }
             }
         }
