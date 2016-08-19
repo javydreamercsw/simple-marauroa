@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
+import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.Configuration;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
@@ -60,7 +63,7 @@ class SimpleServerCLI extends Thread {
             String temp;//Used to hold temporary values
             switch (token) {
                 case "help":
-                    LOG.info("Valid commands include: create, delete, quit, show.");
+                    LOG.info("Valid commands include: create, delete, quit, show, info.");
                     break;
                 case "quit":
                     LOG.info("Are you sure you want to quit? (Y/N)");
@@ -218,6 +221,27 @@ class SimpleServerCLI extends Thread {
                                 + "action\n"
                                 + "event\n"
                                 + "zone\n");
+                    }
+                    break;
+                case "info":
+                    //Display server information
+                    try {
+                        Configuration conf = Configuration.getConfiguration();
+                        Properties p = conf.getAsProperties();
+                        for (Entry<Object, Object> entry : p.entrySet()) {
+                            //Make sure not to disclose security info.
+                            if (!entry.getKey().equals("e")
+                                    && !entry.getKey().equals("d")
+                                    && !entry.getKey().equals("n")
+                                    && !entry.getKey().toString().startsWith("jdbc")
+                                    && !entry.getKey().toString().contains("password")) {
+                                LOG.log(Level.INFO, "{0}: {1}",
+                                        new Object[]{entry.getKey(), entry.getValue()});
+                            }
+                        }
+                    }
+                    catch (IOException ex) {
+                        LOG.log(Level.SEVERE, null, ex);
                     }
                     break;
                 default:
