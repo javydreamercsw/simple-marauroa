@@ -370,7 +370,8 @@ public class DefaultClient implements ClientFrameworkProvider {
                     version != null ? version : "1.0");
         }
         try {
-            if (!Lookup.getDefault().lookup(LoginProvider.class).isAuthenticated()) {
+            LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
+            if (lp != null && !lp.isAuthenticated()) {
                 showLoginDialog();
             }
             getClientManager().connect(getHost(), Integer.parseInt(getPort()));
@@ -382,9 +383,18 @@ public class DefaultClient implements ClientFrameworkProvider {
             connected = true;
         }
         catch (ConnectException ex) {
-            Lookup.getDefault().lookup(MessageProvider.class).displayWarning(
-                    "Unable to connect",
-                    "Unable to connect to the server: " + getHost());
+            LOG.log(Level.WARNING, host, ex);
+            MessageProvider mp = Lookup.getDefault().lookup(MessageProvider.class);
+            if (mp != null) {
+                mp.displayWarning(
+                        "Unable to connect",
+                        "Unable to connect to the server: " + getHost()
+                        + "\n" + ex.getLocalizedMessage());
+            } else {
+                LOG.log(Level.WARNING,
+                        "Unable to connect to the server: {0}\n{1}",
+                        new Object[]{getHost(), ex.getLocalizedMessage()});
+            }
             showLoginDialog();
         }
         catch (IOException ex) {
