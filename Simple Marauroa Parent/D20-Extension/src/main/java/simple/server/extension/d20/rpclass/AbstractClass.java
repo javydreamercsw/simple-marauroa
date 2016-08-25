@@ -210,13 +210,15 @@ public abstract class AbstractClass extends PlayerCharacter implements D20Class 
         }
         sb.append("Stats----------------------------------------").append("\n");
         for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
-            sb.append(stat.getShortName()).append(": ");
-            if (stat.getDefinitionType() == Definition.Type.INT) {
-                sb.append(getInt(stat.getCharacteristicName()));
-            } else {
-                sb.append(get(stat.getCharacteristicName()));
+            if (has(stat.getCharacteristicName())) {
+                sb.append(stat.getShortName()).append(": ");
+                if (stat.getDefinitionType() == Definition.Type.INT) {
+                    sb.append(getInt(stat.getCharacteristicName()));
+                } else {
+                    sb.append(get(stat.getCharacteristicName()));
+                }
+                sb.append("\n");
             }
-            sb.append("\n");
         }
         if (hasSlot(FeatList.FEAT) && getSlot(FeatList.FEAT).size() > 0) {
             sb.append("Feats----------------------------------------").append("\n");
