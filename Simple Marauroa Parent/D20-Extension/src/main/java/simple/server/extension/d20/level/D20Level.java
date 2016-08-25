@@ -7,7 +7,7 @@ package simple.server.extension.d20.level;
  */
 public interface D20Level {
 
-    String LEVEL = "level";
+    String LEVEL = "Level";
     String MAX = "max";
 
     /**
