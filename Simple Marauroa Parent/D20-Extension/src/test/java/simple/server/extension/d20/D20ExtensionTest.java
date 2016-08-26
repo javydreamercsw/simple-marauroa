@@ -18,6 +18,7 @@ import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.item.Item;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.item.D20ItemAttribute;
+import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.list.D20List;
 import simple.server.extension.d20.misc.D20Misc;
 import simple.server.extension.d20.rpclass.D20Class;
@@ -78,7 +79,7 @@ public class D20ExtensionTest extends AbstractSystemTest {
             test.update();
             assertTrue(test.instanceOf(RPClass.getRPClass(
                     simple.server.core.entity.character.PlayerCharacter.class
-                    .newInstance().getRPClassName())));
+                            .newInstance().getRPClassName())));
             boolean pass = false;
             LOG.log(Level.INFO, "Checking abilities:");
             for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
@@ -134,9 +135,11 @@ public class D20ExtensionTest extends AbstractSystemTest {
                 pass = true;
             }
             assertTrue(pass);
-        } catch (InstantiationException | IllegalAccessException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
+            assertTrue(test.has(D20Level.LEVEL));
+            assertEquals(0, test.getInt(D20Level.LEVEL));
+            assertTrue(test.has(D20Level.MAX));
+            assertEquals(0, test.getInt(D20Level.MAX));
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }

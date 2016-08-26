@@ -18,6 +18,7 @@ import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.ability.D20Ability;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
+import simple.server.extension.d20.level.AbstractLevelEntity;
 import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.rpclass.D20Class;
 import static simple.server.extension.d20.skill.D20Skill.MODS;
@@ -26,7 +27,7 @@ import static simple.server.extension.d20.skill.D20Skill.MODS;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public abstract class AbstractSkill extends RPEntity implements D20Skill {
+public abstract class AbstractSkill extends AbstractLevelEntity implements D20Skill {
 
     private final List<Class<? extends D20Class>> exclusiveClasses
             = new ArrayList<>();
