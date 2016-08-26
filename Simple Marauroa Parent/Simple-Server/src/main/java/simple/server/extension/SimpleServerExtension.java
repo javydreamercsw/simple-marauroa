@@ -117,7 +117,7 @@ public abstract class SimpleServerExtension implements MarauroaServerExtension,
     }
 
     @Override
-    public void characterRPClassUpdate(RPObject entity) {
+    public void characterRPClassUpdate(RPObject character) {
         //Do nothing by default
     }
 }
