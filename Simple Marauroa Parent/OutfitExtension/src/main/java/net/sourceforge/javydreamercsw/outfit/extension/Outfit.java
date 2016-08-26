@@ -1,5 +1,5 @@
 
-package simple.server.core.entity;
+package net.sourceforge.javydreamercsw.outfit.extension;
 
 /**
  * A data structure that represents the outfit of an RPEntity. This RPEntity can

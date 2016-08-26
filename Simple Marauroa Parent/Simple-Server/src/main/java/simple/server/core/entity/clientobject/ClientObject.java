@@ -27,7 +27,6 @@ import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.ExtensibleRPClass;
-import simple.server.core.entity.Outfit;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.PrivateTextEvent;
@@ -111,7 +110,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             LOG.log(Level.FINE, "Processing extension to update client object "
                     + "class definition: {0}", extension.getClass()
-                    .getSimpleName());
+                            .getSimpleName());
             try {
                 extension.clientObjectUpdate(this);
             }
@@ -637,43 +636,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     @Override
     public void setAdminLevel(int adminLevel) {
         this.adminLevel = adminLevel;
-    }
-
-    public void setOutfit(Outfit outfit) {
-        setOutfit(outfit, false);
-    }
-
-    /**
-     * Makes this player wear the given outfit. If the given outfit contains
-     * null parts, the current outfit will be kept for these parts.
-     *
-     * @param outfit The new outfit.
-     * @param temporary If true, the original outfit will be stored so that it
-     * can be restored later.
-     */
-    @Override
-    public void setOutfit(Outfit outfit, boolean temporary) {
-        // if the new outfit is temporary and the player is not wearing
-        // a temporary outfit already, store the current outfit in a
-        // second slot so that we can return to it later.
-        if (temporary && !has("outfit_org")) {
-            put("outfit_org", get("outfit"));
-        }
-
-        // if the new outfit is not temporary, remove the backup
-        if (!temporary && has("outfit_org")) {
-            remove("outfit_org");
-        }
-
-        // combine the old outfit with the new one, as the new one might
-        // contain null parts.
-        Outfit newOutfit = outfit.putOver(getOutfit());
-        put("outfit", newOutfit.getCode());
-        notifyWorldAboutChanges();
-    }
-
-    public Outfit getOriginalOutfit() {
-        return has("outfit_org") ? new Outfit(getInt("outfit_org")) : null;
     }
 
     /**

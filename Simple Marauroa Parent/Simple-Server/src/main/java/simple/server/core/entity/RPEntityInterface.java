@@ -9,34 +9,27 @@ import simple.server.core.engine.SimpleRPZone;
  */
 public interface RPEntityInterface extends Constants {
 
-    int getLevel();
-
-    /**
-     * Gets this RPEntity's outfit.
-     *
-     * Note: some RPEntities (e.g. sheep, many NPC's, all monsters) don't use
-     * the outfit system.
-     *
-     * @return The outfit, or null if this RPEntity is represented as a single
-     * sprite rather than an outfit combination.
-     */
-    Outfit getOutfit();
-
-    void setLevel(int level);
-
-    void setOutfit(Outfit o, boolean defaultValue);
-
     /**
      * Called when this object is added to a zone.
      *
-     * @param zone
-     *            The zone this was added to.
+     * @param zone The zone this was added to.
      */
     public void onAdded(SimpleRPZone zone);
 
+    /**
+     * Get current zone;
+     *
+     * @return current zone
+     */
     public SimpleRPZone getZone();
 
+    /**
+     * Action(s) to take when removed from a zone.
+     *
+     * @param zone
+     */
     public void onRemoved(SimpleRPZone zone);
+
     /**
      * Generate this RPClass
      */

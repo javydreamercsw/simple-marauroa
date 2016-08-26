@@ -63,23 +63,4 @@ public class RPEntity extends Entity {
     public RPEntity() {
         RPCLASS_NAME = "rpentity";
     }
-
-    /**
-     * Gets this RPEntity's outfit.
-     *
-     * Note: some RPEntities (e.g. sheep, many NPC's, all monsters) don't use
-     * the outfit system.
-     *
-     * @return The outfit, or null if this RPEntity is represented as a single
-     * sprite rather than an outfit combination.
-     */
-    @Override
-    public Outfit getOutfit() {
-        return has("outfit") ? new Outfit(getInt("outfit")) : null;
-    }
-
-    @Override
-    public void setOutfit(Outfit o, boolean defaultValue) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 }
