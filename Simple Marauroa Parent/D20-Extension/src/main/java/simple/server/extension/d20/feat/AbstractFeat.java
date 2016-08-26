@@ -12,6 +12,7 @@ import simple.server.core.entity.Entity;
 import simple.server.extension.d20.D20Characteristic;
 import simple.server.extension.d20.dice.DiceParser;
 import simple.server.extension.d20.dice.DieRoll;
+import simple.server.extension.d20.level.AbstractLevelEntity;
 import simple.server.extension.d20.level.D20Level;
 import simple.server.extension.d20.rpclass.D20Class;
 import simple.server.extension.d20.weapon.D20Weapon;
@@ -20,7 +21,7 @@ import simple.server.extension.d20.weapon.D20Weapon;
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public abstract class AbstractFeat extends Entity implements D20Feat {
+public abstract class AbstractFeat extends AbstractLevelEntity implements D20Feat {
 
     protected Map<Class<? extends D20Characteristic>, String> bonus
             = new HashMap<>();

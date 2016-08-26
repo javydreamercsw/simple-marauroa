@@ -2,6 +2,7 @@ package simple.server.core.entity.character;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -9,6 +10,7 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.api.LevelEntity;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
@@ -42,6 +44,7 @@ public class PlayerCharacter extends RPEntity {
                         : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                     ext.modifyCharacterRPClassDefinition(entity);
                 }
+                entity.addAttribute(LevelEntity.LEVEL, Definition.Type.INT);
             }
             catch (InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(Character.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,6 +61,9 @@ public class PlayerCharacter extends RPEntity {
         for (MarauroaServerExtension ext
                 : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
             ext.characterRPClassUpdate(this);
+        }
+        if (!has(LevelEntity.LEVEL)) {
+            put(LevelEntity.LEVEL, 0);
         }
     }
 }

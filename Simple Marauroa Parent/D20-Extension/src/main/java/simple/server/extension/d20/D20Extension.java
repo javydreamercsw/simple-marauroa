@@ -53,6 +53,7 @@ public class D20Extension extends SimpleServerExtension {
         clazz.addAttribute(CLASS, Definition.Type.STRING);
         clazz.addAttribute(SUBCLASS, Definition.Type.STRING);
         clazz.addAttribute(TITLE, Definition.Type.STRING);
+        clazz.addAttribute(D20Level.MAX, Definition.Type.INT);
         for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
             LOG.log(Level.FINE, "Adding attribute: {0}",
                     attr.getCharacteristicName());
@@ -108,6 +109,9 @@ public class D20Extension extends SimpleServerExtension {
 
     @Override
     public void characterRPClassUpdate(RPObject entity) {
+        if (!entity.has(D20Level.MAX)) {
+            entity.put(D20Level.MAX, 0);
+        }
         Lookup.getDefault().lookupAll(D20Ability.class).stream()
                 .forEach((attr) -> {
                     if (!entity.has(attr.getCharacteristicName())) {

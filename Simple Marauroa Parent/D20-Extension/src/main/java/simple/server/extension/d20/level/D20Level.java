@@ -1,28 +1,15 @@
 package simple.server.extension.d20.level;
 
+import simple.server.core.entity.api.LevelEntity;
+
 /**
  * Interface for entities that have levels.
  *
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
-public interface D20Level {
+public interface D20Level extends LevelEntity {
 
-    String LEVEL = "Level";
     String MAX = "max";
-
-    /**
-     * Get Level.
-     *
-     * @return level
-     */
-    public int getLevel();
-
-    /**
-     * Set level.
-     *
-     * @param level
-     */
-    public void setLevel(int level);
 
     /**
      * Get max level for this object.
