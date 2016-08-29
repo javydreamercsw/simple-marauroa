@@ -43,13 +43,14 @@ public class CommandCenter {
         AdministrationAction.registerCommandLevel(action, requiredAdminLevel);
     }
 
-    public static boolean execute(ClientObjectInterface player,
+    public static boolean execute(RPObject player,
             RPAction action) {
         try {
             ActionInterface actionInterface = getAction(action);
-            actionInterface.onAction((RPObject) player, action);
+            actionInterface.onAction(player, action);
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.SEVERE, "Cannot execute action " + action
                     + " send by " + player, e);
             return false;
