@@ -6,13 +6,14 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
+import simple.server.extension.TutorialExtension;
 
 /**
  * Manages the tutorial based on events created all over the game.
- * 
- * This class is meant to have generic messages that apply to all games. 
+ *
+ * This class is meant to have generic messages that apply to all games.
  * Additional can be created in the specific games to add more messages.
- * 
+ *
  * Based on code from hendrik
  *
  * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
@@ -34,8 +35,8 @@ public class TutorialNotifier implements ILoginNotifier {
      */
     private static void process(ClientObjectInterface player, TutorialEventType type) {
         String key = type.name().toLowerCase();
-        if (player.getKeyedSlot("!tutorial", key) == null) {
-            player.setKeyedSlot("!tutorial", key, "1");
+        if (player.getKeyedSlot(TutorialExtension.TUTORIAL, key) == null) {
+            player.setKeyedSlot(TutorialExtension.TUTORIAL, key, "1");
             player.notifyWorldAboutChanges();
         }
         // we must delay this for 1 turn for technical reasons (like zone
