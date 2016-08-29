@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
-import marauroa.common.game.Attributes;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -17,6 +16,7 @@ import simple.server.core.engine.IRPWorld;
 import simple.server.core.entity.Entity;
 import simple.server.core.event.LoginListener;
 import simple.server.core.event.TextEvent;
+import simple.server.core.tool.Tool;
 
 /**
  * Handles public said text
@@ -39,30 +39,30 @@ public class PublicChatAction implements ActionProvider {
                     checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
-            if (action.has(TEXT)) {
-                try {
-                    String text = action.get(TEXT);
-                    LOG.log(Level.FINE, "Processing text event: {0}", text);
-                    Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                            Lookup.getDefault().lookup(IRPWorld.class)
-                            .getZone(((Attributes) player)
-                                    .get(Entity.ZONE_ID)),
-                            new TextEvent(text, player.getName()));
-                    if ("true".equals(Configuration.getConfiguration()
-                            .get("log_chat", "false"))) {
-                        LOG.info(text);
-                    }
-                } catch (IOException ex) {
-                    LOG.log(Level.WARNING, ex.toString(), ex);
+        }
+        if (action.has(TEXT)) {
+            try {
+                String text = action.get(TEXT);
+                LOG.log(Level.FINE, "Processing text event: {0}", text);
+                Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
+                        Lookup.getDefault().lookup(IRPWorld.class)
+                                .getZone(rpo.get(Entity.ZONE_ID)),
+                        new TextEvent(text, Tool.extractName(rpo)));
+                if ("true".equals(Configuration.getConfiguration()
+                        .get("log_chat", "false"))) {
+                    LOG.info(text);
                 }
-            } else {
-                StringBuilder mess
-                        = new StringBuilder("Action is missing key components:\n");
-                if (!action.has(TEXT)) {
-                    mess.append(TEXT).append("\n");
-                }
-                LOG.warning(mess.toString());
             }
+            catch (IOException ex) {
+                LOG.log(Level.WARNING, ex.toString(), ex);
+            }
+        } else {
+            StringBuilder mess
+                    = new StringBuilder("Action is missing key components:\n");
+            if (!action.has(TEXT)) {
+                mess.append(TEXT).append("\n");
+            }
+            LOG.warning(mess.toString());
         }
     }
 
