@@ -552,37 +552,35 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 player.addAttribute("grumpy", Type.LONG_STRING,
                         Definition.VOLATILE);
 
+                //TODO: move to an extension
                 // Use this for admin menus and usage.
                 player.addAttribute("admin", Type.FLAG);
                 player.addAttribute("adminlevel", Type.INT);
+
                 player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
                 //User with Monitor permissions
                 player.addAttribute("monitor", Type.FLAG);
 
+                //TODO: move to an extension
                 player.addAttribute("ghostmode", Type.FLAG);
 
                 player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
+                //TODO: move to an extension
                 // We use this for the buddy system
                 player.addRPSlot("!buddy", 1, Definition.PRIVATE);
                 player.addRPSlot("!ignore", 1, Definition.HIDDEN);
+
                 player.addAttribute("online", Type.LONG_STRING,
                         (byte) (Definition.PRIVATE | Definition.VOLATILE));
                 player.addAttribute("offline", Type.LONG_STRING,
                         (byte) (Definition.PRIVATE | Definition.VOLATILE));
-
-                // Non-removable while stored ones have values
-                player.addRPSlot("!skills", 1,
-                        (byte) (Definition.HIDDEN | Definition.VOLATILE));
 
                 player.addRPSlot("!visited", 1, Definition.HIDDEN);
 
                 //TODO: move to an extension
                 // The guild name
                 player.addAttribute("guild", Type.STRING);
-
-                // ClientObject features
-                player.addRPSlot("!features", 1, Definition.PRIVATE);
 
                 //TODO: move to an extension
                 // Last time this player attacked another player
