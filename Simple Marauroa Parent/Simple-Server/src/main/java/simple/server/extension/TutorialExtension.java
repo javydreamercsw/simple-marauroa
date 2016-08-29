@@ -13,7 +13,7 @@ import simple.common.game.ClientObjectInterface;
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class TutorialExtension extends SimpleServerExtension {
 
-    private static final String TUTORIAL = "!tutorial";
+    public static final String TUTORIAL = "!tutorial";
 
     @Override
     public String getName() {
