@@ -121,7 +121,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 for (MarauroaServerExtension extension : ext) {
                     LOG.log(Level.FINE, "Loading extension: {0}",
                             extension.getClass()
-                            .getSimpleName());
+                                    .getSimpleName());
                     extension.updateDatabase();
                 }
                 LOG.info("Done!");
@@ -133,7 +133,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 for (IRPEvent event : events) {
                     LOG.log(Level.FINE, "Registering event: {0}: {1}",
                             new Object[]{event.getClass()
-                                .getSimpleName(), event.getRPClassName()});
+                                        .getSimpleName(), event.getRPClassName()});
                     event.generateRPClass();
                 }
                 LOG.info("Done!");
@@ -203,7 +203,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             SimpleRPZone sZone = (SimpleRPZone) i.next();
             rooms.append(sZone.getName()).append(
                     sZone.getDescription().isEmpty() ? "" : ": "
-                            + sZone.getDescription());
+                    + sZone.getDescription());
             if (i.hasNext()) {
                 rooms.append(separator);
             }
@@ -335,13 +335,14 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         }
         availableZones.stream().forEach((z) -> {
             //Only if zone is not empty
-            if (!z.getPlayers().isEmpty()) {
+            if (!z.getPlayers().isEmpty()
+                    || !z.getNPCS().isEmpty()) {
                 LOG.log(Level.FINE, "Applying public event:{0} to: {1}",
                         new Object[]{event, z});
                 z.applyPublicEvent(event, delay);
             } else {
                 LOG.log(Level.FINE,
-                        "Zone:{0} ignored because is empty (no players)",
+                        "Zone:{0} ignored because is empty (no players/NPC's)",
                         z.getName());
             }
         });
@@ -387,7 +388,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 }
             }
         } else if (object != null) {
-            LOG.log(Level.FINE, "addPlayer Zone {0}not found for Player {1}",
+            LOG.log(Level.FINE, "addPlayer Zone {0} not found for Player {1}",
                     new Object[]{object.get(Entity.ZONE_ID), object.get("name")});
         }
         return result;
@@ -419,7 +420,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 }
             }
         }
-        catch (Exception e) {
+        catch (IOException e) {
             LOG.log(Level.SEVERE, null, e);
         }
         TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
@@ -501,7 +502,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             for (ClientObject co : toMove) {
                 Lookup.getDefault().lookup(IRPWorld.class).changeZone(
                         Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
-                        .getID().getID(), co);
+                                .getID().getID(), co);
             }
             //Handle NPC's
             i = Lookup.getDefault().lookup(IRPWorld.class)
@@ -549,12 +550,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         //Make sure the system account exists. This will be the owner of NPC's
         if (!DAORegister.get().get(AccountDAO.class).hasPlayer(
                 Configuration.getConfiguration()
-                .get("system_account_name"))) {
+                        .get("system_account_name"))) {
             LOG.info("Creating system account...");
             //Must be the one with id 1
             DAORegister.get().get(AccountDAO.class).addPlayer(
                     Configuration.getConfiguration()
-                    .get("system_account_name"),
+                            .get("system_account_name"),
                     Hash.hash(Configuration.getConfiguration()
                             .get("system_password")),
                     Configuration.getConfiguration().get("system_email"));
@@ -564,9 +565,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             //Account exists, make sure the password is up to date
             DAORegister.get().get(AccountDAO.class).changePassword(
                     Configuration.getConfiguration()
-                    .get("system_account_name"),
+                            .get("system_account_name"),
                     Configuration.getConfiguration()
-                    .get("system_password"));
+                            .get("system_password"));
             LOG.info("Done!");
         }
     }
