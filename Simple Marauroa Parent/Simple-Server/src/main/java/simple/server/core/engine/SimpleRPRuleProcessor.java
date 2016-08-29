@@ -25,11 +25,13 @@ import simple.common.Debug;
 import simple.common.filter.FilterCriteria;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.tool.Tool;
@@ -202,12 +204,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
 
     @Override
     public void execute(RPObject caster, RPAction action) {
-        if (caster instanceof ClientObjectInterface) {
-            CommandCenter.execute((ClientObjectInterface) caster, action);
-        } else {
-            LOG.log(Level.SEVERE, "{0} tried to execute action: {1}",
-                    new Object[]{caster, action});
-        }
+        CommandCenter.execute(caster, action);
     }
 
     public int getTurn() {
@@ -287,32 +284,38 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     @Override
     public synchronized boolean onInit(RPObject object) {
         boolean result = true;
-        try {
-            final PlayerEntry entry
-                    = PlayerEntryContainer.getContainer().get(object);
-            final ClientObjectInterface player
-                    = Lookup.getDefault().lookup(IRPObjectFactory.class)
-                    .createClientObject(object);
-            entry.object = (RPObject) player;
+        if ((object.has(WellKnownActionConstant.TYPE)
+                && object.get(WellKnownActionConstant.TYPE)
+                        .equals(ClientObject.DEFAULT_RP_CLASSNAME))
+                || !object.has(WellKnownActionConstant.TYPE))/**/ {
+            try {
+                final PlayerEntry entry
+                        = PlayerEntryContainer.getContainer().get(object);
+                final ClientObjectInterface player
+                        = Lookup.getDefault().lookup(IRPObjectFactory.class)
+                                .createClientObject(object);
+                entry.object = (RPObject) player;
 
-            Lookup.getDefault().lookup(IRPWorld.class)
-                    .addPlayer((RPObject) player);
-            addGameEvent(player.getName(), "login");
-            Lookup.getDefault()
-                    .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
-                ln.onPlayerLoggedIn(player);
-            });
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .addPlayer((RPObject) player);
+                addGameEvent(player.getName(), "login");
+                Lookup.getDefault()
+                        .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
+                    ln.onPlayerLoggedIn(player);
+                });
 
-            getOnlinePlayers().add(player);
-            if (!player.isGhost()) {
-                notifyOnlineStatus(true, player.getName());
+                getOnlinePlayers().add(player);
+                if (!player.isGhost()) {
+                    notifyOnlineStatus(true, player.getName());
+                }
+            }
+            catch (Exception e) {
+                LOG.log(Level.SEVERE, "There has been a severe problem loading player "
+                        + object.get("#db_id"), e);
+                result = false;
             }
         }
-        catch (Exception e) {
-            LOG.log(Level.SEVERE, "There has been a severe problem loading player "
-                    + object.get("#db_id"), e);
-            result = false;
-        }
+        result &= super.onInit(object);
         return result;
     }
 
