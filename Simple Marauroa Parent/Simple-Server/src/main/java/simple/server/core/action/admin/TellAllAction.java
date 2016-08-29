@@ -10,23 +10,28 @@ import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
 @ServiceProvider(service = ActionProvider.class)
-public class TellAllAction extends AdministrationAction implements ActionProvider{
+public class TellAllAction extends AdministrationAction implements ActionProvider {
 
-    private static final String _TEXT = "text";
-    private static final String _TELLALL = "tellall";
+    private static final String TEXT = "text";
+    private static final String TELLALL = "tellall";
 
+    @Override
     public void register() {
-        CommandCenter.register(_TELLALL, new TellAllAction(), 200);
+        CommandCenter.register(TELLALL, new TellAllAction(), 200);
     }
 
     @Override
     public void perform(ClientObjectInterface player, RPAction action) {
-        if (action.has(_TEXT)) {
-            String message = "Administrator SHOUTS: " + action.get(_TEXT);
-            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(),
-                    _TELLALL, action.get(_TEXT));
+        if (action.has(TEXT)) {
+            String message = "Administrator SHOUTS: " + action.get(TEXT);
+            ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class))
+                    .addGameEvent(player.getName(),
+                            TELLALL, action.get(TEXT));
 
-            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).tellAllPlayers(message);
+            ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class))
+                    .tellAllPlayers(message);
         }
     }
 }
