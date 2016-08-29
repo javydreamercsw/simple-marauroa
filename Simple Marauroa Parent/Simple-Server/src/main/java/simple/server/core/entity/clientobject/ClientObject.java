@@ -548,9 +548,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 player.addRPEvent(PrivateTextEvent.RPCLASS_NAME,
                         Definition.PRIVATE);
 
-                player.addAttribute("outfit", Type.INT);
-                player.addAttribute("outfit_org", Type.INT);
-
                 player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
                 player.addAttribute("grumpy", Type.LONG_STRING,
                         Definition.VOLATILE);
