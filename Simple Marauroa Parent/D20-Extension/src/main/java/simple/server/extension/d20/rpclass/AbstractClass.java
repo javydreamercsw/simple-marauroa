@@ -58,12 +58,8 @@ public abstract class AbstractClass extends PlayerCharacter implements D20Class 
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RP_CLASS)) {
-            try {
-                RPClass clazz = new RPClass(RP_CLASS);
-                clazz.isA(PlayerCharacter.class.newInstance().getRPClassName());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
+            RPClass clazz = new RPClass(RP_CLASS);
+            clazz.isA(PlayerCharacter.DEFAULT_RP_CLASSNAME);
         }
         if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);
