@@ -47,7 +47,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         int result = 0;
         for (Entry<Integer, Set<TurnListener>> entry
                 : Lookup.getDefault().lookup(ITurnNotifier.class)
-                .getEventListForDebugging().entrySet()) {
+                        .getEventListForDebugging().entrySet()) {
             LOG.log(Level.INFO, "{0}:{1}",
                     new Object[]{entry.getKey(), entry.getValue().size()});
             result += entry.getValue().size();
@@ -71,7 +71,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
         action.put(ZoneEvent.FIELD,
                 Lookup.getDefault().lookup(IRPWorld.class)
-                .getDefaultZone().getName());
+                        .getDefaultZone().getName());
         instance.onAction(player, action);
         assertEquals(1, listener.getCount());
     }
@@ -237,7 +237,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
                 .isLocked());
         assertTrue(Lookup.getDefault().lookup(IRPWorld.class).getRPZone(room)
                 .isPassword(pw));
-        assertEquals(3, listener.getCount());
+        assertEquals(2, listener.getCount());
     }
 
     private class RPEventListenerImpl implements RPEventListener {
