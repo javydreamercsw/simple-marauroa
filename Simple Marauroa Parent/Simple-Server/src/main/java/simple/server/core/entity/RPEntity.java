@@ -22,7 +22,7 @@ public class RPEntity extends Entity {
      * The title attribute name.
      */
     public static final String ATTR_TITLE = "title";
-    private final String MY_CLASS = "rpentity";
+    public static final String DEFAULT_RPCLASS = "rpentity";
     protected static final Statistics STATS = Statistics.getStatistics();
     /**
      * the logger instance.
@@ -34,8 +34,8 @@ public class RPEntity extends Entity {
     public void generateRPClass() {
         super.generateRPClass();
         try {
-            if (!RPClass.hasRPClass(MY_CLASS)) {
-                RPClass entity = new RPClass(MY_CLASS);
+            if (!RPClass.hasRPClass(DEFAULT_RPCLASS)) {
+                RPClass entity = new RPClass(DEFAULT_RPCLASS);
                 entity.isA(Entity.class.newInstance().getRPClassName());
                 entity.addAttribute(NAME, Type.STRING);
                 entity.addAttribute(ATTR_TITLE, Type.STRING);
@@ -45,7 +45,7 @@ public class RPEntity extends Entity {
                 }
             } else if (!RPClass.hasRPClass(getRPClassName())) {
                 RPClass entity = new RPClass(getRPClassName());
-                entity.isA(MY_CLASS);
+                entity.isA(DEFAULT_RPCLASS);
             }
         }
         catch (SyntaxException e) {

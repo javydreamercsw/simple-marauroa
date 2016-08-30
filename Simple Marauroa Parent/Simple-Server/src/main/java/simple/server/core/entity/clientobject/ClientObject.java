@@ -38,7 +38,8 @@ import simple.server.extension.MarauroaServerExtension;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProviders({
-    @ServiceProvider(service = ClientObjectInterface.class),
+    @ServiceProvider(service = ClientObjectInterface.class)
+    ,
     @ServiceProvider(service = RPEntityInterface.class, position = 100)})
 public class ClientObject extends RPEntity implements ClientObjectInterface,
         java.io.Serializable {
@@ -535,55 +536,50 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
-            try {
-                ExtensibleRPClass player = new ExtensibleRPClass(getRPClassName());
-                player.isA(RPEntity.class.newInstance().getRPClassName());
-                //This is the assigned key for encryption purposes on the client
-                player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
+            ExtensibleRPClass player = new ExtensibleRPClass(getRPClassName());
+            player.isA(RPEntity.DEFAULT_RPCLASS);
+            //This is the assigned key for encryption purposes on the client
+            player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
 
-                player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
-                player.addAttribute("grumpy", Type.LONG_STRING,
-                        Definition.VOLATILE);
+            player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
+            player.addAttribute("grumpy", Type.LONG_STRING,
+                    Definition.VOLATILE);
 
-                //TODO: move to an extension
-                // Use this for admin menus and usage.
-                player.addAttribute("admin", Type.FLAG);
-                player.addAttribute("adminlevel", Type.INT);
+            //TODO: move to an extension
+            // Use this for admin menus and usage.
+            player.addAttribute("admin", Type.FLAG);
+            player.addAttribute("adminlevel", Type.INT);
 
-                player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
-                //User with Monitor permissions
-                player.addAttribute("monitor", Type.FLAG);
+            player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
+            //User with Monitor permissions
+            player.addAttribute("monitor", Type.FLAG);
 
-                //TODO: move to an extension
-                player.addAttribute("ghostmode", Type.FLAG);
+            //TODO: move to an extension
+            player.addAttribute("ghostmode", Type.FLAG);
 
-                player.addAttribute("release", Type.STRING, Definition.PRIVATE);
+            player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
-                //TODO: move to an extension
-                // We use this for the buddy system
-                player.addRPSlot("!buddy", 1, Definition.PRIVATE);
-                player.addRPSlot("!ignore", 1, Definition.HIDDEN);
+            //TODO: move to an extension
+            // We use this for the buddy system
+            player.addRPSlot("!buddy", 1, Definition.PRIVATE);
+            player.addRPSlot("!ignore", 1, Definition.HIDDEN);
 
-                player.addAttribute("online", Type.LONG_STRING,
-                        (byte) (Definition.PRIVATE | Definition.VOLATILE));
-                player.addAttribute("offline", Type.LONG_STRING,
-                        (byte) (Definition.PRIVATE | Definition.VOLATILE));
+            player.addAttribute("online", Type.LONG_STRING,
+                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
+            player.addAttribute("offline", Type.LONG_STRING,
+                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
-                player.addRPSlot("!visited", 1, Definition.HIDDEN);
+            player.addRPSlot("!visited", 1, Definition.HIDDEN);
 
-                //TODO: move to an extension
-                // The guild name
-                player.addAttribute("guild", Type.STRING);
+            //TODO: move to an extension
+            // The guild name
+            player.addAttribute("guild", Type.STRING);
 
-                //TODO: move to an extension
-                // Last time this player attacked another player
-                player.addAttribute("last_pvp_action_time", Type.FLOAT,
-                        Definition.HIDDEN);
-                extendClass(player);
-            }
-            catch (InstantiationException | IllegalAccessException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
+            //TODO: move to an extension
+            // Last time this player attacked another player
+            player.addAttribute("last_pvp_action_time", Type.FLOAT,
+                    Definition.HIDDEN);
+            extendClass(player);
         }
     }
 
