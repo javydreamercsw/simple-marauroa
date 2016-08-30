@@ -521,22 +521,22 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void emptyZone(ID zoneid) {
-        Iterator i = Lookup.getDefault().lookup(IRPWorld.class)
+        Iterator<RPObject> i = Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(zoneid).getPlayers().iterator();
-        List<ClientObject> toRemove = new ArrayList<>();
+        List<RPObject> toRemove = new ArrayList<>();
         while (i.hasNext()) {
-            toRemove.add((ClientObject) i.next());
+            toRemove.add(i.next());
         }
-        for (ClientObject co : toRemove) {
+        for (RPObject co : toRemove) {
             Lookup.getDefault().lookup(IRPWorld.class)
                     .remove(co.getID());
         }
         //Handle NPC's
-        i = Lookup.getDefault().lookup(IRPWorld.class)
+        Iterator<RPEntityInterface> i2 = Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(zoneid).getNPCS().iterator();
         List<RPObject> toRemove2 = new ArrayList<>();
-        while (i.hasNext()) {
-            toRemove2.add((RPObject) i.next());
+        while (i2.hasNext()) {
+            toRemove2.add(i.next());
         }
         for (RPObject co : toRemove2) {
             Lookup.getDefault().lookup(IRPWorld.class)
