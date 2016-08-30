@@ -7,11 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import marauroa.common.game.Attributes;
-import marauroa.common.game.Definition;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.IRPZone.ID;
 import marauroa.common.game.RPAction;
-import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -293,11 +291,6 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                 zone.getID());
         Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
                 new ZoneEvent((ISimpleRPZone) zone, ZoneEvent.ADD));
-    }
-
-    @Override
-    public void modifyClientObjectDefinition(RPClass player) {
-        player.addRPEvent(ZoneEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
 
     @Override
