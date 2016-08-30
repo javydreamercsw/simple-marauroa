@@ -9,7 +9,7 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.event.api.IRPEvent;
 
-@ServiceProvider(service = MarauroaServerExtension.class)
+@ServiceProvider(service = MarauroaServerExtension.class, position = 1)
 public class RPEventExtension extends SimpleServerExtension {
 
     @Override
