@@ -74,7 +74,7 @@ public interface ISimpleRPZone extends IRPZone {
      *
      * @return A list of all players.
      */
-    Collection<ClientObjectInterface> getPlayers();
+    Collection<RPObject> getPlayers();
 
     /**
      * Gets all NPCs in this zone.

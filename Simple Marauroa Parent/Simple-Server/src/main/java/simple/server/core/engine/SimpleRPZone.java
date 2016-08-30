@@ -17,8 +17,10 @@ import marauroa.server.game.rp.MarauroaRPZone;
 import org.openide.util.Lookup;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.character.PlayerCharacter;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
@@ -154,13 +156,9 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      * @return A list of all players.
      */
     @Override
-    public Collection<ClientObjectInterface> getPlayers() {
-        List<ClientObjectInterface> result = new ArrayList<>();
-        for (RPObject o : players.values()) {
-            if (o instanceof ClientObjectInterface) {
-                result.add((ClientObjectInterface) o);
-            }
-        }
+    public Collection<RPObject> getPlayers() {
+        List<RPObject> result = new ArrayList<>();
+        result.addAll(players.values());
         return result;
     }
 
@@ -251,6 +249,27 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 LOG.fine("Processing RPEntityInterface");
                 ((RPEntityInterface) object).onAdded(this);
                 players.put(Tool.extractName(object), object);
+            } else if (object.has(WellKnownActionConstant.TYPE)) {
+                switch (object.get(WellKnownActionConstant.TYPE)) {
+                    case PlayerCharacter.DEFAULT_RP_CLASSNAME:
+                        LOG.log(Level.WARNING,
+                                "Character added:\n{0}", object);
+                        if (!players.containsKey(Tool.extractName(object))) {
+                            players.put(Tool.extractName(object), object);
+                        }
+                        break;
+                    case ClientObject.DEFAULT_RP_CLASSNAME:
+                        LOG.log(Level.WARNING,
+                                "ClientObject added:\n{0}", object);
+                        if (!players.containsKey(Tool.extractName(object))) {
+                            players.put(Tool.extractName(object), object);
+                        }
+                        break;
+                    default:
+                        LOG.log(Level.WARNING,
+                                "Unhandled RPObject added:\n{0}", object);
+                        break;
+                }
             }
             //Request sync previous to any modification
             Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
@@ -336,17 +355,28 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void applyPublicEvent(final RPEvent event, final int delay) {
-        for (ClientObjectInterface p : getPlayers()) {
-            LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
-                    new Object[]{p, ((RPObject) p).getID(), p.getZone()});
-            if (delay <= 0) {
-                ((RPObject) p).addEvent(event);
-                p.notifyWorldAboutChanges();
+        for (RPObject p : getPlayers()) {
+            if (p instanceof ClientObjectInterface) {
+                LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
+                        new Object[]{p, p.getID(),
+                            ((ClientObjectInterface) p).getZone()});
+                if (delay <= 0) {
+                    p.addEvent(event);
+                    ((ClientObjectInterface) p).notifyWorldAboutChanges();
+                } else {
+                    LOG.log(Level.FINE, "With a delay of {0} turns", delay);
+                    Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
+                            delay,
+                            new DelayedPlayerEventSender(event,
+                                    ((ClientObjectInterface) p)));
+                }
             } else {
-                LOG.log(Level.FINE, "With a delay of {0} turns", delay);
-                Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
-                        delay,
-                        new DelayedPlayerEventSender(event, p));
+                LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
+                        new Object[]{p, p.getID(),
+                            Lookup.getDefault().lookup(IRPWorld.class)
+                                    .getRPZone(p.get(Entity.ZONE_ID))});
+                p.addEvent(event);
+                Lookup.getDefault().lookup(IRPWorld.class).modify(p);
             }
         }
         for (RPEntityInterface npc : getNPCS()) {
