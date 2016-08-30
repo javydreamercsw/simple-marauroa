@@ -1,8 +1,6 @@
 package simple.server.core.entity.item;
 
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -25,16 +23,11 @@ public class Item extends RPEntity {
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(DEFAULT_RPCLASS_NAME)) {
-            try {
-                RPClass entity = new RPClass(DEFAULT_RPCLASS_NAME);
-                entity.isA(RPEntity.class.newInstance().getRPClassName());
-                for (MarauroaServerExtension ext
-                        : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-                    ext.modifyItemRPClassDefinition(entity);
-                }
-            }
-            catch (InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(Item.class.getName()).log(Level.SEVERE, null, ex);
+            RPClass entity = new RPClass(DEFAULT_RPCLASS_NAME);
+            entity.isA(RPEntity.DEFAULT_RPCLASS);
+            for (MarauroaServerExtension ext
+                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+                ext.modifyItemRPClassDefinition(entity);
             }
         } else if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);

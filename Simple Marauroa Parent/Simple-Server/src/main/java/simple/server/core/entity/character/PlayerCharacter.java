@@ -1,7 +1,5 @@
 package simple.server.core.entity.character;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import marauroa.common.game.Definition;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
@@ -37,18 +35,13 @@ public class PlayerCharacter extends RPEntity {
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(DEFAULT_RP_CLASSNAME)) {
-            try {
-                RPClass entity = new RPClass(DEFAULT_RP_CLASSNAME);
-                entity.isA(RPEntity.class.newInstance().getRPClassName());
-                for (MarauroaServerExtension ext
-                        : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-                    ext.modifyCharacterRPClassDefinition(entity);
-                }
-                entity.addAttribute(LevelEntity.LEVEL, Definition.Type.INT);
+            RPClass entity = new RPClass(DEFAULT_RP_CLASSNAME);
+            entity.isA(RPEntity.DEFAULT_RPCLASS);
+            for (MarauroaServerExtension ext
+                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+                ext.modifyCharacterRPClassDefinition(entity);
             }
-            catch (InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(Character.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            entity.addAttribute(LevelEntity.LEVEL, Definition.Type.INT);
         } else if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);
             clazz.isA(DEFAULT_RP_CLASSNAME);
