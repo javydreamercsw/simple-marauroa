@@ -15,7 +15,6 @@ import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import org.openide.util.Lookup;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
@@ -155,7 +154,7 @@ class SimpleServerCLI extends Thread {
                             case "extension":
                                 for (MarauroaServerExtension e
                                         : Lookup.getDefault()
-                                        .lookupAll(MarauroaServerExtension.class)) {
+                                                .lookupAll(MarauroaServerExtension.class)) {
                                     sb.append(e.getName()).append("\n");
                                 }
                                 LOG.info(sb.toString());
@@ -163,7 +162,7 @@ class SimpleServerCLI extends Thread {
                             case "action":
                                 for (ActionProvider e
                                         : Lookup.getDefault()
-                                        .lookupAll(ActionProvider.class)) {
+                                                .lookupAll(ActionProvider.class)) {
                                     sb.append(e.getClass().getSimpleName()).append("\n");
                                 }
                                 LOG.info(sb.toString());
@@ -171,7 +170,7 @@ class SimpleServerCLI extends Thread {
                             case "event":
                                 for (IRPEvent e
                                         : Lookup.getDefault()
-                                        .lookupAll(IRPEvent.class)) {
+                                                .lookupAll(IRPEvent.class)) {
                                     sb.append(e.getName()).append("\n");
                                 }
                                 LOG.info(sb.toString());
@@ -192,8 +191,8 @@ class SimpleServerCLI extends Thread {
                                     } else {
                                         sb.append("Players--------------------"
                                                 + "---------------").append("\n");
-                                        for (ClientObjectInterface p : zone.getPlayers()) {
-                                            sb.append(p.getName()).append("\n");
+                                        for (RPObject p : zone.getPlayers()) {
+                                            sb.append(Tool.extractName(p)).append("\n");
                                         }
                                         sb.append("NPC------------------------"
                                                 + "-----------").append("\n");
