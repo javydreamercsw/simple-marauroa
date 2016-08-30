@@ -232,11 +232,10 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
                     .lookup(IRPWorld.class);
             SimpleRPZone zone
                     = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
-            Collection<ClientObjectInterface> players = zone.getPlayers();
-            for (ClientObjectInterface clientObject : players) {
+            Collection<RPObject> players = zone.getPlayers();
+            for (RPObject clientObject : players) {
                 world.changeZone(Lookup.getDefault().lookup(
-                        IRPWorld.class).getDefaultZone().getID().getID(),
-                        (RPObject) clientObject);
+                        IRPWorld.class).getDefaultZone().getID().getID(), clientObject);
             }
             try {
                 world.removeRPZone(new ID(action.get(ROOM)));
@@ -246,9 +245,6 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             world.applyPublicEvent(null,
                     new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
                             ZoneEvent.REMOVE));
-            for (ClientObjectInterface p : zone.getPlayers()) {
-                p.notifyWorldAboutChanges();
-            }
             if (player != null && player instanceof RPObject) {
                 ((RPObject) player).addEvent(new PrivateTextEvent(
                         NotificationType.INFORMATION, "Command completed"));
