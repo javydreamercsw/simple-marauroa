@@ -540,13 +540,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 player.isA(RPEntity.class.newInstance().getRPClassName());
                 //This is the assigned key for encryption purposes on the client
                 player.addAttribute(KEY, Type.LONG_STRING, Definition.PRIVATE);
-                player.addRPEvent(TextEvent.RPCLASS_NAME, Definition.VOLATILE);
-                /*
-                * Add event player.addRPEvent("<Event RPClassName>",
-                * Definition.VOLATILE);
-                 */
-                player.addRPEvent(PrivateTextEvent.RPCLASS_NAME,
-                        Definition.PRIVATE);
 
                 player.addAttribute("away", Type.LONG_STRING, Definition.VOLATILE);
                 player.addAttribute("grumpy", Type.LONG_STRING,
@@ -603,7 +596,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     return extension;
                 }).forEach((extension) -> {
             extension.modifyClientObjectDefinition(player);
-            if (player.subclassOf("entity")) {
+            if (player.subclassOf(Entity.MY_CLASS)) {
                 extension.modifyRootEntityRPClassDefinition(player);
             }
         });
