@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
@@ -126,12 +125,8 @@ public abstract class AbstractFeat extends AbstractLevelEntity implements D20Fea
     @Override
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RP_CLASS)) {
-            try {
-                RPClass clazz = new RPClass(RP_CLASS);
-                clazz.isA(Entity.class.newInstance().getRPClassName());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
+            RPClass clazz = new RPClass(RP_CLASS);
+            clazz.isA(Entity.MY_CLASS);
         }
         if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);

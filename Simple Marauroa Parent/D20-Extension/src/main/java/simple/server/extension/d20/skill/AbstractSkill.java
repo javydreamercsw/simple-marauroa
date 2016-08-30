@@ -118,13 +118,9 @@ public abstract class AbstractSkill extends AbstractLevelEntity implements D20Sk
     public void generateRPClass() {
         super.generateRPClass();
         if (!RPClass.hasRPClass(RP_CLASS)) {
-            try {
-                RPClass clazz = new RPClass(RP_CLASS);
-                clazz.addAttribute(RANK, Definition.Type.STRING);
-                clazz.isA(RPEntity.class.newInstance().getRPClassName());
-            } catch (InstantiationException | IllegalAccessException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
+            RPClass clazz = new RPClass(RP_CLASS);
+            clazz.addAttribute(RANK, Definition.Type.STRING);
+            clazz.isA(RPEntity.DEFAULT_RPCLASS);
         }
         if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);

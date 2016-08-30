@@ -48,7 +48,7 @@ public class D20ExtensionTest extends AbstractSystemTest {
             RPEntity test = (RPEntity) cons.newInstance(new RPObject());
             test.update();
             assertTrue(test.instanceOf(RPClass.getRPClass(
-                    Item.class.newInstance().getRPClassName())));
+                    Item.DEFAULT_RPCLASS_NAME)));
             boolean pass = false;
             LOG.log(Level.INFO, "Checking item attributes:");
             for (D20ItemAttribute attr : Lookup.getDefault().lookupAll(D20ItemAttribute.class)) {
