@@ -30,7 +30,6 @@ import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.Entity;
-import static simple.server.core.entity.Entity.NAME;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.RPObjectMonitor;
 import simple.server.core.entity.clientobject.ClientObject;
@@ -114,17 +113,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         if (!initialized) {
             initialize();
             try {
-                LOG.info("Loading extensions...");
-                Collection<? extends MarauroaServerExtension> ext
-                        = Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
-                LOG.log(Level.INFO, "Found {0} extensions to register!", ext.size());
-                for (MarauroaServerExtension extension : ext) {
-                    LOG.log(Level.FINE, "Loading extension: {0}",
-                            extension.getClass()
-                                    .getSimpleName());
-                    extension.updateDatabase();
-                }
-                LOG.info("Done!");
                 LOG.info("Loading events...");
                 Collection<? extends IRPEvent> events
                         = Lookup.getDefault().lookupAll(IRPEvent.class);
@@ -135,6 +123,17 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                             new Object[]{event.getClass()
                                         .getSimpleName(), event.getRPClassName()});
                     event.generateRPClass();
+                }
+                LOG.info("Done!");
+                LOG.info("Loading extensions...");
+                Collection<? extends MarauroaServerExtension> ext
+                        = Lookup.getDefault().lookupAll(MarauroaServerExtension.class);
+                LOG.log(Level.INFO, "Found {0} extensions to register!", ext.size());
+                for (MarauroaServerExtension extension : ext) {
+                    LOG.log(Level.FINE, "Loading extension: {0}",
+                            extension.getClass()
+                                    .getSimpleName());
+                    extension.updateDatabase();
                 }
                 LOG.info("Done!");
                 LOG.info("Creating RPClasses...");
@@ -300,7 +299,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 break;
             }
             for (RPEntityInterface npc : z.getNPCS()) {
-                if (((RPObject) npc).has(NAME)
+                if (((RPObject) npc).has(Entity.NAME)
                         && Tool.extractName(((RPObject) npc)).equals(target)) {
                     LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
                             new Object[]{npc, ((RPObject) npc).getID(), npc.getZone()});
