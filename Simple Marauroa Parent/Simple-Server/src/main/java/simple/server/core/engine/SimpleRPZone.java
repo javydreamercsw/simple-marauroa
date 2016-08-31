@@ -257,14 +257,14 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             } else if (object.has(WellKnownActionConstant.TYPE)) {
                 switch (object.get(WellKnownActionConstant.TYPE)) {
                     case PlayerCharacter.DEFAULT_RP_CLASSNAME:
-                        LOG.log(Level.WARNING,
+                        LOG.log(Level.FINE,
                                 "Character added:\n{0}", object);
                         if (!players.containsKey(Tool.extractName(object))) {
                             players.put(Tool.extractName(object), object);
                         }
                         break;
                     case ClientObject.DEFAULT_RP_CLASSNAME:
-                        LOG.log(Level.WARNING,
+                        LOG.log(Level.FINE,
                                 "ClientObject added:\n{0}", object);
                         if (!players.containsKey(Tool.extractName(object))) {
                             players.put(Tool.extractName(object), object);
