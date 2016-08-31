@@ -10,8 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -55,7 +57,7 @@ public abstract class AbstractSystemTest {
             }
             WORLD.onInit();
         }
-        catch (Exception ex) {
+        catch (SQLException ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
@@ -123,60 +125,67 @@ public abstract class AbstractSystemTest {
 
     @After
     public void cleanup() {
-        try {
-            LOG.log(Level.INFO, "Cleaning test database environment...");
-            //Remove players from zones
-            for (SimpleRPZone zone : WORLD.getZones()) {
-                WORLD.emptyZone(zone);
-            }
-            //It's deleted on the initialization of the environemnt
+        LOG.log(Level.INFO, "Cleaning test database environment...");
+        //Remove players from zones
+        for (SimpleRPZone zone : WORLD.getZones()) {
+            WORLD.emptyZone(zone);
+        }
+        try {   //It's deleted on the initialization of the environemnt
             WORLD.createSystemAccount();
+            //Reset database. This only works with H2
+            Properties prop = new Properties();
+            InputStream input = null;
             try {
-                //Reset database. This only works with H2
-                Properties prop = new Properties();
-                InputStream input = null;
-                try {
-                    input = new FileInputStream(ini);
-                    // load a properties file
-                    prop.load(input);
-                }
-                catch (IOException ex) {
-                    LOG.log(Level.SEVERE, null, ex);
-                }
-                finally {
-                    if (input != null) {
-                        try {
-                            input.close();
-                        }
-                        catch (IOException e) {
-                            LOG.log(Level.SEVERE, null, e);
-                        }
+                input = new FileInputStream(ini);
+                // load a properties file
+                prop.load(input);
+            }
+            catch (IOException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+            finally {
+                if (input != null) {
+                    try {
+                        input.close();
                     }
-                }
-                Class.forName(prop.getProperty("jdbc_class"));
-                try (Connection conn = DriverManager.
-                        getConnection(prop.getProperty("jdbc_url"),
-                                prop.getProperty("jdbc_user"),
-                                prop.getProperty("jdbc_pwd"))) {
-                    Statement stat = conn.createStatement();
-                    switch (prop.getProperty("jdbc_class")) {
-                        case "org.h2.Driver":
-                            stat.execute("DROP ALL OBJECTS DELETE FILES");
-                            break;
-                        default:
-                            LOG.log(Level.WARNING, "Unhandled data base type: {0}. "
-                                    + "Database was not cleared and might cause "
-                                    + "errors between tests.",
-                                    prop.getProperty("jdbc_class"));
-                            break;
+                    catch (IOException e) {
+                        LOG.log(Level.SEVERE, null, e);
                     }
                 }
             }
-            catch (ClassNotFoundException ex) {
+            Class.forName(prop.getProperty("jdbc_class"));
+            try (Connection conn = DriverManager.
+                    getConnection(prop.getProperty("jdbc_url"),
+                            prop.getProperty("jdbc_user"),
+                            prop.getProperty("jdbc_pwd"))) {
+                Statement stat = conn.createStatement();
+                switch (prop.getProperty("jdbc_class")) {
+                    case "org.h2.Driver":
+                        stat.execute("SET REFERENTIAL_INTEGRITY FALSE");
+                        ResultSet rs = stat.executeQuery("SHOW TABLES");
+                        List<String> tables = new ArrayList<>();
+                        while (rs.next()) {
+                            tables.add(rs.getString(1));
+                        }
+                        for (String table : tables) {
+                            LOG.log(Level.INFO, "Truncating table: {0}", table);
+                            stat.execute("TRUNCATE TABLE " + table);
+                        }
+                        stat.execute("SET REFERENTIAL_INTEGRITY TRUE");
+                        break;
+                    default:
+                        LOG.log(Level.WARNING, "Unhandled data base type: {0}. "
+                                + "Database was not cleared and might cause "
+                                + "errors between tests.",
+                                prop.getProperty("jdbc_class"));
+                        break;
+                }
+            }
+            catch (SQLException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
-        catch (SQLException | IOException ex) {
+        catch (ClassNotFoundException | SQLException | IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
