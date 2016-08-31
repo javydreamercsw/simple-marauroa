@@ -494,11 +494,14 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
              */
             Iterator i = Lookup.getDefault().lookup(IRPWorld.class)
                     .getZone(zoneid).getPlayers().iterator();
-            List<ClientObject> toMove = new ArrayList<>();
+            List<RPObject> toMove = new ArrayList<>();
             while (i.hasNext()) {
-                toMove.add((ClientObject) i.next());
+                RPObject next = (RPObject) i.next();
+                if (next instanceof ClientObject) {
+                    toMove.add(next);
+                }
             }
-            for (ClientObject co : toMove) {
+            for (RPObject co : toMove) {
                 Lookup.getDefault().lookup(IRPWorld.class).changeZone(
                         Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
                                 .getID().getID(), co);
