@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
 import marauroa.common.game.Attributes;
@@ -157,8 +158,12 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      */
     @Override
     public Collection<RPObject> getPlayers() {
-        List<RPObject> result = new ArrayList<>();
-        result.addAll(players.values());
+        List<RPObject> result = players.values()
+                .stream()
+                .filter(o -> (o instanceof ClientObjectInterface)
+                || (o instanceof PlayerCharacter))
+                .map(p -> (RPObject) p)
+                .collect(Collectors.toList());
         return result;
     }
 
@@ -473,14 +478,13 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      */
     @Override
     public Collection<RPEntityInterface> getNPCS() {
-        List<RPEntityInterface> result = new ArrayList<>();
-        for (RPObject o : players.values()) {
-            if ((o instanceof RPEntityInterface)
-                    && !(o instanceof ClientObjectInterface)
-                    && !(o instanceof PlayerCharacter)) {
-                result.add((RPEntityInterface) o);
-            }
-        }
+        List<RPEntityInterface> result = players.values()
+                .stream()
+                .filter(o -> (o instanceof RPEntityInterface)
+                && !(o instanceof ClientObjectInterface)
+                && !(o instanceof PlayerCharacter))
+                .map(p -> (RPEntityInterface) p)
+                .collect(Collectors.toList());
         return result;
     }
 
