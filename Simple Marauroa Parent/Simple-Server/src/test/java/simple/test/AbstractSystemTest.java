@@ -1,7 +1,9 @@
 package simple.test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.IRPZone;
@@ -72,7 +75,8 @@ public abstract class AbstractSystemTest {
                         "client_object=simple.server.core.entity.clientobject.ClientObject",
                         "log4j_url=simple/server/log4j.properties",
                         "jdbc_url=jdbc\\:h2\\:./target/simple;CREATE=TRUE;AUTO_SERVER=TRUE;LOCK_TIMEOUT=10000;MVCC=true;DB_CLOSE_ON_EXIT=FALSE",
-                        "jdbc_class=org.h2.Driver", "database_adapter=marauroa.server.db.adapter.H2DatabaseAdapter",
+                        "jdbc_class=org.h2.Driver",
+                        "database_adapter=marauroa.server.db.adapter.H2DatabaseAdapter",
                         "jdbc_user=simple_user",
                         "jdbc_pwd=password",
                         "tcp_port=32180",
@@ -129,11 +133,43 @@ public abstract class AbstractSystemTest {
             WORLD.createSystemAccount();
             try {
                 //Reset database. This only works with H2
-                Class.forName("org.h2.Driver");
+                Properties prop = new Properties();
+                InputStream input = null;
+                try {
+                    input = new FileInputStream(ini);
+                    // load a properties file
+                    prop.load(input);
+                }
+                catch (IOException ex) {
+                    LOG.log(Level.SEVERE, null, ex);
+                }
+                finally {
+                    if (input != null) {
+                        try {
+                            input.close();
+                        }
+                        catch (IOException e) {
+                            LOG.log(Level.SEVERE, null, e);
+                        }
+                    }
+                }
+                Class.forName(prop.getProperty("jdbc_class"));
                 try (Connection conn = DriverManager.
-                        getConnection("jdbc:h2:~/test", "sa", "")) {
+                        getConnection(prop.getProperty("jdbc_url"),
+                                prop.getProperty("jdbc_user"),
+                                prop.getProperty("jdbc_pwd"))) {
                     Statement stat = conn.createStatement();
-                    stat.execute("DROP ALL OBJECTS DELETE FILES");
+                    switch (prop.getProperty("jdbc_class")) {
+                        case "org.h2.Driver":
+                            stat.execute("DROP ALL OBJECTS DELETE FILES");
+                            break;
+                        default:
+                            LOG.log(Level.WARNING, "Unhandled data base type: {0}. "
+                                    + "Database was not cleared and might cause "
+                                    + "errors between tests.",
+                                    prop.getProperty("jdbc_class"));
+                            break;
+                    }
                 }
             }
             catch (ClassNotFoundException ex) {
