@@ -6,7 +6,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,6 +40,7 @@ public abstract class AbstractSystemTest {
             = Logger.getLogger(AbstractSystemTest.class.getSimpleName());
     private static final IRPWorld WORLD = Lookup.getDefault().lookup(IRPWorld.class);
     private static final IDatabase DB = Lookup.getDefault().lookup(IDatabase.class);
+    private static File ini = new File("server.ini");
 
     @BeforeClass
     public static void setup() throws Exception {
@@ -55,7 +59,6 @@ public abstract class AbstractSystemTest {
     }
 
     private static void checkINIFile() {
-        File ini = new File("server.ini");
         if (!ini.exists()) {
             try {
                 LOG.warning("INI file not found, generating default for "
@@ -68,7 +71,7 @@ public abstract class AbstractSystemTest {
                         "ruleprocessor=simple.server.core.engine.SimpleRPRuleProcessor",
                         "client_object=simple.server.core.entity.clientobject.ClientObject",
                         "log4j_url=simple/server/log4j.properties",
-                        "jdbc_url=jdbc\\:h2\\:~/simple;CREATE=TRUE;AUTO_SERVER=TRUE;LOCK_TIMEOUT=10000;MVCC=true;DB_CLOSE_ON_EXIT=FALSE",
+                        "jdbc_url=jdbc\\:h2\\:./target/simple;CREATE=TRUE;AUTO_SERVER=TRUE;LOCK_TIMEOUT=10000;MVCC=true;DB_CLOSE_ON_EXIT=FALSE",
                         "jdbc_class=org.h2.Driver", "database_adapter=marauroa.server.db.adapter.H2DatabaseAdapter",
                         "jdbc_user=simple_user",
                         "jdbc_pwd=password",
@@ -124,6 +127,18 @@ public abstract class AbstractSystemTest {
             }
             //It's deleted on the initialization of the environemnt
             WORLD.createSystemAccount();
+            try {
+                //Reset database. This only works with H2
+                Class.forName("org.h2.Driver");
+                try (Connection conn = DriverManager.
+                        getConnection("jdbc:h2:~/test", "sa", "")) {
+                    Statement stat = conn.createStatement();
+                    stat.execute("DROP ALL OBJECTS DELETE FILES");
+                }
+            }
+            catch (ClassNotFoundException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
         }
         catch (SQLException | IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -137,7 +152,7 @@ public abstract class AbstractSystemTest {
         object.put(Entity.NAME, name);
         object.put("zoneid",
                 Lookup.getDefault()
-                .lookup(IRPWorld.class).getDefaultZone().getID().getID());
+                        .lookup(IRPWorld.class).getDefaultZone().getID().getID());
         return object;
     }
 
