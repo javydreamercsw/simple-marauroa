@@ -476,7 +476,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         List<RPEntityInterface> result = new ArrayList<>();
         for (RPObject o : players.values()) {
             if ((o instanceof RPEntityInterface)
-                    && !(o instanceof ClientObjectInterface)) {
+                    && !(o instanceof ClientObjectInterface)
+                    && !(o instanceof PlayerCharacter)) {
                 result.add((RPEntityInterface) o);
             }
         }
