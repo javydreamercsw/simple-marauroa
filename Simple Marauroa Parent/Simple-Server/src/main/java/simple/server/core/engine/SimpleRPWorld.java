@@ -513,6 +513,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 Lookup.getDefault().lookup(IRPWorld.class)
                         .remove(((RPObject) i.next()).getID());
             }
+        } else {
+            return null;
         }
         return super.removeRPZone(zoneid);
     }
