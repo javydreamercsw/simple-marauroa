@@ -26,8 +26,6 @@ public class SimpleZoneTest extends AbstractSystemTest {
         //Add two players
         TestPlayer p1 = getTestPlayer("Player 1");
         TestPlayer p2 = getTestPlayer("Player 2");
-        world.add(p1);
-        world.add(p2);
         //Add NPC
         RPObject p3 = new NPC(new RPObject());
         p3.put(Entity.NAME, "NPC");
@@ -68,8 +66,7 @@ public class SimpleZoneTest extends AbstractSystemTest {
             assertNotNull(d);
             assertEquals(2, d.getPlayers().size());
             assertEquals(0, d.getNPCS().size());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(SimpleZoneTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }
