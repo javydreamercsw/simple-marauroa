@@ -37,7 +37,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     private static final Logger LOG
             = Logger.getLogger(SimpleRPZone.class.getSimpleName());
     private final List<TransferContent> contents;
-    private final Map<String, RPObject> players;
     private String description = "";
     private boolean deleteWhenEmpty = false;
     private boolean visited = false;
@@ -46,7 +45,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     public SimpleRPZone(final String name) {
         super(name);
         contents = new LinkedList<>();
-        players = new HashMap<>();
     }
 
     //Stuff to do at the end of a turn
@@ -76,16 +74,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         return contents;
     }
 
-    @Override
-    public void add(final RPObject object) {
-        add(object, null);
-    }
-
-    @Override
-    public RPObject remove(final RPObject.ID id) {
-        return remove(objects.get(id));
-    }
-
     /**
      * Removes object from zone.
      *
@@ -102,7 +90,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
             if (object instanceof ClientObjectInterface) {
                 ClientObjectInterface player = (ClientObjectInterface) object;
-                players.remove(player.getName());
                 try {
                     //Make sure that the correct onRemoved method is called
                     Configuration conf = Configuration.getConfiguration();
@@ -113,8 +100,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     java.lang.reflect.Method localSingleton = clientObjectClass
                             .getDeclaredMethod("onRemoved", types);
                     localSingleton.invoke(clientObjectClass.cast(object), this);
-                }
-                catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                 }
                 //Let everyone else know
@@ -123,8 +109,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         + " left " + getName()));
             } else if (object instanceof Entity) {
                 ((RPEntityInterface) object).onRemoved(this);
-                players.remove(Tool.extractName(object));
-                super.remove(object.getID());
             }
             Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
                     getID().toString());
@@ -158,7 +142,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      */
     @Override
     public Collection<RPObject> getPlayers() {
-        List<RPObject> result = players.values()
+        List<RPObject> result = objects.values()
                 .stream()
                 .filter(o -> (o instanceof ClientObjectInterface)
                 || (o instanceof PlayerCharacter))
@@ -176,7 +160,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     @Override
     public String getPlayersInString(final String separator) {
         StringBuilder playerList = new StringBuilder();
-        Iterator i = players.values().iterator();
+        Iterator i = objects.values().iterator();
         while (i.hasNext()) {
             playerList.append(((ClientObjectInterface) i.next()).getName());
             if (i.hasNext()) {
@@ -188,22 +172,26 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public ClientObjectInterface getPlayer(final String name) {
-        RPObject result = players.get(name);
-        if (result instanceof ClientObjectInterface) {
-            return (ClientObjectInterface) players.get(name);
-        } else {
-            return null;
+        ClientObjectInterface result = null;
+        for (RPObject o : getPlayers()) {
+            if (Tool.extractName(o).equals(name)) {
+                result = (ClientObjectInterface) o;
+                break;
+            }
         }
+        return result;
     }
 
     @Override
     public RPEntityInterface getNPC(String name) {
-        RPObject result = players.get(name);
-        if (result instanceof RPEntityInterface) {
-            return (RPEntityInterface) players.get(name);
-        } else {
-            return null;
+        RPEntityInterface result = null;
+        for (RPEntityInterface o : getNPCS()) {
+            if (Tool.extractName((RPObject) o).equals(name)) {
+                result = o;
+                break;
+            }
         }
+        return result;
     }
 
     @Override
@@ -218,56 +206,23 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
             if (object instanceof ClientObjectInterface) {
                 LOG.fine("Processing ClientObjectInterface");
-                try {
-                    //Make sure that the correct onAdded method is called
-                    Configuration conf = Configuration.getConfiguration();
-                    Class<?> clientObjectClass
-                            = Class.forName(conf.get("client_object",
-                                    ClientObject.class.getCanonicalName()));
-                    Class[] types = new Class[]{IRPZone.class};
-                    java.lang.reflect.Method localSingleton
-                            = clientObjectClass.getDeclaredMethod("onAdded",
-                                    types);
-                    localSingleton.invoke(clientObjectClass.cast(object), this);
-                    final ClientObjectInterface p
-                            = ((ClientObjectInterface) object);
-                    if (!players.containsKey(p.getName())) {
-                        players.put(p.getName(), (RPObject) p);
-                    }
-                    LOG.log(Level.FINE, "Object zone: {0}",
-                            ((Attributes) p).get(Entity.ZONE_ID));
-                    //Let everyone else know
-                    applyPublicEvent(new PrivateTextEvent(
-                            NotificationType.INFORMATION, p.getName()
-                            + " joined " + getName()));
-                }
-                catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException | ClassNotFoundException | IOException ex) {
-                    LOG.log(Level.SEVERE, null, ex);
-                }
-                catch (NoSuchMethodException ex) {
-                    /**
-                     * Method not implemented,fallback
-                     */
-                    ((RPEntityInterface) object).onAdded(this);
-                }
+                final ClientObjectInterface p
+                        = ((ClientObjectInterface) object);
+                LOG.log(Level.FINE, "Object zone: {0}",
+                        ((Attributes) p).get(Entity.ZONE_ID));
+                //Let everyone else know
+                applyPublicEvent(new PrivateTextEvent(
+                        NotificationType.INFORMATION, p.getName()
+                        + " joined " + getName()));
             } else if (object instanceof RPEntityInterface) {
                 LOG.fine("Processing RPEntityInterface");
                 ((RPEntityInterface) object).onAdded(this);
-                players.put(Tool.extractName(object), object);
             } else if (object.has(WellKnownActionConstant.TYPE)) {
                 switch (object.get(WellKnownActionConstant.TYPE)) {
                     case PlayerCharacter.DEFAULT_RP_CLASSNAME:
-                        LOG.log(Level.FINE,
-                                "Character added:\n{0}", object);
-                        if (!players.containsKey(Tool.extractName(object))) {
-                            players.put(Tool.extractName(object), object);
-                        }
-                        break;
-                    case ClientObject.DEFAULT_RP_CLASSNAME:
-                        LOG.log(Level.FINE,
-                                "ClientObject added:\n{0}", object);
-                        if (!players.containsKey(Tool.extractName(object))) {
-                            players.put(Tool.extractName(object), object);
+                        if (getPlayer(Tool.extractName(object)) != null) {
+                            LOG.log(Level.FINE,
+                                    "Character added:\n{0}", object);
                         }
                         break;
                     default:
@@ -283,7 +238,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 player.sendPrivateText(NotificationType.RESPONSE, object
                         + " successfully created!");
             }
-            super.add(object);
             for (MarauroaServerExtension extension
                     : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
                 LOG.log(Level.FINE, "Processing extension: {0}",
@@ -465,8 +419,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         try {
             result = Tool.encrypt(pass,
                     Configuration.getConfiguration().get("d")).equals(password);
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             result = false;
         }
@@ -474,11 +427,11 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     }
 
     /**
-     * @return the npcs
+     * @return the NPCs
      */
     @Override
     public Collection<RPEntityInterface> getNPCS() {
-        List<RPEntityInterface> result = players.values()
+        List<RPEntityInterface> result = objects.values()
                 .stream()
                 .filter(o -> (o instanceof RPEntityInterface)
                 && !(o instanceof ClientObjectInterface)
@@ -490,6 +443,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public Collection<RPObject> getZoneContents() {
-        return players.values();
+        return objects.values();
     }
 }

@@ -20,6 +20,7 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.MonitoreableEntity;
 import simple.server.core.entity.api.RPEventListener;
@@ -30,7 +31,8 @@ import simple.server.core.entity.clientobject.ClientObject;
  * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
  */
 @ServiceProviders({
-    @ServiceProvider(service = ClientObjectInterface.class),
+    @ServiceProvider(service = ClientObjectInterface.class)
+    ,
     @ServiceProvider(service = RPEntityInterface.class)})
 public class TestPlayer extends ClientObject implements MonitoreableEntity {
 
@@ -39,6 +41,7 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
     private static final Logger LOG
             = Logger.getLogger(TestPlayer.class.getName());
     private static final long serialVersionUID = -9018744674003715688L;
+    private final IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
 
     public TestPlayer() {
         this.listeners = new HashMap<>();
@@ -61,17 +64,13 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
                 //Assign a random name
                 setName(UUID.randomUUID().toString());
             }
+            put(Entity.ZONE_ID, world.getDefaultZone().getName());
             DAORegister.get().get(AccountDAO.class).addPlayer(getName(),
                     "password".getBytes("UTF-8"), "dummy@email.com");
             //Add it to the world so it has an ID
-            Lookup.getDefault().lookup(IRPWorld.class)
-                    .getDefaultZone().add(TestPlayer.this);
-            Lookup.getDefault()
-                    .lookup(IRPWorld.class).addPlayer(TestPlayer.this);
-            Lookup.getDefault().lookup(IRPWorld.class)
-                    .registerMonitor(getName(), TestPlayer.this);
-        }
-        catch (SQLException | UnsupportedEncodingException ex) {
+            world.add(TestPlayer.this);
+            world.registerMonitor(getName(), TestPlayer.this);
+        } catch (SQLException | UnsupportedEncodingException ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
