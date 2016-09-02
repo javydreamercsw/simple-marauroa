@@ -189,9 +189,7 @@ public abstract class AbstractSystemTest {
         RPObject object = new RPObject(name);
         object.setRPClass(ClientObject.DEFAULT_RP_CLASSNAME);
         object.put(Entity.NAME, name);
-        object.put("zoneid",
-                Lookup.getDefault()
-                        .lookup(IRPWorld.class).getDefaultZone().getID().getID());
+        object.put(Entity.ZONE_ID, WORLD.getDefaultZone().getID().getID());
         return object;
     }
 
