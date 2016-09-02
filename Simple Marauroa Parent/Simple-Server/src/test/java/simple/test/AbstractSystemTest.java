@@ -30,9 +30,9 @@ import simple.server.application.db.DAO;
 import simple.server.application.db.IDatabase;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.clientobject.ClientObject;
+import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
@@ -186,10 +186,9 @@ public abstract class AbstractSystemTest {
 
     public RPObject createObject(String name) {
         LOG.log(Level.INFO, "Creating object: {0}", name);
-        RPObject object = new RPObject(name);
-        object.setRPClass(ClientObject.DEFAULT_RP_CLASSNAME);
-        object.put(Entity.NAME, name);
-        object.put(Entity.ZONE_ID, WORLD.getDefaultZone().getID().getID());
+        RPObject object = new RPObject();
+        Tool.setName(object, name);
+        Lookup.getDefault().lookup(IRPWorld.class).add(object);
         return object;
     }
 
