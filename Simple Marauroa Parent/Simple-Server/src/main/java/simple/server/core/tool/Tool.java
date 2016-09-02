@@ -2,7 +2,6 @@ package simple.server.core.tool;
 
 import java.io.File;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.Definition.DefinitionClass;
 import marauroa.common.game.RPObject;
+import simple.server.core.entity.Entity;
 import static simple.server.core.entity.Entity.NAME;
 
 /**
@@ -75,7 +76,7 @@ public class Tool {
             LOG.log(Level.FINE, "Changing value from {0}...", value);
             //This will be the index of the character to turn upper case
             int underscoreIndex = value.indexOf('_');
-            result = value.replaceFirst("_", "");
+            result = value.replaceFirst("_", " ");
             changeToUpperCase(result, underscoreIndex);
             LOG.log(Level.FINE, "to {0}", result);
         }
@@ -94,7 +95,7 @@ public class Tool {
         LOG.log(Level.FINE, "Changing value from {0}...", value);
         String result = value.substring(0, index)
                 + value.substring(index, index + 1)
-                .toUpperCase(Locale.getDefault())
+                        .toUpperCase(Locale.getDefault())
                 + value.substring(index + 1);
         LOG.log(Level.FINE, "to {0}", result);
         return result;
@@ -151,22 +152,31 @@ public class Tool {
             sortByValue(Map<K, V> map, boolean asc) {
         List<Map.Entry<K, V>> list
                 = new LinkedList<>(map.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
-            @Override
-            public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
-                if (asc) {
-                    return (o1.getValue()).compareTo(o2.getValue());
-                } else {
-                    return (o2.getValue()).compareTo(o1.getValue());
-                }
+        Collections.sort(list, (Map.Entry<K, V> o1, Map.Entry<K, V> o2) -> {
+            if (asc) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            } else {
+                return (o2.getValue()).compareTo(o1.getValue());
             }
         });
 
         Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list) {
+        list.forEach((entry) -> {
             result.put(entry.getKey(), entry.getValue());
-        }
+        });
         return result;
+    }
+
+    public static void setName(RPObject object, String name) {
+        if (object.getRPClass() != null
+                && object.getRPClass().hasDefinition(DefinitionClass.ATTRIBUTE,
+                        Entity.NAME)) {
+            //Has a name attribute
+            object.put(Entity.NAME, name);
+        } else {
+            LOG.log(Level.WARNING,
+                    "Unable to assign name to RPObject: {0}", object);
+        }
     }
 
     protected Tool() {
