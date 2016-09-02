@@ -47,6 +47,12 @@ public class SimpleZoneTest extends AbstractSystemTest {
         world.changeZone(zone.getID(), p1);
         world.changeZone(zone.getID(), p2);
         world.changeZone(zone.getID(), p3);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SimpleZoneTest.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        }
         d = world.getDefaultZone();
         assertEquals(0, d.getPlayers().size());
         assertEquals(0, d.getNPCS().size());

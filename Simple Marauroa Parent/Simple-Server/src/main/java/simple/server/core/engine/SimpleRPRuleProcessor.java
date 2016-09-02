@@ -68,8 +68,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     public SimpleRPRuleProcessor() {
         try {
             config = Configuration.getConfiguration();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
         onlinePlayers = new PlayerList();
@@ -117,8 +116,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             DAORegister.get().get(GameEventDAO.class).addGameEvent(
                     source, event, params);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.WARNING, "Can't store game event", e);
         }
     }
@@ -134,8 +132,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                         new Object[]{getGAMENAME(), getVERSION()});
                 SimpleRPRuleProcessor.rpman = rpman;
                 SimpleRPAction.initialize(rpman);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 LOG.log(Level.SEVERE, "Cannot set Context. Exiting...", e);
                 throw new RuntimeException(e);
             }
@@ -219,8 +216,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         debugOutput();
         try {
             logNumberOfPlayersOnline();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error in beginTurn.", e);
         }
     }
@@ -265,8 +261,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             }
             // Run registered object's logic method for this turn
             Lookup.getDefault().lookup(ITurnNotifier.class).logic(currentTurn);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error in endTurn", e);
         }
     }
@@ -297,7 +292,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 entry.object = (RPObject) player;
 
                 Lookup.getDefault().lookup(IRPWorld.class)
-                        .addPlayer((RPObject) player);
+                        .add((RPObject) player);
                 addGameEvent(player.getName(), "login");
                 Lookup.getDefault()
                         .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
@@ -308,8 +303,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 if (!player.isGhost()) {
                     notifyOnlineStatus(true, player.getName());
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 LOG.log(Level.SEVERE, "There has been a severe problem loading player "
                         + object.get("#db_id"), e);
                 result = false;
@@ -355,8 +349,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 LOG.log(Level.FINE, "removed player {0}", player);
             }
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "Error in onExit.", e);
             return true;
         }
