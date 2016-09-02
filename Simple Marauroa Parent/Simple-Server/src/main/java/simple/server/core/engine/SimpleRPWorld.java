@@ -85,8 +85,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             try {
                 LOG.log(Level.FINE, "Removing empty zone: {0}", sZone.getName());
                 removeRPZone(sZone.getID());
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
@@ -180,8 +179,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                             extension.afterWorldInit();
                         });
                 initialized = true;
-            }
-            catch (SQLException | IOException e) {
+            } catch (SQLException | IOException e) {
                 LOG.log(Level.SEVERE, "Error initializing the server!", e);
             }
         }
@@ -418,8 +416,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     connection.disconnect();
                 }
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             LOG.log(Level.SEVERE, null, e);
         }
         TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
@@ -478,8 +475,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         IRPZone result;
         try {
             result = removeRPZone(zone.getID());
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             result = null;
         }
@@ -659,5 +655,15 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         return ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class))
                 .getPlayer(name);
+    }
+
+    @Override
+    public void add(RPObject object) {
+        if (!object.has(Entity.ZONE_ID) //No zone assigned
+                || !hasRPZone(object.get(Entity.ZONE_ID))) { //Assigned zone doesn't exist
+            //Assign the current default zone
+            object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
+        }
+        super.add(object);
     }
 }
