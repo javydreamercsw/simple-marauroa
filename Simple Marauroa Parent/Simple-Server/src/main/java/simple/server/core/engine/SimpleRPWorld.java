@@ -363,14 +363,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         return sZone;
     }
 
-    @Override
-    public boolean addPlayer(RPObject object) {
+    protected boolean addPlayer(RPObject object) {
         boolean result = false;
         if (object instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) object;
             for (IRPZone zone : this) {
                 if (zone.getID().getID().equals(player.getZone().getID().getID())) {
-                    add(object);
                     LOG.fine("Object added");
                     showWorld();
                     //Add it to the RuleProcessor as well
@@ -663,6 +661,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 || !hasRPZone(object.get(Entity.ZONE_ID))) { //Assigned zone doesn't exist
             //Assign the current default zone
             object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
+        }
+        if (object instanceof ClientObjectInterface) {
+            addPlayer(object);
         }
         super.add(object);
     }

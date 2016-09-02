@@ -16,14 +16,6 @@ import simple.server.core.entity.api.RPObjectMonitor;
 public interface IRPWorld extends Iterable<IRPZone> {
 
     /**
-     * Add player to world
-     *
-     * @param object Object to add
-     * @return true if successful
-     */
-    boolean addPlayer(RPObject object);
-
-    /**
      * Add RPZone
      *
      * @param zone zone to add
