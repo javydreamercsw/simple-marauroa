@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.npc.NPC;
+import simple.server.core.tool.Tool;
 import simple.test.AbstractSystemTest;
 import simple.test.TestPlayer;
 
@@ -70,5 +71,24 @@ public class SimpleZoneTest extends AbstractSystemTest {
             Logger.getLogger(SimpleZoneTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }
+    }
+
+    /**
+     * This test checks that the objects are assigned the default zone if: 1)
+     * None has been assigned 2) An invalid/non existing zone has been assigned.
+     */
+    @Test
+    public void testAutomaticZoneAssignment() {
+        RPObject o1 = new RPObject();
+        Tool.setName(o1, "Test");
+        assertEquals(0, world.getDefaultZone().getZoneContents().size());
+        world.add(o1);
+        assertEquals(1, world.getDefaultZone().getZoneContents().size());
+        RPObject o2 = new RPObject();
+        Tool.setName(o2, "Test2");
+        o2.put(Entity.ZONE_ID, UUID.randomUUID().toString());
+        assertEquals(1, world.getDefaultZone().getZoneContents().size());
+        world.add(o2);
+        assertEquals(2, world.getDefaultZone().getZoneContents().size());
     }
 }
