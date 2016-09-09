@@ -10,33 +10,16 @@ import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.mock.MockSimpleRPWorld;
+import simple.test.AbstractSystemTest;
 
 /**
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public class DimensionExtensionTest {
+public class DimensionExtensionTest extends AbstractSystemTest {
 
     private static final Logger LOG
             = Logger.getLogger(DimensionExtensionTest.class.getName());
-
-    public DimensionExtensionTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-        Log4J.init();
-
-        MockSimpleRPWorld.get();
-
-        for (RPEntityInterface entity
-                : Lookup.getDefault().lookupAll(RPEntityInterface.class)) {
-            LOG.log(Level.FINE, "Registering RPEntity: {0}",
-                    entity.getClass().getSimpleName());
-            entity.generateRPClass();
-        }
-    }
 
     /**
      * Test of modifyRootRPClassDefinition method, of class DimensionExtension.
