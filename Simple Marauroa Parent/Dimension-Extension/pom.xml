@@ -8,7 +8,6 @@
     </parent>
 
     <artifactId>Dimension-Extension</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
     <name>Dimension Extension</name>
     
     <dependencies>
@@ -21,7 +20,13 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>0.02.07-SNAPSHOT</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.javydreamercsw</groupId>
+            <artifactId>Marauroa-Simple-Server</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
         </dependency>
     </dependencies>
 </project>
