@@ -1,15 +1,10 @@
 package simple.server.extension;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import marauroa.common.Log4J;
 import marauroa.common.game.RPObject;
 import static org.junit.Assert.assertTrue;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
-import simple.server.core.entity.RPEntityInterface;
 import simple.test.AbstractSystemTest;
 
 /**
