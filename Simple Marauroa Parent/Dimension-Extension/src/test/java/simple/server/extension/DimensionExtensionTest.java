@@ -16,9 +16,6 @@ public class DimensionExtensionTest extends AbstractSystemTest {
     private static final Logger LOG
             = Logger.getLogger(DimensionExtensionTest.class.getName());
 
-    public DimensionExtensionTest() {
-    }
-
     /**
      * Test of modifyRootRPClassDefinition method, of class DimensionExtension.
      */
