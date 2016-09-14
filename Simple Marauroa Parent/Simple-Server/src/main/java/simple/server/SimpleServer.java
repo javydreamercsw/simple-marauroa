@@ -18,7 +18,7 @@ public class SimpleServer {
             = Logger.getLogger(SimpleServer.class.getSimpleName());
     public static marauroad server;
 
-    public static void startServer() {
+    public void startServer() {
         if (server != null && server.isAlive()) {
             Properties conf = new Properties();
             //Load configuration file
@@ -37,7 +37,7 @@ public class SimpleServer {
         }
     }
 
-    public static void startServer(Properties conf) {
+    public void startServer(Properties conf) {
         server = marauroad.getMarauroa(conf);
         startCLI();
     }
@@ -52,10 +52,11 @@ public class SimpleServer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        startServer();
+        SimpleServer ss = new SimpleServer();
+        ss.startServer();
     }
 
-    protected static void startCLI() {
+    protected void startCLI() {
         new SimpleServerCLI().start();
     }
 }
