@@ -51,7 +51,8 @@ public class D20ExtensionTest extends AbstractSystemTest {
                     Item.DEFAULT_RPCLASS_NAME)));
             boolean pass = false;
             LOG.log(Level.INFO, "Checking item attributes:");
-            for (D20ItemAttribute attr : Lookup.getDefault().lookupAll(D20ItemAttribute.class)) {
+            for (D20ItemAttribute attr : Lookup.getDefault()
+                    .lookupAll(D20ItemAttribute.class)) {
                 LOG.log(Level.INFO, "{0}: {1}",
                         new Object[]{attr.getCharacteristicName(),
                             test.get(attr.getCharacteristicName())});
@@ -73,7 +74,8 @@ public class D20ExtensionTest extends AbstractSystemTest {
     @Test
     public void testRPCharacterDefinition() {
         try {
-            Constructor<?> cons = simple.server.core.entity.character.PlayerCharacter.class
+            Constructor<?> cons = 
+                    simple.server.core.entity.character.PlayerCharacter.class
                     .getConstructor(RPObject.class);
             RPEntity test = (RPEntity) cons.newInstance(new RPObject());
             test.update();
@@ -82,7 +84,8 @@ public class D20ExtensionTest extends AbstractSystemTest {
                             .newInstance().getRPClassName())));
             boolean pass = false;
             LOG.log(Level.INFO, "Checking abilities:");
-            for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+            for (D20Ability attr : Lookup.getDefault()
+                    .lookupAll(D20Ability.class)) {
                 LOG.log(Level.INFO, "{0}: {1}",
                         new Object[]{attr.getCharacteristicName(),
                             test.get(attr.getCharacteristicName())});
@@ -96,7 +99,8 @@ public class D20ExtensionTest extends AbstractSystemTest {
             //Stats
             pass = false;
             LOG.log(Level.INFO, "Checking stats:");
-            for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+            for (D20Stat stat : Lookup.getDefault()
+                    .lookupAll(D20Stat.class)) {
                 LOG.log(Level.INFO, "{0}: {1}",
                         new Object[]{stat.getCharacteristicName(),
                             test.get(stat.getCharacteristicName())});
@@ -110,22 +114,26 @@ public class D20ExtensionTest extends AbstractSystemTest {
             //Other attributes
             pass = false;
             LOG.log(Level.INFO, "Checking lists:");
-            for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+            for (D20List attr : Lookup.getDefault()
+                    .lookupAll(D20List.class)) {
                 LOG.log(Level.INFO, "{0}: {1}",
                         new Object[]{attr.getCharacteristicName(),
-                            test.getSlot(attr.getCharacteristicName()).getCapacity()});
+                            test.getSlot(attr.getCharacteristicName())
+                                    .getCapacity()});
                 assertTrue(test.hasSlot(attr.getCharacteristicName()));
                 assertTrue(test.getRPClass()
                         .getDefinition(DefinitionClass.RPSLOT,
                                 attr.getCharacteristicName()) != null);
                 assertEquals(attr.getSize(),
-                        test.getSlot(attr.getCharacteristicName()).getCapacity());
+                        test.getSlot(attr.getCharacteristicName())
+                                .getCapacity());
                 pass = true;
             }
             assertTrue(pass);
             pass = false;
             LOG.log(Level.INFO, "Checking miscellaneous:");
-            for (D20Misc attr : Lookup.getDefault().lookupAll(D20Misc.class)) {
+            for (D20Misc attr : Lookup.getDefault()
+                    .lookupAll(D20Misc.class)) {
                 LOG.log(Level.INFO, "{0}",
                         new Object[]{attr.getCharacteristicName()});
                 assertTrue(test.has(attr.getCharacteristicName()));
@@ -160,13 +168,16 @@ public class D20ExtensionTest extends AbstractSystemTest {
                         r.getClass().getSimpleName());
                 //Check class
                 //Attributes
-                Constructor<?> cons = r.getClass().getConstructor(RPObject.class);
+                Constructor<?> cons = r.getClass()
+                        .getConstructor(RPObject.class);
                 RPEntity test = (RPEntity) cons.newInstance(new RPObject());
                 test.update();
-                test.setRPClass(RPClass.getRPClass(((Entity) r).getRPClassName()));
+                test.setRPClass(RPClass.getRPClass(((Entity) r)
+                        .getRPClassName()));
                 boolean pass = false;
                 LOG.log(Level.INFO, "Checking abilities:");
-                for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+                for (D20Ability attr : Lookup.getDefault()
+                        .lookupAll(D20Ability.class)) {
                     LOG.log(Level.INFO, "{0}: {1}",
                             new Object[]{attr.getCharacteristicName(),
                                 test.get(attr.getCharacteristicName())});
@@ -180,7 +191,8 @@ public class D20ExtensionTest extends AbstractSystemTest {
                 //Stats
                 pass = false;
                 LOG.log(Level.INFO, "Checking stats:");
-                for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+                for (D20Stat stat : Lookup.getDefault()
+                        .lookupAll(D20Stat.class)) {
                     LOG.log(Level.INFO, "{0}: {1}",
                             new Object[]{stat.getCharacteristicName(),
                                 test.get(stat.getCharacteristicName())});
@@ -194,20 +206,22 @@ public class D20ExtensionTest extends AbstractSystemTest {
                 //Other attributes
                 pass = false;
                 LOG.log(Level.INFO, "Checking lists:");
-                for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+                for (D20List attr : Lookup.getDefault()
+                        .lookupAll(D20List.class)) {
                     LOG.log(Level.INFO, "{0}: {1}",
                             new Object[]{attr.getCharacteristicName(),
-                                test.getSlot(attr.getCharacteristicName()).getCapacity()});
+                                test.getSlot(attr.getCharacteristicName())
+                                        .getCapacity()});
                     assertTrue(test.hasSlot(attr.getCharacteristicName()));
                     assertTrue(test.getRPClass()
                             .getDefinition(DefinitionClass.RPSLOT,
                                     attr.getCharacteristicName()) != null);
                     assertEquals(attr.getSize(),
-                            test.getSlot(attr.getCharacteristicName()).getCapacity());
+                            test.getSlot(attr.getCharacteristicName())
+                                    .getCapacity());
                     pass = true;
                 }
                 assertTrue(pass);
-                pass = false;
                 count++;
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 LOG.log(Level.SEVERE, null, ex);
