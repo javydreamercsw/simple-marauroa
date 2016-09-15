@@ -59,4 +59,8 @@ public class SimpleServer {
     protected void startCLI() {
         new SimpleServerCLI().start();
     }
+
+    public boolean isRunning() {
+        return server != null && server.isAlive();
+    }
 }
