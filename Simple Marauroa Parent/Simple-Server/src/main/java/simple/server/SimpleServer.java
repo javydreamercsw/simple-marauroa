@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.server.marauroad;
+import org.openide.util.Lookup;
 
 /**
  *
@@ -37,9 +38,11 @@ public class SimpleServer {
                     LOG.log(Level.SEVERE, "Error reading properties from disk!",
                             ex);
                 }
-            }else{
-                LOG.log(Level.SEVERE, "Unable to find specified configuration "
-                        + "file: {0}", config);
+            } else {
+                LOG.log(Level.WARNING,
+                        "Unable to find specified configuration "
+                        + "file: {0}. Using default!", config);
+                ss.startServer();
             }
         } else {
             ss.startServer();
@@ -66,15 +69,33 @@ public class SimpleServer {
         Properties conf = new Properties();
         //Load configuration file
         File config = new File("server.ini");
-        //Load from file
-        try (FileInputStream in = new FileInputStream(config)) {
-            conf.load(in);
-            LOG.log(Level.INFO, "Loaded local properties from: {0}",
-                    config.getName());
+        if (!config.exists()) {
+            //Create minimum required
+            try {
+                INIGenerator gen = Lookup.getDefault().lookup(INIGenerator.class);
+                if (gen != null) {
+                    gen.generateDefault();
+                }else{
+                    throw new IOException("Unable to find default ini generator!");
+                }
+            }
+            catch (IOException ex) {
+                LOG.log(Level.SEVERE, 
+                        "Unable to generate default configuration!",
+                        ex);
+            }
         }
-        catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Error reading properties from disk!",
-                    ex);
+        if (config.exists()) {
+            //Load from file
+            try (FileInputStream in = new FileInputStream(config)) {
+                conf.load(in);
+                LOG.log(Level.INFO, "Loaded local properties from: {0}",
+                        config.getName());
+            }
+            catch (IOException ex) {
+                LOG.log(Level.SEVERE, "Error reading properties from disk!",
+                        ex);
+            }
         }
         server = marauroad.getMarauroa(conf);
         startCLI();
