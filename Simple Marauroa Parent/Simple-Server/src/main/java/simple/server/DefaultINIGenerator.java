@@ -50,7 +50,7 @@ public class DefaultINIGenerator implements INIGenerator {
     }
 
     @Override
-    public File generateCustom() {
+    public File generateCustom() throws IOException {
         Properties p = new Properties();
         File ini = new File("server.ini");
         if (ini.exists()) {
