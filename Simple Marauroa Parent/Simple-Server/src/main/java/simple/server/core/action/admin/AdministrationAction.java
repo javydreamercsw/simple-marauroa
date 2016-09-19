@@ -45,7 +45,8 @@ public abstract class AdministrationAction implements ActionProvider {
         return val;
     }
 
-    public static boolean isPlayerAllowedToExecuteAdminCommand(ClientObjectInterface player,
+    public static boolean isPlayerAllowedToExecuteAdminCommand(
+            ClientObjectInterface player,
             String command, boolean verbose) {
         // get adminlevel of player and required adminlevel for this command
         int adminlevel = player.getAdminLevel();
@@ -55,7 +56,8 @@ public abstract class AdministrationAction implements ActionProvider {
         if (required == null) {
             LOG.log(Level.SEVERE, "Unknown command {0}", command);
             if (verbose) {
-                player.sendPrivateText("Sorry, command \"" + command + "\" is unknown.");
+                player.sendPrivateText("Sorry, command \"" + command
+                        + "\" is unknown.");
             }
             return false;
         }
@@ -122,7 +124,8 @@ public abstract class AdministrationAction implements ActionProvider {
             if (id.startsWith("#")) {
                 id = id.substring(1);
             } else {
-                target = (Entity) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+                target = (Entity) ((SimpleRPRuleProcessor) Lookup.getDefault()
+                        .lookup(IRPRuleProcessor.class))
                         .getPlayer(id);
                 return target;
             }
@@ -146,7 +149,6 @@ public abstract class AdministrationAction implements ActionProvider {
                 }
             }
         }
-
         return target;
     }
 }
