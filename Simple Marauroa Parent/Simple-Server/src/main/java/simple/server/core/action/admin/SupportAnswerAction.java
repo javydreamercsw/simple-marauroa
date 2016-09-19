@@ -12,31 +12,42 @@ import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
 @ServiceProvider(service = ActionProvider.class)
-public class SupportAnswerAction extends AdministrationAction implements ActionProvider{
+public class SupportAnswerAction extends AdministrationAction 
+        implements ActionProvider {
 
-    private static final String _TEXT = "text";
-    private static final String _SUPPORTANSWER = "supportanswer";
+    private static final String TEXT = "support_text";
+    private static final String SUPPORTANSWER = "supportanswer";
 
     @Override
     public void register() {
-        CommandCenter.register(_SUPPORTANSWER, new SupportAnswerAction(), 50);
+        CommandCenter.register(SUPPORTANSWER, new SupportAnswerAction(), 50);
     }
 
     @Override
     public void perform(ClientObjectInterface player, RPAction action) {
-        if (action.has(TARGET) && action.has(_TEXT)) {
-            final String message = player.getTitle() + " answers " + Grammar.suffix_s(action.get(TARGET)) + " support question: " + action.get(_TEXT);
+        if (action.has(TARGET) && action.has(TEXT)) {
+            final String message = player.getTitle() + " answers "
+                    + Grammar.suffix_s(action.get(TARGET))
+                    + " support question: " + action.get(TEXT);
 
-            ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(), _SUPPORTANSWER, action.get(TARGET),
-                    action.get(_TEXT));
-            ClientObjectInterface supported = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(action.get(TARGET));
+            ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(),
+                    SUPPORTANSWER, action.get(TARGET),
+                    action.get(TEXT));
+            ClientObjectInterface supported
+                    = ((SimpleRPRuleProcessor) Lookup.getDefault()
+                            .lookup(IRPRuleProcessor.class))
+                            .getPlayer(action.get(TARGET));
             if (supported != null) {
 
-                supported.sendPrivateText("Support (" + player.getTitle() + ") tells you: " + action.get(_TEXT) + " If you wish to reply, use /support.");
+                supported.sendPrivateText("Support (" + player.getTitle()
+                        + ") tells you: " + action.get(TEXT)
+                        + " If you wish to reply, use /support.");
                 supported.notifyWorldAboutChanges();
                 SimpleRPRuleProcessor.sendMessageToSupporters(message);
             } else {
-                player.sendPrivateText(action.get(TARGET) + " is not currently logged in.");
+                player.sendPrivateText(action.get(TARGET)
+                        + " is not currently logged in.");
             }
         }
     }
