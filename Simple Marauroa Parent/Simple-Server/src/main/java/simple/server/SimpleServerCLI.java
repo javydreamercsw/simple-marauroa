@@ -45,7 +45,7 @@ class SimpleServerCLI extends Thread {
             input = new BufferedReader(new InputStreamReader(System.in));
             String line;
             line = input.readLine();
-            while (!line.equals("")) {
+            while (line !=null && !line.equals("")) {
                 processInput(line.trim());
                 line = input.readLine();
             }
