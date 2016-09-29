@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.crypto.RSAKey;
 import marauroa.server.db.adapter.H2DatabaseAdapter;
+import marauroa.server.game.GameServerManager;
 import org.h2.Driver;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -64,12 +65,25 @@ public class DefaultINIGenerator implements INIGenerator {
         defaults.put("tcp_port",
                 "" + new Random().nextInt(1000) * 3 + 1000);
         defaults.put("jdbc_url",
-                "jdbc:h2:mem:;AUTO_RECONNECT=TRUE;DB_CLOSE_ON_EXIT=TRUE");
+                "jdbc:h2:file:./data/simple_server;CREATE=TRUE;AUTO_SERVER=TRUE;"
+                + "LOCK_TIMEOUT=10000;MVCC=true;DB_CLOSE_ON_EXIT=FALSE;"
+                + "MVCC=true;LOCK_MODE=1");
         defaults.put("jdbc_class", Driver.class.getCanonicalName());
         defaults.put("turn_length", "" + 50);
         defaults.put("system_account_name", "system");
         defaults.put("system_password", "system");
         defaults.put("system_email", "system@email.com");
+        defaults.put("statistics_filename", "./server_stats.xml");
+        defaults.put("allow_account_creation", "true");
+        defaults.put("database_implementation", 
+                SimpleDatabase.class.getCanonicalName());
+        defaults.put("factory_implementation",
+                SimpleRPObjectFactory.class.getCanonicalName());
+        defaults.put("gameserver_implementation", 
+                GameServerManager.class.getCanonicalName());
+        defaults.put("world", SimpleRPWorld.class.getCanonicalName());
+        defaults.put("ruleprocessor", 
+                SimpleRPRuleProcessor.class.getCanonicalName());
     }
 
     @Override
@@ -106,7 +120,7 @@ public class DefaultINIGenerator implements INIGenerator {
      */
     public String getStringWithDefault(final BufferedReader input,
             final String defaultValue) {
-        String ret = "";
+        String ret = null;
         try {
             ret = input.readLine();
         }
@@ -131,7 +145,7 @@ public class DefaultINIGenerator implements INIGenerator {
      */
     public String getStringWithoutDefault(final BufferedReader input,
             final String errorMessage) {
-        String ret = "";
+        String ret = null;
         try {
             ret = input.readLine();
         }
@@ -241,7 +255,7 @@ public class DefaultINIGenerator implements INIGenerator {
         out.println("server_name=Simple Marauroa server");
         out.println("server_version=1.00");
         out.println("server_contact=http://sourceforge.net/tracker/?atid=945763&group_id=193525&func=browse");
-        out.println("server_welcome="+getWelcomeMessage());
+        out.println("server_welcome=" + getWelcomeMessage());
         out.println();
         out.println("statistics_filename=" + statisticsFilename);
         out.println();
@@ -338,7 +352,7 @@ public class DefaultINIGenerator implements INIGenerator {
         } else {
             System.out.println("Using integrated h2 database.");
         }
-        
+
         clientObject = getClientObjectImplementation();
         persistenceUnitName = getPersistenceUnitName();
 
