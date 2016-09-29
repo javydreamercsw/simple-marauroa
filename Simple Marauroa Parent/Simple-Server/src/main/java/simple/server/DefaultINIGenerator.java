@@ -67,6 +67,9 @@ public class DefaultINIGenerator implements INIGenerator {
                 "jdbc:h2:mem:;AUTO_RECONNECT=TRUE;DB_CLOSE_ON_EXIT=TRUE");
         defaults.put("jdbc_class", Driver.class.getCanonicalName());
         defaults.put("turn_length", "" + 50);
+        defaults.put("system_account_name", "system");
+        defaults.put("system_password", "system");
+        defaults.put("system_email", "system@email.com");
     }
 
     @Override
