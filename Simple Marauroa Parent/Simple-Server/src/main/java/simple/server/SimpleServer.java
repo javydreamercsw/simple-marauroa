@@ -18,7 +18,7 @@ public class SimpleServer {
     private static final Logger LOG
             = Logger.getLogger(SimpleServer.class.getSimpleName());
     public static marauroad server;
-    private boolean startCLI=true;
+    private static boolean startCLI=true;
 
     /**
      * @param args the command line arguments
@@ -51,6 +51,7 @@ public class SimpleServer {
     }
 
     protected static void startCLI() {
+        if(isStartCLI())
         new SimpleServerCLI().start();
     }
 
@@ -105,7 +106,7 @@ public class SimpleServer {
     /**
      * @return the startCLI
      */
-    public final boolean isStartCLI() {
+    public static final boolean isStartCLI() {
         return startCLI;
     }
 
@@ -113,6 +114,6 @@ public class SimpleServer {
      * @param startCLI the startCLI to set
      */
     public final void setStartCLI(boolean startCLI) {
-        this.startCLI = startCLI;
+        SimpleServer.startCLI = startCLI;
     }
 }
