@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.crypto.RSAKey;
@@ -62,8 +61,7 @@ public class DefaultINIGenerator implements INIGenerator {
     public DefaultINIGenerator() {
         defaults.put("database_adapter",
                 H2DatabaseAdapter.class.getCanonicalName());
-        defaults.put("tcp_port",
-                "" + new Random().nextInt(1000) * 3 + 1000);
+        defaults.put("tcp_port", "32180");
         defaults.put("jdbc_url",
                 "jdbc:h2:file:./data/simple_server;CREATE=TRUE;AUTO_SERVER=TRUE;"
                 + "LOCK_TIMEOUT=10000;MVCC=true;DB_CLOSE_ON_EXIT=FALSE;"
@@ -75,14 +73,14 @@ public class DefaultINIGenerator implements INIGenerator {
         defaults.put("system_email", "system@email.com");
         defaults.put("statistics_filename", "./server_stats.xml");
         defaults.put("allow_account_creation", "true");
-        defaults.put("database_implementation", 
+        defaults.put("database_implementation",
                 SimpleDatabase.class.getCanonicalName());
         defaults.put("factory_implementation",
                 SimpleRPObjectFactory.class.getCanonicalName());
-        defaults.put("gameserver_implementation", 
+        defaults.put("gameserver_implementation",
                 GameServerManager.class.getCanonicalName());
         defaults.put("world", SimpleRPWorld.class.getCanonicalName());
-        defaults.put("ruleprocessor", 
+        defaults.put("ruleprocessor",
                 SimpleRPRuleProcessor.class.getCanonicalName());
     }
 
