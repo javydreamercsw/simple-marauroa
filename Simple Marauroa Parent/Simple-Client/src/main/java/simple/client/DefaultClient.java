@@ -60,7 +60,7 @@ public class DefaultClient implements ClientFrameworkProvider,
     private String username;
     private String password;
     private String email;
-    private Map<String, RPObject> characters = new HashMap<>();
+    private final Map<String, RPObject> characters = new HashMap<>();
     private boolean createDefaultCharacter = false;
     private boolean connected = false;
     private boolean autocreation = true;
@@ -371,8 +371,8 @@ public class DefaultClient implements ClientFrameworkProvider,
             }));
         }
         if (getClientManager() == null) {
-            createClientManager(gameName != null ? gameName : "SimpleMarauroa",
-                    version != null ? version : "1.0");
+            createClientManager(gameName != null ? gameName : "Simple",
+                    version != null ? version : "1.00");
         }
         try {
             LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
