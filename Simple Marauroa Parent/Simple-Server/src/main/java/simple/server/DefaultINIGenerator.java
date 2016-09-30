@@ -82,6 +82,9 @@ public class DefaultINIGenerator implements INIGenerator {
         defaults.put("world", SimpleRPWorld.class.getCanonicalName());
         defaults.put("ruleprocessor",
                 SimpleRPRuleProcessor.class.getCanonicalName());
+        defaults.put("server_name", "Simple");
+        defaults.put("server_version", "1.00");
+        defaults.put("server_typeGame", "Simple");
     }
 
     @Override
