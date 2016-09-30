@@ -82,28 +82,28 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     /**
      * @return the VERSION
      */
-    public static String getVERSION() {
+    public String getVERSION() {
         return VERSION;
     }
 
     /**
      * @param aVERSION the VERSION to set
      */
-    public static void setVERSION(String aVERSION) {
+    public void setVERSION(String aVERSION) {
         VERSION = aVERSION;
     }
 
     /**
      * @return the GAMENAME
      */
-    public static String getGAMENAME() {
+    public String getGAMENAME() {
         return GAMENAME;
     }
 
     /**
      * @param aGAMENAME the GAMENAME to set
      */
-    public static void setGAMENAME(String aGAMENAME) {
+    public void setGAMENAME(String aGAMENAME) {
         GAMENAME = aGAMENAME;
     }
 
