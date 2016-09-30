@@ -26,6 +26,7 @@ import marauroa.common.net.message.MessageS2CPerception;
 import marauroa.common.net.message.TransferContent;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.util.lookup.ServiceProviders;
 import simple.client.api.AddListener;
 import simple.client.api.ClearListener;
 import simple.client.api.DeleteListener;
@@ -41,8 +42,12 @@ import simple.server.core.entity.clientobject.ClientObject;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-@ServiceProvider(service = ClientFrameworkProvider.class)
-public class DefaultClient implements ClientFrameworkProvider {
+@ServiceProviders({
+    @ServiceProvider(service = ClientFrameworkProvider.class)
+    ,
+@ServiceProvider(service = MessageProvider.class)})
+public class DefaultClient implements ClientFrameworkProvider,
+        MessageProvider {
 
     private String port;
     private String gameName;
@@ -122,7 +127,7 @@ public class DefaultClient implements ClientFrameworkProvider {
                         int j = 0;
                         for (RPObject object
                                 : Lookup.getDefault().lookup(IWorldManager.class)
-                                .getWorld().values()) {
+                                        .getWorld().values()) {
                             j++;
                             LOG.log(Level.FINE, "{0}. {1}",
                                     new Object[]{j, object});
@@ -429,14 +434,17 @@ public class DefaultClient implements ClientFrameworkProvider {
                             break;
                         case FAILED_CREATE_ON_MAIN_INSTEAD:
                             LOG.severe("Account creation is disabled on server!");
-                            Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
+                            Lookup.getDefault().lookup(MessageProvider.class)
+                                    .displayError("ERROR",
                                     "Account creation is disabled on server!");
                             break;
                         default:
                             LOG.log(Level.SEVERE, "Unable to create account: {0}",
                                     result.getResult().getText());
-                            Lookup.getDefault().lookup(MessageProvider.class).displayError("ERROR",
-                                    "Unable to create account: " + result.getResult().getText());
+                            Lookup.getDefault().lookup(MessageProvider.class)
+                                    .displayError("ERROR",
+                                    "Unable to create account: " 
+                                            + result.getResult().getText());
                             break;
                     }
                 }
@@ -454,14 +462,16 @@ public class DefaultClient implements ClientFrameworkProvider {
                     Lookup.getDefault().lookup(MessageProvider.class)
                             .displayError("Invalid version!",
                                     "Invalid version: " + ex.getVersion()
-                                    + " vs. protocol version: " + ex.getProtocolVersion());
+                                    + " vs. protocol version: " 
+                                            + ex.getProtocolVersion());
                 }
                 catch (InterruptedException ex) {
-                    Logger.getLogger(DefaultClient.class.getName()).log(Level.SEVERE, null, ex);
+                    LOG.log(Level.SEVERE, null, ex);
                 }
             } else {
                 Lookup.getDefault().lookup(MessageProvider.class)
-                        .displayWarning("Login Failed!", e.getLocalizedMessage());
+                        .displayWarning("Login Failed!", 
+                                e.getReason().toString());
                 showLoginDialog();
             }
         }
@@ -641,5 +651,20 @@ public class DefaultClient implements ClientFrameworkProvider {
     @Override
     public void setAutoCreation(boolean autocreation) {
         this.autocreation = autocreation;
+    }
+
+    @Override
+    public void displayWarning(String title, String message) {
+        LOG.log(Level.WARNING, "{0}: {1}", new Object[]{title, message});
+    }
+
+    @Override
+    public void displayError(String title, String message) {
+        LOG.log(Level.SEVERE, "{0}: {1}", new Object[]{title, message});
+    }
+
+    @Override
+    public void displayInfo(String title, String message) {
+        LOG.log(Level.INFO, "{0}: {1}", new Object[]{title, message});
     }
 }
