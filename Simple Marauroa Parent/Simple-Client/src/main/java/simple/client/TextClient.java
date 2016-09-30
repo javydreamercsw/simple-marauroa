@@ -14,7 +14,8 @@ public final class TextClient extends DefaultClient {
             boolean t, String name, String v) throws SocketException {
         setShowWorld(world);
         setChat(chat);
-        super.connect(h, u, p, c, P, name, v);
+        setCreateDefaultCharacter(true);
+        connect(h, u, p, c, P, name, v);
     }
 
     public static void main(String[] args) {
@@ -97,21 +98,5 @@ public final class TextClient extends DefaultClient {
             LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
-    }
-
-    @Override
-    public void connect(String host, String username, String password,
-            String user_character, String port, String game_name,
-            String version) throws SocketException {
-        setHost(host);
-        setUsername(username);
-        setPassword(password);
-        setCharacter(user_character);
-        setPort(port);
-        setVersion(version);
-        setGameName(game_name);
-        setEmail("dummy");
-        createClientManager(getGameName() != null ? getGameName() : "Simple",
-                getVersion() != null ? getVersion() : "0.02.06");
     }
 }
