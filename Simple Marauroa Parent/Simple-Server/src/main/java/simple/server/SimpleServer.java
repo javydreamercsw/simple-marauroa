@@ -3,11 +3,18 @@ package simple.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.marauroad;
 import org.openide.util.Lookup;
+import simple.server.core.engine.SimpleRPRuleProcessor;
 
 /**
  *
@@ -18,7 +25,7 @@ public class SimpleServer {
     private static final Logger LOG
             = Logger.getLogger(SimpleServer.class.getSimpleName());
     public static marauroad server;
-    private static boolean startCLI=true;
+    private static boolean startCLI = true;
 
     /**
      * @param args the command line arguments
@@ -51,8 +58,9 @@ public class SimpleServer {
     }
 
     protected static void startCLI() {
-        if(isStartCLI())
-        new SimpleServerCLI().start();
+        if (isStartCLI()) {
+            new SimpleServerCLI().start();
+        }
     }
 
     public void stopServer() {
@@ -77,12 +85,12 @@ public class SimpleServer {
                 INIGenerator gen = Lookup.getDefault().lookup(INIGenerator.class);
                 if (gen != null) {
                     gen.generateDefault();
-                }else{
+                } else {
                     throw new IOException("Unable to find default ini generator!");
                 }
             }
             catch (IOException ex) {
-                LOG.log(Level.SEVERE, 
+                LOG.log(Level.SEVERE,
                         "Unable to generate default configuration!",
                         ex);
             }
@@ -100,7 +108,40 @@ public class SimpleServer {
             }
         }
         server = marauroad.getMarauroa(conf);
-        startCLI();
+        IRPRuleProcessor rp = Lookup.getDefault().lookup(IRPRuleProcessor.class);
+        if (rp != null && rp instanceof SimpleRPRuleProcessor) {
+            SimpleRPRuleProcessor srp = (SimpleRPRuleProcessor) rp;
+            if (conf.containsKey("server_name")) {
+                srp.setGAMENAME(conf.getProperty("server_name"));
+            }
+            if (conf.containsKey("server_version")) {
+                srp.setGAMENAME(conf.getProperty("server_version"));
+            }
+        }
+        if (server.init(new String[]{})) {
+            try {
+                System.out.println("Your Host addr: " 
+                        + InetAddress.getLocalHost().getHostAddress());  // often returns "127.0.0.1"
+                Enumeration<NetworkInterface> n = 
+                        NetworkInterface.getNetworkInterfaces();
+                while (n.hasMoreElements()) {
+                    NetworkInterface e = n.nextElement();
+
+                    Enumeration<InetAddress> a = e.getInetAddresses();
+                    while (a.hasMoreElements()) {
+                        InetAddress addr = a.nextElement();
+                        System.out.println("  " + addr.getHostAddress());
+                    }
+                }
+            }
+            catch (SocketException | UnknownHostException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+            startCLI();
+        } else {
+            LOG.severe("Initialization failed!");
+            System.exit(-1);
+        }
     }
 
     /**
