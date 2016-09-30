@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.marauroad;
 import org.openide.util.Lookup;
+import org.python.jline.internal.Configuration;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
 /**
@@ -72,7 +73,46 @@ public class SimpleServer {
 
     public void startServer(Properties conf) {
         server = marauroad.getMarauroa(conf);
-        startCLI();
+        internalInit(conf);
+    }
+
+    private void internalInit(Properties conf) {
+        IRPRuleProcessor rp = Lookup.getDefault().lookup(IRPRuleProcessor.class);
+        if (rp != null && rp instanceof SimpleRPRuleProcessor) {
+            SimpleRPRuleProcessor srp = (SimpleRPRuleProcessor) rp;
+            if (conf.containsKey("server_name")) {
+                srp.setGAMENAME(conf.getProperty("server_name"));
+            }
+            if (conf.containsKey("server_version")) {
+                srp.setVERSION(conf.getProperty("server_version"));
+            }
+        }
+        if (server.init(new String[]{})) {
+            try {
+                System.out.println("Your Host addr: "
+                        + InetAddress.getLocalHost().getHostAddress());  // often returns "127.0.0.1"
+                Enumeration<NetworkInterface> n
+                        = NetworkInterface.getNetworkInterfaces();
+                while (n.hasMoreElements()) {
+                    NetworkInterface e = n.nextElement();
+
+                    Enumeration<InetAddress> a = e.getInetAddresses();
+                    while (a.hasMoreElements()) {
+                        InetAddress addr = a.nextElement();
+                        System.out.println("  " + addr.getHostAddress());
+                    }
+                }
+                System.out.println("Running on port: "
+                        + conf.getProperty("tcp_port"));
+            }
+            catch (SocketException | UnknownHostException ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+            startCLI();
+        } else {
+            LOG.severe("Initialization failed!");
+            System.exit(-1);
+        }
     }
 
     public void startServer() {
@@ -108,40 +148,7 @@ public class SimpleServer {
             }
         }
         server = marauroad.getMarauroa(conf);
-        IRPRuleProcessor rp = Lookup.getDefault().lookup(IRPRuleProcessor.class);
-        if (rp != null && rp instanceof SimpleRPRuleProcessor) {
-            SimpleRPRuleProcessor srp = (SimpleRPRuleProcessor) rp;
-            if (conf.containsKey("server_name")) {
-                srp.setGAMENAME(conf.getProperty("server_name"));
-            }
-            if (conf.containsKey("server_version")) {
-                srp.setGAMENAME(conf.getProperty("server_version"));
-            }
-        }
-        if (server.init(new String[]{})) {
-            try {
-                System.out.println("Your Host addr: " 
-                        + InetAddress.getLocalHost().getHostAddress());  // often returns "127.0.0.1"
-                Enumeration<NetworkInterface> n = 
-                        NetworkInterface.getNetworkInterfaces();
-                while (n.hasMoreElements()) {
-                    NetworkInterface e = n.nextElement();
-
-                    Enumeration<InetAddress> a = e.getInetAddresses();
-                    while (a.hasMoreElements()) {
-                        InetAddress addr = a.nextElement();
-                        System.out.println("  " + addr.getHostAddress());
-                    }
-                }
-            }
-            catch (SocketException | UnknownHostException ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
-            startCLI();
-        } else {
-            LOG.severe("Initialization failed!");
-            System.exit(-1);
-        }
+        internalInit(conf);
     }
 
     /**
