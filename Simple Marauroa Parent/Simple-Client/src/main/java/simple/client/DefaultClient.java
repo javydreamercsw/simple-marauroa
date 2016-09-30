@@ -371,7 +371,7 @@ public class DefaultClient implements ClientFrameworkProvider,
             }));
         }
         if (getClientManager() == null) {
-            createClientManager(gameName != null ? gameName : "jWrestling",
+            createClientManager(gameName != null ? gameName : "SimpleMarauroa",
                     version != null ? version : "1.0");
         }
         try {
