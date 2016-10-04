@@ -436,14 +436,14 @@ public class DefaultClient implements ClientFrameworkProvider,
                             LOG.severe("Account creation is disabled on server!");
                             Lookup.getDefault().lookup(MessageProvider.class)
                                     .displayError("ERROR",
-                                    "Account creation is disabled on server!");
+                                            "Account creation is disabled on server!");
                             break;
                         default:
                             LOG.log(Level.SEVERE, "Unable to create account: {0}",
                                     result.getResult().getText());
                             Lookup.getDefault().lookup(MessageProvider.class)
                                     .displayError("ERROR",
-                                    "Unable to create account: " 
+                                            "Unable to create account: "
                                             + result.getResult().getText());
                             break;
                     }
@@ -462,15 +462,15 @@ public class DefaultClient implements ClientFrameworkProvider,
                     Lookup.getDefault().lookup(MessageProvider.class)
                             .displayError("Invalid version!",
                                     "Invalid version: " + ex.getVersion()
-                                    + " vs. protocol version: " 
-                                            + ex.getProtocolVersion());
+                                    + " vs. protocol version: "
+                                    + ex.getProtocolVersion());
                 }
                 catch (InterruptedException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                 }
             } else {
                 Lookup.getDefault().lookup(MessageProvider.class)
-                        .displayWarning("Login Failed!", 
+                        .displayWarning("Login Failed!",
                                 e.getReason().toString());
                 showLoginDialog();
             }
@@ -666,5 +666,10 @@ public class DefaultClient implements ClientFrameworkProvider,
     @Override
     public void displayInfo(String title, String message) {
         LOG.log(Level.INFO, "{0}: {1}", new Object[]{title, message});
+    }
+
+    @Override
+    public void disconnect() {
+        this.connected = false;
     }
 }
