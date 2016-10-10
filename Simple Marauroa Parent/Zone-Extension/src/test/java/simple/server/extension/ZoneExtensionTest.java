@@ -157,6 +157,11 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         action.put(ZoneExtension.OPERATION, ZoneEvent.REMOVE);
         //Delete room
         instance.onAction(player, action);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
         assertEquals(1, listener.getCount());
     }
