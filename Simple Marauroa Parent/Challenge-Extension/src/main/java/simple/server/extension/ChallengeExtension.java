@@ -2,9 +2,7 @@ package simple.server.extension;
 
 import marauroa.common.Log4J;
 import marauroa.common.Logger;
-import marauroa.common.game.Definition;
 import marauroa.common.game.RPAction;
-import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
@@ -184,11 +182,6 @@ public class ChallengeExtension extends SimpleServerExtension
                 }
             }
         }
-    }
-
-    @Override
-    public void modifyClientObjectDefinition(RPClass player) {
-        player.addRPEvent(ChallengeEvent.RPCLASS_NAME, Definition.VOLATILE);
     }
 
     @Override
