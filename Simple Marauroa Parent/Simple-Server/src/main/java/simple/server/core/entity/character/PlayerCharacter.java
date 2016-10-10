@@ -37,10 +37,10 @@ public class PlayerCharacter extends RPEntity {
         if (!RPClass.hasRPClass(DEFAULT_RP_CLASSNAME)) {
             RPClass entity = new RPClass(DEFAULT_RP_CLASSNAME);
             entity.isA(RPEntity.DEFAULT_RPCLASS);
-            for (MarauroaServerExtension ext
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .forEach((ext) -> {
                 ext.modifyCharacterRPClassDefinition(entity);
-            }
+                    });
             entity.addAttribute(LevelEntity.LEVEL, Definition.Type.INT);
         } else if (!RPCLASS_NAME.isEmpty() && !RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass clazz = new RPClass(RPCLASS_NAME);
@@ -51,10 +51,10 @@ public class PlayerCharacter extends RPEntity {
     @Override
     public void update() {
         super.update();
-        for (MarauroaServerExtension ext
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                .forEach((ext) -> {
             ext.characterRPClassUpdate(this);
-        }
+                });
         if (!has(LevelEntity.LEVEL)) {
             put(LevelEntity.LEVEL, 0);
         }
