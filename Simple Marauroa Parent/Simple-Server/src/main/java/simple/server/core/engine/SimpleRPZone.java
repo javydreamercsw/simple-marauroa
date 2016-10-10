@@ -100,7 +100,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     java.lang.reflect.Method localSingleton = clientObjectClass
                             .getDeclaredMethod("onRemoved", types);
                     localSingleton.invoke(clientObjectClass.cast(object), this);
-                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
+                }
+                catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                 }
                 //Let everyone else know
@@ -238,12 +239,14 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 player.sendPrivateText(NotificationType.RESPONSE, object
                         + " successfully created!");
             }
-            for (MarauroaServerExtension extension
-                    : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-                LOG.log(Level.FINE, "Processing extension: {0}",
-                        extension.getClass().getSimpleName());
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .stream().map((extension) -> {
+                        LOG.log(Level.FINE, "Processing extension: {0}",
+                                extension.getClass().getSimpleName());
+                        return extension;
+                    }).forEachOrdered((extension) -> {
                 extension.onRPObjectAddToZone(object);
-            }
+            });
         }
     }
 
@@ -314,7 +317,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void applyPublicEvent(final RPEvent event, final int delay) {
-        for (RPObject p : getPlayers()) {
+        getPlayers().forEach((p) -> {
             if (p instanceof ClientObjectInterface) {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
                         new Object[]{p, p.getID(),
@@ -337,13 +340,17 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 p.addEvent(event);
                 Lookup.getDefault().lookup(IRPWorld.class).modify(p);
             }
-        }
-        for (RPEntityInterface npc : getNPCS()) {
+        });
+        getNPCS().stream().map((npc) -> {
             LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
                     new Object[]{npc, ((RPObject) npc).getID(), npc.getZone()});
+            return npc;
+        }).map((npc) -> {
             ((RPObject) npc).addEvent(event);
+            return npc;
+        }).forEachOrdered((npc) -> {
             Lookup.getDefault().lookup(IRPWorld.class).modify((RPObject) npc);
-        }
+        });
     }
 
     /**
@@ -419,7 +426,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         try {
             result = Tool.encrypt(pass,
                     Configuration.getConfiguration().get("d")).equals(password);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             result = false;
         }
