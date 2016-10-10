@@ -48,8 +48,9 @@ public class SimpleZoneTest extends AbstractSystemTest {
         world.changeZone(zone.getID(), p2);
         world.changeZone(zone.getID(), p3);
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ex) {
+            Thread.sleep(10000);
+        }
+        catch (InterruptedException ex) {
             Logger.getLogger(SimpleZoneTest.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
