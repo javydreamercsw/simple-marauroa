@@ -33,7 +33,8 @@ import simple.server.core.tool.Tool;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
-public class ZoneExtension extends SimpleServerExtension implements ActionInterface {
+public class ZoneExtension extends SimpleServerExtension
+        implements ActionInterface {
 
     /**
      * the logger instance.
@@ -41,8 +42,8 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
     private static final Logger LOG
             = Logger.getLogger(ZoneExtension.class.getSimpleName());
     public static final String TYPE = "CRUDZone", ROOM = "room",
-            DESC = "description", OPERATION = "operation", PASSWORD = "password",
-            SEPARATOR = "separator";
+            DESC = "description", OPERATION = "operation",
+            PASSWORD = "password", SEPARATOR = "separator";
 
     public ZoneExtension() {
         CommandCenter.register(TYPE, ZoneExtension.this);
@@ -60,7 +61,8 @@ public class ZoneExtension extends SimpleServerExtension implements ActionInterf
             //Just wait a little bit...
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
                     new DelayedAction(new AbstractAction() {
-                        private static final long serialVersionUID = -5644390861803492172L;
+                        private static final long serialVersionUID
+                                = -5644390861803492172L;
 
                         @Override
                         public void actionPerformed(ActionEvent e) {
