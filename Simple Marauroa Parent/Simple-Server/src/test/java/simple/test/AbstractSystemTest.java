@@ -29,7 +29,6 @@ import org.openide.util.Lookup;
 import simple.server.application.db.DAO;
 import simple.server.application.db.IDatabase;
 import simple.server.core.engine.IRPWorld;
-import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.tool.Tool;
@@ -45,7 +44,7 @@ public abstract class AbstractSystemTest {
             = Logger.getLogger(AbstractSystemTest.class.getSimpleName());
     private static final IRPWorld WORLD = Lookup.getDefault().lookup(IRPWorld.class);
     private static final IDatabase DB = Lookup.getDefault().lookup(IDatabase.class);
-    private static File ini = new File("server.ini");
+    private static final File INI = new File("server.ini");
 
     @BeforeClass
     public static void setup() throws Exception {
@@ -63,11 +62,11 @@ public abstract class AbstractSystemTest {
     }
 
     private static void checkINIFile() {
-        if (!ini.exists()) {
+        if (!INI.exists()) {
             try {
                 LOG.warning("INI file not found, generating default for "
                         + "testing purposes!");
-                ini.deleteOnExit();
+                INI.deleteOnExit();
                 List<String> lines = Arrays.asList(
                         "database_implementation=simple.server.application.db.SimpleDatabase",
                         "factory_implementation=simple.server.core.engine.SimpleRPObjectFactory",
@@ -98,7 +97,7 @@ public abstract class AbstractSystemTest {
                         + "3416307227952013743326604648798383322370040"
                         + "7625284965452796321477265264173527901632535"
                         + "4691167883850414929419335");
-                Path file = Paths.get(ini.getAbsolutePath());
+                Path file = Paths.get(INI.getAbsolutePath());
                 Files.write(file, lines, Charset.forName("UTF-8"));
             } catch (IOException ex) {
                 LOG.log(Level.SEVERE, null, ex);
@@ -110,15 +109,17 @@ public abstract class AbstractSystemTest {
     public void prepare() throws Exception {
         cleanup();
         //Run all after init actions on extensions in case they create something.
-        for (MarauroaServerExtension ext : Lookup.getDefault()
-                .lookupAll(MarauroaServerExtension.class)) {
+        Lookup.getDefault()
+                .lookupAll(MarauroaServerExtension.class).forEach((ext) -> {
             ext.afterWorldInit();
-        }
+        });
         //Load all DAO's for the instances there are some relationships between them.
-        for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
+        Lookup.getDefault().lookupAll(DAO.class).stream().map((dao) -> {
             dao.register();
+            return dao;
+        }).forEachOrdered((dao) -> {
             dao.init();
-        }
+        });
         LOG.log(Level.INFO, "Done!");
     }
 
@@ -126,16 +127,16 @@ public abstract class AbstractSystemTest {
     public void cleanup() {
         LOG.log(Level.INFO, "Cleaning test database environment...");
         //Remove players from zones
-        for (SimpleRPZone zone : WORLD.getZones()) {
+        WORLD.getZones().forEach((zone) -> {
             WORLD.emptyZone(zone);
-        }
+        });
         try {   //It's deleted on the initialization of the environemnt
             WORLD.createSystemAccount();
             //Reset database. This only works with H2
             Properties prop = new Properties();
             InputStream input = null;
             try {
-                input = new FileInputStream(ini);
+                input = new FileInputStream(INI);
                 // load a properties file
                 prop.load(input);
             } catch (IOException ex) {
@@ -164,7 +165,7 @@ public abstract class AbstractSystemTest {
                             tables.add(rs.getString(1));
                         }
                         for (String table : tables) {
-                            LOG.log(Level.INFO, "Truncating table: {0}", table);
+                            LOG.log(Level.FINE, "Truncating table: {0}", table);
                             stat.execute("TRUNCATE TABLE " + table);
                         }
                         stat.execute("SET REFERENTIAL_INTEGRITY TRUE");
