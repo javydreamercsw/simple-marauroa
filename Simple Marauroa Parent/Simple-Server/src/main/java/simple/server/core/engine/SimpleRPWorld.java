@@ -85,7 +85,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             try {
                 LOG.log(Level.FINE, "Removing empty zone: {0}", sZone.getName());
                 removeRPZone(sZone.getID());
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
@@ -135,17 +136,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     extension.updateDatabase();
                 }
                 LOG.info("Done!");
-                LOG.info("Creating RPClasses...");
-                Collection<? extends RPEntityInterface> classes
-                        = Lookup.getDefault().lookupAll(RPEntityInterface.class);
-                LOG.log(Level.INFO, "Found {0} Entities to register!",
-                        classes.size());
-                for (RPEntityInterface entity : classes) {
-                    LOG.log(Level.FINE, "Registering entity: {0}",
-                            entity.getClass().getSimpleName());
-                    entity.generateRPClass();
-                }
-                LOG.info("Done!");
                 LOG.info("Loading actions...");
                 Collection<? extends ActionProvider> actions
                         = Lookup.getDefault().lookupAll(ActionProvider.class);
@@ -155,6 +145,17 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     LOG.log(Level.FINE, "Registering action: {0}",
                             action.getClass().getSimpleName());
                     action.register();
+                }
+                LOG.info("Done!");
+                LOG.info("Creating RPClasses...");
+                Collection<? extends RPEntityInterface> classes
+                        = Lookup.getDefault().lookupAll(RPEntityInterface.class);
+                LOG.log(Level.INFO, "Found {0} Entities to register!",
+                        classes.size());
+                for (RPEntityInterface entity : classes) {
+                    LOG.log(Level.FINE, "Registering entity: {0}",
+                            entity.getClass().getSimpleName());
+                    entity.generateRPClass();
                 }
                 LOG.info("Done!");
 
@@ -179,7 +180,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                             extension.afterWorldInit();
                         });
                 initialized = true;
-            } catch (SQLException | IOException e) {
+            }
+            catch (SQLException | IOException e) {
                 LOG.log(Level.SEVERE, "Error initializing the server!", e);
             }
         }
@@ -414,7 +416,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     connection.disconnect();
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LOG.log(Level.SEVERE, null, e);
         }
         TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
@@ -473,7 +476,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         IRPZone result;
         try {
             result = removeRPZone(zone.getID());
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             LOG.log(Level.SEVERE, null, ex);
             result = null;
         }

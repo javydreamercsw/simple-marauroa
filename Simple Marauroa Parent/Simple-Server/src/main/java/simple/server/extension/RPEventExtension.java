@@ -20,16 +20,16 @@ public class RPEventExtension extends SimpleServerExtension {
     @Override
     public void modifyClientObjectDefinition(RPClass client) {
         //Register all events
-        for (IRPEvent event : Lookup.getDefault().lookupAll(IRPEvent.class)) {
+        Lookup.getDefault().lookupAll(IRPEvent.class).forEach((event) -> {
             client.addRPEvent(event.getRPClassName(), Definition.VOLATILE);
-        }
+        });
     }
 
     @Override
     public void modifyCharacterRPClassDefinition(RPClass character) {
         //Register all events
-        for (IRPEvent event : Lookup.getDefault().lookupAll(IRPEvent.class)) {
+        Lookup.getDefault().lookupAll(IRPEvent.class).forEach((event) -> {
             character.addRPEvent(event.getRPClassName(), Definition.VOLATILE);
-        }
+        });
     }
 }
