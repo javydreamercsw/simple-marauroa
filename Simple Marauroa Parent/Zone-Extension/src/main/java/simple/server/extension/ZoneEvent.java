@@ -26,13 +26,15 @@ public class ZoneEvent extends SimpleRPEvent {
      */
     @Override
     public void generateRPClass() {
-        RPClass rpclass = new RPClass(RPCLASS_NAME);
-        rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.STRING);
-        rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
-        rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
-        rpclass.add(DefinitionClass.ATTRIBUTE, ZoneExtension.SEPARATOR,
-                Type.STRING);
-        addCommonAttributes(rpclass);
+        if (!RPClass.hasRPClass(RPCLASS_NAME)) {
+            RPClass rpclass = new RPClass(RPCLASS_NAME);
+            rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
+            rpclass.add(DefinitionClass.ATTRIBUTE, ZoneExtension.SEPARATOR,
+                    Type.STRING);
+            addCommonAttributes(rpclass);
+        }
     }
 
     /**
