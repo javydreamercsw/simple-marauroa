@@ -98,6 +98,11 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         //Join Zone
         action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
         instance.onAction(player, action);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException ex) {
+            LOG.log(Level.SEVERE, null, ex);
+        }
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).getZone(room).isEmpty());
         assertEquals(1, Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(room).getPlayers().size());
