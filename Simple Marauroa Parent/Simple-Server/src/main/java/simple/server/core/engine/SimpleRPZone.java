@@ -13,6 +13,7 @@ import marauroa.common.game.IRPZone;
 import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import marauroa.common.game.RPObjectInvalidException;
 import marauroa.common.net.message.TransferContent;
 import marauroa.server.game.rp.MarauroaRPZone;
 import org.openide.util.Lookup;
@@ -193,6 +194,17 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             }
         }
         return result;
+    }
+
+    @Override
+    public void add(RPObject object) throws RPObjectInvalidException {
+        synchronized (this) {
+            if (object instanceof ClientObjectInterface) {
+                add(object, null);
+            } else {
+                super.add(object);
+            }
+        }
     }
 
     @Override
