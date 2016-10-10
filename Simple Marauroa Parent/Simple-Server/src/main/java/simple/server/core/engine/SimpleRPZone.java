@@ -244,6 +244,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         break;
                 }
             }
+            super.add(object);
             //Request sync previous to any modification
             Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
             if (player != null) {
