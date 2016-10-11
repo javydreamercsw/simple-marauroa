@@ -230,7 +230,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         super.addRPZone(simpleZone);
         Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                 .forEach((extension) -> {
-            extension.onAddRPZone(simpleZone);
+                    extension.onAddRPZone(simpleZone);
                 });
     }
 
