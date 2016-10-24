@@ -29,6 +29,6 @@ public class FeatList extends AbstractList {
 
     @Override
     public Byte getDefinition() {
-        return Definition.PRIVATE;
+        return Definition.STANDARD;
     }
 }
