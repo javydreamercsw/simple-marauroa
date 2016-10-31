@@ -12,7 +12,7 @@ import simple.server.core.entity.RPEntityInterface;
 
 /**
  *
- * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public interface ISimpleRPZone extends IRPZone {
 

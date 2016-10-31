@@ -16,7 +16,7 @@ import simple.server.extension.TutorialExtension;
  *
  * Based on code from hendrik
  *
- * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = ILoginNotifier.class)
 public class TutorialNotifier implements ILoginNotifier {
