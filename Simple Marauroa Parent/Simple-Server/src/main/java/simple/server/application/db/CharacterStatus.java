@@ -2,7 +2,7 @@ package simple.server.application.db;
 
 /**
  *
- * @author Javier Ortiz Bultron <javier.ortiz.78@gmail.com>
+ * @author Javier Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public enum CharacterStatus {
     //This seems like it's not even implemented/defined in Marauroa. Marking as active by default
