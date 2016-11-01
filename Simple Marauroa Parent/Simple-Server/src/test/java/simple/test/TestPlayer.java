@@ -34,7 +34,7 @@ import simple.server.core.entity.clientobject.ClientObject;
     @ServiceProvider(service = ClientObjectInterface.class)
     ,
     @ServiceProvider(service = RPEntityInterface.class)})
-public class TestPlayer extends ClientObject implements MonitoreableEntity {
+public final class TestPlayer extends ClientObject implements MonitoreableEntity {
 
     private final Map<String, List<RPEventListener>> listeners;
     private final List<String> processedEvents = new ArrayList<>();
@@ -70,7 +70,8 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
             //Add it to the world so it has an ID
             world.add(TestPlayer.this);
             world.registerMonitor(getName(), TestPlayer.this);
-        } catch (SQLException | UnsupportedEncodingException ex) {
+        }
+        catch (SQLException | UnsupportedEncodingException ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
@@ -106,13 +107,13 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
     @Override
     public void modify(RPObject obj) {
         synchronized (listeners) {
-            for (RPEvent event : obj.events()) {
-                if (listeners.containsKey(event.getName())) {
-                    for (RPEventListener l : listeners.get(event.getName())) {
-                        l.onRPEvent(event);
-                    }
-                }
-            }
+            obj.events().stream().filter((event)
+                    -> (listeners.containsKey(event.getName()))).forEachOrdered((event)
+                    -> {
+                listeners.get(event.getName()).forEach((l) -> {
+                    l.onRPEvent(event);
+                });
+            });
         }
         obj.clearEvents();
     }
