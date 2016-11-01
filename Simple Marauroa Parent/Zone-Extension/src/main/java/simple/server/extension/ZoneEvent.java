@@ -8,6 +8,7 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.api.IRPEvent;
+import static simple.server.extension.ZoneExtension.ROOM;
 
 /**
  *
@@ -30,6 +31,7 @@ public class ZoneEvent extends SimpleRPEvent {
             RPClass rpclass = new RPClass(RPCLASS_NAME);
             rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, ROOM, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
             rpclass.add(DefinitionClass.ATTRIBUTE, ZoneExtension.SEPARATOR,
                     Type.STRING);
@@ -78,7 +80,11 @@ public class ZoneEvent extends SimpleRPEvent {
      */
     public ZoneEvent(ISimpleRPZone zone, int action) {
         super(RPCLASS_NAME);
-        put(FIELD, zone.getName());
+        if (action == ZoneEvent.JOIN) {
+            put(ZoneExtension.ROOM, zone.getName());
+        } else {
+            put(FIELD, zone.getName());
+        }
         //Don't add the description if deleting the room...
         if (zone.getDescription() != null && !zone.getDescription().isEmpty()
                 && action != REMOVE) {
