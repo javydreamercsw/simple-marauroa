@@ -59,7 +59,7 @@ public class ZoneExtension extends SimpleServerExtension
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
             //Just wait a little bit...
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
+            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
                         private static final long serialVersionUID
                                 = -5644390861803492172L;
