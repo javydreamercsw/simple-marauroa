@@ -22,7 +22,6 @@ import marauroa.server.game.rp.RPServerManager;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Debug;
-import simple.common.filter.FilterCriteria;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.WellKnownActionConstant;
@@ -68,7 +67,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     public SimpleRPRuleProcessor() {
         try {
             config = Configuration.getConfiguration();
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             LOG.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
         }
         onlinePlayers = new PlayerList();
@@ -82,28 +82,28 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     /**
      * @return the VERSION
      */
-    public String getVERSION() {
+    public final String getVERSION() {
         return VERSION;
     }
 
     /**
      * @param aVERSION the VERSION to set
      */
-    public void setVERSION(String aVERSION) {
+    public final void setVERSION(String aVERSION) {
         VERSION = aVERSION;
     }
 
     /**
      * @return the GAMENAME
      */
-    public String getGAMENAME() {
+    public final String getGAMENAME() {
         return GAMENAME;
     }
 
     /**
      * @param aGAMENAME the GAMENAME to set
      */
-    public void setGAMENAME(String aGAMENAME) {
+    public final void setGAMENAME(String aGAMENAME) {
         GAMENAME = aGAMENAME;
     }
 
@@ -116,7 +116,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             DAORegister.get().get(GameEventDAO.class).addGameEvent(
                     source, event, params);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.WARNING, "Can't store game event", e);
         }
     }
@@ -132,7 +133,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                         new Object[]{getGAMENAME(), getVERSION()});
                 SimpleRPRuleProcessor.rpman = rpman;
                 SimpleRPAction.initialize(rpman);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 LOG.log(Level.SEVERE, "Cannot set Context. Exiting...", e);
                 throw new RuntimeException(e);
             }
@@ -216,7 +218,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         debugOutput();
         try {
             logNumberOfPlayersOnline();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.SEVERE, "Error in beginTurn.", e);
         }
     }
@@ -261,7 +264,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
             }
             // Run registered object's logic method for this turn
             Lookup.getDefault().lookup(ITurnNotifier.class).logic(currentTurn);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.SEVERE, "Error in endTurn", e);
         }
     }
@@ -303,7 +307,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 if (!player.isGhost()) {
                     notifyOnlineStatus(true, player.getName());
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 LOG.log(Level.SEVERE, "There has been a severe problem loading player "
                         + object.get("#db_id"), e);
                 result = false;
@@ -349,7 +354,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 LOG.log(Level.FINE, "removed player {0}", player);
             }
             return true;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.SEVERE, "Error in onExit.", e);
             return true;
         }
@@ -381,21 +387,11 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     public static void sendMessageToSupporters(final String message) {
         ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
-                .forFilteredPlayersExecute(
-                        new Task<ClientObjectInterface>() {
-                    @Override
-                    public void execute(ClientObjectInterface player) {
-                        player.sendPrivateText(message);
-                        player.notifyWorldAboutChanges();
-                    }
-                },
-                        new FilterCriteria<ClientObjectInterface>() {
-                    @Override
-                    public boolean passes(ClientObjectInterface p) {
-                        return p.getAdminLevel()
-                                >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT;
-                    }
-                });
+                .forFilteredPlayersExecute((ClientObjectInterface player) -> {
+                    player.sendPrivateText(message);
+                    player.notifyWorldAboutChanges();
+                }, (ClientObjectInterface p) -> p.getAdminLevel()
+                >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT);
     }
 
     /**
@@ -419,21 +415,15 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         if (isOnline) {
             ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
-                    .forAllPlayersExecute(new Task<ClientObjectInterface>() {
-                        @Override
-                        public void execute(ClientObjectInterface player) {
-                            player.notifyOnline(name);
-                        }
+                    .forAllPlayersExecute((ClientObjectInterface player) -> {
+                        player.notifyOnline(name);
                     });
 
         } else {
             ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
-                    .forAllPlayersExecute(new Task<ClientObjectInterface>() {
-                        @Override
-                        public void execute(ClientObjectInterface player) {
-                            player.notifyOffline(name);
-                        }
+                    .forAllPlayersExecute((ClientObjectInterface player) -> {
+                        player.notifyOffline(name);
                     });
         }
     }
