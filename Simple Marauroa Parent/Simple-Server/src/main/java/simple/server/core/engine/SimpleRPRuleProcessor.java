@@ -314,7 +314,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 result = false;
             }
         }
-        result &= super.onInit(object);
         return result;
     }
 
