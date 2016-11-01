@@ -168,18 +168,22 @@ public class ZoneExtension extends SimpleServerExtension
     private void join(ClientObjectInterface player, RPAction action) {
         if (player != null && action != null) {
             //If in same room, tell the player. The client should handle this but just in case...
-            if (player instanceof RPObject && action.get(ROOM).equals(((Attributes) player).get("zoneid"))) {
+            if (player instanceof RPObject
+                    && action.get(ROOM).equals(((Attributes) player).get("zoneid"))) {
                 player.sendPrivateText("You already are in " + action.get(ROOM) + " room.");
             } //Make sure the zone exists...
             else if (Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(new ID(action.get(ROOM)))) {
-                SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class).getRPZone(((Attributes) player).get("zoneid"));
+                SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
+                        .getRPZone(((Attributes) player).get("zoneid"));
                 //If it's locked it means you need a password, you better have it...
                 if (jZone.isLocked()) {
                     if (action.get(PASSWORD) != null) {
                         LOG.fine("Room is locked but password is provided...");
                         if (jZone.isPassword(action.get(PASSWORD))) {
                             LOG.fine("Password correct, changing zone...");
-                            Lookup.getDefault().lookup(IRPWorld.class).changeZone(action.get(ROOM), (RPObject) player);
+                            Lookup.getDefault().lookup(IRPWorld.class)
+                                    .changeZone(action.get(ROOM),
+                                            (RPObject) player);
                         } else {
                             ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
                             LOG.fine("Room is locked.");
