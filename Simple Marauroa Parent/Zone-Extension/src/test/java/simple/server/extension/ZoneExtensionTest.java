@@ -39,7 +39,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         System.out.println("onRPObjectAddToZone");
         int initial = getDelayedActions();
         TestPlayer player = new TestPlayer(new RPObject());
-        assertEquals(initial + 2, getDelayedActions());
+        assertEquals(initial + 1, getDelayedActions());
     }
 
     private int getDelayedActions() {
@@ -98,12 +98,6 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         //Join Zone
         action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
         instance.onAction(player, action);
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-        }
-        assertFalse(Lookup.getDefault().lookup(IRPWorld.class).getZone(room).isEmpty());
         assertEquals(1, Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(room).getPlayers().size());
     }

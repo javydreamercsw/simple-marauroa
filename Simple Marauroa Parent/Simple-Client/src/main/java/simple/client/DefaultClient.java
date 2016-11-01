@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.BannedAddressException;
@@ -37,6 +39,7 @@ import simple.client.api.PerceptionListener;
 import simple.client.api.SelfChangeListener;
 import simple.client.api.SyncListener;
 import simple.server.core.entity.clientobject.ClientObject;
+import simple.server.core.tool.Tool;
 
 /**
  *
@@ -227,11 +230,34 @@ public class DefaultClient implements ClientFrameworkProvider,
     @SuppressWarnings("empty-statement")
     public void run() {
         if (getPerceptionHandler() == null) {
+            IWorldManager worldManager
+                    = Lookup.getDefault().lookup(IWorldManager.class);
+            SelfChangeListener scl = Lookup.getDefault().lookup(SelfChangeListener.class);
             setPerceptionHandler(new PerceptionHandler(new IPerceptionListener() {
                 @Override
                 public boolean onAdded(RPObject object) {
                     boolean result = false;
-                    LOG.log(Level.INFO, "onAdded: {0}", object);
+
+                    LOG.log(Level.FINE, "onAdded: {0}", object);
+                    //Check if ID is different from last time (zone change, etc)
+                    Set<Entry<RPObject.ID, RPObject>> values
+                            = worldManager.getWorld().entrySet();
+                    values.stream().filter((entry)
+                            -> (Tool.extractName(object).equals(
+                                    Tool.extractName(entry.getValue())))).map((entry)
+                            -> {
+                        RPObject myself = null;
+                        if (scl != null) {
+                            myself = scl.getMyObject();
+                        }
+                        if (myself != null && !myself.getID().equals(object.getID())) {
+                            worldManager.getWorld().remove(entry.getKey());
+                            LOG.log(Level.WARNING, "Removed extra copy of: {0}",
+                                    entry.getValue());
+                        }
+                        return entry;
+                    });
+                    worldManager.getWorld().put(object.getID(), object);
                     for (AddListener listener
                             : Lookup.getDefault().lookupAll(AddListener.class)) {
                         if (!listener.onAdded(object)) {
@@ -415,7 +441,7 @@ public class DefaultClient implements ClientFrameworkProvider,
                         if (lp != null) {
                             lp.getEmailFromUser();
                             while (getEmail().trim().isEmpty()) {
-                                Thread.sleep(100);
+                                sleep(100);
                             }
                         }
                     }
