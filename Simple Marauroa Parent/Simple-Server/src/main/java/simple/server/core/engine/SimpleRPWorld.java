@@ -459,15 +459,17 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         if (zone != null) {
             //ChangeZone takes care of removing from current zone
             super.changeZone(zone.getID(), object);
-            if (object instanceof ClientObjectInterface) {
-                Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
-                        new DelayedPlayerEventSender(new PrivateTextEvent(
-                                NotificationType.INFORMATION,
-                                "Changed to zone: " + newzoneid),
-                                (ClientObjectInterface) object));
+            if (LOG.isLoggable(Level.FINE)) {
+                if (object instanceof ClientObjectInterface) {
+                    Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
+                            new DelayedPlayerEventSender(new PrivateTextEvent(
+                                    NotificationType.INFORMATION,
+                                    "Changed to zone: " + newzoneid),
+                                    (ClientObjectInterface) object));
+                }
             }
         } else {
-            LOG.log(Level.SEVERE, "Zone {0} doesn''t exist!", newzoneid);
+            LOG.log(Level.SEVERE, "Zone {0} doesn't exist!", newzoneid);
         }
         LOG.fine("World after changing zone:");
         showWorld();
@@ -677,9 +679,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 || !hasRPZone(object.get(Entity.ZONE_ID))) { //Assigned zone doesn't exist
             //Assign the current default zone
             object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
-        }
-        if (object instanceof ClientObjectInterface) {
-            addPlayer(object);
         }
         super.add(object);
     }
