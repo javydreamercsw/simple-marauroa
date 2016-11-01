@@ -45,7 +45,7 @@ public class TutorialNotifier implements ILoginNotifier {
         // recognize the event
         TextEvent event = new TextEvent(NotificationType.TUTORIAL,
                 type.getMessage(), "System");
-        Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
+        Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                 new DelayedPlayerEventSender(event, player));
     }
 

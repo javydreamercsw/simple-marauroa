@@ -435,7 +435,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
         if (msg != null && !msg.isEmpty()) {
             if (notifier != null) {
-                notifier.notifyInTurns(2,
+                notifier.notifyInTurns(10,
                         new DelayedPlayerEventSender(new PrivateTextEvent(
                                 NotificationType.TUTORIAL, msg), player));
             } else {
@@ -461,7 +461,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             super.changeZone(zone.getID(), object);
             if (LOG.isLoggable(Level.FINE)) {
                 if (object instanceof ClientObjectInterface) {
-                    Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(5,
+                    Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                             new DelayedPlayerEventSender(new PrivateTextEvent(
                                     NotificationType.INFORMATION,
                                     "Changed to zone: " + newzoneid),
