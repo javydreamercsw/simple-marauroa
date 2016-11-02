@@ -32,9 +32,8 @@ import simple.server.core.entity.clientobject.ClientObject;
  */
 @ServiceProviders({
     @ServiceProvider(service = ClientObjectInterface.class)
-    ,
-    @ServiceProvider(service = RPEntityInterface.class)})
-public final class TestPlayer extends ClientObject implements MonitoreableEntity {
+    ,@ServiceProvider(service = RPEntityInterface.class)})
+public class TestPlayer extends ClientObject implements MonitoreableEntity {
 
     private final Map<String, List<RPEventListener>> listeners;
     private final List<String> processedEvents = new ArrayList<>();
