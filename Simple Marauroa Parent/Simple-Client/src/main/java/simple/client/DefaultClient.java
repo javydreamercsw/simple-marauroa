@@ -108,7 +108,7 @@ public class DefaultClient implements ClientFrameworkProvider,
             @Override
             protected void onPerception(MessageS2CPerception message) {
                 try {
-                    LOG.log(Level.INFO, "Received perception {0}",
+                    LOG.log(Level.FINE, "Received perception {0}",
                             message.getPerceptionTimestamp());
                     getPerceptionHandler().apply(message,
                             Lookup.getDefault().lookup(IWorldManager.class).getWorld());
@@ -126,16 +126,16 @@ public class DefaultClient implements ClientFrameworkProvider,
                         }
                     }
                     if (isShowWorld()) {
-                        LOG.log(Level.INFO, "<World contents ------------------------------------->");
+                        LOG.log(Level.FINE, "<World contents ------------------------------------->");
                         int j = 0;
                         for (RPObject object
                                 : Lookup.getDefault().lookup(IWorldManager.class)
                                         .getWorld().values()) {
                             j++;
-                            LOG.log(Level.INFO, "{0}. {1}",
+                            LOG.log(Level.FINE, "{0}. {1}",
                                     new Object[]{j, object});
                         }
-                        LOG.log(Level.INFO, "</World contents ------------------------------------->");
+                        LOG.log(Level.FINE, "</World contents ------------------------------------->");
                     }
                 }
                 catch (Exception e) {
@@ -153,9 +153,9 @@ public class DefaultClient implements ClientFrameworkProvider,
 
             @Override
             protected void onTransfer(List<TransferContent> items) {
-                LOG.log(Level.INFO, "Transfering ----");
+                LOG.log(Level.FINE, "Transfering ----");
                 items.stream().forEach((item) -> {
-                    LOG.log(Level.INFO, item.toString());
+                    LOG.log(Level.FINE, item.toString());
                 });
             }
 
@@ -203,17 +203,17 @@ public class DefaultClient implements ClientFrameworkProvider,
 
             @Override
             protected void onServerInfo(String[] info) {
-                LOG.log(Level.INFO, "Server info");
+                LOG.log(Level.FINE, "Server info");
                 for (String info_string : info) {
-                    LOG.log(Level.INFO, info_string);
+                    LOG.log(Level.FINE, info_string);
                 }
             }
 
             @Override
             protected void onPreviousLogins(List<String> previousLogins) {
-                LOG.log(Level.INFO, "Previous logins");
+                LOG.log(Level.FINE, "Previous logins");
                 previousLogins.stream().forEach((info_string) -> {
-                    LOG.log(Level.INFO, info_string);
+                    LOG.log(Level.FINE, info_string);
                 });
             }
         });
@@ -282,7 +282,7 @@ public class DefaultClient implements ClientFrameworkProvider,
 
                 @Override
                 public boolean onDeleted(RPObject object) {
-                    LOG.log(Level.INFO, "onDeleted: {0}", object);
+                    LOG.log(Level.FINE, "onDeleted: {0}", object);
                     boolean result = false;
                     for (DeleteListener listener
                             : Lookup.getDefault().lookupAll(DeleteListener.class)) {
@@ -307,7 +307,7 @@ public class DefaultClient implements ClientFrameworkProvider,
 
                 @Override
                 public boolean onModifiedAdded(RPObject object, RPObject changes) {
-                    LOG.log(Level.INFO, "onModifiedAdded: {0}, {1}",
+                    LOG.log(Level.FINE, "onModifiedAdded: {0}, {1}",
                             new Object[]{object, changes});
                     boolean result = false;
                     for (ModificationListener listener
@@ -321,7 +321,7 @@ public class DefaultClient implements ClientFrameworkProvider,
 
                 @Override
                 public boolean onModifiedDeleted(RPObject object, RPObject changes) {
-                    LOG.log(Level.INFO, "onModifiedDeleted: {0}, {1}",
+                    LOG.log(Level.FINE, "onModifiedDeleted: {0}, {1}",
                             new Object[]{object, changes});
                     boolean result = false;
                     for (ModificationListener listener
@@ -691,7 +691,7 @@ public class DefaultClient implements ClientFrameworkProvider,
 
     @Override
     public void displayInfo(String title, String message) {
-        LOG.log(Level.INFO, "{0}: {1}", new Object[]{title, message});
+        LOG.log(Level.FINE, "{0}: {1}", new Object[]{title, message});
     }
 
     @Override
