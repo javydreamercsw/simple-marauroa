@@ -90,7 +90,7 @@
         <repository>
             <id>project.local</id>
             <name>project</name>
-            <url>file:${project.basedir}/../marauroa/repo</url>
+            <url>file:${project.basedir}/../../marauroa/repo</url>
         </repository>
     </repositories>
 </project>
