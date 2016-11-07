@@ -58,19 +58,9 @@ public class ZoneExtension extends SimpleServerExtension
             action.put(WellKnownActionConstant.TYPE, ZoneExtension.TYPE);
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
-            //Just wait a little bit...
-            Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
-                    new DelayedAction(new AbstractAction() {
-                        private static final long serialVersionUID
-                                = -5644390861803492172L;
-
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            listZones(player, ZoneEvent.LISTZONES, action);
-                            player.addEvent(new ZoneEvent(player.getZone(),
-                                    ZoneEvent.JOIN));
-                        }
-                    }));
+            listZones(player, ZoneEvent.LISTZONES, action);
+            player.addEvent(new ZoneEvent(player.getZone(),
+                    ZoneEvent.JOIN));
         } else {
             LOG.log(Level.FINE, "Added a {0}", object.getClass());
         }
