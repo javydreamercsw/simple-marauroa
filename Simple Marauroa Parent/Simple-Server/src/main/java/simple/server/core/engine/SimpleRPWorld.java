@@ -680,6 +680,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             //Assign the current default zone
             object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
         }
+        if (object instanceof ClientObjectInterface) {
+            addPlayer(object);
+        }
         super.add(object);
     }
 }
