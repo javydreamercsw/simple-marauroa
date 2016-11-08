@@ -1,5 +1,6 @@
 package simple.server.extension;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
@@ -72,7 +74,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
                 Lookup.getDefault().lookup(IRPWorld.class)
                         .getDefaultZone().getName());
         instance.onAction(player, action);
-        assertEquals(1, listener.getCount());
+        assertEquals(3, listener.getCount());
     }
 
     /**
@@ -84,22 +86,30 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         TestPlayer player = new TestPlayer(new RPObject());
         RPAction action = new RPAction();
         RPEventListenerImpl listener = new RPEventListenerImpl();
-        player.registerListener(ZoneEvent.RPCLASS_NAME,
-                listener);
         String room = UUID.randomUUID().toString();
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
-        action.put(ZoneExtension.ROOM, room);
+        action.put(ZoneEvent.ROOM, room);
         action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
         ZoneExtension instance = new ZoneExtension();
         //Create room
+        player.registerListener(ZoneEvent.RPCLASS_NAME,
+                listener);
         instance.onAction(player, action);
-        assertTrue(Lookup.getDefault().lookup(IRPWorld.class).getZone(room).isEmpty());
+        assertTrue(Lookup.getDefault().lookup(IRPWorld.class).getZone(room)
+                .isEmpty());
         //Join Zone
         action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
         instance.onAction(player, action);
         assertEquals(1, Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(room).getPlayers().size());
+        try {
+            //Cleanup
+            Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            fail();
+        }
     }
 
     /**
@@ -117,15 +127,22 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
         ZoneExtension instance = new ZoneExtension();
         instance.onAction(player, action);
-        assertEquals(1, listener.getCount());
+        assertEquals(3, listener.getCount());
         String room = UUID.randomUUID().toString();
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
-        action.put(ZoneExtension.ROOM, room);
+        action.put(ZoneEvent.ROOM, room);
         action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
         //Create room
         instance.onAction(player, action);
         action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
         instance.onAction(player, action);
+        try {
+            //Cleanup
+            Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            fail();
+        }
     }
 
     /**
@@ -142,7 +159,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
         String room = UUID.randomUUID().toString();
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
-        action.put(ZoneExtension.ROOM, room);
+        action.put(ZoneEvent.ROOM, room);
         action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
         ZoneExtension instance = new ZoneExtension();
         //Create room
@@ -171,7 +188,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
         String room = UUID.randomUUID().toString();
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
-        action.put(ZoneExtension.ROOM, room);
+        action.put(ZoneEvent.ROOM, room);
         action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
         ZoneExtension instance = new ZoneExtension();
         //Create room
@@ -193,6 +210,13 @@ public class ZoneExtensionTest extends AbstractSystemTest {
                 .getRPZone(room).getDescription());
         assertTrue(Lookup.getDefault().lookup(IRPWorld.class)
                 .getRPZone(room).isPassword(pw));
+        try {
+            //Cleanup
+            Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            fail();
+        }
     }
 
     /**
@@ -214,7 +238,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         assertEquals(1, listener.getCount());
         String room = UUID.randomUUID().toString();
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
-        action.put(ZoneExtension.ROOM, room);
+        action.put(ZoneEvent.ROOM, room);
         //Add room
         instance.onAction(player, action);
         assertTrue(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
@@ -224,7 +248,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         room = UUID.randomUUID().toString();
         String pw = UUID.randomUUID().toString();
         assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
-        action.put(ZoneExtension.ROOM, room);
+        action.put(ZoneEvent.ROOM, room);
         action.put(ZoneExtension.PASSWORD, pw);
         //Add room
         instance.onAction(player, action);
@@ -241,6 +265,13 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         assertTrue(Lookup.getDefault().lookup(IRPWorld.class).getRPZone(room)
                 .isPassword(pw));
         assertEquals(2, listener.getCount());
+        try {
+            //Cleanup
+            Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            fail();
+        }
     }
 
     private class RPEventListenerImpl implements RPEventListener {
@@ -257,9 +288,16 @@ public class ZoneExtensionTest extends AbstractSystemTest {
             if (event instanceof ZoneEvent) {
                 switch (event.getInt(ZoneEvent.ACTION)) {
                     case ZoneEvent.LISTZONES:
-                        assertEquals(Lookup.getDefault().lookup(IRPWorld.class).getZones().size(),
+                        List<SimpleRPZone> zones
+                                = Lookup.getDefault().lookup(IRPWorld.class)
+                                        .getZones();
+                        for (SimpleRPZone zone : zones) {
+                            LOG.info(zone.getName());
+                        }
+                        assertTrue(
                                 new StringTokenizer(event.get(ZoneEvent.FIELD),
-                                        event.get(ZoneExtension.SEPARATOR)).countTokens());
+                                        event.get(ZoneExtension.SEPARATOR))
+                                        .countTokens() <= zones.size());
                         break;
                     case ZoneEvent.ADD:
                         break;
