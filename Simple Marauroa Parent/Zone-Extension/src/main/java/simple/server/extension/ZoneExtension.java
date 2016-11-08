@@ -41,7 +41,7 @@ public class ZoneExtension extends SimpleServerExtension
      */
     private static final Logger LOG
             = Logger.getLogger(ZoneExtension.class.getSimpleName());
-    public static final String TYPE = "CRUDZone", ROOM = "room",
+    public static final String TYPE = "CRUDZone",
             DESC = "description", OPERATION = "operation",
             PASSWORD = "password", SEPARATOR = "separator";
 
@@ -58,9 +58,9 @@ public class ZoneExtension extends SimpleServerExtension
             action.put(WellKnownActionConstant.TYPE, ZoneExtension.TYPE);
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
             action.put(ZoneExtension.SEPARATOR, "#");
-            listZones(player, ZoneEvent.LISTZONES, action);
             player.addEvent(new ZoneEvent(player.getZone(),
                     ZoneEvent.JOIN));
+            listZones(player, ZoneEvent.LISTZONES, action);
         } else {
             LOG.log(Level.FINE, "Added a {0}", object.getClass());
         }
@@ -115,11 +115,11 @@ public class ZoneExtension extends SimpleServerExtension
 
     private void create(final ClientObjectInterface player, final RPAction action) {
         LOG.log(Level.FINE, "Request for zone creation from: {0}, zone: {1}",
-                new Object[]{player.getName(), action.get(ROOM)});
+                new Object[]{player.getName(), action.get(ZoneEvent.ROOM)});
         final SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
         //Make sure the zone doesn't exists!
-        if (action.has(ROOM) && !world.hasRPZone(new ID(action.get(ROOM)))) {
-            SimpleRPZone zone = new SimpleRPZone(action.get(ROOM));
+        if (action.has(ZoneEvent.ROOM) && !world.hasRPZone(new ID(action.get(ZoneEvent.ROOM)))) {
+            SimpleRPZone zone = new SimpleRPZone(action.get(ZoneEvent.ROOM));
             if (action.get(DESC) != null && !action.get(DESC).isEmpty()) {
                 LOG.log(Level.FINE, "Setting description: {0}", action.get(DESC));
                 zone.setDescription(action.get(DESC));
@@ -142,11 +142,12 @@ public class ZoneExtension extends SimpleServerExtension
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             if (player instanceof RPObject) {
-                                world.changeZone(action.get(ROOM), (RPObject) player);
+                                world.changeZone(action.get(ZoneEvent.ROOM),
+                                        (RPObject) player);
                             }
                         }
                     }));
-        } else if (action.has(ROOM)) {
+        } else if (action.has(ZoneEvent.ROOM)) {
             player.sendPrivateText(NotificationType.PRIVMSG,
                     "Sorry, that room already exists!");
         } else {
@@ -159,10 +160,13 @@ public class ZoneExtension extends SimpleServerExtension
         if (player != null && action != null) {
             //If in same room, tell the player. The client should handle this but just in case...
             if (player instanceof RPObject
-                    && action.get(ROOM).equals(((Attributes) player).get("zoneid"))) {
-                player.sendPrivateText("You already are in " + action.get(ROOM) + " room.");
+                    && action.get(ZoneEvent.ROOM)
+                            .equals(((Attributes) player).get("zoneid"))) {
+                player.sendPrivateText("You already are in "
+                        + action.get(ZoneEvent.ROOM) + " room.");
             } //Make sure the zone exists...
-            else if (Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(new ID(action.get(ROOM)))) {
+            else if (Lookup.getDefault().lookup(IRPWorld.class)
+                    .hasRPZone(new ID(action.get(ZoneEvent.ROOM)))) {
                 SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
                         .getRPZone(((Attributes) player).get("zoneid"));
                 //If it's locked it means you need a password, you better have it...
@@ -172,7 +176,7 @@ public class ZoneExtension extends SimpleServerExtension
                         if (jZone.isPassword(action.get(PASSWORD))) {
                             LOG.fine("Password correct, changing zone...");
                             Lookup.getDefault().lookup(IRPWorld.class)
-                                    .changeZone(action.get(ROOM),
+                                    .changeZone(action.get(ZoneEvent.ROOM),
                                             (RPObject) player);
                         } else {
                             ZoneEvent re = new ZoneEvent(action, ZoneEvent.NEEDPASS);
@@ -191,7 +195,8 @@ public class ZoneExtension extends SimpleServerExtension
                 } else {
                     //The room is open so just join it.
                     Lookup.getDefault().lookup(IRPWorld.class)
-                            .changeZone(action.get(ROOM), (RPObject) player);
+                            .changeZone(action.get(ZoneEvent.ROOM),
+                                    (RPObject) player);
                 }
             }
         }
@@ -200,11 +205,11 @@ public class ZoneExtension extends SimpleServerExtension
     private void update(RPAction action) {
         SimpleRPWorld world
                 = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
-        if (action.has(ROOM) && world.hasRPZone(action.get(ROOM))) {
+        if (action.has(ZoneEvent.ROOM) && world.hasRPZone(action.get(ZoneEvent.ROOM))) {
             LOG.log(Level.FINE, "Updating description of zone: {0} to: {1}",
-                    new Object[]{action.get(ROOM), action.get(DESC)});
+                    new Object[]{action.get(ZoneEvent.ROOM), action.get(DESC)});
             SimpleRPZone updated
-                    = world.updateRPZoneDescription(action.get(ROOM),
+                    = world.updateRPZoneDescription(action.get(ZoneEvent.ROOM),
                             action.get(DESC));
             if (action.has(PASSWORD)) {
                 try {
@@ -220,24 +225,24 @@ public class ZoneExtension extends SimpleServerExtension
     }
 
     private void remove(ClientObjectInterface player, RPAction action) {
-        if (!action.get(ROOM).equals(Lookup.getDefault()
+        if (!action.get(ZoneEvent.ROOM).equals(Lookup.getDefault()
                 .lookup(IRPWorld.class).getDefaultZone().getID().getID())) {
             SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault()
                     .lookup(IRPWorld.class);
             SimpleRPZone zone
-                    = (SimpleRPZone) world.getRPZone(new ID(action.get(ROOM)));
+                    = (SimpleRPZone) world.getRPZone(new ID(action.get(ZoneEvent.ROOM)));
             Collection<RPObject> players = zone.getPlayers();
             for (RPObject clientObject : players) {
                 world.changeZone(Lookup.getDefault().lookup(
                         IRPWorld.class).getDefaultZone().getID().getID(), clientObject);
             }
             try {
-                world.removeRPZone(new ID(action.get(ROOM)));
+                world.removeRPZone(new ID(action.get(ZoneEvent.ROOM)));
             } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
             world.applyPublicEvent(null,
-                    new ZoneEvent(new SimpleRPZone(action.get(ROOM)),
+                    new ZoneEvent(new SimpleRPZone(action.get(ZoneEvent.ROOM)),
                             ZoneEvent.REMOVE));
             if (player != null && player instanceof RPObject) {
                 ((RPObject) player).addEvent(new PrivateTextEvent(
