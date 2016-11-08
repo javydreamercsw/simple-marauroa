@@ -8,7 +8,6 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.api.IRPEvent;
-import static simple.server.extension.ZoneExtension.ROOM;
 
 /**
  *
@@ -18,7 +17,7 @@ import static simple.server.extension.ZoneExtension.ROOM;
 public class ZoneEvent extends SimpleRPEvent {
 
     public static final String FIELD = "field", RPCLASS_NAME = "zone_event",
-            ACTION = "action", DESC = "description";
+            ACTION = "action", DESC = "description", ROOM = "room";
     public static final int ADD = 1, UPDATE = 2, REMOVE = 3, LISTZONES = 4,
             NEEDPASS = 5, JOIN = 6, LISTPLAYERS = 7;
 
@@ -81,7 +80,7 @@ public class ZoneEvent extends SimpleRPEvent {
     public ZoneEvent(ISimpleRPZone zone, int action) {
         super(RPCLASS_NAME);
         if (action == ZoneEvent.JOIN) {
-            put(ZoneExtension.ROOM, zone.getName());
+            put(ROOM, zone.getName());
         } else {
             put(FIELD, zone.getName());
         }
