@@ -55,7 +55,8 @@ public abstract class AbstractSystemTest {
                 DB.initialize();
             }
             WORLD.onInit();
-        } catch (SQLException ex) {
+        }
+        catch (SQLException ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
@@ -99,7 +100,8 @@ public abstract class AbstractSystemTest {
                         + "4691167883850414929419335");
                 Path file = Paths.get(INI.getAbsolutePath());
                 Files.write(file, lines, Charset.forName("UTF-8"));
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
@@ -130,6 +132,7 @@ public abstract class AbstractSystemTest {
         WORLD.getZones().forEach((zone) -> {
             WORLD.emptyZone(zone);
         });
+        WORLD.getZones().clear();
         try {   //It's deleted on the initialization of the environemnt
             WORLD.createSystemAccount();
             //Reset database. This only works with H2
@@ -139,13 +142,16 @@ public abstract class AbstractSystemTest {
                 input = new FileInputStream(INI);
                 // load a properties file
                 prop.load(input);
-            } catch (IOException ex) {
+            }
+            catch (IOException ex) {
                 LOG.log(Level.SEVERE, null, ex);
-            } finally {
+            }
+            finally {
                 if (input != null) {
                     try {
                         input.close();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                 }
@@ -177,10 +183,12 @@ public abstract class AbstractSystemTest {
                                 prop.getProperty("jdbc_class"));
                         break;
                 }
-            } catch (SQLException ex) {
+            }
+            catch (SQLException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
-        } catch (ClassNotFoundException | SQLException | IOException ex) {
+        }
+        catch (ClassNotFoundException | SQLException | IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
