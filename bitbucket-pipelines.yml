@@ -2,8 +2,13 @@
 image: javydreamercsw/maven-git-hg
 
 pipelines:
-  default:
+  compile:
     - step:
-        script: # Modify the commands below to build your repository.
+        script:
           - cd 'Simple Marauroa Parent'
           - mvn clean install
+  test:
+    - step:
+        script:
+          - cd 'Simple Marauroa Parent'
+          - mvn test
