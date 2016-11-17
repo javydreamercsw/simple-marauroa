@@ -64,7 +64,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <netbeans.version>RELEASE80</netbeans.version>
         <marauroa.version>3.9.5-SNAPSHOT</marauroa.version>
-        <h2.version>1.4.192</h2.version>
+        <h2.version>1.4.193</h2.version>
         <unit.test.version>4.12</unit.test.version>
     </properties>
     <modules>
@@ -114,7 +114,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.6</version>
+                    <version>3.7</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -144,7 +144,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>3.6.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.bsc.maven</groupId>
@@ -154,7 +154,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.5.1</version>
+                    <version>3.6</version>
                     <dependencies>
                         <dependency>
                             <groupId>lt.velykis.maven.skins</groupId>
