@@ -82,31 +82,37 @@ public class ZoneExtensionTest extends AbstractSystemTest {
      */
     @Test
     public void testJoinZoneAction() {
-        System.out.println("Join Zone Action");
-        TestPlayer player = new TestPlayer(new RPObject());
-        RPAction action = new RPAction();
-        RPEventListenerImpl listener = new RPEventListenerImpl();
-        String room = UUID.randomUUID().toString();
-        assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
-        action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
-        action.put(ZoneEvent.ROOM, room);
-        action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
-        ZoneExtension instance = new ZoneExtension();
-        //Create room
-        player.registerListener(ZoneEvent.RPCLASS_NAME,
-                listener);
-        instance.onAction(player, action);
-        assertTrue(Lookup.getDefault().lookup(IRPWorld.class).getZone(room)
-                .isEmpty());
-        //Join Zone
-        action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
-        instance.onAction(player, action);
-        assertEquals(1, Lookup.getDefault().lookup(IRPWorld.class)
-                .getZone(room).getPlayers().size());
         try {
-            //Cleanup
-            Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
-        } catch (Exception ex) {
+            System.out.println("Join Zone Action");
+            TestPlayer player = new TestPlayer(new RPObject());
+            RPAction action = new RPAction();
+            RPEventListenerImpl listener = new RPEventListenerImpl();
+            String room = UUID.randomUUID().toString();
+            assertFalse(Lookup.getDefault().lookup(IRPWorld.class).hasRPZone(room));
+            action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
+            action.put(ZoneEvent.ROOM, room);
+            action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
+            ZoneExtension instance = new ZoneExtension();
+            //Create room
+            player.registerListener(ZoneEvent.RPCLASS_NAME,
+                    listener);
+            instance.onAction(player, action);
+            assertTrue(Lookup.getDefault().lookup(IRPWorld.class).getZone(room)
+                    .isEmpty());
+            //Join Zone
+            action.put(ZoneExtension.OPERATION, ZoneEvent.JOIN);
+            instance.onAction(player, action);
+            Thread.sleep(1000);
+            assertEquals(1, Lookup.getDefault().lookup(IRPWorld.class)
+                    .getZone(room).getPlayers().size());
+            try {
+                //Cleanup
+                Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
+            } catch (Exception ex) {
+                LOG.log(Level.SEVERE, null, ex);
+                fail();
+            }
+        } catch (InterruptedException ex) {
             LOG.log(Level.SEVERE, null, ex);
             fail();
         }
