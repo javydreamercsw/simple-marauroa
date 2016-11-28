@@ -36,7 +36,8 @@ public interface LoginListener {
      * @param minutes The duration of the sentence
      * @param reason why criminal was gagged
      */
-    void gag(final String criminalName, ClientObjectInterface policeman, int minutes, String reason);
+    void gag(final String criminalName, ClientObjectInterface policeman,
+            int minutes, String reason);
 
     /**
      * Gets time remaining in milliseconds.
