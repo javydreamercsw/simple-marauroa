@@ -39,7 +39,7 @@ public class GagManager implements LoginListener {
             String reason) {
         final ClientObjectInterface criminal
                 = ((SimpleRPRuleProcessor) Lookup.getDefault()
-                .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
+                        .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
 
         if (criminal == null) {
             String text = "ClientObjectInterface " + criminalName
@@ -71,7 +71,8 @@ public class GagManager implements LoginListener {
         policeman.sendPrivateText("You have gagged " + criminalName
                 + " for " + minutes + " minutes. Reason: " + reason + ".");
         criminal.sendPrivateText("You have been gagged by "
-                + policeman.getTitle() + " for " + minutes + " minutes. Reason: " + reason + ".");
+                + policeman.getTitle() + " for " + minutes
+                + " minutes. Reason: " + reason + ".");
         SimpleRPRuleProcessor.sendMessageToSupporters("GagManager",
                 policeman.getName() + " gagged " + criminalName + " for "
                 + minutes + " minutes. Reason: " + reason + ".");
@@ -115,7 +116,8 @@ public class GagManager implements LoginListener {
         boolean res = GagManager.isGagged(player);
         if (res) {
             long timeRemaining = getTimeRemaining(player);
-            player.sendPrivateText("You are gagged, it will expire in " + TimeUtil.approxTimeUntil((int) (timeRemaining / 1000L)));
+            player.sendPrivateText("You are gagged, it will expire in "
+                    + TimeUtil.approxTimeUntil((int) (timeRemaining / 1000L)));
         }
 
         return res;
@@ -166,7 +168,8 @@ public class GagManager implements LoginListener {
             public void onTurnReached(int currentTurn) {
 
                 ClientObjectInterface criminal2
-                        = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
+                        = ((SimpleRPRuleProcessor) Lookup.getDefault()
+                                .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
                 if (criminal2 == null) {
                     LOG.log(Level.FINE,
                             "Gagged player {0}has logged out.",
@@ -175,7 +178,6 @@ public class GagManager implements LoginListener {
                 }
 
                 tryExpire(criminal2);
-
             }
         });
     }
