@@ -345,17 +345,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             availableZones.addAll(getZones());
         }
         availableZones.stream().forEach((z) -> {
-            //Only if zone is not empty
-            if (!z.getPlayers().isEmpty()
-                    || !z.getNPCS().isEmpty()) {
-                LOG.log(Level.FINE, "Applying public event:{0} to: {1}",
-                        new Object[]{event, z});
-                z.applyPublicEvent(event, delay);
-            } else {
-                LOG.log(Level.FINE,
-                        "Zone:{0} ignored because is empty (no players/NPC's)",
-                        z.getName());
-            }
+            LOG.log(Level.FINE, "Applying public event:{0} to: {1}",
+                    new Object[]{event, z});
+            z.applyPublicEvent(event, delay);
         });
         return true;
     }
