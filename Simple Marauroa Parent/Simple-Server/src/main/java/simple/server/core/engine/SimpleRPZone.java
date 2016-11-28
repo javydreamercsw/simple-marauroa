@@ -330,39 +330,31 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void applyPublicEvent(final RPEvent event, final int delay) {
-        getPlayers().forEach((p) -> {
-            if (p instanceof ClientObjectInterface) {
+        objects.values().stream().map((obj) -> {
+            if (obj instanceof ClientObjectInterface) {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
-                        new Object[]{p, p.getID(),
-                            ((ClientObjectInterface) p).getZone()});
+                        new Object[]{obj, obj.getID(),
+                            ((ClientObjectInterface) obj).getZone()});
                 if (delay <= 0) {
-                    p.addEvent(event);
-                    ((ClientObjectInterface) p).notifyWorldAboutChanges();
+                    obj.addEvent(event);
+                    ((ClientObjectInterface) obj).notifyWorldAboutChanges();
                 } else {
                     LOG.log(Level.FINE, "With a delay of {0} turns", delay);
                     Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
                             delay,
                             new DelayedPlayerEventSender(event,
-                                    ((ClientObjectInterface) p)));
+                                    ((ClientObjectInterface) obj)));
                 }
             } else {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
-                        new Object[]{p, p.getID(),
+                        new Object[]{obj, obj.getID(),
                             Lookup.getDefault().lookup(IRPWorld.class)
-                                    .getRPZone(p.get(Entity.ZONE_ID))});
-                p.addEvent(event);
-                Lookup.getDefault().lookup(IRPWorld.class).modify(p);
+                                    .getRPZone(obj.get(Entity.ZONE_ID))});
+                obj.addEvent(event);
             }
-        });
-        getNPCS().stream().map((npc) -> {
-            LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
-                    new Object[]{npc, ((RPObject) npc).getID(), npc.getZone()});
-            return npc;
-        }).map((npc) -> {
-            ((RPObject) npc).addEvent(event);
-            return npc;
-        }).forEachOrdered((npc) -> {
-            Lookup.getDefault().lookup(IRPWorld.class).modify((RPObject) npc);
+            return obj;
+        }).forEachOrdered((obj) -> {
+            Lookup.getDefault().lookup(IRPWorld.class).modify(obj);
         });
     }
 
