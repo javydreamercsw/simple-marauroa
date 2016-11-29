@@ -5,14 +5,14 @@ import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.entity.RPEntityInterface;
 
 @ServiceProvider(service = ActionProvider.class)
-public class SupportAnswerAction extends AdministrationAction 
+public class SupportAnswerAction extends AdministrationAction
         implements ActionProvider {
 
     private static final String TEXT = "support_text";
@@ -24,7 +24,7 @@ public class SupportAnswerAction extends AdministrationAction
     }
 
     @Override
-    public void perform(ClientObjectInterface player, RPAction action) {
+    public void perform(RPEntityInterface player, RPAction action) {
         if (action.has(TARGET) && action.has(TEXT)) {
             final String message = player.getTitle() + " answers "
                     + Grammar.suffix_s(action.get(TARGET))
@@ -34,7 +34,7 @@ public class SupportAnswerAction extends AdministrationAction
                     .lookup(IRPRuleProcessor.class)).addGameEvent(player.getName(),
                     SUPPORTANSWER, action.get(TARGET),
                     action.get(TEXT));
-            ClientObjectInterface supported
+            RPEntityInterface supported
                     = ((SimpleRPRuleProcessor) Lookup.getDefault()
                             .lookup(IRPRuleProcessor.class))
                             .getPlayer(action.get(TARGET));

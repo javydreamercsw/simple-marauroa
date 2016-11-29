@@ -1,6 +1,6 @@
 package simple.server.core.event;
 
-import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.RPEntityInterface;
 
 /**
  *
@@ -11,25 +11,22 @@ public interface ILoginNotifier {
     /**
      * Adds a LoginListener.
      *
-     * @param listener
-     * LoginListener to add
+     * @param listener LoginListener to add
      */
     void addListener(LoginListener listener);
 
     /**
      * This method is invoked by ClientObjectInterface.create().
      *
-     * @param player
-     * the player who logged in
+     * @param player the player who logged in
      */
-    void onPlayerLoggedIn(ClientObjectInterface player);
+    void onPlayerLoggedIn(RPEntityInterface player);
 
     /**
      * Removes a LoginListener.
      *
-     * @param listener
-     * LoginListener to remove
+     * @param listener LoginListener to remove
      */
     void removeListener(LoginListener listener);
-    
+
 }

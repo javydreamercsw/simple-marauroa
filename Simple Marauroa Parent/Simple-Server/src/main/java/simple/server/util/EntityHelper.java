@@ -5,8 +5,8 @@ import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.clientobject.ClientObject;
 
@@ -37,10 +37,11 @@ public class EntityHelper {
             return null;
         }
 
-        SimpleRPZone zone = player.getZone();
+        ISimpleRPZone zone = player.getZone();
         Entity entity = null;
         //Treat as object id
-        if (target.length() > 1 && target.charAt(0) == '#' && Character.isDigit(target.charAt(1))) {
+        if (target.length() > 1 && target.charAt(0) == '#'
+                && Character.isDigit(target.charAt(1))) {
             int objectId = Integer.parseInt(target.substring(1));
 
             RPObject.ID targetid = new RPObject.ID(objectId, zone.getID());
@@ -66,11 +67,12 @@ public class EntityHelper {
 
     public static Entity entityFromSlot(ClientObject player, RPAction action) {
         // entity in a slot?
-        if (!action.has(ATTR_BASEITEM) || !action.has(ATTR_BASEOBJECT) || !action.has(ATTR_BASESLOT)) {
+        if (!action.has(ATTR_BASEITEM) || !action.has(ATTR_BASEOBJECT)
+                || !action.has(ATTR_BASESLOT)) {
             return null;
         }
 
-        SimpleRPZone zone = player.getZone();
+        ISimpleRPZone zone = player.getZone();
 
         int baseObject = action.getInt(ATTR_BASEOBJECT);
 

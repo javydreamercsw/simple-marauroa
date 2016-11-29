@@ -5,11 +5,11 @@ import marauroa.common.game.RPAction;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.entity.RPEntityInterface;
 
 @ServiceProvider(service = ActionProvider.class)
 public class AdminLevelAction extends AdministrationAction
@@ -24,13 +24,13 @@ public class AdminLevelAction extends AdministrationAction
     }
 
     @Override
-    public void perform(ClientObjectInterface player, RPAction action) {
+    public void perform(RPEntityInterface player, RPAction action) {
 
         if (action.has(TARGET)) {
             String name = action.get(TARGET);
-            ClientObjectInterface target
+            RPEntityInterface target
                     = ((SimpleRPRuleProcessor) Lookup.getDefault()
-                    .lookup(IRPRuleProcessor.class)).getPlayer(name);
+                            .lookup(IRPRuleProcessor.class)).getPlayer(name);
             if (target == null || (target.isGhost() && !isAllowedtoSeeGhosts(player))) {
                 LOG.log(Level.FINE, "Player \"{0}\" not found", name);
                 player.sendPrivateText("Player \"" + name + "\" not found");
@@ -43,7 +43,8 @@ public class AdminLevelAction extends AdministrationAction
                 int newlevel;
                 try {
                     newlevel = Integer.parseInt(action.get(NEWLEVEL));
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException e) {
                     player.sendPrivateText("The new adminlevel needs to be an Integer");
                     return;
                 }
@@ -75,7 +76,7 @@ public class AdminLevelAction extends AdministrationAction
         }
     }
 
-    boolean isAllowedtoSeeGhosts(ClientObjectInterface player) {
+    boolean isAllowedtoSeeGhosts(RPEntityInterface player) {
         return AdministrationAction.isPlayerAllowedToExecuteAdminCommand(player,
                 "ghostmode", false);
     }

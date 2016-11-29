@@ -4,10 +4,10 @@ import marauroa.common.game.RPAction;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.entity.RPEntityInterface;
 
 @ServiceProvider(service = ActionProvider.class)
 public class TellAllAction extends AdministrationAction implements ActionProvider {
@@ -21,7 +21,7 @@ public class TellAllAction extends AdministrationAction implements ActionProvide
     }
 
     @Override
-    public void perform(ClientObjectInterface player, RPAction action) {
+    public void perform(RPEntityInterface player, RPAction action) {
         if (action.has(TEXT)) {
             String message = "Administrator SHOUTS: " + action.get(TEXT);
             ((SimpleRPRuleProcessor) Lookup.getDefault()

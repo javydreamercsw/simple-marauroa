@@ -1,6 +1,6 @@
 package simple.server.core.event;
 
-import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.RPEntityInterface;
 
 /**
  * Implementing classes can be notified that a player has logged in.
@@ -20,7 +20,7 @@ public interface LoginListener {
      *
      * @param player the player who has logged in
      */
-    void onLoggedIn(ClientObjectInterface player);
+    void onLoggedIn(RPEntityInterface player);
 
     /**
      * Like isGagged(player) but informs the player in case it is gagged.
@@ -28,7 +28,7 @@ public interface LoginListener {
      * @param player player to check
      * @return true, if it is gagged, false otherwise.
      */
-    boolean checkIsGaggedAndInformPlayer(ClientObjectInterface player);
+    boolean checkIsGaggedAndInformPlayer(RPEntityInterface player);
 
     /**
      * @param criminalName The name of the player who should be gagged
@@ -36,7 +36,7 @@ public interface LoginListener {
      * @param minutes The duration of the sentence
      * @param reason why criminal was gagged
      */
-    void gag(final String criminalName, ClientObjectInterface policeman,
+    void gag(final String criminalName, RPEntityInterface policeman,
             int minutes, String reason);
 
     /**
@@ -45,5 +45,5 @@ public interface LoginListener {
      * @param criminal player to check
      * @return time remaining in milliseconds
      */
-    long getTimeRemaining(ClientObjectInterface criminal);
+    long getTimeRemaining(RPEntityInterface criminal);
 }

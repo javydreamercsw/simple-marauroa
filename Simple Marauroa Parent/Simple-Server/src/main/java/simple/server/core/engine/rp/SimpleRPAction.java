@@ -8,9 +8,10 @@ import marauroa.server.game.rp.RPServerManager;
 import org.openide.util.Lookup;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.IRPObjectFactory;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.TutorialNotifier;
 
 public class SimpleRPAction {
@@ -38,16 +39,16 @@ public class SimpleRPAction {
      * @param entity the entity to place
      * @return true, if it was possible to place the entity, false otherwise
      */
-    public static boolean placeAt(SimpleRPZone zone, Entity entity) {
+    public static boolean placeAt(ISimpleRPZone zone, Entity entity) {
         // check in case of players that that they are still in game
         // because the entity is added to the world again otherwise.
         if (entity instanceof ClientObjectInterface
                 && Lookup.getDefault().lookup(IRPObjectFactory.class)
-                .createDefaultClientObject(entity).isDisconnected()) {
+                        .createDefaultClientObject(entity).isDisconnected()) {
             return true;
         }
 
-        SimpleRPZone oldZone = entity.getZone();
+        ISimpleRPZone oldZone = entity.getZone();
         boolean zoneChanged = (oldZone != zone);
 
         /*
@@ -79,7 +80,7 @@ public class SimpleRPAction {
         if (entity instanceof ClientObjectInterface) {
             ClientObjectInterface player
                     = Lookup.getDefault().lookup(IRPObjectFactory.class)
-                    .createDefaultClientObject(entity);
+                            .createDefaultClientObject(entity);
 
             if (zoneChanged) {
                 /*
@@ -112,9 +113,9 @@ public class SimpleRPAction {
      *
      * @param player
      */
-    public static void transferContent(ClientObjectInterface player) {
+    public static void transferContent(RPEntityInterface player) {
         if (rpman != null) {
-            SimpleRPZone zone = player.getZone();
+            ISimpleRPZone zone = player.getZone();
             if (zone != null) {
                 rpman.transferContent((RPObject) player, zone.getContents());
             }

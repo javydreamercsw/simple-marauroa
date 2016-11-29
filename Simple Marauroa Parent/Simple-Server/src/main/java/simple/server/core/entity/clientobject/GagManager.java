@@ -6,8 +6,8 @@ import marauroa.common.game.Attributes;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.LoginListener;
@@ -34,10 +34,10 @@ public class GagManager implements LoginListener {
      * @param reason why criminal was gagged
      */
     @Override
-    public void gag(final String criminalName, ClientObjectInterface policeman,
+    public void gag(final String criminalName, RPEntityInterface policeman,
             int minutes,
             String reason) {
-        final ClientObjectInterface criminal
+        final RPEntityInterface criminal
                 = ((SimpleRPRuleProcessor) Lookup.getDefault()
                         .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
 
@@ -52,8 +52,8 @@ public class GagManager implements LoginListener {
         gag(criminal, policeman, minutes, reason, criminalName);
     }
 
-    void gag(final ClientObjectInterface criminal,
-            ClientObjectInterface policeman, int minutes,
+    void gag(final RPEntityInterface criminal,
+            RPEntityInterface policeman, int minutes,
             String reason, final String criminalName) {
         // no -1
         if (minutes < 0) {
@@ -85,7 +85,7 @@ public class GagManager implements LoginListener {
      *
      * @param inmate player who should be released
      */
-    public void release(ClientObjectInterface inmate) {
+    public void release(RPEntityInterface inmate) {
 
         if (isGagged(inmate)) {
             ((Attributes) inmate).put("gag", "" + 0);
@@ -101,7 +101,7 @@ public class GagManager implements LoginListener {
      * @param player player to check
      * @return true, if it is gagged, false otherwise.
      */
-    public static boolean isGagged(ClientObjectInterface player) {
+    public static boolean isGagged(RPEntityInterface player) {
         return Long.parseLong(((Attributes) player).get("gag")) > 0;
     }
 
@@ -112,7 +112,7 @@ public class GagManager implements LoginListener {
      * @return true, if it is gagged, false otherwise.
      */
     @Override
-    public boolean checkIsGaggedAndInformPlayer(ClientObjectInterface player) {
+    public boolean checkIsGaggedAndInformPlayer(RPEntityInterface player) {
         boolean res = GagManager.isGagged(player);
         if (res) {
             long timeRemaining = getTimeRemaining(player);
@@ -130,7 +130,7 @@ public class GagManager implements LoginListener {
      * @return true, if the gag expired and was removed or was already removed.
      * false, if the player still has time to serve.
      */
-    private boolean tryExpire(ClientObjectInterface player) {
+    private boolean tryExpire(RPEntityInterface player) {
         if (!isGagged(player)) {
             return true;
         }
@@ -145,7 +145,7 @@ public class GagManager implements LoginListener {
     }
 
     @Override
-    public void onLoggedIn(ClientObjectInterface player) {
+    public void onLoggedIn(RPEntityInterface player) {
         if (!isGagged(player)) {
             return;
         }
@@ -155,7 +155,7 @@ public class GagManager implements LoginListener {
         }
     }
 
-    private void setupNotifier(ClientObjectInterface criminal) {
+    private void setupNotifier(RPEntityInterface criminal) {
 
         final String criminalName = criminal.getName();
 
@@ -167,7 +167,7 @@ public class GagManager implements LoginListener {
             @Override
             public void onTurnReached(int currentTurn) {
 
-                ClientObjectInterface criminal2
+                RPEntityInterface criminal2
                         = ((SimpleRPRuleProcessor) Lookup.getDefault()
                                 .lookup(IRPRuleProcessor.class)).getPlayer(criminalName);
                 if (criminal2 == null) {
@@ -189,7 +189,7 @@ public class GagManager implements LoginListener {
      * @return time remaining in milliseconds
      */
     @Override
-    public long getTimeRemaining(ClientObjectInterface criminal) {
+    public long getTimeRemaining(RPEntityInterface criminal) {
         if (!isGagged(criminal)) {
             return 0L;
         }

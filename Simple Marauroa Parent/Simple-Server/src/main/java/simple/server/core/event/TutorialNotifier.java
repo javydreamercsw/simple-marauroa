@@ -2,10 +2,12 @@ package simple.server.core.event;
 
 import java.util.ArrayList;
 import java.util.List;
+import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.extension.TutorialExtension;
 
 /**
@@ -33,20 +35,29 @@ public class TutorialNotifier implements ILoginNotifier {
      * @param player ClientObjectInterface
      * @param type EventType
      */
-    private static void process(ClientObjectInterface player, TutorialEventType type) {
+    private static void process(RPEntityInterface player, TutorialEventType type) {
         String key = type.name().toLowerCase();
-        if (player.getKeyedSlot(TutorialExtension.TUTORIAL, key) == null) {
-            player.setKeyedSlot(TutorialExtension.TUTORIAL, key, "1");
-            player.notifyWorldAboutChanges();
+        if (player instanceof ClientObjectInterface) {
+            ClientObjectInterface coi = (ClientObjectInterface) player;
+            if (coi.getKeyedSlot(TutorialExtension.TUTORIAL, key) == null) {
+                coi.setKeyedSlot(TutorialExtension.TUTORIAL, key, "1");
+                coi.notifyWorldAboutChanges();
+            }
+        } else {
+            RPObject obj = (RPObject) player;
+            if (obj.hasSlot(TutorialExtension.TUTORIAL)
+                    && obj.getSlot(TutorialExtension.TUTORIAL).isEmpty()) {
+                //TODO: Handle tutorial for player characters.
+            }
         }
-        // we must delay this for 1 turn for technical reasons (like zone
+        // We must delay this for 1 turn for technical reasons (like zone
         // change)
         // but we delay it for 5 seconds so that the player has some time to
         // recognize the event
         TextEvent event = new TextEvent(NotificationType.TUTORIAL,
                 type.getMessage(), "System");
         Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
-                new DelayedPlayerEventSender(event, player));
+                new DelayedPlayerEventSender(event, (RPObject) player));
     }
 
     /**
@@ -54,7 +65,7 @@ public class TutorialNotifier implements ILoginNotifier {
      *
      * @param player ClientObjectInterface
      */
-    public static void login(ClientObjectInterface player) {
+    public static void login(RPEntityInterface player) {
         //Here add the messages to be sent to the user on login.
         process(player, TutorialEventType.LOGIN);
         process(player, TutorialEventType.TIMED_PASSWORD);
@@ -67,7 +78,7 @@ public class TutorialNotifier implements ILoginNotifier {
      * @param sourceZone source zone
      * @param destinationZone destination zone
      */
-    public static void zoneChange(ClientObjectInterface player, String sourceZone,
+    public static void zoneChange(RPEntityInterface player, String sourceZone,
             String destinationZone) {
     }
 
@@ -79,7 +90,7 @@ public class TutorialNotifier implements ILoginNotifier {
     }
 
     @Override
-    public void onPlayerLoggedIn(ClientObjectInterface player) {
+    public void onPlayerLoggedIn(RPEntityInterface player) {
         login(player);
     }
 

@@ -15,6 +15,7 @@ import static simple.server.core.action.WellKnownActionConstant.TARGET;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.SimpleRPRuleProcessor;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.LoginListener;
 
 /**
@@ -26,11 +27,11 @@ public class TellAction implements ActionProvider {
     protected String text;
     protected String senderName;
     protected String receiverName;
-    protected ClientObjectInterface sender;
-    protected ClientObjectInterface receiver;
+    protected RPEntityInterface sender;
+    protected RPEntityInterface receiver;
     public static final String TELL = "tell";
 
-    protected void init(ClientObjectInterface player, RPAction action) {
+    protected void init(RPEntityInterface player, RPAction action) {
         text = action.get(TEXT).trim();
         senderName = player.getName();
         receiverName = action.get(TARGET);
@@ -103,7 +104,7 @@ public class TellAction implements ActionProvider {
         }
     }
 
-    protected void tellIgnorePostman(ClientObjectInterface receiver,
+    protected void tellIgnorePostman(RPEntityInterface receiver,
             String message) {
         if (!receiver.getName().equals("postman")) {
             receiver.sendPrivateText(message);
