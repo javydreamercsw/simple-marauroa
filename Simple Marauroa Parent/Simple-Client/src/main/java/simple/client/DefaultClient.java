@@ -12,6 +12,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import marauroa.client.BannedAddressException;
 import marauroa.client.ClientFramework;
 import marauroa.client.LoginFailedException;
@@ -188,14 +190,37 @@ public class DefaultClient implements ClientFrameworkProvider,
                     return;
                 }
                 // Autologin if a valid character was specified.
-                if ((getCharacter() != null)
-                        && (characters.keySet().contains(getCharacter()))
-                        && isCreateDefaultCharacter()) {
-                    try {
-                        chooseCharacter(getCharacter());
+                if (getCharacters().size() == 1) {
+                    if ((getCharacter() != null)
+                            && (characters.keySet().contains(getCharacter()))
+                            && isCreateDefaultCharacter()) {
+                        try {
+                            chooseCharacter(getCharacter());
+                        }
+                        catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                            LOG.log(Level.SEVERE, null, e);
+                        }
                     }
-                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
-                        LOG.log(Level.SEVERE, null, e);
+                } else {
+                    //Pick from your characters
+                    String[] possibilities = getCharacters().keySet()
+                            .toArray(new String[getCharacters().keySet().size()]);
+                    String s = (String) JOptionPane.showInputDialog(
+                            new JFrame(),
+                            "Please choose a character.",
+                            "Choose Character",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            possibilities,
+                            null);
+
+                    if ((s != null) && (s.length() > 0)) {
+                        try {
+                            chooseCharacter(s);
+                        }
+                        catch (TimeoutException | InvalidVersionException | BannedAddressException ex) {
+                            LOG.log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
             }
