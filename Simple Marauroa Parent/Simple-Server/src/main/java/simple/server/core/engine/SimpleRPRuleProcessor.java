@@ -313,6 +313,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                         + object.get("#db_id"), e);
                 result = false;
             }
+        } else {
+            Lookup.getDefault().lookup(IRPWorld.class).add(object);
         }
         return result;
     }
