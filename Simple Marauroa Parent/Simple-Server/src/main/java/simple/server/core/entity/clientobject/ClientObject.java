@@ -39,8 +39,7 @@ import simple.server.extension.MarauroaServerExtension;
  */
 @ServiceProviders({
     @ServiceProvider(service = ClientObjectInterface.class)
-    ,
-    @ServiceProvider(service = RPEntityInterface.class, position = 100)})
+    ,@ServiceProvider(service = RPEntityInterface.class, position = 100)})
 public class ClientObject extends RPEntity implements ClientObjectInterface,
         java.io.Serializable {
 
