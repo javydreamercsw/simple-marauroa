@@ -30,6 +30,7 @@ import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.RPObjectMonitor;
 import simple.server.core.entity.clientobject.ClientObject;
@@ -371,26 +372,26 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     protected boolean addPlayer(RPObject object) {
         boolean result = false;
-        if (object instanceof ClientObjectInterface) {
-            ClientObjectInterface player = (ClientObjectInterface) object;
+        if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+            RPEntityInterface player = new RPEntity(object);
             for (IRPZone zone : this) {
                 if (zone.getID().getID().equals(player.getZone().getID().getID())) {
                     LOG.fine("Object added");
                     showWorld();
                     //Add it to the RuleProcessor as well
                     if (SimpleRPRuleProcessor.get().getOnlinePlayers()
-                            .getOnlinePlayer(player.getName()) == null) {
+                            .getOnlinePlayer(Tool.extractName(object)) == null) {
                         SimpleRPRuleProcessor.get().getOnlinePlayers()
                                 .add(player);
                     }
                     result = true;
-                    welcome(player);
+                    welcome(object);
                     break;
                 }
             }
-        } else if (object != null) {
-            LOG.log(Level.FINE, "addPlayer Zone {0} not found for Player {1}",
-                    new Object[]{object.get(Entity.ZONE_ID), object.get("name")});
+        } else {
+            LOG.log(Level.FINE, "Trying to add non-player {1} to Zone {0}",
+                    new Object[]{object.get(Entity.ZONE_ID), object});
         }
         return result;
     }
@@ -402,7 +403,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      *
      * @param player ClientObjectInterface
      */
-    protected static void welcome(final ClientObjectInterface player) {
+    protected static void welcome(final RPObject player) {
         String msg = "";
         try {
             Configuration config = Configuration.getConfiguration();
@@ -433,7 +434,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             } else {
                 LOG.log(Level.WARNING,
                         "Unable to send message: ''{0}'' to player: {1}",
-                        new Object[]{msg, player.getName()});
+                        new Object[]{msg, Tool.extractName(player)});
             }
         }
     }
@@ -456,8 +457,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                             new DelayedPlayerEventSender(new PrivateTextEvent(
                                     NotificationType.INFORMATION,
-                                    "Changed to zone: " + newzoneid),
-                                    (ClientObjectInterface) object));
+                                    "Changed to zone: " + newzoneid), object));
                 }
             }
         } else {
@@ -659,7 +659,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public ClientObjectInterface getPlayer(String name) {
+    public RPEntityInterface getPlayer(String name) {
         return ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class))
                 .getPlayer(name);
@@ -672,7 +672,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             //Assign the current default zone
             object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
         }
-        if (object instanceof ClientObjectInterface) {
+        if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
             addPlayer(object);
         }
         super.add(object);

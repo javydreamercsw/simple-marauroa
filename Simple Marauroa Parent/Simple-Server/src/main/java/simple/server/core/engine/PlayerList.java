@@ -3,12 +3,18 @@ package simple.server.core.engine;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import marauroa.common.game.RPObject;
+import org.openide.util.Lookup;
+import simple.common.NotificationType;
 import simple.common.filter.FilterCriteria;
 import simple.common.game.ClientObjectInterface;
+import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.tool.Tool;
 
 public class PlayerList {
 
-    private final Map<String, ClientObjectInterface> players;
+    private final Map<String, RPEntityInterface> players;
 
     public PlayerList() {
         players = new ConcurrentHashMap<>();
@@ -21,7 +27,7 @@ public class PlayerList {
      * @return the ClientObjectInterface specified by the name or <code> null
      * </code> if not found
      */
-    ClientObjectInterface getOnlinePlayer(String name) {
+    RPEntityInterface getOnlinePlayer(String name) {
         return players.get(name.toLowerCase());
     }
 
@@ -31,12 +37,16 @@ public class PlayerList {
      * @param message
      */
     void tellAllOnlinePlayers(final String message) {
-        forAllPlayersExecute(new Task<ClientObjectInterface>() {
-
-            @Override
-            public void execute(ClientObjectInterface player) {
-                player.sendPrivateText(message);
-                player.notifyWorldAboutChanges();
+        forAllPlayersExecute((RPEntityInterface player) -> {
+            if (player instanceof ClientObjectInterface) {
+                ClientObjectInterface coi = (ClientObjectInterface) player;
+                coi.sendPrivateText(message);
+                coi.notifyWorldAboutChanges();
+            } else {
+                ((RPObject) player).addEvent(
+                        new PrivateTextEvent(NotificationType.PRIVMSG, message));
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .modify((RPObject) player);
             }
         });
     }
@@ -46,8 +56,8 @@ public class PlayerList {
      *
      * @param task the task to execute
      */
-    public void forAllPlayersExecute(Task<ClientObjectInterface> task) {
-        Iterator<Map.Entry<String, ClientObjectInterface>> it
+    public void forAllPlayersExecute(Task<RPEntityInterface> task) {
+        Iterator<Map.Entry<String, RPEntityInterface>> it
                 = players.entrySet().iterator();
         while (it.hasNext()) {
             task.execute(it.next().getValue());
@@ -61,13 +71,13 @@ public class PlayerList {
      * @param task the task to execute.
      * @param filter the FilterCriteria to pass
      */
-    public void forFilteredPlayersExecute(Task<ClientObjectInterface> task,
-            FilterCriteria<ClientObjectInterface> filter) {
-        Iterator<Map.Entry<String, ClientObjectInterface>> it
+    public void forFilteredPlayersExecute(Task<RPEntityInterface> task,
+            FilterCriteria<RPEntityInterface> filter) {
+        Iterator<Map.Entry<String, RPEntityInterface>> it
                 = players.entrySet().iterator();
         while (it.hasNext()) {
 
-            ClientObjectInterface player = it.next().getValue();
+            RPEntityInterface player = it.next().getValue();
 
             if (filter.passes(player)) {
                 task.execute(player);
@@ -84,8 +94,8 @@ public class PlayerList {
         return players.size();
     }
 
-    public void add(ClientObjectInterface player) {
-        String playerName = player.getName();
+    public void add(RPEntityInterface player) {
+        String playerName = Tool.extractName((RPObject) player);
 
         if (playerName != null) {
             players.put(playerName.toLowerCase(), player);
@@ -94,8 +104,8 @@ public class PlayerList {
         }
     }
 
-    public boolean remove(ClientObjectInterface player) {
-        String playerName = player.getName();
+    public boolean remove(RPEntityInterface player) {
+        String playerName = Tool.extractName((RPObject) player);
 
         if (playerName != null) {
             return players.remove(playerName.toLowerCase()) != null;

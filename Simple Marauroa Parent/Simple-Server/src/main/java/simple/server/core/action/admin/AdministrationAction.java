@@ -8,12 +8,12 @@ import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.action.WellKnownActionConstant;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPRuleProcessor;
-import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntityInterface;
 
 /**
  * Most /commands for admins are handled here.
@@ -46,7 +46,7 @@ public abstract class AdministrationAction implements ActionProvider {
     }
 
     public static boolean isPlayerAllowedToExecuteAdminCommand(
-            ClientObjectInterface player,
+            RPEntityInterface player,
             String command, boolean verbose) {
         // get adminlevel of player and required adminlevel for this command
         int adminlevel = player.getAdminLevel();
@@ -90,8 +90,8 @@ public abstract class AdministrationAction implements ActionProvider {
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
-        if (rpo instanceof ClientObjectInterface) {
-            ClientObjectInterface player = (ClientObjectInterface) rpo;
+        if (rpo instanceof RPEntityInterface) {
+            RPEntityInterface player = (RPEntityInterface) rpo;
             String type = action.get(WellKnownActionConstant.TYPE);
             if (!isPlayerAllowedToExecuteAdminCommand(player, type, true)) {
                 return;
@@ -100,7 +100,7 @@ public abstract class AdministrationAction implements ActionProvider {
         }
     }
 
-    protected abstract void perform(ClientObjectInterface player,
+    protected abstract void perform(RPEntityInterface player,
             RPAction action);
 
     /**
@@ -110,7 +110,7 @@ public abstract class AdministrationAction implements ActionProvider {
      * @param action
      * @return the Entity or null if it does not exist
      */
-    protected final Entity getTarget(ClientObjectInterface player,
+    protected final Entity getTarget(RPEntityInterface player,
             RPAction action) {
 
         String id = null;
@@ -138,7 +138,7 @@ public abstract class AdministrationAction implements ActionProvider {
 
         // go for the id
         if (id != null) {
-            SimpleRPZone zone = player.getZone();
+            ISimpleRPZone zone = player.getZone();
 
             RPObject.ID oid = new RPObject.ID(Integer.parseInt(id),
                     zone.getName());

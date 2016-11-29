@@ -172,7 +172,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      * @return The player, or null if no player with the given name is currently
      * online.
      */
-    public ClientObjectInterface getPlayer(String name) {
+    public RPEntityInterface getPlayer(String name) {
         return getOnlinePlayers().getOnlinePlayer(name);
     }
 
@@ -276,7 +276,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      * @param player
      */
     public static void transferContent(final ClientObjectInterface player) {
-        final SimpleRPZone zone = player.getZone();
+        final ISimpleRPZone zone = player.getZone();
         rpman.transferContent((RPObject) player, zone.getContents());
     }
 
@@ -323,7 +323,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     public synchronized boolean onExit(RPObject object) {
         super.onExit(object);
         try {
-            ClientObjectInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class))
+            RPEntityInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault()
+                    .lookup(IRPRuleProcessor.class))
                     .getPlayer(object.get("name"));
             if (player != null) {
                 if (wasKilled((RPEntity) player)) {
@@ -333,8 +334,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 if (!player.isGhost()) {
                     notifyOnlineStatus(false, player.getName());
                 }
-                Lookup.getDefault().lookup(IRPObjectFactory.class)
-                        .destroyClientObject(player);
+                if (player instanceof ClientObjectInterface) {
+                    Lookup.getDefault().lookup(IRPObjectFactory.class)
+                            .destroyClientObject((ClientObjectInterface) player);
+                }
                 getOnlinePlayers().remove(player);
 
                 //Player is still somewhere else?
@@ -388,10 +391,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     public static void sendMessageToSupporters(final String message) {
         ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
-                .forFilteredPlayersExecute((ClientObjectInterface player) -> {
+                .forFilteredPlayersExecute((RPEntityInterface player) -> {
                     player.sendPrivateText(message);
                     player.notifyWorldAboutChanges();
-                }, (ClientObjectInterface p) -> p.getAdminLevel()
+                }, (RPEntityInterface p) -> p.getAdminLevel()
                 >= AdministrationAction.REQUIRED_ADMIN_LEVEL_FOR_SUPPORT);
     }
 
@@ -416,14 +419,14 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         if (isOnline) {
             ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
-                    .forAllPlayersExecute((ClientObjectInterface player) -> {
+                    .forAllPlayersExecute((RPEntityInterface player) -> {
                         player.notifyOnline(name);
                     });
 
         } else {
             ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
-                    .forAllPlayersExecute((ClientObjectInterface player) -> {
+                    .forAllPlayersExecute((RPEntityInterface player) -> {
                         player.notifyOffline(name);
                     });
         }
