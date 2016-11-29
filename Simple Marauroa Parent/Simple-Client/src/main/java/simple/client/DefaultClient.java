@@ -47,8 +47,7 @@ import simple.server.core.tool.Tool;
  */
 @ServiceProviders({
     @ServiceProvider(service = ClientFrameworkProvider.class)
-    ,
-@ServiceProvider(service = MessageProvider.class)})
+    ,@ServiceProvider(service = MessageProvider.class)})
 public class DefaultClient implements ClientFrameworkProvider,
         MessageProvider {
 

@@ -9,15 +9,16 @@ import simple.common.NotificationType;
  */
 public abstract class HelpAction implements SlashAction {
 
-    private ActionRepository repo;
-    private String[] lines;
-    private SimpleUI ui;
+    private final ActionRepository repo;
+    private final String[] lines;
+    private final SimpleUI ui;
 
     /**
      * Help action class
+     *
      * @param repo Repository containing the actions handled by this class
-     * @param lines Additional lines of text to be displayed before the actual usage.
-     *        Usually for usage with no parameters.
+     * @param lines Additional lines of text to be displayed before the actual
+     * usage. Usually for usage with no parameters.
      * @param ui
      */
     public HelpAction(ActionRepository repo, String[] lines, SimpleUI ui) {
@@ -28,15 +29,14 @@ public abstract class HelpAction implements SlashAction {
 
     /**
      * Execute a chat command.
-     * 
-     * @param params
-     *            The formal parameters.
-     * @param remainder
-     *            Line content after parameters.
-     * 
+     *
+     * @param params The formal parameters.
+     * @param remainder Line content after parameters.
+     *
      * @return <code>true</code> if was handled.
      */
     @SuppressWarnings("static-access")
+    @Override
     public boolean execute(String[] params, String remainder) {
         String command = params[1];
         boolean detailed = false;
@@ -61,6 +61,7 @@ public abstract class HelpAction implements SlashAction {
      *
      * @return The parameter count.
      */
+    @Override
     public int getMaximumParameters() {
         // /help <command>
         return 2;
@@ -71,6 +72,7 @@ public abstract class HelpAction implements SlashAction {
      *
      * @return The parameter count.
      */
+    @Override
     public int getMinimumParameters() {
         //In case they just type /help
         return 1;
@@ -81,11 +83,12 @@ public abstract class HelpAction implements SlashAction {
      *
      */
     @SuppressWarnings("static-access")
+    @Override
     public void usage(boolean detailed) {
-        ui.get().addEventLine("- /help <command> -d" +
-                (detailed ? "\t\tGet detailed help for the named command." : "") +
-                "- /help <command>" +
-                (detailed ? "\t\tGet non-detailed help for the named command." : ""),
+        ui.get().addEventLine("- /help <command> -d"
+                + (detailed ? "\t\tGet detailed help for the named command." : "")
+                + "- /help <command>"
+                + (detailed ? "\t\tGet non-detailed help for the named command." : ""),
                 NotificationType.CLIENT);
     }
 }
