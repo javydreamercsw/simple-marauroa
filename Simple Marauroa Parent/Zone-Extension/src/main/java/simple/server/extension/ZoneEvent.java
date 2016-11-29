@@ -28,7 +28,7 @@ public class ZoneEvent extends SimpleRPEvent {
     public void generateRPClass() {
         if (!RPClass.hasRPClass(RPCLASS_NAME)) {
             RPClass rpclass = new RPClass(RPCLASS_NAME);
-            rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.LONG_STRING);
+            rpclass.add(DefinitionClass.ATTRIBUTE, FIELD, Type.VERY_LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, DESC, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, ROOM, Type.LONG_STRING);
             rpclass.add(DefinitionClass.ATTRIBUTE, ACTION, Type.INT);
