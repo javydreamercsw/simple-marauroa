@@ -2,6 +2,7 @@ package simple.client.gui;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -26,18 +27,18 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
     private JTextPane tp;
     protected static final int TEXT_SIZE = 11;
     protected static final Color HEADER_COLOR = Color.gray;
-    /** the logger instance. */
-    private static final Logger logger = Log4J.getLogger(ChatEnabledScreen.class);
+    /**
+     * the logger instance.
+     */
+    private static final Logger LOG
+            = Log4J.getLogger(ChatEnabledScreen.class);
 
     /**
      * The implemented method.
      *
-     * @param header
-     *            a string with the header name
-     * @param line
-     *            a string representing the line to be printed
-     * @param type
-     *            The logical format type.
+     * @param header a string with the header name
+     * @param line a string representing the line to be printed
+     * @param type The logical format type.
      */
     public void addLine(String header, String line,
             NotificationType type) {
@@ -58,8 +59,9 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
         if (getCurrentTextPane().getDocument().getLength() > 20000) {
             try {
                 getCurrentTextPane().getDocument().remove(0, 100);
-            } catch (BadLocationException e) {
-                logger.info(e);
+            }
+            catch (BadLocationException e) {
+                LOG.info(e);
             }
         }
         getCurrentTextPane().setCaretPosition(getCurrentTextPane().getDocument().getLength());
@@ -69,6 +71,7 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
 
     /**
      * This is used to switch where the messages will be written to
+     *
      * @param tp
      */
     public void setCurrentTextPane(JTextPane tp) {
@@ -78,6 +81,7 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
 
     /**
      * Get the current TextPane
+     *
      * @return JTextPane
      */
     public JTextPane getCurrentTextPane() {
@@ -86,12 +90,14 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
 
     /**
      * React to key presses
+     *
      * @param e
      */
     public abstract void onKeyPressed(KeyEvent e);
 
     /**
      * React to key release
+     *
      * @param e
      */
     public abstract void onKeyReleased(KeyEvent e);
@@ -103,6 +109,7 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
 
     /**
      * Insert a header.
+     *
      * @param header
      */
     protected void insertHeader(String header) {
@@ -112,15 +119,18 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
                 doc.insertString(doc.getLength(), "<" + header + "> ",
                         getCurrentTextPane().getStyle("header"));
             }
-        } catch (BadLocationException ble) {
-            logger.error("Couldn't insert initial text.", ble);
-        } catch (Exception e) {
-            logger.error("Couldn't insert initial text.", e);
+        }
+        catch (BadLocationException ble) {
+            LOG.error("Couldn't insert initial text.", ble);
+        }
+        catch (Exception e) {
+            LOG.error("Couldn't insert initial text.", e);
         }
     }
 
     /**
      * Insert time stamp
+     *
      * @param header
      */
     protected void insertTimestamp(String header) {
@@ -130,13 +140,15 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
                 doc.insertString(doc.getLength(), header,
                         getCurrentTextPane().getStyle("timestamp"));
             }
-        } catch (BadLocationException ble) {
-            logger.error("Couldn't insert initial text.");
+        }
+        catch (BadLocationException ble) {
+            LOG.error("Couldn't insert initial text.");
         }
     }
 
     /**
      * Insert text
+     *
      * @param text
      * @param type
      */
@@ -165,8 +177,9 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
                 }
             };
             parser.format(text);
-        } catch (Exception ble) { // BadLocationException
-            logger.error(ble);
+        }
+        catch (Exception ble) { // BadLocationException
+            LOG.error(ble);
         }
     }
 
@@ -177,8 +190,9 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
         Document doc = getCurrentTextPane().getDocument();
         try {
             doc.insertString(doc.getLength(), "\r\n", getColor(Color.black));
-        } catch (BadLocationException ble) {
-            logger.error("Couldn't insert initial text. " + ble);
+        }
+        catch (BadLocationException ble) {
+            LOG.error("Couldn't insert initial text. " + ble);
         }
     }
 
@@ -188,6 +202,7 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
 
     /**
      * Add a line of text
+     *
      * @param header
      * @param line
      */
@@ -197,6 +212,7 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
 
     /**
      * Add a line of text
+     *
      * @param line
      * @param type
      */
@@ -213,15 +229,12 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
         try {
             // We need to wait because we must not print further lines
             // before we have scrolled down.
-            SwingUtilities.invokeAndWait(new Runnable() {
-
-                @Override
-                public void run() {
-                    vbar.setValue(vbar.getMaximum());
-                }
+            SwingUtilities.invokeAndWait(() -> {
+                vbar.setValue(vbar.getMaximum());
             });
-        } catch (Exception e) {
-            logger.error(e, e);
+        }
+        catch (InterruptedException | InvocationTargetException e) {
+            LOG.error(e, e);
         }
     }
 
@@ -255,8 +268,7 @@ public abstract class ChatEnabledScreen extends javax.swing.JFrame {
     }
 
     /**
-     * @param desiredColor
-     *            the color with which the text must be colored
+     * @param desiredColor the color with which the text must be colored
      * @return the colored style
      */
     public Style getColor(Color desiredColor) {

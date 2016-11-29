@@ -8,6 +8,7 @@ import simple.common.NotificationType;
  *
  * This should have minimal UI-implementation dependent code. That's what
  * sub-classes are for!
+ *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 public abstract class SimpleUI {
@@ -61,6 +62,7 @@ public abstract class SimpleUI {
 
     /**
      * Adds a Swing component to the view.
+     *
      * @param dlg
      */
     public abstract void addDialog(Component dlg);
@@ -79,7 +81,7 @@ public abstract class SimpleUI {
      * Get the default UI.
      *
      *
-     * @return 
+     * @return
      */
     public static SimpleUI get() {
         return sharedUI;
@@ -107,8 +109,7 @@ public abstract class SimpleUI {
     /**
      * Set the shared [singleton] value.
      *
-     * @param sharedUI
-     *            The Jwrestling UI.
+     * @param sharedUI The game's UI.
      */
     public static void setDefault(SimpleUI sharedUI) {
         SimpleUI.sharedUI = sharedUI;
@@ -117,8 +118,7 @@ public abstract class SimpleUI {
     /**
      * Set the offline indication state.
      *
-     * @param offline
-     *            <code>true</code> if offline.
+     * @param offline <code>true</code> if offline.
      */
     public abstract void setOffline(boolean offline);
 
@@ -128,9 +128,8 @@ public abstract class SimpleUI {
     public abstract void shutdown();
 
     /**
-     * Handles the game main loop.
-     * The stuff that happens over and over on the client,
-     * i.e. the game itself
+     * Handles the game main loop. The stuff that happens over and over on the
+     * client, i.e. the game itself
      */
     public abstract void gameLoop();
 }

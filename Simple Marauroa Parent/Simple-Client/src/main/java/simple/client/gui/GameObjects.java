@@ -20,14 +20,15 @@ public class GameObjects implements IGameObjects {
     /**
      * the logger instance.
      */
-    private static final Logger logger = Log4J.getLogger(GameObjects.class);
+    private static final Logger LOG = Log4J.getLogger(GameObjects.class);
     private final Map<FQID, ClientEntity> objects;
+
     /**
      * constructor.
      *
      */
     public GameObjects() {
-        objects = new HashMap<FQID, ClientEntity>();
+        objects = new HashMap<>();
     }
 
     @Override
@@ -59,14 +60,14 @@ public class GameObjects implements IGameObjects {
      */
     public synchronized void clear() {
         if (!objects.isEmpty()) {
-            logger.debug("Game objects not empty!");
+            LOG.debug("Game objects not empty!");
 
             // invalidate all entity objects
             Iterator<ClientEntity> it = iterator();
 
             while (it.hasNext()) {
                 ClientEntity entity = it.next();
-                logger.error("Residual entity: " + entity);
+                LOG.error("Residual entity: " + entity);
                 entity.release();
             }
 
@@ -83,10 +84,9 @@ public class GameObjects implements IGameObjects {
         Rectangle2D area = entity.getArea();
 
         synchronized (this) {
-            for (ClientEntity other : objects.values()) {
-                if (other.isObstacle(entity) && area.intersects(other.getArea())) {
-                    return true;
-                }
+            if (objects.values().stream().anyMatch((other)
+                    -> (other.isObstacle(entity) && area.intersects(other.getArea())))) {
+                return true;
             }
         }
 
@@ -100,9 +100,9 @@ public class GameObjects implements IGameObjects {
      */
     @Override
     public synchronized void update(int delta) {
-        for (ClientEntity entity : objects.values()) {
+        objects.values().forEach((entity) -> {
             entity.update(delta);
-        }
+        });
     }
 
     /**
@@ -135,19 +135,19 @@ public class GameObjects implements IGameObjects {
     @Override
     public void onAdded(final RPObject object) {
         if (object.has("server-only")) {
-            logger.debug("Discarding object: " + object);
+            LOG.debug("Discarding object: " + object);
         } else {
             if (!object.getRPClass().subclassOf("entity")) {
-                logger.debug("Skipping non-entity object: " + object);
+                LOG.debug("Skipping non-entity object: " + object);
                 return;
             }
 
             ClientEntity entity = add(object);
 
             if (entity != null) {
-                logger.debug("added " + entity);
+                LOG.debug("added " + entity);
             } else {
-                logger.error("No entity for: " + object);
+                LOG.error("No entity for: " + object);
             }
         }
     }
@@ -199,7 +199,7 @@ public class GameObjects implements IGameObjects {
     public void onRemoved(final RPObject object) {
         RPObject.ID id = object.getID();
 
-        logger.debug("removed " + id);
+        LOG.debug("removed " + id);
 
         ClientEntity entity;
 
@@ -306,7 +306,7 @@ public class GameObjects implements IGameObjects {
          * @param id And object ID.
          */
         public FQID(RPObject.ID id) {
-            this(new Object[]{Integer.valueOf(id.getObjectID())});
+            this(new Object[]{id.getObjectID()});
         }
 
         /**
@@ -329,11 +329,11 @@ public class GameObjects implements IGameObjects {
          * @return A FQID.
          */
         public static FQID create(final RPObject object) {
-            LinkedList<Object> path = new LinkedList<Object>();
+            LinkedList<Object> path = new LinkedList<>();
             RPObject node = object;
 
             while (true) {
-                path.addFirst(Integer.valueOf(node.getID().getObjectID()));
+                path.addFirst(node.getID().getObjectID());
 
                 RPSlot slot = node.getContainerSlot();
 
@@ -364,6 +364,7 @@ public class GameObjects implements IGameObjects {
          * Check if this equals another object.
          *
          * @param obj The object to compare to.
+         * @return true if equal.
          */
         @Override
         public boolean equals(final Object obj) {

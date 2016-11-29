@@ -180,7 +180,7 @@ public interface ClientFrameworkProvider extends Runnable {
      * @return the connected status. true if logged in, false otherwise.
      */
     public boolean isConnected();
-    
+
     /**
      * Disconnects the client.
      */

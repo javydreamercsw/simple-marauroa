@@ -1,8 +1,7 @@
-
 package simple.client.gui;
 
 /**
- * Parsing of formated text to show highlighted expressions. 
+ * Parsing of formated text to show highlighted expressions.
  *
  * @author Martin Fuchs
  */
