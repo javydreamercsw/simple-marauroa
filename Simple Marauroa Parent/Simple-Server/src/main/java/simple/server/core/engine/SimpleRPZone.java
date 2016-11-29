@@ -1,7 +1,6 @@
 package simple.server.core.engine;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
 import marauroa.common.game.Attributes;
-import marauroa.common.game.IRPZone;
 import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
@@ -23,7 +21,6 @@ import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.character.PlayerCharacter;
-import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TurnNotifier;
@@ -63,7 +60,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         TransferContent content = new TransferContent();
         content.name = name;
         content.cacheable = true;
-        LOG.log(Level.FINE, "Layer timestamp: {0}", Integer.toString(content.timestamp));
+        LOG.log(Level.FINE, "Layer timestamp: {0}",
+                Integer.toString(content.timestamp));
         content.data = byteContents;
         content.timestamp = CRC.cmpCRC(content.data);
 
@@ -91,20 +89,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
             if (object instanceof ClientObjectInterface) {
                 ClientObjectInterface player = (ClientObjectInterface) object;
-                try {
-                    //Make sure that the correct onRemoved method is called
-                    Configuration conf = Configuration.getConfiguration();
-                    Class<?> clientObjectClass = Class.forName(
-                            conf.get("client_object",
-                                    ClientObject.class.getCanonicalName()));
-                    Class[] types = new Class[]{IRPZone.class};
-                    java.lang.reflect.Method localSingleton = clientObjectClass
-                            .getDeclaredMethod("onRemoved", types);
-                    localSingleton.invoke(clientObjectClass.cast(object), this);
-                }
-                catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException | IOException ex) {
-                    LOG.log(Level.SEVERE, null, ex);
-                }
+                player.onRemoved(this);
                 //Let everyone else know
                 applyPublicEvent(new PrivateTextEvent(
                         NotificationType.INFORMATION, player.getName()
@@ -342,8 +327,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     LOG.log(Level.FINE, "With a delay of {0} turns", delay);
                     Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
                             delay,
-                            new DelayedPlayerEventSender(event,
-                                    ((ClientObjectInterface) obj)));
+                            new DelayedPlayerEventSender(event, obj));
                 }
             } else {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
