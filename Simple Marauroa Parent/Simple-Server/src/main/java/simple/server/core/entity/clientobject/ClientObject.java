@@ -107,18 +107,20 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     @Override
     //Warning! Always call super.update() if you are overriding this method.
     public void update() {
-        for (MarauroaServerExtension extension
-                : Lookup.getDefault().lookupAll(MarauroaServerExtension.class)) {
-            LOG.log(Level.FINE, "Processing extension to update client object "
-                    + "class definition: {0}", extension.getClass()
-                            .getSimpleName());
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class).stream()
+                .map((extension) -> {
+                    LOG.log(Level.FINE, "Processing extension to update client object "
+                            + "class definition: {0}", extension.getClass()
+                                    .getSimpleName());
+                    return extension;
+                }).forEachOrdered((extension) -> {
             try {
                 extension.clientObjectUpdate(this);
             }
             catch (SimpleException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
-        }
+        });
         super.update();
     }
 
