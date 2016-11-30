@@ -203,7 +203,7 @@ public abstract class AbstractSystemTest {
 
     public IRPZone createZone(String test) {
         WORLD.addZone(test);
-        return WORLD.getRPZone(test);
+        return WORLD.getZone(test);
     }
 
     public static TestPlayer getTestPlayer(String name) {

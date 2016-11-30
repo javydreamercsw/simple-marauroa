@@ -4,20 +4,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
 import marauroa.common.crypto.Hash;
-import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import org.openide.util.Lookup;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.engine.IRPWorld;
-import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.api.IRPEvent;
 import simple.server.core.tool.Tool;
@@ -45,7 +43,7 @@ class SimpleServerCLI extends Thread {
             input = new BufferedReader(new InputStreamReader(System.in));
             String line;
             line = input.readLine();
-            while (line !=null && !line.equals("")) {
+            while (line != null && !line.equals("")) {
                 processInput(line.trim());
                 line = input.readLine();
             }
@@ -145,34 +143,31 @@ class SimpleServerCLI extends Thread {
                         StringBuilder sb = new StringBuilder();
                         switch (temp) {
                             case "entity":
-                                for (RPEntityInterface e : Lookup.getDefault()
-                                        .lookupAll(RPEntityInterface.class)) {
+                                Lookup.getDefault()
+                                        .lookupAll(RPEntityInterface.class).forEach((e) -> {
                                     sb.append(e.getClass().getSimpleName()).append("\n");
-                                }
+                                });
                                 LOG.info(sb.toString());
                                 break;
                             case "extension":
-                                for (MarauroaServerExtension e
-                                        : Lookup.getDefault()
-                                                .lookupAll(MarauroaServerExtension.class)) {
+                                Lookup.getDefault()
+                                        .lookupAll(MarauroaServerExtension.class).forEach((e) -> {
                                     sb.append(e.getName()).append("\n");
-                                }
+                                });
                                 LOG.info(sb.toString());
                                 break;
                             case "action":
-                                for (ActionProvider e
-                                        : Lookup.getDefault()
-                                                .lookupAll(ActionProvider.class)) {
+                                Lookup.getDefault()
+                                        .lookupAll(ActionProvider.class).forEach((e) -> {
                                     sb.append(e.getClass().getSimpleName()).append("\n");
-                                }
+                                });
                                 LOG.info(sb.toString());
                                 break;
                             case "event":
-                                for (IRPEvent e
-                                        : Lookup.getDefault()
-                                                .lookupAll(IRPEvent.class)) {
+                                Lookup.getDefault()
+                                        .lookupAll(IRPEvent.class).forEach((e) -> {
                                     sb.append(e.getName()).append("\n");
-                                }
+                                });
                                 LOG.info(sb.toString());
                                 break;
                             case "zone":
@@ -184,26 +179,26 @@ class SimpleServerCLI extends Thread {
                                     while (st.hasMoreTokens()) {
                                         z += st.nextToken() + " ";
                                     }
-                                    SimpleRPZone zone = world.getZone(z.trim());
+                                    ISimpleRPZone zone = world.getZone(z.trim());
                                     if (zone == null) {
                                         LOG.log(Level.WARNING,
                                                 "Unable to find zone: {0}", z);
                                     } else {
                                         sb.append("Players--------------------"
                                                 + "---------------").append("\n");
-                                        for (RPObject p : zone.getPlayers()) {
-                                            sb.append(Tool.extractName(p)).append("\n");
-                                        }
+                                        zone.getPlayers().forEach((p) -> {
+                                            sb.append(p.getName()).append("\n");
+                                        });
                                         sb.append("NPC------------------------"
                                                 + "-----------").append("\n");
-                                        for (RPEntityInterface npc : zone.getNPCS()) {
-                                            sb.append(Tool.extractName((RPObject) npc)).append("\n");
-                                        }
+                                        zone.getNPCS().forEach((npc) -> {
+                                            sb.append(Tool.extractName(npc)).append("\n");
+                                        });
                                     }
                                 } else {
-                                    for (SimpleRPZone zone : world.getZones()) {
+                                    world.getZones().forEach((zone) -> {
                                         sb.append(zone.getName()).append("\n");
-                                    }
+                                    });
                                 }
                                 LOG.info(sb.toString());
                                 break;
@@ -227,17 +222,18 @@ class SimpleServerCLI extends Thread {
                     try {
                         Configuration conf = Configuration.getConfiguration();
                         Properties p = conf.getAsProperties();
-                        for (Entry<Object, Object> entry : p.entrySet()) {
-                            //Make sure not to disclose security info.
-                            if (!entry.getKey().equals("e")
-                                    && !entry.getKey().equals("d")
-                                    && !entry.getKey().equals("n")
-                                    && !entry.getKey().toString().startsWith("jdbc")
-                                    && !entry.getKey().toString().contains("password")) {
-                                LOG.log(Level.INFO, "{0}: {1}",
-                                        new Object[]{entry.getKey(), entry.getValue()});
-                            }
-                        }
+                        p.entrySet().stream().filter((entry)
+                                -> (!entry.getKey().equals("e")
+                                && !entry.getKey().equals("d")
+                                && !entry.getKey().equals("n")
+                                && !entry.getKey().toString().startsWith("jdbc")
+                                && !entry.getKey().toString()
+                                        .contains("password")))
+                                .forEachOrdered((entry) -> {
+                                    LOG.log(Level.INFO, "{0}: {1}",
+                                            new Object[]{entry.getKey(),
+                                                entry.getValue()});
+                                }); //Make sure not to disclose security info.
                     }
                     catch (IOException ex) {
                         LOG.log(Level.SEVERE, null, ex);

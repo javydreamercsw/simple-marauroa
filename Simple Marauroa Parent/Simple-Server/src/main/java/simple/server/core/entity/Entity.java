@@ -236,7 +236,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         Lookup.getDefault()
                 .lookup(IRPWorld.class).checkZone(this);
         zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
-                .getRPZone(get(Entity.ZONE_ID));
+                .getZone(get(Entity.ZONE_ID));
         return zone;
     }
 

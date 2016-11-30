@@ -101,7 +101,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param event Event to apply
      * @return true if successful
      */
-    boolean applyPublicEvent(SimpleRPZone zone, RPEvent event);
+    boolean applyPublicEvent(ISimpleRPZone zone, RPEvent event);
 
     /**
      * Apply event to everyone in zone after a delay (in turns)
@@ -111,7 +111,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param delay amount of turns before applying the event
      * @return true if successful
      */
-    boolean applyPublicEvent(SimpleRPZone zone, RPEvent event, int delay);
+    boolean applyPublicEvent(ISimpleRPZone zone, RPEvent event, int delay);
 
     /**
      * Change object to new zone
@@ -137,14 +137,6 @@ public interface IRPWorld extends Iterable<IRPZone> {
     void deleteIfEmpty(String zone);
 
     /**
-     * Get zone by name
-     *
-     * @param zone zone's name
-     * @return Zone
-     */
-    ISimpleRPZone getRPZone(String zone);
-
-    /**
      * Gives the number of turns that will take place during a given number of
      * seconds.
      *
@@ -161,7 +153,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @return The matching zone, or <code>null</code> if not found.
      */
-    SimpleRPZone getZone(final String id);
+    ISimpleRPZone getZone(final String id);
 
     /**
      * Finds a zone by its id.
@@ -170,14 +162,14 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @return The matching zone, or <code>null</code> if not found.
      */
-    SimpleRPZone getZone(final IRPZone.ID id);
+    ISimpleRPZone getZone(final IRPZone.ID id);
 
     /**
      * Get a list of zones
      *
      * @return list of zones
      */
-    List<SimpleRPZone> getZones();
+    List<ISimpleRPZone> getZones();
 
     /**
      * Gets all zones in this world.
@@ -210,7 +202,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param desc new description
      * @return new zone
      */
-    SimpleRPZone updateRPZoneDescription(String zone, String desc);
+    ISimpleRPZone updateRPZoneDescription(String zone, String desc);
 
     /**
      * Request sync from object

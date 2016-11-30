@@ -7,7 +7,6 @@ import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.entity.RPEntityInterface;
 
 /**
@@ -22,7 +21,7 @@ public interface ISimpleRPZone extends IRPZone {
      * @param object object to add
      * @param player player adding the object
      */
-    void add(final RPObject object, final ClientObjectInterface player);
+    void add(final RPObject object, final RPEntityInterface player);
 
     /**
      * Apply a public event to the zone.
@@ -67,21 +66,21 @@ public interface ISimpleRPZone extends IRPZone {
      * @param name player's name
      * @return the requested player or null if not found.
      */
-    ClientObjectInterface getPlayer(final String name);
+    RPEntityInterface getPlayer(final String name);
 
     /**
      * Gets all players in this zone.
      *
      * @return A list of all players.
      */
-    Collection<RPObject> getPlayers();
+    Collection<RPEntityInterface> getPlayers();
 
     /**
      * Gets all NPCs in this zone.
      *
      * @return A list of all NPC's.
      */
-    Collection<RPEntityInterface> getNPCS();
+    Collection<RPObject> getNPCS();
 
     /**
      * Get a specific NPC.
@@ -89,7 +88,7 @@ public interface ISimpleRPZone extends IRPZone {
      * @param name NPC's name.
      * @return NPC or null if not found.
      */
-    RPEntityInterface getNPC(String name);
+    RPObject getNPC(String name);
 
     /**
      * Gets all players in this zone.

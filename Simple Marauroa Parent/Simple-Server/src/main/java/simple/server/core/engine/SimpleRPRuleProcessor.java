@@ -182,11 +182,12 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      * @param name NPC's name
      * @return The NPC, or null if not found.
      */
-    public RPEntityInterface getNPC(String name) {
-        RPEntityInterface npc = null;
-        for (SimpleRPZone zone : Lookup.getDefault().lookup(IRPWorld.class).getZones()) {
-            for (RPEntityInterface o : zone.getNPCS()) {
-                if (Tool.extractName((RPObject) o).equals(name)) {
+    public RPObject getNPC(String name) {
+        RPObject npc = null;
+        for (ISimpleRPZone zone : Lookup.getDefault()
+                .lookup(IRPWorld.class).getZones()) {
+            for (RPObject o : zone.getNPCS()) {
+                if (Tool.extractName(o).equals(name)) {
                     npc = o;
                     break;
                 }
