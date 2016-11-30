@@ -23,6 +23,7 @@ import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.tool.Tool;
@@ -168,7 +169,7 @@ public class ZoneExtension extends SimpleServerExtension
             else if (Lookup.getDefault().lookup(IRPWorld.class)
                     .hasRPZone(new ID(action.get(ZoneEvent.ROOM)))) {
                 SimpleRPZone jZone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
-                        .getRPZone(((Attributes) player).get("zoneid"));
+                        .getZone(((Attributes) player).get("zoneid"));
                 //If it's locked it means you need a password, you better have it...
                 if (jZone.isLocked()) {
                     if (action.get(PASSWORD) != null) {
@@ -230,11 +231,12 @@ public class ZoneExtension extends SimpleServerExtension
             SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault()
                     .lookup(IRPWorld.class);
             SimpleRPZone zone
-                    = (SimpleRPZone) world.getRPZone(new ID(action.get(ZoneEvent.ROOM)));
-            Collection<RPObject> players = zone.getPlayers();
-            for (RPObject clientObject : players) {
+                    = (SimpleRPZone) world.getZone(new ID(action.get(ZoneEvent.ROOM)));
+            Collection<RPEntityInterface> players = zone.getPlayers();
+            for (RPEntityInterface clientObject : players) {
                 world.changeZone(Lookup.getDefault().lookup(
-                        IRPWorld.class).getDefaultZone().getID().getID(), clientObject);
+                        IRPWorld.class).getDefaultZone().getID().getID(),
+                        (RPObject) clientObject);
             }
             try {
                 world.removeRPZone(new ID(action.get(ZoneEvent.ROOM)));
@@ -302,7 +304,7 @@ public class ZoneExtension extends SimpleServerExtension
     private void listPlayers(ClientObjectInterface player, RPAction action) {
         //Extract zone from field
         String z = action.get(ZoneEvent.FIELD);
-        SimpleRPZone zone = Lookup.getDefault()
+        ISimpleRPZone zone = Lookup.getDefault()
                 .lookup(IRPWorld.class).getZone(z);
         if (zone == null) {
             LOG.log(Level.WARNING,

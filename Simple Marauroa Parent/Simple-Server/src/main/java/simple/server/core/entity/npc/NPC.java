@@ -19,6 +19,7 @@ import simple.common.SizeLimitedArray;
 import static simple.server.core.action.WellKnownActionConstant.FROM;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.entity.Entity;
 import static simple.server.core.entity.Entity.NAME;
 import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.RPEntity;
@@ -34,7 +35,7 @@ import simple.server.core.event.TextEvent;
  * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = RPEntityInterface.class, position = 200)
-public class NPC extends RPEntity implements MonitoreableEntity {
+public class NPC extends Entity implements MonitoreableEntity {
 
     public static final String NPC_TYPE = "NPC_Type";
     private final Map<String, List<RPEventListener>> listeners;
@@ -78,7 +79,8 @@ public class NPC extends RPEntity implements MonitoreableEntity {
                 npc.isA(RPEntity.DEFAULT_RPCLASS);
                 npc.addAttribute(NPC_TYPE, Type.STRING);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOG.log(Level.SEVERE, null, e);
         }
     }

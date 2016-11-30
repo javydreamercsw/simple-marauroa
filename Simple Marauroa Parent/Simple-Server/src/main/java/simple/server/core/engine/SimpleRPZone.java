@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
-import marauroa.common.game.Attributes;
 import marauroa.common.game.Perception;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
@@ -19,8 +17,10 @@ import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.character.PlayerCharacter;
+import simple.server.core.entity.npc.NPC;
 import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TurnNotifier;
@@ -73,22 +73,17 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         return contents;
     }
 
-    /**
-     * Removes object from zone.
-     *
-     * @param object
-     * @return the removed object
-     */
     @Override
-    public RPObject remove(final RPObject object) {
+    public RPObject remove(RPObject.ID id) {
+        RPObject object = super.remove(id);
         if (object != null) {
             Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                     .stream().forEach((extension) -> {
                         extension.onRPObjectRemoveFromZone(object);
                     });
 
-            if (object instanceof ClientObjectInterface) {
-                ClientObjectInterface player = (ClientObjectInterface) object;
+            if (object instanceof RPEntityInterface) {
+                RPEntityInterface player = (RPEntityInterface) object;
                 player.onRemoved(this);
                 //Let everyone else know
                 applyPublicEvent(new PrivateTextEvent(
@@ -99,11 +94,40 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             }
             Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
                     getID().toString());
+            //Update the Player list
+            Iterator<RPEntityInterface> it = getPlayers().iterator();
+            while (it.hasNext()) {
+                RPEntityInterface player = it.next();
+                if (player.getName().equals(Tool.extractName(object))) {
+                    it.remove();
+                    break;
+                }
+            }
+            //Update the NPC list
+            Iterator<RPObject> it2 = getNPCS().iterator();
+            while (it2.hasNext()) {
+                RPObject npc = it2.next();
+                if (Tool.extractName(npc).equals(Tool.extractName(object))) {
+                    it2.remove();
+                    break;
+                }
+            }
             return super.remove(object.getID());
         } else {
             LOG.warning("Trying to remove null RPObject!");
             return null;
         }
+    }
+
+    /**
+     * Removes object from zone.
+     *
+     * @param object
+     * @return the removed object
+     */
+    @Override
+    public RPObject remove(final RPObject object) {
+        return remove(object.getID());
     }
 
     /**
@@ -128,13 +152,12 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      * @return A list of all players.
      */
     @Override
-    public Collection<RPObject> getPlayers() {
-        List<RPObject> result = objects.values()
-                .stream()
-                .filter(o -> (o instanceof ClientObjectInterface)
-                || (o instanceof PlayerCharacter))
-                .map(p -> (RPObject) p)
-                .collect(Collectors.toList());
+    public Collection<RPEntityInterface> getPlayers() {
+        List<RPEntityInterface> result = new ArrayList<>();
+        objects.values().stream().filter((o)
+                -> (o instanceof RPEntity)).forEachOrdered((o) -> {
+            result.add((RPEntityInterface) o);
+        });
         return result;
     }
 
@@ -158,11 +181,11 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     }
 
     @Override
-    public ClientObjectInterface getPlayer(final String name) {
-        ClientObjectInterface result = null;
-        for (RPObject o : getPlayers()) {
-            if (Tool.extractName(o).equals(name)) {
-                result = (ClientObjectInterface) o;
+    public RPEntityInterface getPlayer(final String name) {
+        RPEntityInterface result = null;
+        for (RPEntityInterface o : getPlayers()) {
+            if (o.getName().equals(name)) {
+                result = o;
                 break;
             }
         }
@@ -170,9 +193,9 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     }
 
     @Override
-    public RPEntityInterface getNPC(String name) {
-        RPEntityInterface result = null;
-        for (RPEntityInterface o : getNPCS()) {
+    public RPObject getNPC(String name) {
+        RPObject result = null;
+        for (RPObject o : getNPCS()) {
             if (Tool.extractName((RPObject) o).equals(name)) {
                 result = o;
                 break;
@@ -184,8 +207,8 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     @Override
     public void add(RPObject object) throws RPObjectInvalidException {
         synchronized (this) {
-            if (object instanceof ClientObjectInterface) {
-                add(object, null);
+            if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+                add(new RPEntity(object), null);
             } else {
                 super.add(object);
             }
@@ -193,7 +216,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     }
 
     @Override
-    public void add(final RPObject object, final ClientObjectInterface player) {
+    public void add(final RPObject object, final RPEntityInterface player) {
         synchronized (this) {
             /*
              * Assign [zone relative] ID info if not already there.
@@ -202,19 +225,14 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 assignRPObjectID(object);
             }
 
-            if (object instanceof ClientObjectInterface) {
-                LOG.fine("Processing ClientObjectInterface");
-                final ClientObjectInterface p
-                        = ((ClientObjectInterface) object);
-                LOG.log(Level.FINE, "Object zone: {0}",
-                        ((Attributes) p).get(Entity.ZONE_ID));
+            if (object instanceof RPEntityInterface) {
+                RPEntityInterface p = (RPEntityInterface) object;
+                LOG.fine("Processing RPEntityInterface");
                 //Let everyone else know
                 applyPublicEvent(new PrivateTextEvent(
                         NotificationType.INFORMATION, p.getName()
                         + " joined " + getName()));
-            } else if (object instanceof RPEntityInterface) {
-                LOG.fine("Processing RPEntityInterface");
-                ((RPEntityInterface) object).onAdded(this);
+                p.onAdded(this);
             } else if (object.has(WellKnownActionConstant.TYPE)) {
                 switch (object.get(WellKnownActionConstant.TYPE)) {
                     case PlayerCharacter.DEFAULT_RP_CLASSNAME:
@@ -333,7 +351,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
                         new Object[]{obj, obj.getID(),
                             Lookup.getDefault().lookup(IRPWorld.class)
-                                    .getRPZone(obj.get(Entity.ZONE_ID))});
+                                    .getZone(obj.get(Entity.ZONE_ID))});
                 obj.addEvent(event);
             }
             return obj;
@@ -427,14 +445,12 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      * @return the NPCs
      */
     @Override
-    public Collection<RPEntityInterface> getNPCS() {
-        List<RPEntityInterface> result = objects.values()
-                .stream()
-                .filter(o -> (o instanceof RPEntityInterface)
-                && !(o instanceof ClientObjectInterface)
-                && !(o instanceof PlayerCharacter))
-                .map(p -> (RPEntityInterface) p)
-                .collect(Collectors.toList());
+    public Collection<RPObject> getNPCS() {
+        List<RPObject> result = new ArrayList<>();
+        objects.values().stream().filter((o)
+                -> (o instanceof NPC)).forEachOrdered((o) -> {
+            result.add(o);
+        });
         return result;
     }
 

@@ -40,24 +40,17 @@ public class SimpleZoneTest extends AbstractSystemTest {
         //Create a new zone
         String zoneName = UUID.randomUUID().toString();
         world.addZone(zoneName);
-        ISimpleRPZone zone = world.getRPZone(zoneName);
+        ISimpleRPZone zone = world.getZone(zoneName);
         assertEquals(0, zone.getPlayers().size());
         assertEquals(0, zone.getNPCS().size());
         //Move players to new zone
         world.changeZone(zone.getID(), p1);
         world.changeZone(zone.getID(), p2);
         world.changeZone(zone.getID(), p3);
-        try {
-            Thread.sleep(10000);
-        }
-        catch (InterruptedException ex) {
-            Logger.getLogger(SimpleZoneTest.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        }
         d = world.getDefaultZone();
         assertEquals(0, d.getPlayers().size());
         assertEquals(0, d.getNPCS().size());
-        zone = world.getRPZone(zoneName);
+        zone = world.getZone(zoneName);
         assertEquals(2, zone.getPlayers().size());
         assertEquals(1, zone.getNPCS().size());
         try {
@@ -66,7 +59,7 @@ public class SimpleZoneTest extends AbstractSystemTest {
             d = world.getDefaultZone();
             assertEquals(2, d.getPlayers().size());
             assertEquals(0, d.getNPCS().size());
-            zone = world.getRPZone(zoneName);
+            zone = world.getZone(zoneName);
             assertNull(zone);
             //Attempt to delete the default zone
             world.removeRPZone(d.getID());
@@ -74,7 +67,8 @@ public class SimpleZoneTest extends AbstractSystemTest {
             assertNotNull(d);
             assertEquals(2, d.getPlayers().size());
             assertEquals(0, d.getNPCS().size());
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Logger.getLogger(SimpleZoneTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
         }

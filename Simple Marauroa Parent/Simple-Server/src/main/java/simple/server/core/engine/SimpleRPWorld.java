@@ -79,7 +79,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void deleteIfEmpty(String zone) {
-        SimpleRPZone sZone = (SimpleRPZone) getRPZone(zone);
+        SimpleRPZone sZone = (SimpleRPZone) getZone(zone);
         if (sZone != null && sZone.isDeleteWhenEmpty()
                 && sZone.getPlayers().isEmpty()
                 && !getDefaultZone().getID().equals(sZone.getID())) {
@@ -242,7 +242,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void addZone(String name, String description) {
-        if (getRPZone(name) == null) {
+        if (getZone(name) == null) {
             SimpleRPZone zone = new SimpleRPZone(name);
             if (!description.isEmpty()) {
                 zone.setDescription(description);
@@ -262,23 +262,23 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public ISimpleRPZone getRPZone(String zone) {
-        return (ISimpleRPZone) getRPZone(new IRPZone.ID(zone));
+    public ISimpleRPZone getZone(final String id) {
+        return getZone(new IRPZone.ID(id));
     }
 
     @Override
-    public SimpleRPZone getZone(final String id) {
-        return (SimpleRPZone) getRPZone(new IRPZone.ID(id));
+    public ISimpleRPZone getZone(final IRPZone.ID id) {
+        for (ISimpleRPZone z : getZones()) {
+            if (z.getID().equals(id)) {
+                return z;
+            }
+        }
+        return null;
     }
 
     @Override
-    public SimpleRPZone getZone(final IRPZone.ID id) {
-        return (SimpleRPZone) getRPZone(id);
-    }
-
-    @Override
-    public List<SimpleRPZone> getZones() {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
+    public List<ISimpleRPZone> getZones() {
+        ArrayList<ISimpleRPZone> availableZones = new ArrayList<>();
 
         Iterator zoneList = iterator();
         while (zoneList.hasNext()) {
@@ -295,7 +295,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public boolean applyPrivateEvent(String target, RPEvent event, int delay) {
         boolean result = false;
-        for (SimpleRPZone z : getZones()) {
+        for (ISimpleRPZone z : getZones()) {
             //Only if zone is not empty
             if (!z.getPlayers().isEmpty() && z.getPlayer(target) != null) {
                 LOG.log(Level.FINE,
@@ -312,7 +312,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                     .map((npc) -> {
                         LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
                                 new Object[]{npc, ((RPObject) npc).getID(),
-                                    npc.getZone()});
+                                    npc.get(Entity.ZONE_ID)});
                         return npc;
                     }).map((npc) -> {
                 ((RPObject) npc).addEvent(event);
@@ -333,13 +333,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event) {
+    public boolean applyPublicEvent(ISimpleRPZone zone, RPEvent event) {
         return applyPublicEvent(zone, event, 0);
     }
 
     @Override
-    public boolean applyPublicEvent(SimpleRPZone zone, RPEvent event, int delay) {
-        ArrayList<SimpleRPZone> availableZones = new ArrayList<>();
+    public boolean applyPublicEvent(ISimpleRPZone zone, RPEvent event, int delay) {
+        ArrayList<ISimpleRPZone> availableZones = new ArrayList<>();
         if (zone != null) {
             availableZones.add(zone);
         } else {
@@ -359,7 +359,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 new Object[]{zone, desc});
         SimpleRPZone sZone = null;
         if (hasRPZone(new ID(zone))) {
-            sZone = (SimpleRPZone) getRPZone(zone);
+            sZone = (SimpleRPZone) getZone(zone);
         }
         if (sZone != null) {
             sZone.setDescription(desc);
@@ -370,28 +370,22 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         return sZone;
     }
 
-    protected boolean addPlayer(RPObject object) {
+    protected boolean addPlayer(RPEntityInterface object) {
         boolean result = false;
-        if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
-            RPEntityInterface player = new RPEntity(object);
-            for (IRPZone zone : this) {
-                if (zone.getID().getID().equals(player.getZone().getID().getID())) {
-                    LOG.fine("Object added");
-                    showWorld();
-                    //Add it to the RuleProcessor as well
-                    if (SimpleRPRuleProcessor.get().getOnlinePlayers()
-                            .getOnlinePlayer(Tool.extractName(object)) == null) {
-                        SimpleRPRuleProcessor.get().getOnlinePlayers()
-                                .add(player);
-                    }
-                    result = true;
-                    welcome(object);
-                    break;
+        for (IRPZone zone : this) {
+            if (zone.getID().getID().equals(object.getZone().getID().getID())) {
+                LOG.fine("Object added");
+                showWorld();
+                //Add it to the RuleProcessor as well
+                if (SimpleRPRuleProcessor.get().getOnlinePlayers()
+                        .getOnlinePlayer(object.getName()) == null) {
+                    SimpleRPRuleProcessor.get().getOnlinePlayers()
+                            .add(object);
                 }
+                result = true;
+                welcome(object);
+                break;
             }
-        } else {
-            LOG.log(Level.FINE, "Trying to add non-player {1} to Zone {0}",
-                    new Object[]{object.get(Entity.ZONE_ID), object});
         }
         return result;
     }
@@ -401,9 +395,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
      * server.ini file as "server_welcome". If the value is an http:// address,
      * the first line of that address is read and used as the message
      *
-     * @param player ClientObjectInterface
+     * @param player RPEntityInterface
      */
-    protected static void welcome(final RPObject player) {
+    protected static void welcome(final RPEntityInterface player) {
         String msg = "";
         try {
             Configuration config = Configuration.getConfiguration();
@@ -430,11 +424,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             if (notifier != null) {
                 notifier.notifyInTurns(10,
                         new DelayedPlayerEventSender(new PrivateTextEvent(
-                                NotificationType.TUTORIAL, msg), player));
+                                NotificationType.TUTORIAL, msg),
+                                (RPObject) player));
             } else {
                 LOG.log(Level.WARNING,
                         "Unable to send message: ''{0}'' to player: {1}",
-                        new Object[]{msg, Tool.extractName(player)});
+                        new Object[]{msg, player.getName()});
             }
         }
     }
@@ -448,7 +443,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     public void changeZone(String newzoneid, RPObject object) {
         LOG.fine("World before changing zone:");
         showWorld();
-        SimpleRPZone zone = getZone(newzoneid);
+        ISimpleRPZone zone = getZone(newzoneid);
         if (zone != null) {
             //ChangeZone takes care of removing from current zone
             super.changeZone(zone.getID(), object);
@@ -501,7 +496,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             List<RPObject> toMove = new ArrayList<>();
             while (i.hasNext()) {
                 RPObject next = (RPObject) i.next();
-                if (next instanceof ClientObject) {
+                if (next instanceof RPEntityInterface) {
                     toMove.add(next);
                 }
             }
@@ -530,20 +525,20 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void emptyZone(ID zoneid) {
-        Iterator<RPObject> i = Lookup.getDefault().lookup(IRPWorld.class)
-                .getZone(zoneid).getPlayers().iterator();
-        List<RPObject> toRemove = new ArrayList<>();
+        ISimpleRPZone zone = Lookup.getDefault().lookup(IRPWorld.class)
+                .getZone(zoneid);
+        Iterator<RPEntityInterface> i = zone.getPlayers().iterator();
+        List<RPEntityInterface> toRemove = new ArrayList<>();
         while (i.hasNext()) {
             toRemove.add(i.next());
         }
         toRemove.forEach((co) -> {
             Lookup.getDefault().lookup(IRPWorld.class)
-                    .remove(co.getID());
+                    .remove(((RPObject) co).getID());
         });
         //Handle NPC's
-        Iterator<RPEntityInterface> i2 = Lookup.getDefault().lookup(IRPWorld.class)
-                .getZone(zoneid).getNPCS().iterator();
-        List<RPEntityInterface> toRemove2 = new ArrayList<>();
+        Iterator<RPObject> i2 = zone.getNPCS().iterator();
+        List<RPObject> toRemove2 = new ArrayList<>();
         while (i2.hasNext()) {
             toRemove2.add(i2.next());
         }
@@ -583,7 +578,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public void checkZone(RPObject object) {
         SimpleRPZone zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
-                .getRPZone(object.get(Entity.ZONE_ID));
+                .getZone(object.get(Entity.ZONE_ID));
         if (zone == null) {
             //The zone we were no longer exists use default.
             zone = (SimpleRPZone) Lookup.getDefault()
@@ -673,7 +668,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
         }
         if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
-            addPlayer(object);
+            addPlayer(new RPEntity(object));
         }
         super.add(object);
     }

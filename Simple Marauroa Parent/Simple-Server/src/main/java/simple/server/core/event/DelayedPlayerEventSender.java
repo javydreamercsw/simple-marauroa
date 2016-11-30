@@ -3,9 +3,9 @@ package simple.server.core.event;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.entity.RPEntityInterface;
 
 /**
  * Delays the sending of event (until the next turn for instance to work around
@@ -15,7 +15,7 @@ import simple.server.core.engine.SimpleRPZone;
  */
 public class DelayedPlayerEventSender implements TurnListener {
 
-    private RPEvent event;
+    private final RPEvent event;
     private RPObject player;
     private SimpleRPZone zone;
 
@@ -34,10 +34,11 @@ public class DelayedPlayerEventSender implements TurnListener {
         //If player is not null send the event to that player only
         if (player != null) {
             player.addEvent(event);
-            if (player instanceof ClientObjectInterface) {
-                ((ClientObjectInterface) player).notifyWorldAboutChanges();
+            if (player instanceof RPEntityInterface) {
+                ((RPEntityInterface) player).notifyWorldAboutChanges();
             } else {
-                Lookup.getDefault().lookup(IRPWorld.class).modify(player);
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .modify((RPObject) player);
             }
         } /**
          * Other wise set it up to send as a public event. If zone is null it's
@@ -45,7 +46,8 @@ public class DelayedPlayerEventSender implements TurnListener {
          * zone.
          */
         else {
-            Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(zone, event);
+            Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(zone,
+                    event);
         }
     }
 }
