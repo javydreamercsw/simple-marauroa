@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
 import marauroa.common.crypto.Hash;
+import marauroa.common.game.IRPZone;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import org.openide.util.Lookup;
@@ -179,25 +180,28 @@ class SimpleServerCLI extends Thread {
                                     while (st.hasMoreTokens()) {
                                         z += st.nextToken() + " ";
                                     }
-                                    ISimpleRPZone zone = world.getZone(z.trim());
+                                    IRPZone zone = world.getZone(z.trim());
                                     if (zone == null) {
                                         LOG.log(Level.WARNING,
                                                 "Unable to find zone: {0}", z);
                                     } else {
-                                        sb.append("Players--------------------"
-                                                + "---------------").append("\n");
-                                        zone.getPlayers().forEach((p) -> {
-                                            sb.append(p.getName()).append("\n");
-                                        });
-                                        sb.append("NPC------------------------"
-                                                + "-----------").append("\n");
-                                        zone.getNPCS().forEach((npc) -> {
-                                            sb.append(Tool.extractName(npc)).append("\n");
-                                        });
+                                        if (zone instanceof ISimpleRPZone) {
+                                            ISimpleRPZone sz = (ISimpleRPZone) zone;
+                                            sb.append("Players--------------------"
+                                                    + "---------------").append("\n");
+                                            sz.getPlayers().forEach((p) -> {
+                                                sb.append(p.getName()).append("\n");
+                                            });
+                                            sb.append("NPC------------------------"
+                                                    + "-----------").append("\n");
+                                            sz.getNPCS().forEach((npc) -> {
+                                                sb.append(Tool.extractName(npc)).append("\n");
+                                            });
+                                        }
                                     }
                                 } else {
                                     world.getZones().forEach((zone) -> {
-                                        sb.append(zone.getName()).append("\n");
+                                        sb.append(zone.getID()).append("\n");
                                     });
                                 }
                                 LOG.info(sb.toString());

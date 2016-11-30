@@ -20,7 +20,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @param zone zone to add
      */
-    void addRPZone(IRPZone zone);
+    void addZone(IRPZone zone);
 
     /**
      * Remove zone from world (use with caution). Make sure to move all players
@@ -153,7 +153,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @return The matching zone, or <code>null</code> if not found.
      */
-    ISimpleRPZone getZone(final String id);
+    IRPZone getZone(final String id);
 
     /**
      * Finds a zone by its id.
@@ -162,14 +162,14 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @return The matching zone, or <code>null</code> if not found.
      */
-    ISimpleRPZone getZone(final IRPZone.ID id);
+    IRPZone getZone(final IRPZone.ID id);
 
     /**
      * Get a list of zones
      *
      * @return list of zones
      */
-    List<ISimpleRPZone> getZones();
+    List<IRPZone> getZones();
 
     /**
      * Gets all zones in this world.
@@ -239,7 +239,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @return Default Zone
      */
-    public ISimpleRPZone getDefaultZone();
+    public IRPZone getDefaultZone();
 
     /**
      * Create system accounts.

@@ -64,7 +64,7 @@ public final class TurnNotifier implements ITurnNotifier {
             for (TurnListener event : set) {
                 TurnListener turnListener = event;
                 try {
-                    LOG.log(Level.FINE,
+                    LOG.log(Level.INFO,
                             "Processing turn listener: {0}",
                             turnListener.getClass().getName());
                     turnListener.onTurnReached(currentTurn);

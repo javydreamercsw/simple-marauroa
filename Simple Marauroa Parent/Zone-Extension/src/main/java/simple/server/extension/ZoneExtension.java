@@ -134,7 +134,7 @@ public class ZoneExtension extends SimpleServerExtension
                 }
             }
             LOG.fine("Adding zone to the world...");
-            world.addRPZone(zone);
+            world.addZone(zone);
             LOG.fine("Scheduling moving player to created zone...");
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
@@ -304,7 +304,7 @@ public class ZoneExtension extends SimpleServerExtension
     private void listPlayers(ClientObjectInterface player, RPAction action) {
         //Extract zone from field
         String z = action.get(ZoneEvent.FIELD);
-        ISimpleRPZone zone = Lookup.getDefault()
+        IRPZone zone = Lookup.getDefault()
                 .lookup(IRPWorld.class).getZone(z);
         if (zone == null) {
             LOG.log(Level.WARNING,
@@ -320,7 +320,7 @@ public class ZoneExtension extends SimpleServerExtension
                 }
             }
             StringBuilder players = new StringBuilder();
-            for (RPObject obj : zone.getZoneContents()) {
+            for (RPObject obj : zone) {
                 if (!players.toString().isEmpty()) {
                     players.append(separator);
                 }

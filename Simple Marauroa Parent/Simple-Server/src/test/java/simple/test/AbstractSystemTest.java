@@ -29,6 +29,7 @@ import org.openide.util.Lookup;
 import simple.server.application.db.DAO;
 import simple.server.application.db.IDatabase;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.tool.Tool;
@@ -97,7 +98,8 @@ public abstract class AbstractSystemTest {
                         "d = 2247818318324102371765170170042918563738507675091"
                         + "3416307227952013743326604648798383322370040"
                         + "7625284965452796321477265264173527901632535"
-                        + "4691167883850414929419335");
+                        + "4691167883850414929419335",
+                        "server_welcome = Welcome to the Unit Tests!");
                 Path file = Paths.get(INI.getAbsolutePath());
                 Files.write(file, lines, Charset.forName("UTF-8"));
             }
@@ -133,6 +135,10 @@ public abstract class AbstractSystemTest {
             WORLD.emptyZone(zone);
         });
         WORLD.getZones().clear();
+        if (WORLD instanceof SimpleRPWorld) {
+            SimpleRPWorld sw = (SimpleRPWorld) WORLD;
+            sw.setDefaultZone(null);
+        }
         try {   //It's deleted on the initialization of the environemnt
             WORLD.createSystemAccount();
             //Reset database. This only works with H2
