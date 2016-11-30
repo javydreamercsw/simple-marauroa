@@ -20,7 +20,6 @@ import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.engine.IRPWorld;
-import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.MonitoreableEntity;
 import simple.server.core.entity.api.RPEventListener;
@@ -63,7 +62,6 @@ public class TestPlayer extends ClientObject implements MonitoreableEntity {
                 //Assign a random name
                 setName(UUID.randomUUID().toString());
             }
-            put(Entity.ZONE_ID, world.getDefaultZone().getName());
             DAORegister.get().get(AccountDAO.class).addPlayer(getName(),
                     "password".getBytes("UTF-8"), "dummy@email.com");
             //Add it to the world so it has an ID
