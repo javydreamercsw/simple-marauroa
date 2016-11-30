@@ -52,9 +52,9 @@ public class ZoneExtension extends SimpleServerExtension
 
     @Override
     public RPObject onRPObjectAddToZone(RPObject object) {
-        if (object instanceof ClientObjectInterface) {
+        if (object instanceof RPEntityInterface) {
             //Send the list to the user
-            final ClientObjectInterface player = (ClientObjectInterface) object;
+            final RPEntityInterface player = (RPEntityInterface) object;
             final RPAction action = new RPAction();
             action.put(WellKnownActionConstant.TYPE, ZoneExtension.TYPE);
             action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
@@ -259,7 +259,7 @@ public class ZoneExtension extends SimpleServerExtension
         }
     }
 
-    private void listZones(ClientObjectInterface player, int option, RPAction a) {
+    private void listZones(RPEntityInterface player, int option, RPAction a) {
         try {
             LOG.log(Level.FINE, "Request for zone list from: {0}",
                     player.getName());
