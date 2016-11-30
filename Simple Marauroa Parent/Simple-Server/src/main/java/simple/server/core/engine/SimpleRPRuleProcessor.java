@@ -184,12 +184,15 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      */
     public RPObject getNPC(String name) {
         RPObject npc = null;
-        for (ISimpleRPZone zone : Lookup.getDefault()
+        for (IRPZone zone : Lookup.getDefault()
                 .lookup(IRPWorld.class).getZones()) {
-            for (RPObject o : zone.getNPCS()) {
-                if (Tool.extractName(o).equals(name)) {
-                    npc = o;
-                    break;
+            if (zone instanceof ISimpleRPZone) {
+                ISimpleRPZone sz = (ISimpleRPZone) zone;
+                for (RPObject o : sz.getNPCS()) {
+                    if (Tool.extractName(o).equals(name)) {
+                        npc = o;
+                        break;
+                    }
                 }
             }
         }

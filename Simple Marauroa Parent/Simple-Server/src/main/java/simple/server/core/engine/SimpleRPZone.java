@@ -372,7 +372,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
      * @param description the description to set
      */
     @Override
-    public void setDescription(String description) {
+    public final void setDescription(String description) {
         this.description = description;
     }
 

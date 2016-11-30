@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
+import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -13,6 +14,7 @@ import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.IRPWorld;
+import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.entity.Entity;
 import simple.server.core.event.LoginListener;
 import simple.server.core.event.TextEvent;
@@ -44,10 +46,13 @@ public class PublicChatAction implements ActionProvider {
             try {
                 String text = action.get(TEXT);
                 LOG.log(Level.FINE, "Processing text event: {0}", text);
-                Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                        Lookup.getDefault().lookup(IRPWorld.class)
-                                .getZone(rpo.get(Entity.ZONE_ID)),
-                        new TextEvent(text, Tool.extractName(rpo)));
+                IRPZone zone = Lookup.getDefault().lookup(IRPWorld.class)
+                        .getZone(rpo.get(Entity.ZONE_ID));
+                if (zone instanceof ISimpleRPZone) {
+                    ISimpleRPZone sz = (ISimpleRPZone) zone;
+                    Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
+                            sz, new TextEvent(text, Tool.extractName(rpo)));
+                }
                 if ("true".equals(Configuration.getConfiguration()
                         .get("log_chat", "false"))) {
                     LOG.info(text);
