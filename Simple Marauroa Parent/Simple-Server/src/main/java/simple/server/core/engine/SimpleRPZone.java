@@ -93,7 +93,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 ((RPEntityInterface) object).onRemoved(this);
             }
             Lookup.getDefault().lookup(IRPWorld.class).deleteIfEmpty(
-                    getID().toString());
+                    getID().getID());
             //Update the Player list
             Iterator<RPEntityInterface> it = getPlayers().iterator();
             while (it.hasNext()) {
