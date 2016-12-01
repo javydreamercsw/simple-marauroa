@@ -27,7 +27,6 @@ import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
@@ -458,7 +457,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             //ChangeZone takes care of removing from current zone
             super.changeZone(zone.getID(), object);
             if (LOG.isLoggable(Level.FINE)) {
-                if (object instanceof ClientObjectInterface) {
+                if (object instanceof RPEntityInterface) {
                     Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                             new DelayedPlayerEventSender(new PrivateTextEvent(
                                     NotificationType.INFORMATION,
