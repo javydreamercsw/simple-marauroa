@@ -112,7 +112,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                     break;
                 }
             }
-            return super.remove(object.getID());
+            return object;
         } else {
             LOG.warning("Trying to remove null RPObject!");
             return null;
