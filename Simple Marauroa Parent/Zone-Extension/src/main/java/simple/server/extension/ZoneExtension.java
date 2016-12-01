@@ -52,7 +52,7 @@ public class ZoneExtension extends SimpleServerExtension
 
     @Override
     public RPObject onRPObjectAddToZone(RPObject object) {
-        if (object instanceof RPEntityInterface) {
+        if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
             //Send the list to the user
             final RPEntityInterface player = (RPEntityInterface) object;
             final RPAction action = new RPAction();
