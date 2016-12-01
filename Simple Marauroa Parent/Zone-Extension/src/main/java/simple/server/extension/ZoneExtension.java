@@ -14,7 +14,6 @@ import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.DelayedAction;
@@ -23,6 +22,7 @@ import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
@@ -70,8 +70,8 @@ public class ZoneExtension extends SimpleServerExtension
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
-        if (rpo instanceof ClientObjectInterface) {
-            ClientObjectInterface player = (ClientObjectInterface) rpo;
+        if (rpo.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+            RPEntityInterface player = new RPEntity(rpo);
             LOG.log(Level.FINE, "Action requested by: {0}, action: {1}",
                     new Object[]{rpo, action});
             if (action.has(OPERATION)) {
@@ -114,7 +114,7 @@ public class ZoneExtension extends SimpleServerExtension
         }
     }
 
-    private void create(final ClientObjectInterface player, final RPAction action) {
+    private void create(final RPEntityInterface player, final RPAction action) {
         LOG.log(Level.FINE, "Request for zone creation from: {0}, zone: {1}",
                 new Object[]{player.getName(), action.get(ZoneEvent.ROOM)});
         final SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
@@ -157,7 +157,7 @@ public class ZoneExtension extends SimpleServerExtension
         }
     }
 
-    private void join(ClientObjectInterface player, RPAction action) {
+    private void join(RPEntityInterface player, RPAction action) {
         if (player != null && action != null) {
             //If in same room, tell the player. The client should handle this but just in case...
             if (player instanceof RPObject
@@ -225,7 +225,7 @@ public class ZoneExtension extends SimpleServerExtension
         }
     }
 
-    private void remove(ClientObjectInterface player, RPAction action) {
+    private void remove(RPEntityInterface player, RPAction action) {
         if (!action.get(ZoneEvent.ROOM).equals(Lookup.getDefault()
                 .lookup(IRPWorld.class).getDefaultZone().getID().getID())) {
             SimpleRPWorld world = (SimpleRPWorld) Lookup.getDefault()
@@ -301,7 +301,7 @@ public class ZoneExtension extends SimpleServerExtension
         return "Zone Extension";
     }
 
-    private void listPlayers(ClientObjectInterface player, RPAction action) {
+    private void listPlayers(RPEntityInterface player, RPAction action) {
         //Extract zone from field
         String z = action.get(ZoneEvent.FIELD);
         IRPZone zone = Lookup.getDefault()
