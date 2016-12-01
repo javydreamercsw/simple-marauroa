@@ -266,14 +266,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
                 .getZone(room)).isLocked());
         assertTrue(((ISimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(room)).isPassword(pw));
-        assertEquals(2, listener.getCount());
-        try {
-            //Cleanup
-            Lookup.getDefault().lookup(IRPWorld.class).removeRPZone(room);
-        } catch (Exception ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            fail();
-        }
+        assertEquals(3, listener.getCount());
     }
 
     private class RPEventListenerImpl implements RPEventListener {
