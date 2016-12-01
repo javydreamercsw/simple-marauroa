@@ -272,9 +272,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public IRPZone getZone(final IRPZone.ID id) {
-        for (IRPZone z : getZones()) {
-            if (z.getID().equals(id)) {
-                return z;
+        if (id != null) {
+            for (IRPZone z : getZones()) {
+                if (z.getID() != null) {
+                    if (z.getID().equals(id)) {
+                        return z;
+                    }
+                }
             }
         }
         return null;
@@ -345,20 +349,29 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPublicEvent(ISimpleRPZone zone, RPEvent event, int delay) {
-        ArrayList<IRPZone> availableZones = new ArrayList<>();
+        ArrayList<IRPZone.ID> availableZones = new ArrayList<>();
         if (zone != null) {
-            availableZones.add(zone);
+            availableZones.add(zone.getID());
         } else {
-            availableZones.addAll(getZones());
+            getZones().forEach((z) -> {
+                availableZones.add(z.getID());
+            });
         }
-        availableZones.stream().forEach((z) -> {
-            LOG.log(Level.FINE, "Applying public event:{0} to: {1}",
-                    new Object[]{event, z});
-            if (z instanceof ISimpleRPZone) {
-                ISimpleRPZone z2 = (ISimpleRPZone) z;
-                z2.applyPublicEvent(event, delay);
-            }
-        });
+        ((SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
+                .forAllPlayersExecute((RPEntityInterface p) -> {
+                    if (availableZones.contains(p.getZone().getID())) {
+                        if (delay == 0) {
+                            p.addEvent(event);
+                            p.notifyWorldAboutChanges();
+                        } else {
+                            Lookup.getDefault().lookup(TurnNotifier.class)
+                                    .notifyInTurns(delay,
+                                            new DelayedPlayerEventSender(event,
+                                                    (RPObject) p));
+                        }
+                    }
+                });
         return true;
     }
 
@@ -386,13 +399,18 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 LOG.fine("Object added");
                 showWorld();
                 //Add it to the RuleProcessor as well
-                if (SimpleRPRuleProcessor.get().getOnlinePlayers()
-                        .getOnlinePlayer(object.getName()) == null) {
-                    SimpleRPRuleProcessor.get().getOnlinePlayers()
-                            .add(object);
+                RPEntityInterface player = SimpleRPRuleProcessor.get()
+                        .getOnlinePlayers()
+                        .getOnlinePlayer(object.getName());
+                if (player == null) {
+                    //Just joined us, greet the player!
+                    welcome(object);
+                } else {
+                    //Replace
+                    SimpleRPRuleProcessor.get().onExit((RPObject) object);
                 }
+                SimpleRPRuleProcessor.get().onInit((RPObject) object);
                 result = true;
-                welcome(object);
                 break;
             }
         }
@@ -473,11 +491,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void showWorld() {
-        if (LOG.isLoggable(Level.FINE)) {
-            Iterator it = iterator();
-            while (it.hasNext()) {
-                ((ISimpleRPZone) it.next()).showZone();
-            }
+        Iterator it = iterator();
+        while (it.hasNext()) {
+            ((ISimpleRPZone) it.next()).showZone();
         }
     }
 

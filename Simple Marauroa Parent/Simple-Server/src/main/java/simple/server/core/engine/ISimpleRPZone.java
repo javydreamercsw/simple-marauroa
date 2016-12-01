@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import marauroa.common.game.IRPZone;
-import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.TransferContent;
 import simple.server.core.entity.RPEntityInterface;
@@ -22,21 +21,6 @@ public interface ISimpleRPZone extends IRPZone {
      * @param player player adding the object
      */
     void add(final RPObject object, final RPEntityInterface player);
-
-    /**
-     * Apply a public event to the zone.
-     *
-     * @param event event to apply
-     */
-    void applyPublicEvent(RPEvent event);
-
-    /**
-     * Apply a public event to the zone with a delay.
-     *
-     * @param event event to apply
-     * @param delay delay in turns
-     */
-    void applyPublicEvent(final RPEvent event, final int delay);
 
     /**
      * Return whether the zone contains one or more players.
