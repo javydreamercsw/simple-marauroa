@@ -360,7 +360,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
                 .forAllPlayersExecute((RPEntityInterface p) -> {
-                    if (availableZones.contains(p.getZone().getID())) {
+                    if (p.getZone() != null
+                            && p.getZone().getID() != null
+                            && availableZones.contains(p.getZone().getID())) {
                         if (delay == 0) {
                             p.addEvent(event);
                             p.notifyWorldAboutChanges();
@@ -370,6 +372,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                                             new DelayedPlayerEventSender(event,
                                                     (RPObject) p));
                         }
+                    } else {
+                        LOG.severe(p.toString());
                     }
                 });
         return true;
