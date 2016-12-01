@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -131,9 +132,17 @@ public abstract class AbstractSystemTest {
     public void cleanup() {
         LOG.log(Level.INFO, "Cleaning test database environment...");
         //Remove players from zones
-        WORLD.getZones().forEach((zone) -> {
+        Iterator<IRPZone> iterator = WORLD.getZones().iterator();
+        while (iterator.hasNext()) {
+            IRPZone zone = iterator.next();
             WORLD.emptyZone(zone);
-        });
+            try {
+                WORLD.removeRPZone(zone.getID());
+            }
+            catch (Exception ex) {
+                LOG.log(Level.SEVERE, null, ex);
+            }
+        }
         WORLD.getZones().clear();
         if (WORLD instanceof SimpleRPWorld) {
             SimpleRPWorld sw = (SimpleRPWorld) WORLD;
