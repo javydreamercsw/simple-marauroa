@@ -332,26 +332,29 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         return result;
     }
 
-    @Override
-    public void applyPublicEvent(RPEvent event) {
+    private void applyPublicEvent(RPEvent event) {
         applyPublicEvent(event, 0);
     }
 
-    @Override
-    public void applyPublicEvent(final RPEvent event, final int delay) {
+    private void applyPublicEvent(final RPEvent event, final int delay) {
         objects.values().stream().map((obj) -> {
-            if (obj instanceof ClientObjectInterface) {
+            if (obj instanceof RPEntityInterface) {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
                         new Object[]{obj, obj.getID(),
-                            ((ClientObjectInterface) obj).getZone()});
-                if (delay <= 0) {
-                    obj.addEvent(event);
-                    ((ClientObjectInterface) obj).notifyWorldAboutChanges();
-                } else {
-                    LOG.log(Level.FINE, "With a delay of {0} turns", delay);
-                    Lookup.getDefault().lookup(TurnNotifier.class).notifyInTurns(
-                            delay,
-                            new DelayedPlayerEventSender(event, obj));
+                            ((RPEntityInterface) obj).getZone()});
+                RPEntityInterface target
+                        = getPlayer(((RPEntityInterface) obj).getName());
+                if (target != null) {
+                    if (delay <= 0) {
+                        target.addEvent(event);
+                        target.notifyWorldAboutChanges();
+                    } else {
+                        LOG.log(Level.FINE, "With a delay of {0} turns", delay);
+                        Lookup.getDefault().lookup(TurnNotifier.class)
+                                .notifyInTurns(delay,
+                                        new DelayedPlayerEventSender(event,
+                                                (RPObject) target));
+                    }
                 }
             } else {
                 LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
