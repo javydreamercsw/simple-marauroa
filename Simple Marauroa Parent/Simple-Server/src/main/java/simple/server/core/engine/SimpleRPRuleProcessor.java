@@ -12,8 +12,6 @@ import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.Statistics;
-import marauroa.server.game.container.PlayerEntry;
-import marauroa.server.game.container.PlayerEntryContainer;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.db.GameEventDAO;
 import marauroa.server.game.rp.IRPRuleProcessor;
@@ -24,13 +22,11 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.common.Debug;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
-import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.action.admin.AdministrationAction;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
 import simple.server.core.tool.Tool;
@@ -287,21 +283,10 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     @Override
     public synchronized boolean onInit(RPObject object) {
         boolean result = true;
-        if ((object.has(WellKnownActionConstant.TYPE)
-                && object.get(WellKnownActionConstant.TYPE)
-                        .equals(ClientObject.DEFAULT_RP_CLASSNAME))
-                || !object.has(WellKnownActionConstant.TYPE))/**/ {
+        if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+            final RPEntityInterface player = (RPEntityInterface) object;
             try {
-                final PlayerEntry entry
-                        = PlayerEntryContainer.getContainer().get(object);
-                final ClientObjectInterface player
-                        = Lookup.getDefault().lookup(IRPObjectFactory.class)
-                                .createClientObject(object);
-                entry.object = (RPObject) player;
-
-                Lookup.getDefault().lookup(IRPWorld.class)
-                        .add((RPObject) player);
-                addGameEvent(player.getName(), "login");
+                addGameEvent(Tool.extractName(object), "login");
                 Lookup.getDefault()
                         .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
                     ln.onPlayerLoggedIn(player);
@@ -329,7 +314,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         try {
             RPEntityInterface player = ((SimpleRPRuleProcessor) Lookup.getDefault()
                     .lookup(IRPRuleProcessor.class))
-                    .getPlayer(object.get("name"));
+                    .getPlayer(Tool.extractName(object));
             if (player != null) {
                 if (wasKilled((RPEntity) player)) {
                     LOG.info("Logged out shortly before death: "
@@ -348,7 +333,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 Iterator it = SimpleRPWorld.get().iterator();
                 while (it.hasNext()) {
                     SimpleRPZone zone = (SimpleRPZone) it.next();
-                    if (zone.has(((RPObject) player).getID())
+                    if (zone.getPlayer(Tool.extractName(object)) != null
                             && !zone.getName().equals(
                                     player.getZone().getName())) {
                         LOG.log(Level.WARNING,
