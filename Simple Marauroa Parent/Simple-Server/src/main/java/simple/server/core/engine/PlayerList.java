@@ -24,11 +24,14 @@ public class PlayerList {
      * Retrieve from this list a player specified by its name.
      *
      * @param name the unique name of a player
-     * @return the ClientObjectInterface specified by the name or <code> null
+     * @return the RPEntityInterface specified by the name or <code> null
      * </code> if not found
      */
     RPEntityInterface getOnlinePlayer(String name) {
-        return players.get(name.toLowerCase());
+        if (name != null) {
+            return players.get(name.toLowerCase());
+        }
+        return null;
     }
 
     /**
