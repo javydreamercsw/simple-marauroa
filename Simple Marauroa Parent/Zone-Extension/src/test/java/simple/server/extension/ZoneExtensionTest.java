@@ -41,8 +41,8 @@ public class ZoneExtensionTest extends AbstractSystemTest {
     public void testOnRPObjectAddToZone() {
         System.out.println("onRPObjectAddToZone");
         int initial = getDelayedActions();
-        TestPlayer player = new TestPlayer(new RPObject());
-        assertEquals(initial + 1, getDelayedActions());
+        new TestPlayer(new RPObject());
+        assertEquals(initial + 3, getDelayedActions());
     }
 
     private int getDelayedActions() {
