@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
 import marauroa.common.game.Perception;
-import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPObjectInvalidException;
 import marauroa.common.net.message.TransferContent;
@@ -21,9 +20,7 @@ import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.character.PlayerCharacter;
 import simple.server.core.entity.npc.NPC;
-import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TurnNotifier;
 import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
 
@@ -86,9 +83,10 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 RPEntityInterface player = (RPEntityInterface) object;
                 player.onRemoved(this);
                 //Let everyone else know
-                applyPublicEvent(new PrivateTextEvent(
-                        NotificationType.INFORMATION, player.getName()
-                        + " left " + getName()));
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .applyPublicEvent(new PrivateTextEvent(
+                                NotificationType.INFORMATION, player.getName()
+                                + " left " + getName()));
             } else if (object instanceof Entity) {
                 ((RPEntityInterface) object).onRemoved(this);
             }
@@ -229,9 +227,10 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 RPEntityInterface p = (RPEntityInterface) object;
                 LOG.fine("Processing RPEntityInterface");
                 //Let everyone else know
-                applyPublicEvent(new PrivateTextEvent(
-                        NotificationType.INFORMATION, p.getName()
-                        + " joined " + getName()));
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .applyPublicEvent(new PrivateTextEvent(
+                                NotificationType.INFORMATION, p.getName()
+                                + " joined " + getName()));
                 p.onAdded(this);
             } else if (object.has(WellKnownActionConstant.TYPE)) {
                 switch (object.get(WellKnownActionConstant.TYPE)) {
@@ -324,49 +323,12 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     public boolean containsPlayer() {
         boolean result = false;
         for (RPObject obj : objects.values()) {
-            if (obj instanceof ClientObjectInterface) {
+            if (obj instanceof RPEntityInterface) {
                 result = true;
                 break;
             }
         }
         return result;
-    }
-
-    private void applyPublicEvent(RPEvent event) {
-        applyPublicEvent(event, 0);
-    }
-
-    private void applyPublicEvent(final RPEvent event, final int delay) {
-        objects.values().stream().map((obj) -> {
-            if (obj instanceof RPEntityInterface) {
-                LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
-                        new Object[]{obj, obj.getID(),
-                            ((RPEntityInterface) obj).getZone()});
-                RPEntityInterface target
-                        = getPlayer(((RPEntityInterface) obj).getName());
-                if (target != null) {
-                    if (delay <= 0) {
-                        target.addEvent(event);
-                        target.notifyWorldAboutChanges();
-                    } else {
-                        LOG.log(Level.FINE, "With a delay of {0} turns", delay);
-                        Lookup.getDefault().lookup(TurnNotifier.class)
-                                .notifyInTurns(delay,
-                                        new DelayedPlayerEventSender(event,
-                                                (RPObject) target));
-                    }
-                }
-            } else {
-                LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
-                        new Object[]{obj, obj.getID(),
-                            Lookup.getDefault().lookup(IRPWorld.class)
-                                    .getZone(obj.get(Entity.ZONE_ID))});
-                obj.addEvent(event);
-            }
-            return obj;
-        }).forEachOrdered((obj) -> {
-            Lookup.getDefault().lookup(IRPWorld.class).modify(obj);
-        });
     }
 
     /**
