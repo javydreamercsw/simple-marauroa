@@ -268,22 +268,28 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void showZone() {
-        LOG.log(Level.FINE, "Zone {0} contents:", getName());
-        LOG.log(Level.FINE, "Players: {0}", (getPlayers().isEmpty() ? "Empty" : ""));
-        getPlayers().stream().forEach((co) -> {
-            LOG.fine(co.toString());
-        });
-        LOG.log(Level.FINE, "Objects: {0}", (objects.entrySet().isEmpty()
-                ? "Empty" : ""));
-        objects.entrySet().stream().forEach((co) -> {
-            LOG.fine(co.toString());
-        });
+        if (LOG.isLoggable(Level.FINE)) {
+            System.out.println("Zone " + getName() + " contents:");
+            System.out.println("Players: "
+                    + (getPlayers().isEmpty() ? "Empty" : ""));
+            LOG.log(Level.INFO, "Players: {0}",
+                    (getPlayers().isEmpty() ? "Empty" : ""));
+            getPlayers().stream().forEach((co) -> {
+                System.out.println(co.toString());
+            });
+            System.out.println("NPC's: " + (getNPCS().isEmpty()
+                    ? "Empty" : ""));
+            objects.entrySet().stream().forEach((co) -> {
+                System.out.println(co.toString());
+            });
+            System.out.println("-------------------------------------------------");
+        }
     }
 
     @Override
     public Perception getPerception(final RPObject player, final byte type) {
         Perception p = super.getPerception(player, type);
-        if (LOG.isLoggable(Level.FINE) && p.size() > 0) {
+        if (p.size() > 0) {
             showZone();
         }
         if (!visited) {
