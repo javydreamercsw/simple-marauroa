@@ -169,7 +169,20 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      * online.
      */
     public RPEntityInterface getPlayer(String name) {
-        return getOnlinePlayers().getOnlinePlayer(name);
+        RPEntityInterface player = null;
+        for (IRPZone zone : Lookup.getDefault()
+                .lookup(IRPWorld.class).getZones()) {
+            if (zone instanceof ISimpleRPZone) {
+                ISimpleRPZone sz = (ISimpleRPZone) zone;
+                for (RPEntityInterface o : sz.getPlayers()) {
+                    if (o.getName().equals(name)) {
+                        player = o;
+                        break;
+                    }
+                }
+            }
+        }
+        return player;
     }
 
     /**
