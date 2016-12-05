@@ -19,16 +19,14 @@ import simple.test.TestPlayer;
  */
 public class SimpleRPWorldTest extends AbstractSystemTest {
 
-    public SimpleRPWorldTest() {
-    }
-
     /**
      * Test of setDefaultZone method, of class SimpleRPWorld.
      */
     @Test
     public void testSetDefaultZone() {
         System.out.println("setDefaultZone");
-        SimpleRPWorld instance = (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
+        SimpleRPWorld instance = (SimpleRPWorld) Lookup.getDefault()
+                .lookup(IRPWorld.class);
         String name = UUID.randomUUID().toString();
         assertFalse(instance.hasRPZone(name));
         instance.addZone(name);
