@@ -37,7 +37,6 @@ public class ZoneExtensionTest extends AbstractSystemTest {
      * Test of onRPObjectAddToZone method, of class ZoneExtension.
      */
     @Test
-
     public void testOnRPObjectAddToZone() {
         System.out.println("onRPObjectAddToZone");
         int initial = getDelayedActions();
