@@ -222,7 +222,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
             if (!object.has("id")) {
                 assignRPObjectID(object);
             }
-
+            super.add(object);
             if (object instanceof RPEntityInterface) {
                 RPEntityInterface p = (RPEntityInterface) object;
                 LOG.fine("Processing RPEntityInterface");
@@ -246,7 +246,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                         break;
                 }
             }
-            super.add(object);
             //Request sync previous to any modification
             Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
             if (player != null) {

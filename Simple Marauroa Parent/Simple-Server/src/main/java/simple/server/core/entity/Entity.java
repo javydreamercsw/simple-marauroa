@@ -247,15 +247,7 @@ public class Entity extends RPObject implements RPEntityInterface {
      */
     @Override
     public void onAdded(ISimpleRPZone zone) {
-        if (this.zone != null) {
-            //Make sure its not in the old zone
-            if (this.zone.has(getID())) {
-                LOG.log(Level.SEVERE,
-                        "Entity added while in another zone: {0} in zone {1}",
-                        new Object[]{this, zone.getID()});
-                this.zone.remove(getID());
-            }
-        }
+        //Do nothing by default.
         this.zone = zone;
     }
 

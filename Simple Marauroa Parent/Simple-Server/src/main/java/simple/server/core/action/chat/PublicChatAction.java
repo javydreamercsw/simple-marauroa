@@ -9,13 +9,14 @@ import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
-import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.action.CommandCenter;
 import static simple.server.core.action.WellKnownActionConstant.TEXT;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.LoginListener;
 import simple.server.core.event.TextEvent;
 import simple.server.core.tool.Tool;
@@ -35,8 +36,8 @@ public class PublicChatAction implements ActionProvider {
 
     @Override
     public void onAction(RPObject rpo, RPAction action) {
-        if (rpo instanceof ClientObjectInterface) {
-            ClientObjectInterface player = (ClientObjectInterface) rpo;
+        if (rpo.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+            RPEntityInterface player = new RPEntity(rpo);
             if (Lookup.getDefault().lookup(LoginListener.class).
                     checkIsGaggedAndInformPlayer(player)) {
                 return;
