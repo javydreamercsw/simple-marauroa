@@ -1,6 +1,8 @@
 package simple.server.core.event;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.Configuration;
 
 /**
@@ -12,8 +14,11 @@ public enum TutorialEventType {
 
     LOGIN("Hi, welcome to %g!"),
     TIMED_PASSWORD(
-            "Remember to keep your password completely secret, never tell it to another friend, player, or even admin.");
+            "Remember to keep your password completely secret, "
+            + "never tell it to another friend, player, or even admin.");
     private final String message;
+    private final Logger LOG
+            = Logger.getLogger(TutorialEventType.class.getName());
 
     /**
      * Creates a new TutorialEventType.
@@ -24,7 +29,9 @@ public enum TutorialEventType {
         String g = "Simple-Game";
         try {
             g = Configuration.getConfiguration().get("server_name");
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
         this.message = message.replaceAll("%g", g);
     }
