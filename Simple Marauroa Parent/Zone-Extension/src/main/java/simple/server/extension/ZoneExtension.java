@@ -170,7 +170,7 @@ public class ZoneExtension extends SimpleServerExtension
                     .hasRPZone(new ID(action.get(ZoneEvent.ROOM)))) {
                 ISimpleRPZone jZone = (ISimpleRPZone) Lookup.getDefault()
                         .lookup(IRPWorld.class)
-                        .getZone(((Attributes) player).get("zoneid"));
+                        .getZone(action.get(ZoneEvent.ROOM));
                 //If it's locked it means you need a password, you better have it...
                 if (jZone.isLocked()) {
                     if (action.get(PASSWORD) != null) {
