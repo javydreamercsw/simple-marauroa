@@ -320,7 +320,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 }
             }
             catch (Exception e) {
-                LOG.log(Level.SEVERE, "There has been a severe problem loading player "
+                LOG.log(Level.SEVERE,
+                        "There has been a severe problem loading player "
                         + object.get("#db_id"), e);
                 result = false;
             }

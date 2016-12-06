@@ -356,17 +356,18 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class)).getOnlinePlayers()
                 .forAllPlayersExecute((RPEntityInterface p) -> {
-                    if (p.getZone() != null
-                            && p.getZone().getID() != null
-                            && availableZones.contains(p.getZone().getID())) {
+                    RPEntityInterface player = getPlayer(p.getName());
+                    if (player.getZone() != null
+                            && player.getZone().getID() != null
+                            && availableZones.contains(player.getZone().getID())) {
                         if (delay == 0) {
-                            p.addEvent(event);
-                            p.notifyWorldAboutChanges();
+                            player.addEvent(event);
+                            player.notifyWorldAboutChanges();
                         } else {
                             Lookup.getDefault().lookup(TurnNotifier.class)
                                     .notifyInTurns(delay,
                                             new DelayedPlayerEventSender(event,
-                                                    (RPObject) p));
+                                                    (RPObject) player));
                         }
                     } else {
                         LOG.severe(p.toString());
