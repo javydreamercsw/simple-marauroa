@@ -1,10 +1,6 @@
 package simple.server.core.engine;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -397,72 +393,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     protected boolean addPlayer(RPEntityInterface object) {
-        boolean result = false;
-        for (IRPZone zone : this) {
-            if (zone.getID().getID().equals(object.getZone().getID().getID())) {
-                LOG.fine("Object added");
-                showWorld();
-                //Add it to the RuleProcessor as well
-                RPEntityInterface player = SimpleRPRuleProcessor.get()
-                        .getOnlinePlayers()
-                        .getOnlinePlayer(object.getName());
-                if (player == null) {
-                    //Just joined us, greet the player!
-                    welcome(object);
-                } else {
-                    //Replace
-                    SimpleRPRuleProcessor.get().onExit((RPObject) object);
-                }
-                SimpleRPRuleProcessor.get().onInit((RPObject) object);
-                result = true;
-                break;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Send a welcome message to the player which can be configured in
-     * server.ini file as "server_welcome". If the value is an http:// address,
-     * the first line of that address is read and used as the message
-     *
-     * @param player RPEntityInterface
-     */
-    protected static void welcome(final RPEntityInterface player) {
-        String msg = "";
-        try {
-            Configuration config = Configuration.getConfiguration();
-            if (config.has("server_welcome")) {
-                msg = config.get("server_welcome");
-                if (msg.startsWith("http://")) {
-                    URL url = new URL(msg);
-                    HttpURLConnection.setFollowRedirects(false);
-                    HttpURLConnection connection
-                            = (HttpURLConnection) url.openConnection();
-                    try (BufferedReader br = new BufferedReader(
-                            new InputStreamReader(connection.getInputStream()))) {
-                        msg = br.readLine();
-                    }
-                    connection.disconnect();
-                }
-            }
-        }
-        catch (IOException e) {
-            LOG.log(Level.SEVERE, null, e);
-        }
-        TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
-        if (msg != null && !msg.isEmpty()) {
-            if (notifier != null) {
-                notifier.notifyInTurns(10,
-                        new DelayedPlayerEventSender(new PrivateTextEvent(
-                                NotificationType.TUTORIAL, msg),
-                                (RPObject) player));
-            } else {
-                LOG.log(Level.WARNING,
-                        "Unable to send message: ''{0}'' to player: {1}",
-                        new Object[]{msg, player.getName()});
-            }
-        }
+        return true;
     }
 
     @Override

@@ -1,6 +1,10 @@
 package simple.server.core.engine;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +24,7 @@ import marauroa.server.game.rp.RPServerManager;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Debug;
+import simple.common.NotificationType;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.action.admin.AdministrationAction;
@@ -27,8 +32,11 @@ import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.ILoginNotifier;
 import simple.server.core.event.ITurnNotifier;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TurnNotifier;
 import simple.server.core.tool.Tool;
 
 /**
@@ -297,14 +305,15 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     public synchronized boolean onInit(RPObject object) {
         boolean result = true;
         if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
-            final RPEntityInterface player = (RPEntityInterface) object;
+            final RPEntityInterface player = new RPEntity(object);
             try {
                 addGameEvent(Tool.extractName(object), "login");
                 Lookup.getDefault()
-                        .lookupAll(ILoginNotifier.class).stream().forEach((ln) -> {
+                        .lookupAll(ILoginNotifier.class).stream().forEach((ln)
+                        -> {
                     ln.onPlayerLoggedIn(player);
                 });
-
+                welcome(player);
                 getOnlinePlayers().add(player);
                 if (!player.isGhost()) {
                     notifyOnlineStatus(true, player.getName());
@@ -315,10 +324,53 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                         + object.get("#db_id"), e);
                 result = false;
             }
-        } else {
-            Lookup.getDefault().lookup(IRPWorld.class).add(object);
         }
+        Lookup.getDefault().lookup(IRPWorld.class).add(object);
         return result;
+    }
+
+    /**
+     * Send a welcome message to the player which can be configured in
+     * server.ini file as "server_welcome". If the value is an http:// address,
+     * the first line of that address is read and used as the message
+     *
+     * @param player RPEntityInterface
+     */
+    protected static void welcome(final RPEntityInterface player) {
+        String msg = "";
+        try {
+            Configuration config = Configuration.getConfiguration();
+            if (config.has("server_welcome")) {
+                msg = config.get("server_welcome");
+                if (msg.startsWith("http://")) {
+                    URL url = new URL(msg);
+                    HttpURLConnection.setFollowRedirects(false);
+                    HttpURLConnection connection
+                            = (HttpURLConnection) url.openConnection();
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()))) {
+                        msg = br.readLine();
+                    }
+                    connection.disconnect();
+                }
+            }
+        }
+        catch (IOException e) {
+            LOG.log(Level.SEVERE, null, e);
+        }
+        TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
+        if (msg != null && !msg.isEmpty()) {
+            if (notifier != null) {
+                notifier.notifyInTurns(10,
+                        new DelayedPlayerEventSender(new PrivateTextEvent(
+                                NotificationType.TUTORIAL, msg),
+                                (RPObject) player));
+            } else {
+                LOG.log(Level.WARNING,
+                        "Unable to send message: ''{0}'' to player: {1}",
+                        new Object[]{msg, player.getName()});
+            }
+        }
     }
 
     @Override
