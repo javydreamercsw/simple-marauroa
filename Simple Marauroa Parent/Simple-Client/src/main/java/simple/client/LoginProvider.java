@@ -22,4 +22,11 @@ public interface LoginProvider {
      * @return true if logged in, false otherwise.
      */
     boolean isAuthenticated();
+
+    /**
+     * Set the value of the authentication flag.
+     *
+     * @param authenticated new value
+     */
+    void setAuthenticated(boolean authenticated);
 }
