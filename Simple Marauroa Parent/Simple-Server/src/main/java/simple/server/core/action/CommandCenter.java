@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import simple.common.game.ClientObjectInterface;
-import simple.server.core.action.admin.AdministrationAction;
+import static simple.server.core.action.WellKnownActionConstant.TYPE;
 
 public class CommandCenter {
 
@@ -34,13 +34,11 @@ public class CommandCenter {
     public static void registerAndOverwrite(String action, ActionInterface actionClass,
             int requiredAdminLevel) {
         registerAndOverwrite(action, actionClass);
-        AdministrationAction.registerCommandLevel(action, requiredAdminLevel);
     }
 
     public static void register(String action, ActionInterface actionClass,
             int requiredAdminLevel) {
         register(action, actionClass);
-        AdministrationAction.registerCommandLevel(action, requiredAdminLevel);
     }
 
     public static boolean execute(RPObject player,
@@ -49,8 +47,7 @@ public class CommandCenter {
             ActionInterface actionInterface = getAction(action);
             actionInterface.onAction(player, action);
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "Cannot execute action " + action
                     + " send by " + player, e);
             return false;
@@ -61,7 +58,7 @@ public class CommandCenter {
         if (action == null) {
             return UNKNOWN_ACTION;
         } else {
-            return getAction(action.get(WellKnownActionConstant.TYPE));
+            return getAction(action.get(TYPE));
         }
     }
 
@@ -89,7 +86,7 @@ public class CommandCenter {
                 ClientObjectInterface player = (ClientObjectInterface) rpo;
                 String type = "null";
                 if (action != null) {
-                    type = action.get(WellKnownActionConstant.TYPE);
+                    type = action.get(TYPE);
                 }
                 LOG.log(Level.WARNING,
                         "{0} tried to execute unknown action {1}",

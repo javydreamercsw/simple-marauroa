@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sourceforge.javydreamercsw</groupId>
     <artifactId>Simple-Marauroa</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
+    <version>0.03.00-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -76,7 +76,7 @@
         <module>Challenge-Extension</module>
         <module>Dimension-Extension</module>
         <module>Zone-Extension</module>
-        <module>D20-Extension</module>
+        <!--Disable for now<module>D20-Extension</module>-->
         <module>OutfitExtension</module>
     </modules>
     <build>

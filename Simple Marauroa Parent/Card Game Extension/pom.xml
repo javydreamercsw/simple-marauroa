@@ -4,10 +4,9 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.07-SNAPSHOT</version>
+        <version>0.03.00-SNAPSHOT</version>
     </parent>
     <artifactId>Card-Game-Extension</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Card Game Extension</name>

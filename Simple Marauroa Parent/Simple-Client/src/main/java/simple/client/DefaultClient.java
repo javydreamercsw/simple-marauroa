@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -40,6 +42,8 @@ import simple.client.api.ModificationListener;
 import simple.client.api.PerceptionListener;
 import simple.client.api.SelfChangeListener;
 import simple.client.api.SyncListener;
+import simple.server.core.action.WellKnownActionConstant;
+import simple.server.core.action.chat.PublicChatAction;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.tool.Tool;
 
@@ -96,6 +100,8 @@ public class DefaultClient implements ClientFrameworkProvider,
         setGameName(name);
         setVersion(gversion);
         setClientManager(new ClientFramework("log4j.properties") {
+            Timer timer = null;
+
             @Override
             protected String getGameName() {
                 return DefaultClient.this.getGameName();
@@ -109,37 +115,28 @@ public class DefaultClient implements ClientFrameworkProvider,
             @Override
             protected void onPerception(MessageS2CPerception message) {
                 try {
-                    LOG.log(Level.FINE, "Received perception {0}",
+                    LOG.log(Level.INFO, "Received perception {0}",
                             message.getPerceptionTimestamp());
                     getPerceptionHandler().apply(message,
                             Lookup.getDefault().lookup(IWorldManager.class).getWorld());
-                    int i = message.getPerceptionTimestamp();
-                    if (isChat()) {
-                        RPAction action = new RPAction();
-                        if (i % 50 == 0) {
-                            action.put("type", "chat");
-                            action.put("text", "Hi!");
-                            send(action);
-                        } else if (i % 50 == 20) {
-                            action.put("type", "chat");
-                            action.put("text", "How are you?");
-                            send(action);
-                        }
+                    if (timer == null) {
+                        timer = new Timer();
+                        timer.schedule(new TalkToServer(DefaultClient.this), 0, 5000);
                     }
                     if (isShowWorld()) {
-                        LOG.log(Level.FINE, "<World contents ------------------------------------->");
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("<World contents ------------------------------------->").append("\n");
                         int j = 0;
                         for (RPObject object
                                 : Lookup.getDefault().lookup(IWorldManager.class)
                                         .getWorld().values()) {
                             j++;
-                            LOG.log(Level.FINE, "{0}. {1}",
-                                    new Object[]{j, object});
+                            sb.append(j).append(":").append(object).append("\n");
                         }
-                        LOG.log(Level.FINE, "</World contents ------------------------------------->");
+                        sb.append("</World contents ------------------------------------->").append("\n");
+                        LOG.info(sb.toString());
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     LOG.log(Level.SEVERE, null, e);
                 }
             }
@@ -183,28 +180,31 @@ public class DefaultClient implements ClientFrameworkProvider,
                         if (result.getResult().failed()) {
                             LOG.log(Level.WARNING, result.getResult().getText());
                         }
-                    }
-                    catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                     return;
                 }
                 // Autologin if a valid character was specified.
-                if (getCharacters().size() == 1) {
-                    if ((getCharacter() != null)
-                            && (characters.keySet().contains(getCharacter()))
-                            && isCreateDefaultCharacter()) {
-                        try {
-                            chooseCharacter(getCharacter());
-                        }
-                        catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
-                            LOG.log(Level.SEVERE, null, e);
-                        }
+                if (Lookup.getDefault().lookup(ClientFrameworkProvider.class).
+                        getCharacters().isEmpty()) {
+                    displayError("Unable to login",
+                            "No characters and not set for automatic "
+                            + "character creation.");
+                    disconnect();
+                } else if (Lookup.getDefault().lookup(ClientFrameworkProvider.class)
+                        .getCharacters().size() == 1) {
+                    try {
+                        chooseCharacter(getCharacter());
+                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                        LOG.log(Level.SEVERE, null, e);
                     }
                 } else {
                     //Pick from your characters
                     String[] possibilities = getCharacters().keySet()
-                            .toArray(new String[getCharacters().keySet().size()]);
+                            .toArray(new String[Lookup.getDefault()
+                                    .lookup(ClientFrameworkProvider.class)
+                                    .getCharacters().keySet().size()]);
                     String s = (String) JOptionPane.showInputDialog(
                             new JFrame(),
                             "Please choose a character.",
@@ -217,8 +217,7 @@ public class DefaultClient implements ClientFrameworkProvider,
                     if ((s != null) && (s.length() > 0)) {
                         try {
                             chooseCharacter(s);
-                        }
-                        catch (TimeoutException | InvalidVersionException | BannedAddressException ex) {
+                        } catch (TimeoutException | InvalidVersionException | BannedAddressException ex) {
                             LOG.log(Level.SEVERE, null, ex);
                         }
                     }
@@ -436,8 +435,7 @@ public class DefaultClient implements ClientFrameworkProvider,
             setEmail("dummy@dummy.com");
             getClientManager().login(getUsername(), password);
             connected = true;
-        }
-        catch (ConnectException ex) {
+        } catch (ConnectException ex) {
             LOG.log(Level.WARNING, host, ex);
             MessageProvider mp = Lookup.getDefault().lookup(MessageProvider.class);
             if (mp != null) {
@@ -451,12 +449,10 @@ public class DefaultClient implements ClientFrameworkProvider,
                         new Object[]{getHost(), ex.getLocalizedMessage()});
             }
             showLoginDialog();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
-        }
-        catch (LoginFailedException e) {
+        } catch (LoginFailedException e) {
             if (e.getReason().equals(Reasons.USERNAME_WRONG) && isAutoCreation()) {
                 try {
                     if (getEmail() == null) {
@@ -497,8 +493,7 @@ public class DefaultClient implements ClientFrameworkProvider,
                                             + result.getResult().getText());
                             break;
                     }
-                }
-                catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
+                } catch (LoginFailedException | TimeoutException | BannedAddressException ex) {
                     if (ex instanceof LoginFailedException) {
                         Lookup.getDefault().lookup(MessageProvider.class)
                                 .displayWarning("Login Failed!",
@@ -507,15 +502,13 @@ public class DefaultClient implements ClientFrameworkProvider,
                                         + "your account. Check your provided email.");
                         showLoginDialog();
                     }
-                }
-                catch (InvalidVersionException ex) {
+                } catch (InvalidVersionException ex) {
                     Lookup.getDefault().lookup(MessageProvider.class)
                             .displayError("Invalid version!",
                                     "Invalid version: " + ex.getVersion()
                                     + " vs. protocol version: "
                                     + ex.getProtocolVersion());
-                }
-                catch (InterruptedException ex) {
+                } catch (InterruptedException ex) {
                     LOG.log(Level.SEVERE, null, ex);
                 }
             } else {
@@ -524,16 +517,14 @@ public class DefaultClient implements ClientFrameworkProvider,
                                 e.getReason().toString());
                 showLoginDialog();
             }
-        }
-        catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
+        } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
             System.exit(1);
         }
         while (isConnected()) {
             getClientManager().loop(0);
             try {
                 sleep(100);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 LOG.log(Level.SEVERE, null, e);
                 connected = false;
             }
@@ -721,5 +712,35 @@ public class DefaultClient implements ClientFrameworkProvider,
     @Override
     public void disconnect() {
         this.connected = false;
+    }
+
+    class TalkToServer extends TimerTask {
+
+        private final ClientFrameworkProvider client;
+        private int i = 0;
+
+        public TalkToServer(ClientFrameworkProvider client) {
+            this.client = client;
+        }
+
+        @Override
+        public void run() {
+            if (isChat()) {
+                RPAction action = new RPAction();
+                if (i % 2 != 0) {
+                    action.put(WellKnownActionConstant.TYPE,
+                            PublicChatAction.CHAT);
+                    action.put(WellKnownActionConstant.TEXT,
+                            "How are you?");
+                    client.getClientManager().send(action);
+                } else {
+                    action.put(WellKnownActionConstant.TYPE,
+                            PublicChatAction.CHAT);
+                    action.put(WellKnownActionConstant.TEXT, "Hi!");
+                    client.getClientManager().send(action);
+                }
+                i++;
+            }
+        }
     }
 }
