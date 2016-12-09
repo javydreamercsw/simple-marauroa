@@ -245,7 +245,9 @@ public class DefaultClient implements ClientFrameworkProvider,
     private void showLoginDialog() {
         LoginProvider lp = Lookup.getDefault().lookup(LoginProvider.class);
         if (lp != null) {
-            lp.displayLoginDialog();
+            if (!lp.isAuthenticated()) {
+                lp.displayLoginDialog();
+            }
         }
     }
 
