@@ -50,9 +50,13 @@ public class ClientEntity implements RPObjectChangeListener {
      * moving.
      */
     protected String[] moveSounds;
-    /** The current x location of this entity. */
+    /**
+     * The current x location of this entity.
+     */
     protected double x;
-    /** The current y location of this entity. */
+    /**
+     * The current y location of this entity.
+     */
     protected double y;
     /**
      * The entity width.
@@ -74,7 +78,9 @@ public class ClientEntity implements RPObjectChangeListener {
      * Change listeners.
      */
     protected EntityChangeListener[] changeListeners;
-    /** The arianne object associated with this game entity. */
+    /**
+     * The arianne object associated with this game entity.
+     */
     protected RPObject rpObject;
     /**
      * The entity class.
@@ -124,8 +130,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Add a change listener.
      *
-     * @param listener
-     *            The listener.
+     * @param listener The listener.
      */
     public void addChangeListener(final EntityChangeListener listener) {
         EntityChangeListener[] newListeners;
@@ -141,12 +146,10 @@ public class ClientEntity implements RPObjectChangeListener {
 
     /**
      * Fill the action with the entity's target info. This will set the
-     * <code>baseobject</code>, <code>baseslot</code> and
-     * <code>baseitem</code> respective the <code>target</code> attributes
-     * for uncontained objects.
+     * <code>baseobject</code>, <code>baseslot</code> and <code>baseitem</code>
+     * respective the <code>target</code> attributes for uncontained objects.
      *
-     * @param action
-     *            The RP action.
+     * @param action The RP action.
      */
     public void fillTargetInfo(RPAction action) {
         int id = rpObject.getID().getObjectID();
@@ -166,8 +169,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Fire change to all registered listeners.
      *
-     * @param property
-     *            The changed property.
+     * @param property The changed property.
      */
     protected void fireChange(final Property property) {
         EntityChangeListener[] listeners = changeListeners;
@@ -204,7 +206,9 @@ public class ClientEntity implements RPObjectChangeListener {
         return height;
     }
 
-    /** @return the represented arianne object id. */
+    /**
+     * @return the represented arianne object id.
+     */
     public final RPObject.ID getID() {
         if (rpObject == null) {
             return null;
@@ -308,11 +312,10 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Determine if this entity represents an instance of an RPClass.
      *
-     * @param clazz
-     *            The class name.
+     * @param clazz The class name.
      *
      * @return <code>true</code> if the entity represents that class, or a
-     *         subclass.
+     * subclass.
      */
     public boolean isInstanceOf(String clazz) {
         return rpObject.getRPClass().subclassOf(clazz);
@@ -347,8 +350,7 @@ public class ClientEntity implements RPObjectChangeListener {
      * unit to emit sounds and influences the result of
      * <code>getAudibleArea()</code>.
      *
-     * @param range
-     *            double audibility area radius in coordinate units
+     * @param range double audibility area radius in coordinate units
      */
     public void setAudibleRange(final double range) {
         audibleRange = range;
@@ -359,10 +361,8 @@ public class ClientEntity implements RPObjectChangeListener {
      * because different entities may want to process coordinate changes more
      * gracefully.
      *
-     * @param base
-     *            The previous values.
-     * @param diff
-     *            The changes.
+     * @param base The previous values.
+     * @param diff The changes.
      */
     protected void processPositioning(final RPObject base, final RPObject diff) {
         boolean moved = false;
@@ -393,10 +393,8 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * When the entity's position changed.
      *
-     * @param x
-     *            The new X coordinate.
-     * @param y
-     *            The new Y coordinate.
+     * @param x The new X coordinate.
+     * @param y The new Y coordinate.
      */
     protected void onPosition(final double x, final double y) {
         fireChange(PROP_POSITION);
@@ -414,8 +412,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Get the amount of resistance between this and another entity (0-100).
      *
-     * @param entity
-     *            The entity to check against.
+     * @param entity The entity to check against.
      *
      * @return The effective resistance.
      */
@@ -425,9 +422,10 @@ public class ClientEntity implements RPObjectChangeListener {
 
     /**
      * Gets the slot specified by name.
+     *
      * @param name of the slot
      *
-     * @return    the specified slot or <code>null</code> if the entity does not
+     * @return the specified slot or <code>null</code> if the entity does not
      * have this slot
      */
     public RPSlot getSlot(final String name) {
@@ -441,8 +439,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Initialize this entity for an object.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      *
      * @see #release()
      */
@@ -555,8 +552,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Determine if this is an obstacle for another entity.
      *
-     * @param entity
-     *            The entity to check against.
+     * @param entity The entity to check against.
      *
      * @return <code>true</code> the entity can not enter this entity's area.
      */
@@ -572,14 +568,13 @@ public class ClientEntity implements RPObjectChangeListener {
      * @see #initialize(RPObject)
      */
     public void release() {
-        
+
     }
 
     /**
      * Remove a change listener.
      *
-     * @param listener
-     *            The listener.
+     * @param listener The listener.
      */
     public void removeChangeListener(final EntityChangeListener listener) {
         EntityChangeListener[] newListeners;
@@ -609,8 +604,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * Update cycle.
      *
-     * @param delta
-     *            The time (in ms) since last call.
+     * @param delta The time (in ms) since last call.
      */
     public void update(final int delta) {
     }
@@ -621,8 +615,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * An object was added.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      */
     @Override
     public final void onAdded(final RPObject object) {
@@ -632,10 +625,8 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * The object added/changed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedAdded(final RPObject object, final RPObject changes) {
@@ -728,10 +719,8 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * The object removed attribute(s).
      *
-     * @param object
-     *            The base object.
-     * @param changes
-     *            The changes.
+     * @param object The base object.
+     * @param changes The changes.
      */
     @Override
     public void onChangedRemoved(final RPObject object, final RPObject changes) {
@@ -815,8 +804,7 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * An object was removed.
      *
-     * @param object
-     *            The object.
+     * @param object The object.
      * @deprecated Moving to different listener. Use release().
      */
     @Deprecated
@@ -827,12 +815,9 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * A slot object was added.
      *
-     * @param object
-     *            The container object.
-     * @param slotName
-     *            The slot name.
-     * @param sobject
-     *            The slot object.
+     * @param object The container object.
+     * @param slotName The slot name.
+     * @param sobject The slot object.
      */
     @Override
     public void onSlotAdded(final RPObject object, final String slotName,
@@ -842,14 +827,10 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * A slot object added/changed attribute(s).
      *
-     * @param object
-     *            The base container object.
-     * @param slotName
-     *            The container's slot name.
-     * @param sobject
-     *            The slot object.
-     * @param schanges
-     *            The slot object changes.
+     * @param object The base container object.
+     * @param slotName The container's slot name.
+     * @param sobject The slot object.
+     * @param schanges The slot object changes.
      */
     @Override
     public void onSlotChangedAdded(final RPObject object,
@@ -860,14 +841,10 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * A slot object removed attribute(s).
      *
-     * @param object
-     *            The base container object.
-     * @param slotName
-     *            The container's slot name.
-     * @param sobject
-     *            The slot object.
-     * @param schanges
-     *            The slot object changes.
+     * @param object The base container object.
+     * @param slotName The container's slot name.
+     * @param sobject The slot object.
+     * @param schanges The slot object changes.
      */
     @Override
     public void onSlotChangedRemoved(final RPObject object,
@@ -878,12 +855,9 @@ public class ClientEntity implements RPObjectChangeListener {
     /**
      * A slot object was removed.
      *
-     * @param object
-     *            The container object.
-     * @param slotName
-     *            The slot name.
-     * @param sobject
-     *            The slot object.
+     * @param object The container object.
+     * @param slotName The slot name.
+     * @param sobject The slot object.
      */
     @Override
     public void onSlotRemoved(final RPObject object, final String slotName,

@@ -3,15 +3,14 @@ package simple.client.entity;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import simple.client.HeaderLessEventLine;
 import simple.client.SimpleUI;
 import simple.common.Grammar;
 import simple.common.NotificationType;
-import simple.server.core.entity.item.ItemTools;
 
 /**
  * This class is a link between client graphical objects and server attributes
@@ -20,7 +19,8 @@ import simple.server.core.entity.item.ItemTools;
  */
 public abstract class ClientRPEntity extends ClientEntity {
 
-    private static final Logger logger = Log4J.getLogger(ClientRPEntity.class);
+    private static final Logger LOG
+            = Logger.getLogger(ClientRPEntity.class.getSimpleName());
     /**
      * Admin Level property.
      */
@@ -283,9 +283,9 @@ public abstract class ClientRPEntity extends ClientEntity {
             result = name;
         } else if (clazz != null) {
             // replace underscores in clazz and type without calling the function UpdateConverter.transformItemName() located in server code
-            result = ItemTools.itemNameToDisplayName(clazz);
+            result = clazz;
         } else if (type != null) {
-            result = ItemTools.itemNameToDisplayName(type);
+            result = type;
         } else {
             result = null;
         }
@@ -538,7 +538,7 @@ public abstract class ClientRPEntity extends ClientEntity {
         try {
             nType = NotificationType.valueOf(texttype);
         } catch (RuntimeException e) {
-            logger.error("Unkown texttype: ", e);
+            LOG.log(Level.SEVERE, "Unkown texttype: ", e);
             nType = NotificationType.PRIVMSG;
         }
 
@@ -930,7 +930,7 @@ public abstract class ClientRPEntity extends ClientEntity {
 
                 SimpleUI.get().addEventLine(
                         getTitle() + " earns " + Grammar.quantityplnoun(amount,
-                        "experience point") + ".",
+                                "experience point") + ".",
                         NotificationType.SIGNIFICANT_POSITIVE);
             } else if (amount < 0) {
                 addTextIndicator("" + amount,
@@ -938,7 +938,7 @@ public abstract class ClientRPEntity extends ClientEntity {
 
                 SimpleUI.get().addEventLine(
                         getTitle() + " loses " + Grammar.quantityplnoun(-amount,
-                        "experience point") + ".",
+                                "experience point") + ".",
                         NotificationType.SIGNIFICANT_NEGATIVE);
             }
         }

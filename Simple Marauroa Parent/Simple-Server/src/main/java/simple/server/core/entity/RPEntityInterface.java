@@ -1,7 +1,6 @@
 package simple.server.core.entity;
 
 import marauroa.common.game.RPEvent;
-import simple.common.Constants;
 import simple.common.NotificationType;
 import simple.server.core.engine.ISimpleRPZone;
 
@@ -9,7 +8,7 @@ import simple.server.core.engine.ISimpleRPZone;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface RPEntityInterface extends Constants {
+public interface RPEntityInterface {
 
     /**
      * Called when this object is added to a zone.

@@ -61,18 +61,17 @@ public final class TurnNotifier implements ITurnNotifier {
         }
 
         if (set != null) {
-            for (TurnListener event : set) {
-                TurnListener turnListener = event;
-                try {
-                    LOG.log(Level.FINE,
-                            "Processing turn listener: {0}",
-                            turnListener.getClass().getName());
-                    turnListener.onTurnReached(currentTurn);
-                }
-                catch (RuntimeException e) {
-                    LOG.log(Level.SEVERE, null, e);
-                }
-            }
+            set.stream().map((event) -> event)
+                    .forEachOrdered((turnListener) -> {
+                        try {
+                            LOG.log(Level.FINE,
+                                    "Processing turn listener: {0}",
+                                    turnListener.getClass().getName());
+                            turnListener.onTurnReached(currentTurn);
+                        } catch (RuntimeException e) {
+                            LOG.log(Level.SEVERE, null, e);
+                        }
+                    });
         }
     }
 
@@ -150,19 +149,18 @@ public final class TurnNotifier implements ITurnNotifier {
     public void dontNotify(TurnListener turnListener) {
         // all events that are equal to this one should be forgotten.
         // TurnEvent turnEvent = new TurnEvent(turnListener);
-        for (Map.Entry<Integer, Set<TurnListener>> mapEntry
-                : register.entrySet()) {
-            Set<TurnListener> set = mapEntry.getValue();
+        register.entrySet().stream().map((mapEntry)
+                -> mapEntry.getValue()).forEachOrdered((set) -> {
             // We don't remove directly, but first store in this
             // set. This is to avoid ConcurrentModificationExceptions.
             Set<TurnListener> toBeRemoved = new HashSet<>();
             if (set.contains(turnListener)) {
                 toBeRemoved.add(turnListener);
             }
-            for (TurnListener event : toBeRemoved) {
+            toBeRemoved.forEach((event) -> {
                 set.remove(event);
-            }
-        }
+            });
+        });
     }
 
     /**
@@ -180,15 +178,14 @@ public final class TurnNotifier implements ITurnNotifier {
         // the HashMap is unsorted, so we need to run through
         // all of it.
         List<Integer> matchingTurns = new ArrayList<>();
-        for (Map.Entry<Integer, Set<TurnListener>> mapEntry
-                : register.entrySet()) {
+        register.entrySet().forEach((mapEntry) -> {
             Set<TurnListener> set = mapEntry.getValue();
             for (TurnListener currentEvent : set) {
                 if (currentEvent.equals(turnListener)) {
                     matchingTurns.add(mapEntry.getKey());
                 }
             }
-        }
+        });
         if (matchingTurns.size() > 0) {
             Collections.sort(matchingTurns);
             return matchingTurns.get(0) - currentTurn;

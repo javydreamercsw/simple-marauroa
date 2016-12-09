@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.marauroad;
 import org.openide.util.Lookup;
-import org.python.jline.internal.Configuration;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 
 /**
@@ -42,8 +41,7 @@ public class SimpleServer {
                     LOG.log(Level.INFO, "Loaded local properties from: {0}",
                             config.getName());
                     ss.startServer(conf);
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     LOG.log(Level.SEVERE, "Error reading properties from disk!",
                             ex);
                 }
@@ -81,10 +79,10 @@ public class SimpleServer {
         if (rp != null && rp instanceof SimpleRPRuleProcessor) {
             SimpleRPRuleProcessor srp = (SimpleRPRuleProcessor) rp;
             if (conf.containsKey("server_name")) {
-                srp.setGAMENAME(conf.getProperty("server_name"));
+                srp.setGameName(conf.getProperty("server_name"));
             }
             if (conf.containsKey("server_version")) {
-                srp.setVERSION(conf.getProperty("server_version"));
+                srp.setVersion(conf.getProperty("server_version"));
             }
         }
         if (server.init(new String[]{})) {
@@ -104,8 +102,7 @@ public class SimpleServer {
                 }
                 System.out.println("Running on port: "
                         + conf.getProperty("tcp_port"));
-            }
-            catch (SocketException | UnknownHostException ex) {
+            } catch (SocketException | UnknownHostException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
             startCLI();
@@ -128,8 +125,7 @@ public class SimpleServer {
                 } else {
                     throw new IOException("Unable to find default ini generator!");
                 }
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.SEVERE,
                         "Unable to generate default configuration!",
                         ex);
@@ -141,8 +137,7 @@ public class SimpleServer {
                 conf.load(in);
                 LOG.log(Level.INFO, "Loaded local properties from: {0}",
                         config.getName());
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.SEVERE, "Error reading properties from disk!",
                         ex);
             }

@@ -15,11 +15,11 @@ import java.util.logging.Logger;
 import marauroa.common.crypto.RSAKey;
 import marauroa.server.db.adapter.H2DatabaseAdapter;
 import marauroa.server.game.GameServerManager;
+import marauroa.server.game.rp.RPObjectFactory;
 import org.h2.Driver;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.application.db.SimpleDatabase;
-import simple.server.core.engine.SimpleRPObjectFactory;
 import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.entity.clientobject.ClientObject;
@@ -76,7 +76,7 @@ public class DefaultINIGenerator implements INIGenerator {
         defaults.put("database_implementation",
                 SimpleDatabase.class.getCanonicalName());
         defaults.put("factory_implementation",
-                SimpleRPObjectFactory.class.getCanonicalName());
+                RPObjectFactory.class.getCanonicalName());
         defaults.put("gameserver_implementation",
                 GameServerManager.class.getCanonicalName());
         defaults.put("world", SimpleRPWorld.class.getCanonicalName());
@@ -124,8 +124,7 @@ public class DefaultINIGenerator implements INIGenerator {
         String ret = null;
         try {
             ret = input.readLine();
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
@@ -149,8 +148,7 @@ public class DefaultINIGenerator implements INIGenerator {
         String ret = null;
         try {
             ret = input.readLine();
-        }
-        catch (final IOException e) {
+        } catch (final IOException e) {
             LOG.log(Level.SEVERE, null, e);
             System.exit(1);
         }
@@ -219,7 +217,7 @@ public class DefaultINIGenerator implements INIGenerator {
     }
 
     private String getFactoryImplementation() {
-        return SimpleRPObjectFactory.class.getCanonicalName();
+        return RPObjectFactory.class.getCanonicalName();
     }
 
     private void write(PrintWriter out) {
@@ -386,8 +384,7 @@ public class DefaultINIGenerator implements INIGenerator {
             File ini = Lookup.getDefault().lookup(INIGenerator.class)
                     .generateCustom();
             System.out.println(ini + " has been generated.");
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }

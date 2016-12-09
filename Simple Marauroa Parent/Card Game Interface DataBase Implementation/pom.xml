@@ -4,11 +4,10 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.07-SNAPSHOT</version>
+        <version>0.03.00-SNAPSHOT</version>
     </parent>
 
     <artifactId>Card-Game-Interface-DataBase-Implementation</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Card Game Interface DataBase Implementation</name>

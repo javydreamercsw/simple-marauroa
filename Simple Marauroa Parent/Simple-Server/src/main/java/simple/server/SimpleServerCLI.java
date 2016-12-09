@@ -48,8 +48,7 @@ class SimpleServerCLI extends Thread {
                 processInput(line.trim());
                 line = input.readLine();
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
@@ -84,8 +83,7 @@ class SimpleServerCLI extends Thread {
                                     break;
                             }
                         }
-                    }
-                    catch (IOException ex) {
+                    } catch (IOException ex) {
                         LOG.log(Level.SEVERE, null, ex);
                     }
                     break;
@@ -238,8 +236,7 @@ class SimpleServerCLI extends Thread {
                                             new Object[]{entry.getKey(),
                                                 entry.getValue()});
                                 }); //Make sure not to disclose security info.
-                    }
-                    catch (IOException ex) {
+                    } catch (IOException ex) {
                         LOG.log(Level.SEVERE, null, ex);
                     }
                     break;
@@ -293,8 +290,7 @@ class SimpleServerCLI extends Thread {
                             "Account: {0} succesfully created!",
                             username);
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 LOG.log(Level.SEVERE,
                         "Error creating account: "
                         + username, ex);
@@ -335,8 +331,7 @@ class SimpleServerCLI extends Thread {
                             "Account: {0} doesn't exist!",
                             username);
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 LOG.log(Level.SEVERE,
                         "Error deleting account: "
                         + username, ex);
@@ -355,8 +350,7 @@ class SimpleServerCLI extends Thread {
                 try {
                     world.removeRPZone(zone.trim());
                     LOG.log(Level.INFO, "Zone: {0} succesfully deleted!", zone);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     LOG.log(Level.SEVERE, "Unable to delete zone!", ex);
                 }
             } else {

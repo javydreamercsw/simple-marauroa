@@ -5,17 +5,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.*;
 import marauroa.common.game.Definition.Type;
-import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
-import simple.common.FeatureList;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
-import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
@@ -43,10 +40,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      * The base log for karma use.
      */
     private static final long serialVersionUID = -3451819589645530092L;
-    /**
-     * A list of enabled client features.
-     */
-    protected FeatureList features;
     /**
      * A list of away replies sent to players.
      */
@@ -81,8 +74,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 }).forEachOrdered((extension) -> {
             try {
                 extension.clientObjectUpdate(this);
-            }
-            catch (SimpleException ex) {
+            } catch (SimpleException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         });
@@ -134,30 +126,30 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         ClientObject player = new ClientObject(object);
 
         //TODO: Move this to an extension
-        if (player.has(ATTR_AWAY)) {
-            player.remove(ATTR_AWAY);
-        }
-        // remove grumpy on login to give postman a chance to deliver messages
-        // (and in the hope that player is receptive now)
-        if (player.has(ATTR_GRUMPY)) {
-            player.remove(ATTR_GRUMPY);
-        }
-
-        if (player.hasSlot("!buddy") && player.getSlot("!buddy").size() > 0) {
-            RPObject buddies = player.getSlot("!buddy").iterator().next();
-            for (String buddyName : buddies) {
-                if (buddyName.charAt(0) == '_') {
-                    ClientObject buddy
-                            = (ClientObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(
-                                    buddyName.substring(1));
-                    if ((buddy != null) && !buddy.isGhost()) {
-                        buddies.put(buddyName, 1);
-                    } else {
-                        buddies.put(buddyName, 0);
-                    }
-                }
-            }
-        }
+//        if (player.has(ATTR_AWAY)) {
+//            player.remove(ATTR_AWAY);
+//        }
+//        // remove grumpy on login to give postman a chance to deliver messages
+//        // (and in the hope that player is receptive now)
+//        if (player.has(ATTR_GRUMPY)) {
+//            player.remove(ATTR_GRUMPY);
+//        }
+//
+//        if (player.hasSlot("!buddy") && player.getSlot("!buddy").size() > 0) {
+//            RPObject buddies = player.getSlot("!buddy").iterator().next();
+//            for (String buddyName : buddies) {
+//                if (buddyName.charAt(0) == '_') {
+//                    ClientObject buddy
+//                            = (ClientObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(
+//                                    buddyName.substring(1));
+//                    if ((buddy != null) && !buddy.isGhost()) {
+//                        buddies.put(buddyName, 1);
+//                    } else {
+//                        buddies.put(buddyName, 0);
+//                    }
+//                }
+//            }
+//        }
         return player;
     }
 
@@ -335,7 +327,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 31 * hash + (this.features != null ? this.features.hashCode() : 0);
         hash = 31 * hash + this.adminLevel;
         hash = 31 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
         hash = 31 * hash + (this.getID() != null ? this.getID().hashCode() : 0);

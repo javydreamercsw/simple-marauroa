@@ -15,11 +15,9 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.common.NotificationType;
-import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 import simple.server.extension.MarauroaServerExtension;
@@ -56,6 +54,10 @@ public class Entity extends RPObject implements RPEntityInterface {
      */
     protected static final String ATTR_GRUMPY = "grumpy";
     /**
+     * Entity type
+     */
+    protected static final String TYPE = "type";
+    /**
      * The logger.
      */
     private static final Logger LOG
@@ -84,7 +86,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (!RPClass.hasRPClass(MY_CLASS)) {
             RPClass entity = new RPClass(MY_CLASS);
             entity.addAttribute(NAME, Type.LONG_STRING);
-            entity.addAttribute(WellKnownActionConstant.TYPE, Type.STRING);
+            entity.addAttribute(TYPE, Type.STRING);
 
             // Some things may have a textual description
             entity.addAttribute(DESC, Type.LONG_STRING,
@@ -145,8 +147,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             result = Grammar.article_noun(get("class"), definite);
         } else {
             String ret = "something indescribably strange";
-            if (has(WellKnownActionConstant.TYPE)) {
-                ret += " of type " + get(WellKnownActionConstant.TYPE);
+            if (has(TYPE)) {
+                ret += " of type " + get(TYPE);
             }
             if (has("id")) {
                 ret += " with id " + get("id");
@@ -216,8 +218,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             result = get("subclass").replace('_', ' ');
         } else if (has("class")) {
             result = get("class").replace('_', ' ');
-        } else if (has(WellKnownActionConstant.TYPE)) {
-            result = get(WellKnownActionConstant.TYPE).replace('_', ' ');
+        } else if (has(TYPE)) {
+            result = get(TYPE).replace('_', ' ');
         } else {
             result = null;
         }
@@ -463,9 +465,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             addEvent(new TextEvent(text,
                     Configuration.getConfiguration().get("system_account_name")));
             notifyWorldAboutChanges();
-        }
-        catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ClientObject.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
