@@ -19,7 +19,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
@@ -66,13 +66,13 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>RELEASE81</version>
+            <version>${netbeans.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.192</version>
+            <version>1.4.193</version>
             <type>jar</type>
         </dependency>
     </dependencies>
