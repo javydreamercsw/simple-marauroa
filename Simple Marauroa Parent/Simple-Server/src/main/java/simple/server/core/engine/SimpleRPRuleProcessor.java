@@ -13,6 +13,10 @@ import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.rp.SimpleRPAction;
+import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.event.ILoginNotifier;
+import simple.server.core.tool.Tool;
 
 /**
  *
@@ -107,5 +111,38 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     @Override
     public void execute(RPObject caster, RPAction action) {
         CommandCenter.execute(caster, action);
+    }
+
+    @Override
+    public synchronized boolean onInit(RPObject object) {
+        boolean result = true;
+        if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+            final RPEntityInterface player = new RPEntity(object);
+            try {
+                addGameEvent(Tool.extractName(object), "login");
+                Lookup.getDefault()
+                        .lookupAll(ILoginNotifier.class).stream().forEach((ln)
+                        -> {
+                    ln.onPlayerLoggedIn(player);
+                });
+                welcome(player);
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE,
+                        "There has been a severe problem loading player "
+                        + object.get("#db_id"), e);
+                result = false;
+            }
+        }
+        Lookup.getDefault().lookup(IRPWorld.class).add(object);
+        return result;
+    }
+
+    /**
+     * Welcome the player to the world.
+     *
+     * @param player Player to welcome
+     */
+    private void welcome(RPEntityInterface player) {
+
     }
 }
