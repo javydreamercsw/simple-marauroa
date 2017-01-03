@@ -224,6 +224,7 @@ class SimpleServerCLI extends Thread {
                     try {
                         Configuration conf = Configuration.getConfiguration();
                         Properties p = conf.getAsProperties();
+                        StringBuilder sb = new StringBuilder();
                         p.entrySet().stream().filter((entry)
                                 -> (!entry.getKey().equals("e")
                                 && !entry.getKey().equals("d")
@@ -232,10 +233,10 @@ class SimpleServerCLI extends Thread {
                                 && !entry.getKey().toString()
                                         .contains("password")))
                                 .forEachOrdered((entry) -> {
-                                    LOG.log(Level.INFO, "{0}: {1}",
-                                            new Object[]{entry.getKey(),
-                                                entry.getValue()});
+                                    sb.append(entry.getKey()).append(": ")
+                                            .append(entry.getValue()).append('\n');
                                 }); //Make sure not to disclose security info.
+                        LOG.log(Level.INFO, sb.toString());
                     } catch (IOException ex) {
                         LOG.log(Level.SEVERE, null, ex);
                     }
