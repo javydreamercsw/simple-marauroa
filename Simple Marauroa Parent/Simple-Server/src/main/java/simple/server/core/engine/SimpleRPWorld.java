@@ -246,11 +246,17 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                         }
                     }
                 }
-                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
-                        .stream().forEach((extension) -> {
-                            extension.afterWorldInit();
-                        });
-                initialized = true;
+                if (needDefault) {
+                    //Something is wrong, no default zone!
+                    LOG.log(Level.SEVERE, "No default zone found!");
+                    System.exit(0);
+                } else {
+                    Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                            .stream().forEach((extension) -> {
+                                extension.afterWorldInit();
+                            });
+                    initialized = true;
+                }
             } catch (SQLException | IOException e) {
                 LOG.log(Level.SEVERE, "Error initializing the server!", e);
             }
