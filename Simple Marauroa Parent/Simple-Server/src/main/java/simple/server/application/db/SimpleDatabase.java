@@ -1,9 +1,10 @@
 package simple.server.application.db;
 
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.server.db.DatabaseConnectionException;
 import marauroa.server.game.db.DatabaseFactory;
+import org.openide.util.Exceptions;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -12,17 +13,28 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
 @ServiceProvider(service = IDatabase.class)
-public class SimpleDatabase implements IDatabase {
+public class SimpleDatabase extends AbstractDatabase implements IDatabase {
 
     private static final Logger LOG
             = Logger.getLogger(SimpleDatabase.class.getSimpleName());
     private boolean initialized = false;
 
     @Override
-    public void initialize() throws SQLException {
+    public void initialize() throws DatabaseConnectionException {
         if (!isInitialized()) {
-            registerDAOs();
-            initialized = true;
+            try {
+                //Connect to database
+                if (getPersistenceUnitName() != null) {
+                    getEntityManagerFactory();
+                } else {
+                    //Do it the old way.
+                    new DatabaseFactory().initializeDatabase();
+                }
+                registerDAOs();
+                initialized = true;
+            } catch (Exception ex) {
+                Exceptions.printStackTrace(ex);
+            }
         }
     }
 
@@ -30,17 +42,16 @@ public class SimpleDatabase implements IDatabase {
         LOG.log(Level.FINE, "Loading DAOs from: {0}",
                 getClass().getSimpleName());
         //Override DAO's here
-        boolean custom = false;
-        for (DAO dao : Lookup.getDefault().lookupAll(DAO.class)) {
+        Lookup.getDefault().lookupAll(DAO.class).stream().map((dao) -> {
             LOG.log(Level.FINE, "Registerig DAO: {0}",
                     dao.getClass().getSimpleName());
+            return dao;
+        }).map((dao) -> {
             dao.register();
+            return dao;
+        }).forEachOrdered((dao) -> {
             dao.init();
-            custom = true;
-        }
-        if (!custom) {
-            new DatabaseFactory().initializeDatabase();
-        }
+        });
     }
 
     @Override
