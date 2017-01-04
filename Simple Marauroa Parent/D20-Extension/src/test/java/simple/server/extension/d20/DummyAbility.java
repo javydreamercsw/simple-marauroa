@@ -16,14 +16,14 @@ public class DummyAbility extends AbstractAbility {
 
     @Override
     public String getCharacteristicName() {
-        return "Dummy";
+        return "Dummy Ability";
     }
 
     @Override
     public String getShortName() {
-        return "Dummy";
+        return "Dummy Ability";
     }
-    
+
     @Override
     public Definition.Type getDefinitionType() {
         return Definition.Type.values()[counter++];
