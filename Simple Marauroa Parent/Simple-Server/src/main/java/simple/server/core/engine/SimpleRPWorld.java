@@ -19,6 +19,7 @@ import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
+import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
@@ -510,7 +511,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public RPEntityInterface getPlayer(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ((SimpleRPRuleProcessor) Lookup.getDefault()
+                .lookup(IRPRuleProcessor.class))
+                .getPlayer(name);
     }
 
     @Override

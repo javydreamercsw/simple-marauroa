@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
+import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.DAORegister;
@@ -204,5 +205,52 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
         }).forEachOrdered((tn) -> {
             tn.logic(turn);
         });
+    }
+
+    /**
+     * Finds an online player with a specific name.
+     *
+     * @param name The player's name
+     * @return The player, or null if no player with the given name is currently
+     * online.
+     */
+    public RPEntityInterface getPlayer(String name) {
+        RPEntityInterface player = null;
+        for (IRPZone zone : Lookup.getDefault()
+                .lookup(IRPWorld.class).getZones()) {
+            if (zone instanceof ISimpleRPZone) {
+                ISimpleRPZone sz = (ISimpleRPZone) zone;
+                for (RPEntityInterface o : sz.getPlayers()) {
+                    if (o.getName().equals(name)) {
+                        player = o;
+                        break;
+                    }
+                }
+            }
+        }
+        return player;
+    }
+
+    /**
+     * Finds an NPC.
+     *
+     * @param name NPC's name
+     * @return The NPC, or null if not found.
+     */
+    public RPObject getNPC(String name) {
+        RPObject npc = null;
+        for (IRPZone zone : Lookup.getDefault()
+                .lookup(IRPWorld.class).getZones()) {
+            if (zone instanceof ISimpleRPZone) {
+                ISimpleRPZone sz = (ISimpleRPZone) zone;
+                for (RPObject o : sz.getNPCS()) {
+                    if (Tool.extractName(o).equals(name)) {
+                        npc = o;
+                        break;
+                    }
+                }
+            }
+        }
+        return npc;
     }
 }
