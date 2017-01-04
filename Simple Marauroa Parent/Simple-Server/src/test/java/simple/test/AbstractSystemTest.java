@@ -65,7 +65,7 @@ public abstract class AbstractSystemTest {
                 INI.deleteOnExit();
                 List<String> lines = Arrays.asList(
                         "database_implementation=simple.server.application.db.SimpleDatabase",
-                        "factory_implementation=simple.server.core.engine.SimpleRPObjectFactory",
+                        "factory_implementation=marauroa.server.game.rp.RPObjectFactory",
                         "world=simple.server.core.engine.SimpleRPWorld",
                         "ruleprocessor=simple.server.core.engine.SimpleRPRuleProcessor",
                         "client_object=simple.server.core.entity.clientobject.ClientObject",
