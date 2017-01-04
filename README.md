@@ -5,7 +5,7 @@ Simple Marauroa is a configurable server based on Marauroa. It provides a basic 
 ### What is this repository for? ###
 
 * Simple Marauroa
-* 0.02.07
+* 0.03.00
 
 ### How do I get set up? ###
 
