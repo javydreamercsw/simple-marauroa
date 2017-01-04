@@ -54,57 +54,69 @@ public class D20Extension extends SimpleServerExtension {
         clazz.addAttribute(SUBCLASS, Definition.Type.STRING);
         clazz.addAttribute(TITLE, Definition.Type.STRING);
         clazz.addAttribute(D20Level.MAX, Definition.Type.INT);
-        for (D20Ability attr : Lookup.getDefault().lookupAll(D20Ability.class)) {
+        Lookup.getDefault().lookupAll(D20Ability.class).stream().map((attr) -> {
             LOG.log(Level.FINE, "Adding attribute: {0}",
                     attr.getCharacteristicName());
+            return attr;
+        }).forEachOrdered((attr) -> {
             clazz.addAttribute(attr.getCharacteristicName(),
                     attr.getDefinitionType(),
                     attr.getDefinition());
-        }
+        });
         //Maps
-        for (D20Map map : Lookup.getDefault().lookupAll(D20Map.class)) {
+        Lookup.getDefault().lookupAll(D20Map.class).stream().map((map) -> {
             LOG.log(Level.FINE, "Adding map: {0}",
                     map.getCharacteristicName());
+            return map;
+        }).forEachOrdered((map) -> {
             clazz.addAttribute(map.getCharacteristicName(),
                     Definition.Type.MAP,
                     map.getDefinition());
-        }
+        });
         //Misc fields
-        for (D20Misc misc : Lookup.getDefault().lookupAll(D20Misc.class)) {
+        Lookup.getDefault().lookupAll(D20Misc.class).stream().map((misc) -> {
             LOG.log(Level.FINE, "Adding miscellaneous field: {0}",
                     misc.getCharacteristicName());
+            return misc;
+        }).forEachOrdered((misc) -> {
             clazz.addAttribute(misc.getCharacteristicName(),
                     misc.getDefinitionType(),
                     misc.getDefinition());
-        }
+        });
         //Other attributes
-        for (D20List attr : Lookup.getDefault().lookupAll(D20List.class)) {
+        Lookup.getDefault().lookupAll(D20List.class).stream().map((attr) -> {
             LOG.log(Level.FINE, "Adding slot attribute: {0}",
                     attr.getCharacteristicName());
+            return attr;
+        }).forEachOrdered((attr) -> {
             clazz.addRPSlot(attr.getCharacteristicName(),
                     attr.getSize(),
                     attr.getDefinition());
-        }
+        });
         //Stats
-        for (D20Stat stat : Lookup.getDefault().lookupAll(D20Stat.class)) {
+        Lookup.getDefault().lookupAll(D20Stat.class).stream().map((stat) -> {
             LOG.log(Level.FINE, "Adding stat: {0}",
                     stat.getCharacteristicName());
+            return stat;
+        }).forEachOrdered((stat) -> {
             clazz.addAttribute(stat.getCharacteristicName(),
                     stat.getDefinitionType(),
                     stat.getDefinition());
-        }
+        });
     }
 
     @Override
     public void modifyItemRPClassDefinition(RPClass item) {
-        for (D20ItemAttribute attr : Lookup.getDefault()
-                .lookupAll(D20ItemAttribute.class)) {
+        Lookup.getDefault()
+                .lookupAll(D20ItemAttribute.class).stream().map((attr) -> {
             LOG.log(Level.FINE, "Adding item attribute: {0}",
                     attr.getCharacteristicName());
+            return attr;
+        }).forEachOrdered((attr) -> {
             item.addAttribute(attr.getCharacteristicName(),
                     attr.getDefinitionType(),
                     attr.getDefinition());
-        }
+        });
     }
 
     @Override
@@ -197,13 +209,14 @@ public class D20Extension extends SimpleServerExtension {
 
     @Override
     public void itemRPClassUpdate(RPObject item) {
-        for (D20ItemAttribute attr : Lookup.getDefault()
-                .lookupAll(D20ItemAttribute.class)) {
+        Lookup.getDefault()
+                .lookupAll(D20ItemAttribute.class).stream().map((attr) -> {
             LOG.log(Level.FINE, "Updating item attribute: {0}",
                     attr.getCharacteristicName());
-            if (!item.has(attr.getCharacteristicName())) {
-                item.add(attr.getCharacteristicName(), 0);
-            }
-        }
+            return attr;
+        }).filter((attr) -> (!item.has(attr.getCharacteristicName())))
+                .forEachOrdered((attr) -> {
+                    item.add(attr.getCharacteristicName(), 0);
+                });
     }
 }
