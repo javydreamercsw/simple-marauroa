@@ -110,7 +110,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         }
         getZones().forEach((z) -> {
             if (availableZones.contains(z.getID())) {
-                while (z.iterator().hasNext()) {
+                Iterator<RPObject> iterator = z.iterator();
+                while (iterator.hasNext()) {
                     RPObject obj = z.iterator().next();
                     if (obj.getRPClass().hasDefinition(
                             Definition.DefinitionClass.RPEVENT, event.getName())) {
