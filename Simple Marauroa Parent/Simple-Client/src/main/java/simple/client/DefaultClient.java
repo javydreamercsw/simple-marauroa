@@ -117,7 +117,7 @@ public class DefaultClient implements ClientFrameworkProvider,
             @Override
             protected void onPerception(MessageS2CPerception message) {
                 try {
-                    LOG.log(Level.INFO, "Received perception {0}",
+                    LOG.log(Level.FINE, "Received perception {0}",
                             message.getPerceptionTimestamp());
                     getPerceptionHandler().apply(message,
                             Lookup.getDefault().lookup(IWorldManager.class).getWorld());
