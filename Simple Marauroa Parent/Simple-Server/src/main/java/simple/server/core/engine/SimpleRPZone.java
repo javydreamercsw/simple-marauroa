@@ -3,20 +3,79 @@ package simple.server.core.engine;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
+import marauroa.common.game.RPObjectInvalidException;
 import marauroa.common.net.message.TransferContent;
 import marauroa.server.game.rp.MarauroaRPZone;
+import org.openide.util.Lookup;
+import simple.common.NotificationType;
+import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.extension.MarauroaServerExtension;
 
 public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
+
+    /**
+     * the logger instance.
+     */
+    private static final Logger LOG
+            = Logger.getLogger(SimpleRPZone.class.getSimpleName());
+    private String description = "";
 
     public SimpleRPZone(final String name) {
         super(name);
     }
 
     @Override
+    public void add(RPObject object) throws RPObjectInvalidException {
+        synchronized (this) {
+            if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
+                add(new RPEntity(object), null);
+            } else {
+                super.add(object);
+            }
+        }
+    }
+
+    @Override
     public void add(RPObject object, RPEntityInterface player) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        synchronized (this) {
+            /*
+             * Assign [zone relative] ID info if not already there.
+             */
+            if (!object.has("id")) {
+                assignRPObjectID(object);
+            }
+            super.add(object);
+            if (object instanceof RPEntityInterface) {
+                RPEntityInterface p = (RPEntityInterface) object;
+                LOG.fine("Processing RPEntityInterface");
+                //Let everyone else know
+                Lookup.getDefault().lookup(IRPWorld.class)
+                        .applyPublicEvent(new PrivateTextEvent(
+                                NotificationType.INFORMATION, p.getName()
+                                + " joined " + getName()));
+                p.onAdded(this);
+            }
+            //Request sync previous to any modification
+            Lookup.getDefault().lookup(IRPWorld.class).requestSync(object);
+            if (player != null) {
+                //Notify the player that created it
+                player.sendPrivateText(NotificationType.RESPONSE, object
+                        + " successfully created!");
+            }
+            Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                    .stream().map((extension) -> {
+                        LOG.log(Level.FINE, "Processing extension: {0}",
+                                extension.getClass().getSimpleName());
+                        return extension;
+                    }).forEachOrdered((extension) -> {
+                extension.onRPObjectAddToZone(object);
+            });
+        }
     }
 
     @Override
@@ -31,12 +90,12 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return description;
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return getID().getID();
     }
 
     @Override
@@ -71,7 +130,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public boolean isEmpty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return !iterator().hasNext();
     }
 
     @Override
@@ -96,7 +155,7 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void setDescription(String description) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.description = description;
     }
 
     @Override
@@ -118,5 +177,4 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     public Collection<RPObject> getZoneContents() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
