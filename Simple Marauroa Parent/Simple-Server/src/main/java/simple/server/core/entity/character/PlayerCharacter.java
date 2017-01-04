@@ -12,6 +12,7 @@ import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.api.LevelEntity;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.extension.MarauroaServerExtension;
 
@@ -71,5 +72,17 @@ public class PlayerCharacter extends ClientObject {
                     new Object[]{def.getName(), def.getType()});
         });
         LOG.fine("-------------------------------");
+    }
+
+    @Override
+    public void update() {
+        super.update();
+        Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                .forEach((ext) -> {
+                    ext.characterRPClassUpdate(this);
+                });
+        if (!has(LevelEntity.LEVEL)) {
+            put(LevelEntity.LEVEL, 0);
+        }
     }
 }
