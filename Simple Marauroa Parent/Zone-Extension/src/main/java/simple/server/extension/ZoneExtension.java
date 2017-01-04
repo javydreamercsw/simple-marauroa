@@ -210,7 +210,7 @@ public class ZoneExtension extends SimpleServerExtension
         if (action.has(ZoneEvent.ROOM) && world.hasRPZone(action.get(ZoneEvent.ROOM))) {
             LOG.log(Level.FINE, "Updating description of zone: {0} to: {1}",
                     new Object[]{action.get(ZoneEvent.ROOM), action.get(DESC)});
-            SimpleRPZone updated
+            ISimpleRPZone updated
                     = world.updateRPZoneDescription(action.get(ZoneEvent.ROOM),
                             action.get(DESC));
             if (action.has(PASSWORD)) {
