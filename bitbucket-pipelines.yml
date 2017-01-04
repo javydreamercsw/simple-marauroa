@@ -2,6 +2,7 @@
 image: javydreamercsw/maven-git-hg
 
 pipelines:
+ default:
   compile:
     - step:
         script:
