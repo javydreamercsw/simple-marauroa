@@ -4,6 +4,7 @@ import java.io.IOException;
 import static java.lang.Thread.sleep;
 import java.net.ConnectException;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import marauroa.client.net.PerceptionHandler;
 import marauroa.common.game.AccountResult;
 import marauroa.common.game.CharacterResult;
 import marauroa.common.game.RPAction;
+import marauroa.common.game.RPClass;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.InvalidVersionException;
 import marauroa.common.net.message.MessageS2CLoginNACK.Reasons;
@@ -160,51 +162,25 @@ public class DefaultClient implements ClientFrameworkProvider,
             @Override
             protected void onAvailableCharacters(String[] characters) {
                 //See onAvailableCharacterDetails
-            }
-
-            @Override
-            protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
-                Lookup.getDefault().lookup(ClientFrameworkProvider.class)
-                        .getCharacters().clear();
-                Lookup.getDefault().lookup(ClientFrameworkProvider.class)
-                        .getCharacters().putAll(characters);
-                // If there are no characters, create one with the specified name automatically
-                if (characters.isEmpty() && isCreateDefaultCharacter()) {
-                    LOG.log(Level.WARNING,
-                            "The requested character is not available, trying "
-                            + "to create character {0}", getCharacter());
-                    final ClientObject template = new ClientObject();
+                LOG.log(Level.INFO, "onAvailableCharacters: {0}",
+                        Arrays.toString(characters));
+                // Autologin if a valid character was specified.
+                if (characters.length == 1) {
                     try {
-                        final CharacterResult result = createCharacter(getCharacter(),
-                                template);
-                        if (result.getResult().failed()) {
-                            LOG.log(Level.WARNING, result.getResult().getText());
+                        LOG.log(Level.INFO,
+                                "Automatically choosing character: {0}",
+                                getCharacter());
+                        if (!chooseCharacter(characters[0])) {
+                            LOG.log(Level.SEVERE,
+                                    "Unable to choose character: {0}",
+                                    getCharacter());
                         }
                     } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
-                    return;
-                }
-                // Autologin if a valid character was specified.
-                if (Lookup.getDefault().lookup(ClientFrameworkProvider.class).
-                        getCharacters().isEmpty()) {
-                    displayError("Unable to login",
-                            "No characters and not set for automatic "
-                            + "character creation.");
-                    disconnect();
-                } else if (Lookup.getDefault().lookup(ClientFrameworkProvider.class)
-                        .getCharacters().size() == 1) {
-                    try {
-                        chooseCharacter(getCharacter());
-                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
-                        LOG.log(Level.SEVERE, null, e);
-                    }
-                } else {
+                } else if (characters.length > 1) {
                     //Pick from your characters
-                    String[] possibilities = getCharacters().keySet()
-                            .toArray(new String[Lookup.getDefault()
-                                    .lookup(ClientFrameworkProvider.class)
-                                    .getCharacters().keySet().size()]);
+                    String[] possibilities = characters.clone();
                     String s = (String) JOptionPane.showInputDialog(
                             new JFrame(),
                             "Please choose a character.",
@@ -216,10 +192,44 @@ public class DefaultClient implements ClientFrameworkProvider,
 
                     if ((s != null) && (s.length() > 0)) {
                         try {
-                            chooseCharacter(s);
+                            if (!chooseCharacter(s)) {
+                                LOG.log(Level.SEVERE,
+                                        "Unable to choose character: {0}", s);
+                            }
                         } catch (TimeoutException | InvalidVersionException | BannedAddressException ex) {
                             LOG.log(Level.SEVERE, null, ex);
                         }
+                    }
+                }
+            }
+
+            @Override
+            protected void onAvailableCharacterDetails(Map<String, RPObject> characters) {
+                Lookup.getDefault().lookup(ClientFrameworkProvider.class)
+                        .getCharacters().clear();
+                Lookup.getDefault().lookup(ClientFrameworkProvider.class)
+                        .getCharacters().putAll(characters);
+                // If there are no characters, create one with the specified name automatically
+                if (characters.isEmpty() && isCreateDefaultCharacter()) {
+                    LOG.log(Level.WARNING,
+                            "No characters available, trying "
+                            + "to create character {0}", getCharacter());
+                    RPObject template = new RPObject();
+                    if (RPClass.hasRPClass(ClientObject.DEFAULT_RP_CLASSNAME)) {
+                        template = new ClientObject(new RPObject());
+                    }
+                    try {
+                        final CharacterResult result
+                                = createCharacter(getCharacter(), template);
+                        if (result.getResult().failed()) {
+                            LOG.log(Level.WARNING,
+                                    result.getResult().getText());
+                        } else {
+                            LOG.log(Level.INFO, "Created character: {0}",
+                                    getCharacter());
+                        }
+                    } catch (final BannedAddressException | TimeoutException | InvalidVersionException e) {
+                        LOG.log(Level.SEVERE, null, e);
                     }
                 }
             }
@@ -444,11 +454,13 @@ public class DefaultClient implements ClientFrameworkProvider,
                 mp.displayWarning(
                         "Unable to connect",
                         "Unable to connect to the server: " + getHost()
+                        + "@" + getPort()
                         + "\n" + ex.getLocalizedMessage());
             } else {
                 LOG.log(Level.WARNING,
-                        "Unable to connect to the server: {0}\n{1}",
-                        new Object[]{getHost(), ex.getLocalizedMessage()});
+                        "Unable to connect to the server: {0}@{2}\n{1}",
+                        new Object[]{getHost(), ex.getLocalizedMessage(),
+                            getPort()});
             }
             showLoginDialog();
         } catch (IOException ex) {
