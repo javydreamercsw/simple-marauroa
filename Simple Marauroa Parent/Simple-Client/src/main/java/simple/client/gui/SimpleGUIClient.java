@@ -322,11 +322,9 @@ public class SimpleGUIClient extends javax.swing.JFrame
             myself = object;
             //Get the object's events
             object.events().forEach((event) -> {
-                LOG.info(event.toString());
                 processEvent(event);
             });
         }
-        LOG.info(myself.toString());
         return true;
     }
 
