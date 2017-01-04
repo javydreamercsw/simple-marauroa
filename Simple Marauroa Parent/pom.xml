@@ -78,6 +78,7 @@
         <module>Zone-Extension</module>
         <!--Disable for now<module>D20-Extension</module>-->
         <module>OutfitExtension</module>
+        <module>D20-Extension</module>
     </modules>
     <build>
         <pluginManagement>
