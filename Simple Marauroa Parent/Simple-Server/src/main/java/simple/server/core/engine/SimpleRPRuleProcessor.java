@@ -1,7 +1,13 @@
 package simple.server.core.engine;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.Configuration;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.DAORegister;
@@ -11,11 +17,16 @@ import marauroa.server.game.rp.RPRuleProcessorImpl;
 import marauroa.server.game.rp.RPServerManager;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import simple.common.NotificationType;
 import simple.server.core.action.CommandCenter;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.event.DelayedPlayerEventSender;
 import simple.server.core.event.ILoginNotifier;
+import simple.server.core.event.ITurnNotifier;
+import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.TurnNotifier;
 import simple.server.core.tool.Tool;
 
 /**
@@ -39,6 +50,8 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      */
     private static final Logger LOG
             = Logger.getLogger(SimpleRPRuleProcessor.class.getSimpleName());
+    //Current turn.
+    private int turn = 0;
 
     public void addGameEvent(String source, String event, String... params) {
         try {
@@ -138,11 +151,58 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     }
 
     /**
-     * Welcome the player to the world.
+     * Send a welcome message to the player which can be configured in
+     * server.ini file as "server_welcome". If the value is an http:// address,
+     * the first line of that address is read and used as the message
      *
-     * @param player Player to welcome
+     * @param player RPEntityInterface
      */
-    private void welcome(RPEntityInterface player) {
+    protected static void welcome(final RPEntityInterface player) {
+        String msg = "";
+        try {
+            Configuration config = Configuration.getConfiguration();
+            if (config.has("server_welcome")) {
+                msg = config.get("server_welcome");
+                if (msg.startsWith("http://")) {
+                    //Display from the url
+                    URL url = new URL(msg);
+                    HttpURLConnection.setFollowRedirects(false);
+                    HttpURLConnection connection
+                            = (HttpURLConnection) url.openConnection();
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(connection.getInputStream()))) {
+                        msg = br.readLine();
+                    }
+                    connection.disconnect();
+                }
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE, null, e);
+        }
+        TurnNotifier notifier = Lookup.getDefault().lookup(TurnNotifier.class);
+        if (msg != null && !msg.isEmpty()) {
+            if (notifier != null) {
+                notifier.notifyInTurns(10,
+                        new DelayedPlayerEventSender(new PrivateTextEvent(
+                                NotificationType.TUTORIAL, msg),
+                                (RPObject) player));
+            } else {
+                LOG.log(Level.WARNING,
+                        "Unable to send message: ''{0}'' to player: {1}",
+                        new Object[]{msg, player.getName()});
+            }
+        }
+    }
 
+    @Override
+    public synchronized void beginTurn() {
+        super.beginTurn(); //Empty right now
+        //Look for Turn Listeners and run them if applicable.
+        Lookup.getDefault().lookupAll(ITurnNotifier.class).stream().map((tn) -> {
+            turn++;
+            return tn;
+        }).forEachOrdered((tn) -> {
+            tn.logic(turn);
+        });
     }
 }
