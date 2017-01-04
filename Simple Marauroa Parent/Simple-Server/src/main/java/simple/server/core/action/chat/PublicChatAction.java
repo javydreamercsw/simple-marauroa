@@ -38,8 +38,8 @@ public class PublicChatAction implements ActionProvider {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
             RPEntityInterface player = new RPEntity(rpo);
-            if (Lookup.getDefault().lookup(LoginListener.class).
-                    checkIsGaggedAndInformPlayer(player)) {
+            LoginListener ll = Lookup.getDefault().lookup(LoginListener.class);
+            if (ll != null && ll.checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
         }
@@ -58,8 +58,7 @@ public class PublicChatAction implements ActionProvider {
                         .get("log_chat", "false"))) {
                     LOG.info(text);
                 }
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.WARNING, ex.toString(), ex);
             }
         } else {
