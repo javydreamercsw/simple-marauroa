@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.Definition;
 import marauroa.common.game.IRPZone;
+import marauroa.common.game.IRPZone.ID;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.server.game.db.AccountDAO;
@@ -20,9 +23,11 @@ import marauroa.server.game.rp.RPWorld;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.action.ActionProvider;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.RPObjectMonitor;
 import simple.server.core.event.api.IRPEvent;
+import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
 
 @ServiceProvider(service = IRPWorld.class)
@@ -40,8 +45,25 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     private static final Logger LOG
             = Logger.getLogger(SimpleRPWorld.class.getSimpleName());
 
+    //Monitors
+    private static final Map<String, List<RPObjectMonitor>> MONITORS
+            = new HashMap<>();
+
     public static SimpleRPWorld get() {
         return (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
+    }
+
+    @Override
+    public void add(RPObject object) {
+        if (!object.has(Entity.ZONE_ID) //No zone assigned
+                || !hasRPZone(object.get(Entity.ZONE_ID))) { //Assigned zone doesn't exist
+            //Assign the current default zone
+            object.put(Entity.ZONE_ID, getDefaultZone().getID().getID());
+            LOG.log(Level.WARNING, "Assigning {0} to default zone: {1}",
+                    new Object[]{Tool.extractName(object),
+                        getDefaultZone().getID().getID()});
+        }
+        super.add(object);
     }
 
     @Override
@@ -50,13 +72,55 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public IRPZone removeRPZone(IRPZone zone) throws Exception {
-        return super.removeRPZone(zone.getID());
+    public IRPZone removeRPZone(String zone) throws Exception {
+        return removeRPZone(new IRPZone.ID(zone));
     }
 
     @Override
-    public IRPZone removeRPZone(String zone) throws Exception {
-        return removeRPZone(new IRPZone.ID(zone));
+    public IRPZone removeRPZone(IRPZone zone) {
+        IRPZone result;
+        try {
+            result = removeRPZone(zone.getID());
+        } catch (Exception ex) {
+            LOG.log(Level.SEVERE, null, ex);
+            result = null;
+        }
+        return result;
+    }
+
+    @Override
+    public IRPZone removeRPZone(ID zoneid) throws Exception {
+        if (hasRPZone(zoneid)) {
+            if (getZone(zoneid) instanceof ISimpleRPZone) {
+                ISimpleRPZone zone = (ISimpleRPZone) getZone(zoneid);
+                /**
+                 * Kick everyone to the default zone or they'll end in the
+                 * limbo!
+                 */
+                Iterator i = zone.getPlayers().iterator();
+                List<RPObject> toMove = new ArrayList<>();
+                while (i.hasNext()) {
+                    RPObject next = (RPObject) i.next();
+                    if (next instanceof RPEntityInterface) {
+                        toMove.add(next);
+                    }
+                }
+                toMove.forEach((co) -> {
+                    Lookup.getDefault().lookup(IRPWorld.class).changeZone(
+                            Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone()
+                                    .getID().getID(), co);
+                });
+                //Handle NPC's
+                i = zone.getNPCS().iterator();
+                while (i.hasNext()) {
+                    Lookup.getDefault().lookup(IRPWorld.class)
+                            .remove(((RPObject) i.next()).getID());
+                }
+            }
+        } else {
+            return null;
+        }
+        return super.removeRPZone(zoneid);
     }
 
     @Override
@@ -80,12 +144,35 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPrivateEvent(String target, RPEvent event) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return applyPrivateEvent(target, event, 0);
     }
 
     @Override
     public boolean applyPrivateEvent(String target, RPEvent event, int delay) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean result = false;
+        for (IRPZone zone : getZones()) {
+            if (zone instanceof ISimpleRPZone) {
+                ISimpleRPZone z = (ISimpleRPZone) zone;
+                Iterator<RPObject> iterator = z.iterator();
+                while (iterator.hasNext()) {
+                    RPObject obj = iterator.next();
+                    if (obj.has(Entity.NAME)
+                            && Tool.extractName(obj).equals(target)) {
+                        LOG.log(Level.FINE, "Adding event to: {0}, {1}, {2}",
+                                new Object[]{obj, obj.getID(),
+                                    obj.get(Entity.ZONE_ID)});
+                        obj.addEvent(event);
+                        Lookup.getDefault().lookup(IRPWorld.class).modify(obj);
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!result) {
+            LOG.log(Level.FINE, "Unable to find player:{0}!", target);
+        }
+        return result;
     }
 
     @Override
@@ -129,7 +216,23 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void deleteIfEmpty(String zone) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        IRPZone sZone = getZone(zone);
+        if (sZone instanceof ISimpleRPZone) {
+            ISimpleRPZone z = (ISimpleRPZone) sZone;
+            if (z.isDeleteWhenEmpty()
+                    && z.getPlayers().isEmpty()
+                    && !getDefaultZone().getID().equals(sZone.getID())) {
+                try {
+                    LOG.log(Level.INFO, "Removing empty zone: {0}",
+                            z.getName());
+                    removeRPZone(sZone.getID());
+                } catch (Exception ex) {
+                    LOG.log(Level.SEVERE, null, ex);
+                }
+            }
+        } else {
+            LOG.log(Level.WARNING, "Not deleting zone: {0}", zone);
+        }
     }
 
     @Override
@@ -169,7 +272,18 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public StringBuilder listZones(String separator) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder zones = new StringBuilder();
+        Iterator i = iterator();
+        while (i.hasNext()) {
+            SimpleRPZone sZone = (SimpleRPZone) i.next();
+            zones.append(sZone.getName()).append(
+                    sZone.getDescription().isEmpty() ? "" : ": "
+                    + sZone.getDescription());
+            if (i.hasNext()) {
+                zones.append(separator);
+            }
+        }
+        return zones;
     }
 
     @Override
@@ -271,7 +385,19 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public ISimpleRPZone updateRPZoneDescription(String zone, String desc) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        LOG.log(Level.FINE, "Updating room: {0} with desc: {1}",
+                new Object[]{zone, desc});
+        SimpleRPZone sZone = null;
+        if (hasRPZone(new ID(zone))) {
+            sZone = (SimpleRPZone) getZone(zone);
+        }
+        if (sZone != null) {
+            sZone.setDescription(desc);
+            LOG.log(Level.FINE, "Updated: {0}", sZone.toString());
+        } else {
+            LOG.log(Level.FINE, "Couldn't find zone: {0}", zone);
+        }
+        return sZone;
     }
 
     @Override
@@ -329,12 +455,21 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void registerMonitor(String target, RPObjectMonitor monitor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        synchronized (MONITORS) {
+            if (!MONITORS.containsKey(target)) {
+                MONITORS.put(target, new ArrayList<>());
+            }
+            MONITORS.get(target).add(monitor);
+        }
     }
 
     @Override
     public void unregisterMonitor(String target, RPObjectMonitor monitor) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        synchronized (MONITORS) {
+            if (MONITORS.containsKey(target)) {
+                MONITORS.get(target).remove(monitor);
+            }
+        }
     }
 
     @Override
@@ -344,21 +479,53 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void checkZone(RPObject object) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        SimpleRPZone zone = (SimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
+                .getZone(object.get(Entity.ZONE_ID));
+        if (zone == null) {
+            //The zone we were no longer exists use default.
+            zone = (SimpleRPZone) Lookup.getDefault()
+                    .lookup(IRPWorld.class).getDefaultZone();
+            object.put(Entity.ZONE_ID, zone.getName());
+        }
     }
 
     @Override
     public void emptyZone(IRPZone zone) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        emptyZone(zone.getID());
     }
 
     @Override
     public void emptyZone(IRPZone.ID zoneid) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        IRPZone zone = Lookup.getDefault().lookup(IRPWorld.class)
+                .getZone(zoneid);
+        Iterator<RPObject> iterator = zone.iterator();
+        List<RPObject.ID> toRemove = new ArrayList<>();
+        while (iterator.hasNext()) {
+            toRemove.add(iterator.next().getID());
+        }
+        toRemove.forEach((id) -> {
+            zone.remove(id);
+        });
     }
 
     @Override
     public RPEntityInterface getPlayer(String name) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void modify(RPObject object) {
+        checkZone(object);
+        super.modify(object);
+        synchronized (MONITORS) {
+            if (MONITORS.containsKey(Tool.extractName(object))) {
+                Iterator<RPObjectMonitor> iter
+                        = MONITORS.get(Tool.extractName(object)).iterator();
+                while (iter.hasNext()) {
+                    RPObjectMonitor m = iter.next();
+                    m.modify(object);
+                }
+            }
+        }
     }
 }
