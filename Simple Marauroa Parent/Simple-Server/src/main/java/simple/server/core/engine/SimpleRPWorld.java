@@ -475,7 +475,18 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public RPObject.ID getID(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Iterator<IRPZone> iterator = iterator();
+        while (iterator.hasNext()) {
+            IRPZone zone = iterator.next();
+            Iterator<RPObject> iterator1 = zone.iterator();
+            while (iterator1.hasNext()) {
+                RPObject next = iterator1.next();
+                if (Tool.extractName(next).equals(name)) {
+                    return next.getID();
+                }
+            }
+        }
+        return null;
     }
 
     @Override
