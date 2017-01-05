@@ -1,32 +1,39 @@
-
 package net.sourceforge.javydreamercsw.outfit.extension;
 
 /**
  * A data structure that represents the outfit of an RPEntity. This RPEntity can
  * either be an NPC which uses the outfit sprite system, or of a player.
- * 
+ *
  * You can use this data structure so that you don't have to deal with the way
  * outfits are stored internally.
- * 
+ *
  * An outfit can contain of up to four parts: hair, head, dress, and base.
- * 
+ *
  * Note, however, that you can create outfit objects that consist of less than
- * four parts by setting the other parts to <code>null</code>. For example,
- * you can create a dress outfit that you can combine with the player's current
- * so that the player gets the dress, but keeps his hair, head, and base.
- * 
+ * four parts by setting the other parts to <code>null</code>. For example, you
+ * can create a dress outfit that you can combine with the player's current so
+ * that the player gets the dress, but keeps his hair, head, and base.
+ *
  * @author daniel
- * 
+ *
  */
 public class Outfit {
 
-    /** The hair index, as a value between 0 and 99, or null. */
+    /**
+     * The hair index, as a value between 0 and 99, or null.
+     */
     private Integer hair;
-    /** The head index, as a value between 0 and 99, or null. */
+    /**
+     * The head index, as a value between 0 and 99, or null.
+     */
     private Integer head;
-    /** The dress index, as a value between 0 and 99, or null. */
+    /**
+     * The dress index, as a value between 0 and 99, or null.
+     */
     private Integer dress;
-    /** The base index, as a value between 0 and 99, or null. */
+    /**
+     * The base index, as a value between 0 and 99, or null.
+     */
     private Integer base;
 
     /**
@@ -41,14 +48,10 @@ public class Outfit {
      * entity that put on this outfit to keep on the corresponding parts of its
      * current outfit.
      *
-     * @param hair
-     *            The index of the hair style, or null
-     * @param head
-     *            The index of the head style, or null
-     * @param dress
-     *            The index of the dress style, or null
-     * @param base
-     *            The index of the base style, or null
+     * @param hair The index of the hair style, or null
+     * @param head The index of the head style, or null
+     * @param dress The index of the dress style, or null
+     * @param base The index of the base style, or null
      */
     public Outfit(Integer hair, Integer head, Integer dress, Integer base) {
         this.hair = hair;
@@ -60,10 +63,9 @@ public class Outfit {
     /**
      * Creates a new outfit based on a numeric code.
      *
-     * @param code
-     *            A 8-digit decimal number where the first pair (from the left)
-     *            of digits stand for hair, the second pair for head, the third
-     *            pair for dress, and the fourth pair for base.
+     * @param code A 8-digit decimal number where the first pair (from the left)
+     * of digits stand for hair, the second pair for head, the third pair for
+     * dress, and the fourth pair for base.
      */
     public Outfit(int code) {
         int remainder = code;
@@ -88,8 +90,7 @@ public class Outfit {
     /**
      * Sets the index of this outfit's base style.
      *
-     * @param base
-     *            The index, or null if this outfit shouldn't contain a base.
+     * @param base The index, or null if this outfit shouldn't contain a base.
      */
     public void setBase(Integer base) {
         this.base = base;
@@ -107,8 +108,7 @@ public class Outfit {
     /**
      * Sets the index of this outfit's dress style.
      *
-     * @param dress
-     *            The index, or null if this outfit shouldn't contain a dress.
+     * @param dress The index, or null if this outfit shouldn't contain a dress.
      */
     public void setDress(Integer dress) {
         this.dress = dress;
@@ -126,8 +126,7 @@ public class Outfit {
     /**
      * Sets the index of this outfit's hair style.
      *
-     * @param hair
-     *            The index, or null if this outfit shouldn't contain hair.
+     * @param hair The index, or null if this outfit shouldn't contain hair.
      */
     public void setHair(Integer hair) {
         this.hair = hair;
@@ -145,8 +144,7 @@ public class Outfit {
     /**
      * Sets the index of this outfit's head style.
      *
-     * @param head
-     *            The index, or null if this outfit shouldn't contain a head.
+     * @param head The index, or null if this outfit shouldn't contain a head.
      */
     public void setHead(Integer head) {
         this.head = head;
@@ -156,8 +154,8 @@ public class Outfit {
      * Represents this outfit in a numeric code.
      *
      * @return A 8-digit decimal number where the first pair of digits stand for
-     *         hair, the second pair for head, the third pair for dress, and the
-     *         fourth pair for base.
+     * hair, the second pair for head, the third pair for dress, and the fourth
+     * pair for base.
      */
     public int getCode() {
         return hair * 1000000 + head * 10000 + dress * 100 + base;
@@ -168,8 +166,7 @@ public class Outfit {
      * outfit. Note that this new outfit can contain parts that are marked as
      * NONE; in this case, the parts from the other outfit will be used.
      *
-     * @param other
-     *            the outfit that should be worn 'under' the current one
+     * @param other the outfit that should be worn 'under' the current one
      * @return the combined outfit
      */
     public Outfit putOver(Outfit other) {
@@ -205,12 +202,14 @@ public class Outfit {
     /**
      * Checks whether this outfit is equal to or part of another outfit.
      *
-     * @param other
-     *            Another outfit.
-     * @return true iff this outfit is part of the given outfit.
+     * @param other Another outfit.
+     * @return true if this outfit is part of the given outfit.
      */
     public boolean isPartOf(Outfit other) {
-        return (hair == null || hair.equals(other.hair)) && (head == null || head.equals(other.head)) && (dress == null || dress.equals(other.dress)) && (base == null || base.equals(other.base));
+        return (hair == null || hair.equals(other.hair))
+                && (head == null || head.equals(other.head))
+                && (dress == null || dress.equals(other.dress))
+                && (base == null || base.equals(other.base));
     }
 
     /**
@@ -220,7 +219,8 @@ public class Outfit {
      * @return true if it is a normal outfit
      */
     public boolean isChoosableByPlayers() {
-        return (hair < 50) && (hair >= 0) && (head < 50) && (head >= 0) && (dress < 50) && (dress >= 0) && (base < 50) && (base >= 0);
+        return (hair < 50) && (hair >= 0) && (head < 50) && (head >= 0)
+                && (dress < 50) && (dress >= 0) && (base < 50) && (base >= 0);
     }
 
     /**
