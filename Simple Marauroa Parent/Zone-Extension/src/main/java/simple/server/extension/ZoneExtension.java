@@ -148,6 +148,11 @@ public class ZoneExtension extends SimpleServerExtension
                             }
                         }
                     }));
+            if (player instanceof RPObject) {
+                ((RPObject) player).addEvent(new PrivateTextEvent(
+                        NotificationType.INFORMATION, "Command completed"));
+                player.notifyWorldAboutChanges();
+            }
         } else if (action.has(ZoneEvent.ROOM)) {
             player.sendPrivateText(NotificationType.PRIVMSG,
                     "Sorry, that room already exists!");
