@@ -7,7 +7,7 @@ import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.core.entity.api.RPObjectMonitor;
+import simple.server.core.entity.api.RPEventListener;
 
 /**
  *
@@ -253,17 +253,41 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * Register RPObject monitors.
      *
      * @param target Entity name to monitor
-     * @param monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
      */
-    public void registerMonitor(String target, RPObjectMonitor monitor);
+    public void registerMonitor(String target, String eventClassName,
+            RPEventListener listener);
 
     /**
      * Register RPObject monitors.
      *
      * @param target Entity name to monitor
-     * @param monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
      */
-    public void unregisterMonitor(String target, RPObjectMonitor monitor);
+    public void registerMonitor(RPObject target, String eventClassName,
+            RPEventListener listener);
+
+    /**
+     * Register RPObject monitors.
+     *
+     * @param target Entity name to monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
+     */
+    public void unregisterMonitor(String target, String eventClassName,
+            RPEventListener listener);
+
+    /**
+     * Register RPObject monitors.
+     *
+     * @param target Entity name to monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
+     */
+    public void unregisterMonitor(RPObject target, String eventClassName,
+            RPEventListener listener);
 
     /**
      * Get ID of object by name.

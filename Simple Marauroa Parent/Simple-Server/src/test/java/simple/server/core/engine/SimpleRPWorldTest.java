@@ -115,8 +115,8 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         TestPlayer p2 = new TestPlayer(new RPObject());
         TextEventListener l = new TextEventListener();
         TextEventListener l2 = new TextEventListener();
-        p.registerListener(TextEvent.RPCLASS_NAME, l);
-        p2.registerListener(TextEvent.RPCLASS_NAME, l2);
+        instance.registerMonitor(p, TextEvent.RPCLASS_NAME, l);
+        instance.registerMonitor(p2, TextEvent.RPCLASS_NAME, l2);
         target = p.getName();
         expResult = true;
         result = instance.applyPrivateEvent(target, event, delay);
@@ -143,8 +143,8 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         instance.changeZone(zone, p2);
         TextEventListener l = new TextEventListener();
         TextEventListener l2 = new TextEventListener();
-        p.registerListener(TextEvent.RPCLASS_NAME, l);
-        p2.registerListener(TextEvent.RPCLASS_NAME, l2);
+        instance.registerMonitor(p, TextEvent.RPCLASS_NAME, l);
+        instance.registerMonitor(p2, TextEvent.RPCLASS_NAME, l2);
         boolean expResult = true;
         boolean result = instance.applyPublicEvent(event);
         assertEquals(expResult, result);
@@ -170,8 +170,8 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         instance.changeZone(zone, p2);
         TextEventListener l = new TextEventListener();
         TextEventListener l2 = new TextEventListener();
-        p.registerListener(TextEvent.RPCLASS_NAME, l);
-        p2.registerListener(TextEvent.RPCLASS_NAME, l2);
+        instance.registerMonitor(p, TextEvent.RPCLASS_NAME, l);
+        instance.registerMonitor(p2, TextEvent.RPCLASS_NAME, l2);
         boolean expResult = true;
         boolean result = instance
                 .applyPublicEvent((ISimpleRPZone) instance.getZone(zone), event);

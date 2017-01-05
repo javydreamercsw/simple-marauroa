@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,7 @@ import simple.server.application.db.IDatabase;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
@@ -208,12 +210,17 @@ public abstract class AbstractSystemTest {
     }
 
     public static TestPlayer getTestPlayer(String name) {
+        return getTestPlayer(name, null);
+    }
+
+    public static TestPlayer getTestPlayer(String name,
+            Map<String, RPEventListener> listeners) {
         System.out.println("Setting up test player " + name);
         RPObject obj = new RPObject();
-        obj.setRPClass("test player");
+        obj.setRPClass(TestPlayer.DEFAULT_RP_CLASSNAME);
         obj.put(ClientObject.KEY, "AbCdEfG");
         obj.put(RPEntity.NAME, name);
-        TestPlayer player = new TestPlayer(obj);
+        TestPlayer player = new TestPlayer(obj, listeners);
         System.out.println("Done!");
         return player;
     }

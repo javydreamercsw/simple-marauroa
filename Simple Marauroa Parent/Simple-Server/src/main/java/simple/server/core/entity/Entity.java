@@ -2,6 +2,8 @@ package simple.server.core.entity;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +20,7 @@ import simple.common.NotificationType;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPZone;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
 import simple.server.extension.MarauroaServerExtension;
@@ -65,6 +68,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     private ISimpleRPZone zone = null;
     private boolean disconnected;
     private int adminLevel;
+    private final IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
     /**
      * A list of away replies sent to players.
      */
@@ -75,6 +79,17 @@ public class Entity extends RPObject implements RPEntityInterface {
     public Entity(RPObject object) {
         super(object);
         update();
+    }
+
+    @SuppressWarnings("OverridableMethodCallInConstructor")
+    public Entity(RPObject object, Map<String, RPEventListener> listeners) {
+        super(object);
+        update();
+        if (listeners != null) {
+            for (Entry<String, RPEventListener> entry : listeners.entrySet()) {
+                world.registerMonitor(getName(), entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
@@ -732,8 +747,31 @@ public class Entity extends RPObject implements RPEntityInterface {
         }
     }
 
+    /**
+     * Add a player ignore entry.
+     *
+     * @param name The player name.
+     * @param duration The ignore duration (in minutes), or <code>0</code> for
+     * infinite.
+     * @param reply The reply.
+     *
+     * @return <code>true</code> if value changed, <code>false</code> if there
+     * was a problem.
+     */
     @Override
     public boolean addIgnore(String name, int duration, String reply) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder sbuf = new StringBuilder();
+
+        if (duration != 0) {
+            sbuf.append(System.currentTimeMillis() + (duration * 60000L));
+        }
+
+        sbuf.append(';');
+
+        if (reply != null) {
+            sbuf.append(reply);
+        }
+
+        return setKeyedSlot("!ignore", "_" + name, sbuf.toString());
     }
 }
