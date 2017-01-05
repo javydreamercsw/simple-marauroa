@@ -179,6 +179,12 @@ public class Tool {
         }
     }
 
+    public static void printStackTrace(StackTraceElement[] stackTrace) {
+        for (StackTraceElement element : stackTrace) {
+            System.out.println(element);
+        }
+    }
+
     protected Tool() {
     }
 

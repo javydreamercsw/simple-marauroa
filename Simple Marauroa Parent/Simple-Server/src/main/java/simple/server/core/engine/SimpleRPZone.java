@@ -44,6 +44,14 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
                 add(new RPEntity(object), null);
             } else {
                 super.add(object);
+                Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
+                        .stream().map((extension) -> {
+                            LOG.log(Level.FINE, "Processing extension: {0}",
+                                    extension.getClass().getSimpleName());
+                            return extension;
+                        }).forEachOrdered((extension) -> {
+                    extension.onRPObjectAddToZone(object);
+                });
             }
         }
     }

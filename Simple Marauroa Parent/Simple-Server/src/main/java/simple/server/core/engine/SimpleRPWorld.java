@@ -26,7 +26,7 @@ import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
-import simple.server.core.entity.api.RPObjectMonitor;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.event.api.IRPEvent;
 import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
@@ -47,7 +47,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             = Logger.getLogger(SimpleRPWorld.class.getSimpleName());
 
     //Monitors
-    private static final Map<String, List<RPObjectMonitor>> MONITORS
+    private static final Map<String, Map<String, RPEventListener>> MONITORS
             = new HashMap<>();
 
     public static SimpleRPWorld get() {
@@ -455,20 +455,45 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public void registerMonitor(String target, RPObjectMonitor monitor) {
-        synchronized (MONITORS) {
-            if (!MONITORS.containsKey(target)) {
-                MONITORS.put(target, new ArrayList<>());
+    public void registerMonitor(RPObject target, String eventClassName,
+            RPEventListener listener) {
+        registerMonitor(Tool.extractName(target), eventClassName, listener);
+    }
+
+    @Override
+    public void registerMonitor(String target, String eventClassName,
+            RPEventListener listener) {
+        if (target != null && listener != null) {
+            synchronized (MONITORS) {
+                if (!MONITORS.containsKey(target)) {
+                    MONITORS.put(target, new HashMap<>());
+                }
+                MONITORS.get(target).put(eventClassName, listener);
             }
-            MONITORS.get(target).add(monitor);
+        } else {
+            if (target == null) {
+                LOG.warning("Ignoring request due to null target!");
+            } else {
+                LOG.warning("Ignoring request due to null listener!");
+            }
+            Tool.printStackTrace(Thread.currentThread().getStackTrace());
         }
     }
 
     @Override
-    public void unregisterMonitor(String target, RPObjectMonitor monitor) {
+    public void unregisterMonitor(RPObject target, String eventClassName,
+            RPEventListener listener) {
+        unregisterMonitor(Tool.extractName(target), eventClassName, listener);
+    }
+
+    @Override
+    public void unregisterMonitor(String target, String eventClassName,
+            RPEventListener listener) {
         synchronized (MONITORS) {
             if (MONITORS.containsKey(target)) {
-                MONITORS.get(target).remove(monitor);
+                if (MONITORS.get(target).containsKey(eventClassName)) {
+                    MONITORS.get(target).remove(eventClassName);
+                }
             }
         }
     }
@@ -533,12 +558,13 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         super.modify(object);
         synchronized (MONITORS) {
             if (MONITORS.containsKey(Tool.extractName(object))) {
-                Iterator<RPObjectMonitor> iter
-                        = MONITORS.get(Tool.extractName(object)).iterator();
-                while (iter.hasNext()) {
-                    RPObjectMonitor m = iter.next();
-                    m.modify(object);
-                }
+                object.events().stream().filter((event)
+                        -> (MONITORS.get(Tool.extractName(object))
+                                .containsKey(event.getName())))
+                        .forEachOrdered((event) -> {
+                            MONITORS.get(Tool.extractName(object))
+                                    .get(event.getName()).onRPEvent(event);
+                        });
             }
         }
     }

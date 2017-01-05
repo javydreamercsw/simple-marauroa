@@ -1,6 +1,7 @@
 package simple.server.core.entity.clientobject;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.*;
@@ -19,6 +20,7 @@ import simple.server.core.entity.Entity;
 import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
@@ -53,6 +55,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      *
      * @param object
      */
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public ClientObject(RPObject object) {
         super(object);
         RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
@@ -60,6 +63,10 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         put(WellKnownActionConstant.TYPE, RPCLASS_NAME);
         awayReplies = new HashMap<>();
         addEmptySlots("!visited");
+    }
+
+    public ClientObject(RPObject object, Map<String, RPEventListener> listeners) {
+        super(object, listeners);
     }
 
     @Override
@@ -246,34 +253,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 Lookup.getDefault().lookup(IRPWorld.class).getDefaultZone().getID().getID());
         object.update();
         return object;
-    }
-
-    /**
-     * Add a player ignore entry.
-     *
-     * @param name The player name.
-     * @param duration The ignore duration (in minutes), or <code>0</code> for
-     * infinite.
-     * @param reply The reply.
-     *
-     * @return <code>true</code> if value changed, <code>false</code> if there
-     * was a problem.
-     */
-    @Override
-    public boolean addIgnore(String name, int duration, String reply) {
-        StringBuilder sbuf = new StringBuilder();
-
-        if (duration != 0) {
-            sbuf.append(System.currentTimeMillis() + (duration * 60000L));
-        }
-
-        sbuf.append(';');
-
-        if (reply != null) {
-            sbuf.append(reply);
-        }
-
-        return setKeyedSlot("!ignore", "_" + name, sbuf.toString());
     }
 
     /**

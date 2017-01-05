@@ -1,5 +1,6 @@
 package simple.server.core.entity;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.Definition.Type;
@@ -9,6 +10,7 @@ import marauroa.common.game.SyntaxException;
 import marauroa.server.game.Statistics;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
@@ -47,11 +49,9 @@ public class RPEntity extends Entity {
                 RPClass entity = new RPClass(getRPClassName());
                 entity.isA(DEFAULT_RPCLASS);
             }
-        }
-        catch (SyntaxException e) {
+        } catch (SyntaxException e) {
             LOG.log(Level.SEVERE, "Cannot generateRPClass", e);
-        }
-        catch (InstantiationException | IllegalAccessException ex) {
+        } catch (InstantiationException | IllegalAccessException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
@@ -62,5 +62,9 @@ public class RPEntity extends Entity {
 
     public RPEntity() {
         RPCLASS_NAME = "rpentity";
+    }
+
+    public RPEntity(RPObject object, Map<String, RPEventListener> listeners) {
+        super(object, listeners);
     }
 }
