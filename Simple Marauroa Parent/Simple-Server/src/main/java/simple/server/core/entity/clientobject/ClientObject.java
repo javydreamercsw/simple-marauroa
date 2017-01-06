@@ -176,8 +176,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                     Definition.VOLATILE);
 
             player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
-            //User with Monitor permissions
-            player.addAttribute("monitor", Type.FLAG);
 
             //TODO: move to an extension
             player.addAttribute("ghostmode", Type.FLAG);
