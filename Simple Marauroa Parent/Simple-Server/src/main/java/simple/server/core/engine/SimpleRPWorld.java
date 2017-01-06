@@ -47,7 +47,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             = Logger.getLogger(SimpleRPWorld.class.getSimpleName());
 
     //Monitors
-    private static final Map<String, Map<String, RPEventListener>> MONITORS
+    private static final Map<String, Map<String, List<RPEventListener>>> MONITORS
             = new HashMap<>();
 
     public static SimpleRPWorld get() {
@@ -468,7 +468,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 if (!MONITORS.containsKey(target)) {
                     MONITORS.put(target, new HashMap<>());
                 }
-                MONITORS.get(target).put(eventClassName, listener);
+                if (!MONITORS.get(target).containsKey(eventClassName)) {
+                    MONITORS.get(target).put(eventClassName, new ArrayList<>());
+                }
+                MONITORS.get(target).get(eventClassName).add(listener);
             }
         } else {
             if (target == null) {
@@ -563,7 +566,9 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                                 .containsKey(event.getName())))
                         .forEachOrdered((event) -> {
                             MONITORS.get(Tool.extractName(object))
-                                    .get(event.getName()).onRPEvent(event);
+                                    .get(event.getName()).forEach((listener) -> {
+                                listener.onRPEvent(event);
+                            });
                         });
             }
         }
