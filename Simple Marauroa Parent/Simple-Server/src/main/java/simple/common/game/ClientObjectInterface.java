@@ -1,6 +1,7 @@
 package simple.common.game;
 
 import marauroa.common.game.RPObject;
+import marauroa.common.game.RPSlot;
 import marauroa.common.net.Serializable;
 import simple.server.core.entity.RPEntityInterface;
 
@@ -34,4 +35,12 @@ public interface ClientObjectInterface extends RPEntityInterface,
      * @return Created object
      */
     public ClientObjectInterface createDefaultClientObject(RPObject object);
+
+    /**
+     * Get slot.
+     *
+     * @param name Slot name
+     * @return Slot or null if not found.
+     */
+    public RPSlot getSlot(String name);
 }
