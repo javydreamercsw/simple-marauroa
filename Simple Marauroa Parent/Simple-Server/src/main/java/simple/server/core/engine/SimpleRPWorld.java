@@ -381,7 +381,10 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public void showWorld() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Iterator it = iterator();
+        while (it.hasNext()) {
+            ((ISimpleRPZone) it.next()).showZone();
+        }
     }
 
     @Override
