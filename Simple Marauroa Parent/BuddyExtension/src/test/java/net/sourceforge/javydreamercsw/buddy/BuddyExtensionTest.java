@@ -27,10 +27,10 @@ public class BuddyExtensionTest extends AbstractSystemTest {
         assertTrue(client.getRPClass()
                 .hasDefinition(Definition.DefinitionClass.RPSLOT,
                         BuddyExtension.IGNORE));
-        assertTrue(client.has(BuddyExtension.OFFLINE));
-        assertTrue(client.has(BuddyExtension.ONLINE));
+        assertTrue(client.has(BuddyExtension.BUDDY_OFFLINE));
+        assertTrue(client.has(BuddyExtension.BUDDY_ONLINE));
         client.update();
-        assertEquals("", client.get(BuddyExtension.OFFLINE));
-        assertEquals("", client.get(BuddyExtension.ONLINE));
+        assertEquals("", client.get(BuddyExtension.BUDDY_OFFLINE));
+        assertEquals("", client.get(BuddyExtension.BUDDY_ONLINE));
     }
 }
