@@ -79,6 +79,7 @@
         <!--Disable for now<module>D20-Extension</module>-->
         <module>OutfitExtension</module>
         <module>D20-Extension</module>
+        <module>AdminExtension</module>
     </modules>
     <build>
         <pluginManagement>
