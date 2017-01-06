@@ -182,16 +182,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
 
             player.addAttribute("release", Type.STRING, Definition.PRIVATE);
 
-            //TODO: move to an extension
-            // We use this for the buddy system
-            player.addRPSlot("!buddy", 1, Definition.PRIVATE);
-            player.addRPSlot("!ignore", 1, Definition.HIDDEN);
-
-            player.addAttribute("online", Type.LONG_STRING,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
-            player.addAttribute("offline", Type.LONG_STRING,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
-
             player.addRPSlot("!visited", 1, Definition.HIDDEN);
 
             //TODO: move to an extension
