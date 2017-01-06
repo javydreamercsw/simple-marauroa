@@ -80,6 +80,7 @@
         <module>OutfitExtension</module>
         <module>D20-Extension</module>
         <module>AdminExtension</module>
+        <module>BuddyExtension</module>
     </modules>
     <build>
         <pluginManagement>
