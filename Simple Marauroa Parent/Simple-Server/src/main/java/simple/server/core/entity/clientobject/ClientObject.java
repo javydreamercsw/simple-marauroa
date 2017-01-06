@@ -175,11 +175,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             player.addAttribute("grumpy", Type.LONG_STRING,
                     Definition.VOLATILE);
 
-            //TODO: move to an extension
-            // Use this for admin menus and usage.
-            player.addAttribute("admin", Type.FLAG);
-            player.addAttribute("adminlevel", Type.INT);
-
             player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
             //User with Monitor permissions
             player.addAttribute("monitor", Type.FLAG);
