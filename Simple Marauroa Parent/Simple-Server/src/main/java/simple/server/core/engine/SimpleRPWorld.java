@@ -564,7 +564,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         super.modify(object);
         synchronized (MONITORS) {
             if (MONITORS.containsKey(Tool.extractName(object))) {
-                object.events().stream().filter((event)
+                List<RPEvent> events = object.events();
+                List<RPEvent> copy = new ArrayList<>();
+                events.forEach((e) -> {
+                    copy.add((RPEvent) e.clone());
+                });
+                copy.stream().filter((event)
                         -> (MONITORS.get(Tool.extractName(object))
                                 .containsKey(event.getName())))
                         .forEachOrdered((event) -> {
