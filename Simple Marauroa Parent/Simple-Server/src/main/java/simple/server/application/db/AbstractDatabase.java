@@ -37,11 +37,17 @@ public abstract class AbstractDatabase implements IDatabase {
     @Override
     public EntityManagerFactory getEntityManagerFactory() throws Exception {
         if (emf == null) {
-            LOG.log(Level.WARNING, "Manually specified connection parameters. "
-                    + "Using pre-defined persistence unit: {0}",
-                    getPersistenceUnitName());
-            emf = Persistence.createEntityManagerFactory(
-                    getPersistenceUnitName());
+            if (getPersistenceUnitName() != null
+                    && !getPersistenceUnitName().trim().isEmpty()) {
+                LOG.log(Level.WARNING, "Manually specified connection parameters. "
+                        + "Using pre-defined persistence unit: {0}",
+                        getPersistenceUnitName());
+                emf = Persistence.createEntityManagerFactory(
+                        getPersistenceUnitName());
+            } else {
+                LOG.log(Level.SEVERE, "Invalid Persistence Unit name: {0}",
+                        getPersistenceUnitName());
+            }
         }
         return emf;
     }
