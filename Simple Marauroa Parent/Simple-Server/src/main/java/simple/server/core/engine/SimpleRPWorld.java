@@ -563,7 +563,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         checkZone(object);
         super.modify(object);
         synchronized (MONITORS) {
-            if (MONITORS.containsKey(Tool.extractName(object))) {
+            if (MONITORS.size() > 0
+                    && MONITORS.containsKey(Tool.extractName(object))) {
                 List<RPEvent> events = object.events();
                 List<RPEvent> copy = new ArrayList<>();
                 events.forEach((e) -> {
