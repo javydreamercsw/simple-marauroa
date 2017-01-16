@@ -9,17 +9,20 @@ import marauroa.common.Configuration;
 import marauroa.common.game.Definition;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.common.NotificationType;
+import simple.common.SizeLimitedArray;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
 import simple.server.extension.MarauroaServerExtension;
 
@@ -55,6 +58,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     private boolean disconnected;
     private final IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
     private String lastPrivateChatterName;
+    private final SizeLimitedArray queue = new SizeLimitedArray();
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public Entity(RPObject object) {
@@ -74,7 +78,6 @@ public class Entity extends RPObject implements RPEntityInterface {
         }
     }
 
-    @SuppressWarnings("OverridableMethodCallInConstructor")
     public Entity() {
     }
 
@@ -516,5 +519,19 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public boolean isDisconnected() {
         return disconnected;
+    }
+
+    @Override
+    public void addEvent(RPEvent event) {
+        //Avoid duplicates
+        if (!event.has(SimpleRPEvent.EVENT_ID) // if it doesn't have an id
+                || !queue.contains(event.get(SimpleRPEvent.EVENT_ID))) { //or is not in the queue
+            if (event.has(SimpleRPEvent.EVENT_ID)) {
+                //Add it to the queue
+                queue.add(event.get(SimpleRPEvent.EVENT_ID));
+            }
+            //Add the event
+            super.addEvent(event);
+        }
     }
 }
