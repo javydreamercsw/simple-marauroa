@@ -524,8 +524,7 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void addEvent(RPEvent event) {
         //Avoid duplicates
-        if (!event.has(SimpleRPEvent.EVENT_ID) // if it doesn't have an id
-                || !queue.contains(event.get(SimpleRPEvent.EVENT_ID))) { //or is not in the queue
+        if (!proccessedEvent(event)) {
             if (event.has(SimpleRPEvent.EVENT_ID)) {
                 //Add it to the queue
                 queue.add(event.get(SimpleRPEvent.EVENT_ID));
@@ -533,5 +532,10 @@ public class Entity extends RPObject implements RPEntityInterface {
             //Add the event
             super.addEvent(event);
         }
+    }
+
+    public boolean proccessedEvent(RPEvent event) {
+        return event.has(SimpleRPEvent.EVENT_ID) // if it doesn't have an id
+                && queue.contains(event.get(SimpleRPEvent.EVENT_ID));//or is not in the queue
     }
 }
