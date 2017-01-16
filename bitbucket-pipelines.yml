@@ -1,0 +1,9 @@
+# Use custom image
+image: javydreamercsw/maven-git-hg
+
+pipelines:
+  default:
+    - step:
+        script:
+          - cd 'Simple Marauroa Parent'
+          - mvn clean install test

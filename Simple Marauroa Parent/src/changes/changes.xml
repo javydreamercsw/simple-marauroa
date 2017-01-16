@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+    <properties>
+        <title>Simple Marauroa</title>
+        <author email="javier.ortiz.78@gmail.com>Javier Ortiz</author>
+    </properties>
+    <body>
+        <release version="current" description="Current work version">
+            <action dev="Javier Ortiz" type="add" issue="SMS-6">
+                Extension system uses Lookup.
+            </action>
+            <action dev="Javier Ortiz" type="fix" issue="SMS-7">
+                Extension don't modify client object.
+            </action>
+        </release>
+    </body>
+</document>
