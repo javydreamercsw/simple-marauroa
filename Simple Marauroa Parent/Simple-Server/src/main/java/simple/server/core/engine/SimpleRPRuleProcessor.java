@@ -130,6 +130,7 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
     @Override
     public synchronized boolean onInit(RPObject object) {
         boolean result = true;
+        Lookup.getDefault().lookup(IRPWorld.class).add(object);
         if (object.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
             final RPEntityInterface player = new RPEntity(object);
             try {
@@ -147,7 +148,6 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
                 result = false;
             }
         }
-        Lookup.getDefault().lookup(IRPWorld.class).add(object);
         return result;
     }
 
