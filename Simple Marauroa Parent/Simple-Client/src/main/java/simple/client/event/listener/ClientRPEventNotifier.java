@@ -84,7 +84,7 @@ public final class ClientRPEventNotifier {
      */
     public HashMap<RPEvent, Boolean> logic(List<RPEvent> events) {
         HashMap<RPEvent, Boolean> result = new HashMap<>();
-        for (RPEvent event : events) {
+        events.forEach((event) -> {
             Set<ClientRPEventListener> set = register.get(event.getName());
 
             if (LOG.isDebugEnabled()) {
@@ -98,8 +98,8 @@ public final class ClientRPEventNotifier {
 
             if (set != null) {
                 result.put(event, true);
-                for (ClientRPEventListener currentEvent : set) {
-                    ClientRPEventListener eventListener = currentEvent;
+                set.stream().map((currentEvent)
+                        -> currentEvent).forEachOrdered((eventListener) -> {
                     try {
                         if (LOG.isDebugEnabled()) {
                             LOG.debug(eventListener);
@@ -112,11 +112,11 @@ public final class ClientRPEventNotifier {
                     } catch (RuntimeException e) {
                         LOG.error(e, e);
                     }
-                }
+                });
             } else {
                 result.put(event, false);
             }
-        }
+        });
         return result;
     }
 }
