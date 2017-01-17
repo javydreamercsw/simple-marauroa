@@ -58,7 +58,8 @@ public abstract class SimpleUI {
      * @param text
      * @param type
      */
-    public abstract void addEventLine(String header, String text, NotificationType type);
+    public abstract void addEventLine(String header, String text,
+            NotificationType type);
 
     /**
      * Adds a Swing component to the view.

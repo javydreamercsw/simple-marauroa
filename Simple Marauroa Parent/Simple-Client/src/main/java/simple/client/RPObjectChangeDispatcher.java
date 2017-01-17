@@ -183,7 +183,7 @@ public class RPObjectChangeDispatcher {
      * @param object whose slots shall be fixed.
      */
     protected void fixContainers(final RPObject object) {
-        for (RPSlot slot : object.slots()) {
+        object.slots().forEach((slot) -> {
             for (RPObject sobject : slot) {
                 if (!sobject.isContained()) {
                     LOG.log(Level.FINE, "Fixing container: {0}", slot);
@@ -192,7 +192,7 @@ public class RPObjectChangeDispatcher {
 
                 fixContainers(sobject);
             }
-        }
+        });
     }
 
     /**
@@ -209,21 +209,21 @@ public class RPObjectChangeDispatcher {
         listener.onAdded(object);
 
         if (user) {
-            for (RPObjectChangeListener userListener : userListeners) {
+            userListeners.forEach((userListener) -> {
                 userListener.onAdded(object);
-            }
+            });
         }
 
         /*
          * Walk each slot
          */
-        for (RPSlot slot : object.slots()) {
+        object.slots().forEach((slot) -> {
             String slotName = slot.getName();
 
             for (RPObject sobject : slot) {
                 fireAdded(object, slotName, sobject, user);
             }
-        }
+        });
     }
 
     /**
@@ -247,9 +247,9 @@ public class RPObjectChangeDispatcher {
         listener.onSlotAdded(object, slotName, sobject);
 
         if (user) {
-            for (RPObjectChangeListener userListener : userListeners) {
+            userListeners.forEach((userListener) -> {
                 userListener.onSlotAdded(object, slotName, sobject);
-            }
+            });
         }
     }
 
@@ -267,11 +267,10 @@ public class RPObjectChangeDispatcher {
         /*
          * Walk each slot
          */
-        for (RPSlot cslot : changes.slots()) {
-            if (cslot.size() != 0) {
-                fireChangedAdded(object, cslot, user);
-            }
-        }
+        changes.slots().stream().filter((cslot)
+                -> (cslot.size() != 0)).forEachOrdered((cslot) -> {
+            fireChangedAdded(object, cslot, user);
+        });
 
         /*
          * Call after children have been notified
@@ -279,9 +278,9 @@ public class RPObjectChangeDispatcher {
         listener.onChangedAdded(object, changes);
 
         if (user) {
-            for (RPObjectChangeListener userListener : userListeners) {
+            userListeners.forEach((userListener) -> {
                 userListener.onChangedAdded(object, changes);
-            }
+            });
         }
     }
 
@@ -318,10 +317,10 @@ public class RPObjectChangeDispatcher {
                 listener.onSlotChangedAdded(object, slotName, sobject, schanges);
 
                 if (user) {
-                    for (RPObjectChangeListener userListener : userListeners) {
+                    userListeners.forEach((userListener) -> {
                         userListener.onSlotChangedAdded(object, slotName, sobject,
                                 schanges);
-                    }
+                    });
                 }
 
                 fireChangedAdded(sobject, schanges, user);
@@ -352,19 +351,18 @@ public class RPObjectChangeDispatcher {
         listener.onChangedRemoved(object, changes);
 
         if (user) {
-            for (RPObjectChangeListener userListener : userListeners) {
+            userListeners.forEach((userListener) -> {
                 userListener.onChangedRemoved(object, changes);
-            }
+            });
         }
 
         /*
          * Walk each slot
          */
-        for (RPSlot cslot : changes.slots()) {
-            if (cslot.size() != 0) {
-                fireChangedRemoved(object, cslot, user);
-            }
-        }
+        changes.slots().stream().filter((cslot)
+                -> (cslot.size() != 0)).forEachOrdered((cslot) -> {
+            fireChangedRemoved(object, cslot, user);
+        });
     }
 
     /**
@@ -403,10 +401,10 @@ public class RPObjectChangeDispatcher {
                         schanges);
 
                 if (user) {
-                    for (RPObjectChangeListener userListener : userListeners) {
+                    userListeners.forEach((userListener) -> {
                         userListener.onSlotChangedRemoved(object, slotName,
                                 sobject, schanges);
-                    }
+                    });
                 }
 
                 fireChangedRemoved(sobject, schanges, user);
@@ -427,13 +425,13 @@ public class RPObjectChangeDispatcher {
         /*
          * Walk each slot
          */
-        for (RPSlot slot : object.slots()) {
+        object.slots().forEach((slot) -> {
             String slotName = slot.getName();
 
             for (RPObject sobject : slot) {
                 fireRemoved(object, slotName, sobject, user);
             }
-        }
+        });
 
         /*
          * Call after children have been notified
@@ -441,9 +439,9 @@ public class RPObjectChangeDispatcher {
         listener.onRemoved(object);
 
         if (user) {
-            for (RPObjectChangeListener userListener : userListeners) {
+            userListeners.forEach((userListener) -> {
                 userListener.onRemoved(object);
-            }
+            });
         }
     }
 
@@ -463,9 +461,9 @@ public class RPObjectChangeDispatcher {
         listener.onSlotRemoved(object, slotName, sobject);
 
         if (user) {
-            for (RPObjectChangeListener userListener : userListeners) {
+            userListeners.forEach((userListener) -> {
                 userListener.onSlotRemoved(object, slotName, sobject);
-            }
+            });
         }
 
         /*
