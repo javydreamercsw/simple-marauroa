@@ -13,13 +13,14 @@ import simple.client.entity.IUserContext;
  *
  * @author Javier A. Ortiz Bultrón <javier.ortiz.78@gmail.com>
  */
-public class SimplePerceptionHandler extends PerceptionHandler implements IPerceptionListener {
+public class SimplePerceptionHandler extends PerceptionHandler
+        implements IPerceptionListener {
 
     private final PerceptionDispatcher dispatch;
-    private RPObjectChangeDispatcher rpobjDispatcher;
-    private SimpleClient client;
-    private static final Logger logger =
-            Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
+    private final RPObjectChangeDispatcher rpobjDispatcher;
+    private final SimpleClient client;
+    private static final Logger LOG
+            = Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
 
     public SimplePerceptionHandler(PerceptionDispatcher dispatch,
             RPObjectChangeDispatcher rpobjDispatcher, SimpleClient client) {
@@ -33,7 +34,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onAdded(RPObject object) {
-        logger.log(Level.FINE, "onAdded: {0}", object);
+        LOG.log(Level.FINE, "onAdded: {0}", object);
         rpobjDispatcher.dispatchAdded(object, isUser(object));
         client.onAdded(object);
         return false;
@@ -47,7 +48,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onDeleted(RPObject object) {
-        logger.log(Level.FINE, "onDeleted: {0}", object);
+        LOG.log(Level.FINE, "onDeleted: {0}", object);
         rpobjDispatcher.dispatchRemoved(object, isUser(object));
         client.onDeleted(object);
         return false;
@@ -56,13 +57,14 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
     @Override
     public void onException(Exception exception,
             MessageS2CPerception perception) {
-        logger.log(Level.SEVERE, null, exception);
+        LOG.log(Level.SEVERE, null, exception);
         client.onException(exception, perception);
     }
 
     @Override
     public boolean onModifiedAdded(RPObject object, RPObject changes) {
-        logger.log(Level.FINE, "onModifiedAdded: {0}:{1}", new Object[]{object, changes});
+        LOG.log(Level.FINE, "onModifiedAdded: {0}:{1}",
+                new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyAdded(object, changes, false);
         client.onModifiedAdded(object, changes);
         //Process the events
@@ -75,7 +77,8 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onModifiedDeleted(RPObject object, RPObject changes) {
-        logger.log(Level.FINE, "onModifiedDeleted: {0}:{1}", new Object[]{object, changes});
+        LOG.log(Level.FINE, "onModifiedDeleted: {0}:{1}",
+                new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyRemoved(object, changes, false);
         client.onModifiedDeleted(object, changes);
         return false;
@@ -83,7 +86,7 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public boolean onMyRPObject(RPObject added, RPObject deleted) {
-        logger.fine("onMyRPObject");
+        LOG.fine("onMyRPObject");
         //Process the events
         if (added != null) {
             //Process Events
@@ -94,27 +97,27 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
 
     @Override
     public void onPerceptionBegin(byte type, int timestamp) {
-        logger.log(Level.FINE, "onPerceptionBegin: {0}, {1}",
+        LOG.log(Level.FINE, "onPerceptionBegin: {0}, {1}",
                 new Object[]{type, timestamp});
         client.onPerceptionBegin(type, timestamp);
     }
 
     @Override
     public void onPerceptionEnd(byte type, int timestamp) {
-        logger.log(Level.FINE, "onPerceptionEnd: {0}, {1}",
+        LOG.log(Level.FINE, "onPerceptionEnd: {0}, {1}",
                 new Object[]{type, timestamp});
         client.onPerceptionEnd(type, timestamp);
     }
 
     @Override
     public void onSynced() {
-        logger.fine("onSynced");
+        LOG.fine("onSynced");
         client.onSynced();
     }
 
     @Override
     public void onUnsynced() {
-        logger.fine("onUnsynced");
+        LOG.fine("onUnsynced");
         client.onUnsynced();
     }
 
@@ -123,14 +126,14 @@ public class SimplePerceptionHandler extends PerceptionHandler implements IPerce
      * needed because the perception protocol distinguishes between normal and
      * private (my) object changes, but not full add/removes.
      *
-     * @param object
-     *            An object.
-     * 
+     * @param object An object.
+     *
      * @return <code>true</code> if it is the user object.
      */
     public boolean isUser(final RPObject object) {
         if (object.getRPClass().subclassOf("client_object")) {
-            return client.getAccountUsername().equalsIgnoreCase(object.get("name"));
+            return client.getAccountUsername()
+                    .equalsIgnoreCase(object.get("name"));
         } else {
             return false;
         }
