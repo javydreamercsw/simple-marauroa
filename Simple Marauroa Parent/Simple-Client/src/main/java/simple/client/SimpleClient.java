@@ -205,9 +205,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     @Override
     protected void onTransfer(List<TransferContent> items) {
         LOG.log(Level.FINE, "Transfering ----");
-        for (TransferContent item : items) {
+        items.forEach((item) -> {
             LOG.log(Level.FINE, item.toString());
-        }
+        });
     }
 
     @Override
@@ -236,9 +236,9 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     @Override
     protected void onPreviousLogins(List<String> previousLogins) {
         LOG.log(Level.FINE, "Previous logins");
-        for (String FINE_string : previousLogins) {
+        previousLogins.forEach((FINE_string) -> {
             LOG.log(Level.FINE, FINE_string);
-        }
+        });
     }
 
     /**

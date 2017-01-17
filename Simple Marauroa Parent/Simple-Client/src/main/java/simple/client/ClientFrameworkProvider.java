@@ -199,7 +199,7 @@ public interface ClientFrameworkProvider extends Runnable {
     /**
      * Set if auto account creation is allowed in client.
      *
-     * @param autocreation the autocreation to set
+     * @param autocreation the auto creation to set
      */
     public void setAutoCreation(boolean autocreation);
 }
