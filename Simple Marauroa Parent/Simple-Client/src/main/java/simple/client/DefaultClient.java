@@ -379,17 +379,22 @@ public class DefaultClient implements ClientFrameworkProvider,
                         id = deleted.getID();
                     }
                     if (id != null) {
-                        RPObject object = Lookup.getDefault().lookup(IWorldManager.class).get(id);
+                        RPObject object
+                                = Lookup.getDefault().lookup(IWorldManager.class)
+                                        .get(id);
                         if (object != null) {
                             object.applyDifferences(added, deleted);
-                            Collection<? extends SelfChangeListener> listeners
-                                    = Lookup.getDefault().lookupAll(SelfChangeListener.class);
-                            for (SelfChangeListener listener : listeners) {
+                            SelfChangeListener listener
+                                    = Lookup.getDefault()
+                                            .lookup(SelfChangeListener.class);
+                            if (listener != null) {
                                 if (!listener.onMyRPObject(added, deleted)) {
                                     result = false;
-                                    break;
                                 }
                             }
+                            Collection<? extends SelfChangeListener> listeners
+                                    = Lookup.getDefault()
+                                            .lookupAll(SelfChangeListener.class);
                         }
                     } else {
                         // Unchanged.
@@ -462,6 +467,8 @@ public class DefaultClient implements ClientFrameworkProvider,
                         new Object[]{getHost(), ex.getLocalizedMessage(),
                             getPort()});
             }
+            Lookup.getDefault().lookup(LoginProvider.class)
+                    .setAuthenticated(false);
             showLoginDialog();
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
@@ -514,6 +521,8 @@ public class DefaultClient implements ClientFrameworkProvider,
                                         ex.getLocalizedMessage()
                                         + "\nMake sure you have verified "
                                         + "your account. Check your provided email.");
+                        Lookup.getDefault().lookup(LoginProvider.class)
+                                .setAuthenticated(false);
                         showLoginDialog();
                     }
                 } catch (InvalidVersionException ex) {
@@ -529,6 +538,8 @@ public class DefaultClient implements ClientFrameworkProvider,
                 Lookup.getDefault().lookup(MessageProvider.class)
                         .displayWarning("Login Failed!",
                                 e.getReason().toString());
+                Lookup.getDefault().lookup(LoginProvider.class)
+                        .setAuthenticated(false);
                 showLoginDialog();
             }
         } catch (InvalidVersionException | TimeoutException | BannedAddressException ex) {
