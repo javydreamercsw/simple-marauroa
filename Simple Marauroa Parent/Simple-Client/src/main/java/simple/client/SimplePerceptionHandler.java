@@ -1,5 +1,7 @@
 package simple.client;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.client.net.IPerceptionListener;
@@ -7,6 +9,15 @@ import marauroa.client.net.PerceptionHandler;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
 import org.openide.util.Lookup;
+import simple.client.api.AddListener;
+import simple.client.api.ClearListener;
+import simple.client.api.DeleteListener;
+import simple.client.api.ExceptionListener;
+import simple.client.api.IWorldManager;
+import simple.client.api.ModificationListener;
+import simple.client.api.PerceptionListener;
+import simple.client.api.SelfChangeListener;
+import simple.client.api.SyncListener;
 import simple.client.entity.IUserContext;
 
 /**
@@ -21,6 +32,8 @@ public class SimplePerceptionHandler extends PerceptionHandler
     private final SimpleClient client;
     private static final Logger LOG
             = Logger.getLogger(SimplePerceptionHandler.class.getSimpleName());
+    private final IWorldManager worldManager
+            = Lookup.getDefault().lookup(IWorldManager.class);
 
     public SimplePerceptionHandler(PerceptionDispatcher dispatch,
             RPObjectChangeDispatcher rpobjDispatcher, SimpleClient client) {
@@ -37,13 +50,32 @@ public class SimplePerceptionHandler extends PerceptionHandler
         LOG.log(Level.FINE, "onAdded: {0}", object);
         rpobjDispatcher.dispatchAdded(object, isUser(object));
         client.onAdded(object);
-        return false;
+        boolean result = false;
+
+        LOG.log(Level.FINE, "onAdded: {0}", object);
+        //Check if ID is different from last time (zone change, etc)
+        Set<Map.Entry<RPObject.ID, RPObject>> values
+                = worldManager.getWorld().entrySet();
+        for (AddListener listener
+                : Lookup.getDefault().lookupAll(AddListener.class)) {
+            if (!listener.onAdded(object)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
     public boolean onClear() {
         client.onClear();
-        return false;
+        boolean result = false;
+        for (ClearListener listener
+                : Lookup.getDefault().lookupAll(ClearListener.class)) {
+            if (!listener.onClear()) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -51,7 +83,15 @@ public class SimplePerceptionHandler extends PerceptionHandler
         LOG.log(Level.FINE, "onDeleted: {0}", object);
         rpobjDispatcher.dispatchRemoved(object, isUser(object));
         client.onDeleted(object);
-        return false;
+        boolean result = false;
+        for (DeleteListener listener
+                : Lookup.getDefault().lookupAll(DeleteListener.class)) {
+            if (!listener.onDeleted(object)) {
+                result = true;
+            }
+        }
+        worldManager.getWorld().remove(object.getID());
+        return result;
     }
 
     @Override
@@ -59,6 +99,10 @@ public class SimplePerceptionHandler extends PerceptionHandler
             MessageS2CPerception perception) {
         LOG.log(Level.SEVERE, null, exception);
         client.onException(exception, perception);
+        Lookup.getDefault().lookupAll(ExceptionListener.class)
+                .stream().forEach((listener) -> {
+                    listener.onException(exception, perception);
+                });
     }
 
     @Override
@@ -72,7 +116,14 @@ public class SimplePerceptionHandler extends PerceptionHandler
             //Process Events
             Lookup.getDefault().lookup(IUserContext.class).onRPEvent(changes);
         }
-        return false;
+        boolean result = false;
+        for (ModificationListener listener
+                : Lookup.getDefault().lookupAll(ModificationListener.class)) {
+            if (!listener.onModifiedAdded(object, changes)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -81,7 +132,14 @@ public class SimplePerceptionHandler extends PerceptionHandler
                 new Object[]{object, changes});
         rpobjDispatcher.dispatchModifyRemoved(object, changes, false);
         client.onModifiedDeleted(object, changes);
-        return false;
+        boolean result = false;
+        for (ModificationListener listener
+                : Lookup.getDefault().lookupAll(ModificationListener.class)) {
+            if (!listener.onModifiedDeleted(object, changes)) {
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
@@ -92,7 +150,34 @@ public class SimplePerceptionHandler extends PerceptionHandler
             //Process Events
             Lookup.getDefault().lookup(IUserContext.class).onRPEvent(added);
         }
-        return client.onMyRPObject(added, deleted);
+        boolean result = true;
+        RPObject.ID id = null;
+        if (added != null) {
+            id = added.getID();
+        }
+        if (deleted != null) {
+            id = deleted.getID();
+        }
+        if (id != null) {
+            RPObject object
+                    = Lookup.getDefault().lookup(IWorldManager.class)
+                            .get(id);
+            if (object != null) {
+                object.applyDifferences(added, deleted);
+                SelfChangeListener listener
+                        = Lookup.getDefault()
+                                .lookup(SelfChangeListener.class);
+                if (listener != null) {
+                    if (!listener.onMyRPObject(added, deleted)) {
+                        result = false;
+                    }
+                }
+            }
+        } else {
+            // Unchanged.
+            // Do nothing.
+        }
+        return result && client.onMyRPObject(added, deleted);
     }
 
     @Override
@@ -100,6 +185,10 @@ public class SimplePerceptionHandler extends PerceptionHandler
         LOG.log(Level.FINE, "onPerceptionBegin: {0}, {1}",
                 new Object[]{type, timestamp});
         client.onPerceptionBegin(type, timestamp);
+        Lookup.getDefault().lookupAll(PerceptionListener.class)
+                .stream().forEach((listener) -> {
+                    listener.onPerceptionBegin(type, timestamp);
+                });
     }
 
     @Override
@@ -107,18 +196,30 @@ public class SimplePerceptionHandler extends PerceptionHandler
         LOG.log(Level.FINE, "onPerceptionEnd: {0}, {1}",
                 new Object[]{type, timestamp});
         client.onPerceptionEnd(type, timestamp);
+        Lookup.getDefault().lookupAll(PerceptionListener.class)
+                .stream().forEach((listener) -> {
+                    listener.onPerceptionEnd(type, timestamp);
+                });
     }
 
     @Override
     public void onSynced() {
         LOG.fine("onSynced");
         client.onSynced();
+        Lookup.getDefault().lookupAll(SyncListener.class).stream()
+                .forEach((listener) -> {
+                    listener.onSynced();
+                });
     }
 
     @Override
     public void onUnsynced() {
         LOG.fine("onUnsynced");
         client.onUnsynced();
+        Lookup.getDefault().lookupAll(SyncListener.class).stream()
+                .forEach((listener) -> {
+                    listener.onUnsynced();
+                });
     }
 
     /**
@@ -132,8 +233,9 @@ public class SimplePerceptionHandler extends PerceptionHandler
      */
     public boolean isUser(final RPObject object) {
         if (object.getRPClass().subclassOf("client_object")) {
-            return client.getAccountUsername()
-                    .equalsIgnoreCase(object.get("name"));
+            return client.getAccountUsername() != null
+                    && client.getAccountUsername()
+                            .equalsIgnoreCase(object.get("name"));
         } else {
             return false;
         }

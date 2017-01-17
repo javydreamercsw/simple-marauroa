@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import marauroa.client.ClientFramework;
 import marauroa.client.net.IPerceptionListener;
+import marauroa.client.net.PerceptionHandler;
 import marauroa.common.game.RPAction;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
@@ -30,7 +31,7 @@ import simple.server.core.event.TextEvent;
  */
 public class SimpleClient extends ClientFramework implements IPerceptionListener {
 
-    protected SimplePerceptionHandler handler;
+    protected PerceptionHandler handler;
     protected static SimpleClient client;
     private String[] available_characters;
     private ClientObjectInterface player;
@@ -51,6 +52,23 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
             client = new SimpleClient(LOG4J_PROPERTIES);
         }
         return client;
+    }
+
+    protected SimpleClient() {
+        super();
+        world = new World();
+        //Register listeners for normal chat and private messages
+        registerListeners();
+        //**************************
+        rpobjDispatcher = new RPObjectChangeDispatcher(
+                getGameObjects(),
+                getUserContext());
+        PerceptionToObject pto = new PerceptionToObject();
+        pto.setObjectFactory(new ObjectFactory());
+        dispatch.register(pto);
+        dispatch.register(SimpleClient.this);
+        handler = new SimplePerceptionHandler(dispatch, rpobjDispatcher, this);
+        //**************************
     }
 
     protected SimpleClient(String properties) {
@@ -224,7 +242,7 @@ public class SimpleClient extends ClientFramework implements IPerceptionListener
     }
 
     @Override
-    protected String getGameName() {
+    public String getGameName() {
         return gameName;
     }
 
