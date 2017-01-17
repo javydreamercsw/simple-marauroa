@@ -1,9 +1,8 @@
 package simple.client.entity;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
@@ -26,7 +25,8 @@ public class UserContext implements IUserContext {
     /**
      * The logger.
      */
-    private static final Logger LOG = Log4J.getLogger(UserContext.class);
+    private static final Logger LOG
+            = Logger.getLogger(UserContext.class.getSimpleName());
     /**
      * The currently known buddies.
      */
@@ -69,9 +69,9 @@ public class UserContext implements IUserContext {
     @Override
     public void registerClientRPEventListener(Class<? extends RPEvent> event,
             ClientRPEventListener listener) {
-        LOG.debug("Adding event: " + event.getName()
-                + " to the listener list with listener: "
-                + listener.getClass().getSimpleName());
+        LOG.log(Level.FINE, "Adding event: {0} to the listener list with "
+                + "listener: {1}", new Object[]{event.getName(),
+                    listener.getClass().getSimpleName()});
         eventNotifier.notifyAtEvent(event, listener);
     }
 
@@ -208,10 +208,9 @@ public class UserContext implements IUserContext {
                 if (entity != null) {
                     ClientEntity parent = Lookup.getDefault().lookup(IGameObjects.class).get(object);
 
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Added: " + entity);
-                        LOG.debug("   To: " + parent + "  [" + slotName + "]");
-                    }
+                    LOG.log(Level.FINE, "Added: {0}", entity);
+                    LOG.log(Level.FINE, "   To: {0}  [{1}]",
+                            new Object[]{parent, slotName});
                 }
             }
         }
@@ -257,15 +256,16 @@ public class UserContext implements IUserContext {
             final RPObject sobject) {
         if (sobject.getRPClass().subclassOf("entity")) {
             synchronized (Lookup.getDefault().lookup(IGameObjects.class)) {
-                ClientEntity entity = Lookup.getDefault().lookup(IGameObjects.class).get(sobject);
+                ClientEntity entity
+                        = Lookup.getDefault().lookup(IGameObjects.class).get(sobject);
 
                 if (entity != null) {
-                    ClientEntity parent = Lookup.getDefault().lookup(IGameObjects.class).get(object);
+                    ClientEntity parent
+                            = Lookup.getDefault().lookup(IGameObjects.class).get(object);
 
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Removed: " + entity);
-                        LOG.debug("   From: " + parent + "  [" + slotName + "]");
-                    }
+                    LOG.log(Level.FINE, "Removed: {0}", entity);
+                    LOG.log(Level.FINE, "   From: {0}  [{1}]",
+                            new Object[]{parent, slotName});
                 }
             }
         }
@@ -281,18 +281,18 @@ public class UserContext implements IUserContext {
     public RPObject onRPEvent(RPObject object) {
         HashMap<RPEvent, Boolean> result = eventNotifier.logic(object.events());
         if (!result.entrySet().isEmpty()) {
-            LOG.info("Here are the processed events. A false means "
+            LOG.fine("Here are the processed events. A false means "
                     + "that probably RPEventListeners not registered.\n");
-            for (Entry e : result.entrySet()) {
-                LOG.debug(e.getKey() + " Processed? " + e.getValue());
-            }
+            result.entrySet().forEach((e) -> {
+                LOG.log(Level.FINE, "{0} Processed? {1}",
+                        new Object[]{e.getKey(), e.getValue()});
+            });
         } else if (!object.events().isEmpty()) {
-            LOG.info("Unable to process events:");
-            for (RPEvent e : object.events()) {
-                LOG.info(e);
-            }
+            LOG.warning("Unable to process events:");
+            object.events().forEach((e) -> {
+                LOG.info(e.toString());
+            });
         }
-        object.clearEvents();
         return object;
     }
 }

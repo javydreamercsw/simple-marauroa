@@ -1,9 +1,9 @@
 package simple.client;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.client.net.IPerceptionListener;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
 import marauroa.common.game.RPObject;
 import marauroa.common.net.message.MessageS2CPerception;
 
@@ -18,7 +18,8 @@ public class PerceptionToObject implements IPerceptionListener {
     public Map<RPObject.ID, ObjectChangeListener> map
             = Collections.synchronizedMap(new HashMap<>());
     private ObjectFactory of;
-    private static final Logger LOG = Log4J.getLogger(PerceptionToObject.class);
+    private static final Logger LOG
+            = Logger.getLogger(PerceptionToObject.class.getSimpleName());
 
     /**
      * sets Object factory for callback
@@ -55,7 +56,7 @@ public class PerceptionToObject implements IPerceptionListener {
         if (isValid(object)) {
             ObjectChangeListener objectChangeListener = map.get(object.getID());
             if (objectChangeListener == null) {
-                LOG.error("no listener for: " + object);
+                LOG.log(Level.SEVERE, "no listener for: {0}", object);
             } else {
                 objectChangeListener.deleted();
                 map.remove(object.getID());
@@ -86,7 +87,7 @@ public class PerceptionToObject implements IPerceptionListener {
         if (isValid(object)) {
             ObjectChangeListener objectChangeListener = map.get(object.getID());
             if (objectChangeListener == null) {
-                LOG.error("no listener for: " + object);
+                LOG.log(Level.SEVERE, "no listener for: {0}", object);
             } else {
                 objectChangeListener.modifiedAdded(changes);
             }
@@ -100,7 +101,7 @@ public class PerceptionToObject implements IPerceptionListener {
         if (isValid(object)) {
             ObjectChangeListener objectChangeListener = map.get(object.getID());
             if (objectChangeListener == null) {
-                LOG.error("no listener for: " + object);
+                LOG.log(Level.SEVERE, "no listener for: {0}", object);
             } else {
                 objectChangeListener.modifiedDeleted(changes);
             }
@@ -114,7 +115,7 @@ public class PerceptionToObject implements IPerceptionListener {
         if (isValid(added)) {
             ObjectChangeListener objectChangeListener = map.get(added.getID());
             if (objectChangeListener == null) {
-                LOG.error("no listener for: " + added);
+                LOG.log(Level.SEVERE, "no listener for: {0}", added);
             } else {
                 objectChangeListener.modifiedAdded(added);
             }
@@ -122,7 +123,7 @@ public class PerceptionToObject implements IPerceptionListener {
         if (isValid(deleted)) {
             ObjectChangeListener objectChangeListener = map.get(deleted.getID());
             if (objectChangeListener == null) {
-                LOG.error("no listener for: " + added);
+                LOG.log(Level.SEVERE, "no listener for: {0}", deleted);
             } else {
                 objectChangeListener.modifiedDeleted(deleted);
             }
@@ -146,7 +147,8 @@ public class PerceptionToObject implements IPerceptionListener {
     public void onUnsynced() {
     }
 
-    public void register(final RPObject object, final ObjectChangeListener listener) {
+    public void register(final RPObject object,
+            final ObjectChangeListener listener) {
         if (isValid(object)) {
             map.put(object.getID(), listener);
         }
