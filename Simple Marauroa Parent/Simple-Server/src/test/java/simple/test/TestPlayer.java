@@ -55,6 +55,17 @@ public class TestPlayer extends ClientObject {
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
+    public TestPlayer(RPObject object, Map<String, RPEventListener> listeners,
+            boolean add) {
+        super(object, listeners);
+        RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
+        setRPClass(RPCLASS_NAME);
+        if (add) {
+            addToWorld();
+        }
+    }
+
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public TestPlayer(RPObject obj) {
         super(obj);
         RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
