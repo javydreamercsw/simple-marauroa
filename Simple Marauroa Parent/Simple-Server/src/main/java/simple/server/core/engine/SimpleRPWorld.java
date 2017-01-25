@@ -68,11 +68,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public void addZone(IRPZone zone) {
-        super.addRPZone(zone);
-    }
-
-    @Override
     public IRPZone removeRPZone(String zone) throws Exception {
         return removeRPZone(new IRPZone.ID(zone));
     }
@@ -136,7 +131,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             if (!description.isEmpty()) {
                 zone.setDescription(description);
             }
-            addZone(zone);
+            addRPZone(zone);
         } else {
             LOG.log(Level.WARNING,
                     "Request to add an already existing zone: {0}", name);
@@ -353,19 +348,34 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 for (IDefaultZoneProvider provider
                         : Lookup.getDefault().lookupAll(IDefaultZoneProvider.class)) {
                     for (IRPZone zone : provider.getDefaultZones()) {
+                        addRPZone(zone);
                         if (needDefault) {
                             setDefaultZone(zone);
                             needDefault = false;
-                        } else {
-                            //setDefaultZone adds the zone
-                            addZone(zone);
                         }
                     }
                 }
                 if (needDefault) {
-                    //Something is wrong, no default zone!
-                    LOG.log(Level.SEVERE, "No default zone found!");
-                    System.exit(0);
+                    //If none defined, this will be a MarauroaRPZone, we need to replace it.
+                    IRPZone defaultZone = super.getDefaultZone();
+                    if (defaultZone != null
+                            && !(defaultZone instanceof ISimpleRPZone)) {
+                        try {
+                            String id = defaultZone.getID().getID();
+                            removeRPZone(defaultZone.getID());
+                            //Recreate it in our system
+                            addZone(id);
+                            IRPZone zone = getZone(id);
+                            setDefaultZone(zone);
+                        } catch (Exception ex) {
+                            LOG.log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    if (getDefaultZone() == null) {
+                        //Something is wrong, no default zone!
+                        LOG.log(Level.SEVERE, "No default zone found!");
+                        System.exit(0);
+                    }
                 } else {
                     Lookup.getDefault().lookupAll(MarauroaServerExtension.class)
                             .stream().forEach((extension) -> {
@@ -407,27 +417,6 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     @Override
     public boolean hasRPZone(String zone) {
         return hasRPZone(new IRPZone.ID(zone));
-    }
-
-    @Override
-    public IRPZone getDefaultZone() {
-        //If none defined, this will be a MarauroaRPZone, we need to replace it.
-        IRPZone defaultZone = super.getDefaultZone();
-        if (defaultZone != null
-                && !(defaultZone instanceof ISimpleRPZone)) {
-            try {
-                String id = defaultZone.getID().getID();
-                removeRPZone(defaultZone.getID());
-                //Recreate it in our system
-                addZone(id);
-                IRPZone zone = getZone(id);
-                setDefaultZone(zone);
-                return zone;
-            } catch (Exception ex) {
-                LOG.log(Level.SEVERE, null, ex);
-            }
-        }
-        return defaultZone;
     }
 
     @Override
