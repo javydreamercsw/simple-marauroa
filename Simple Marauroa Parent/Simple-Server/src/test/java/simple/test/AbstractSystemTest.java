@@ -210,18 +210,27 @@ public abstract class AbstractSystemTest {
         return WORLD.getZone(test);
     }
 
+    public static TestPlayer getTestPlayer(String name, boolean add) {
+        return getTestPlayer(name, null, add);
+    }
+
     public static TestPlayer getTestPlayer(String name) {
         return getTestPlayer(name, null);
     }
 
     public static TestPlayer getTestPlayer(String name,
             Map<String, RPEventListener> listeners) {
+        return getTestPlayer(name, listeners, true);
+    }
+
+    public static TestPlayer getTestPlayer(String name,
+            Map<String, RPEventListener> listeners, boolean add) {
         System.out.println("Setting up test player " + name);
         RPObject obj = new RPObject();
         obj.setRPClass(TestPlayer.DEFAULT_RP_CLASSNAME);
         obj.put(ClientObject.KEY, "AbCdEfG");
         obj.put(RPEntity.NAME, name);
-        TestPlayer player = new TestPlayer(obj, listeners);
+        TestPlayer player = new TestPlayer(obj, listeners, add);
         System.out.println("Done!");
         return player;
     }
