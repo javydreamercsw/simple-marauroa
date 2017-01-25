@@ -96,10 +96,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 Iterator i = zone.getPlayers().iterator();
                 List<RPObject> toMove = new ArrayList<>();
                 while (i.hasNext()) {
-                    RPObject next = (RPObject) i.next();
-                    if (next instanceof RPEntityInterface) {
-                        toMove.add(next);
-                    }
+                    toMove.add((RPObject) i.next());
                 }
                 toMove.forEach((co) -> {
                     Lookup.getDefault().lookup(IRPWorld.class).changeZone(
