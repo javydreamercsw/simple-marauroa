@@ -191,6 +191,7 @@ public abstract class AbstractSystemTest {
             } catch (SQLException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
+            WORLD.onInit();
         } catch (ClassNotFoundException | SQLException | IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }

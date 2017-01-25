@@ -3,11 +3,13 @@ package simple.server.core.engine;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPObject;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.server.core.entity.Entity;
+import simple.server.core.entity.npc.NPC;
 import simple.server.core.tool.Tool;
 import simple.test.AbstractSystemTest;
 import simple.test.TestPlayer;
@@ -15,7 +17,7 @@ import simple.test.TestPlayer;
 /**
  * Test the custom methods of SimpleZone.
  *
- * @author Javier A. Ortiz BultrÃ³n javier.ortiz.78@gmail.com
+ * @author Javier A. Ortiz Bultron javier.ortiz.78@gmail.com
  */
 public class SimpleZoneTest extends AbstractSystemTest {
 
@@ -67,7 +69,8 @@ public class SimpleZoneTest extends AbstractSystemTest {
             assertEquals(2, d.getPlayers().size());
             assertEquals(0, d.getNPCS().size());
         } catch (Exception ex) {
-            Logger.getLogger(SimpleZoneTest.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SimpleZoneTest.class.getName())
+                    .log(Level.SEVERE, null, ex);
             fail();
         }
     }
@@ -80,18 +83,43 @@ public class SimpleZoneTest extends AbstractSystemTest {
     public void testAutomaticZoneAssignment() {
         RPObject o1 = new RPObject();
         Tool.setName(o1, "Test");
-        assertEquals(0, ((ISimpleRPZone) world.getDefaultZone())
-                .getZoneContents().size());
+        assertEquals(0, world.getDefaultZone().size());
         world.add(o1);
-        assertEquals(1, ((ISimpleRPZone) world.getDefaultZone())
-                .getZoneContents().size());
+        assertEquals(1, world.getDefaultZone().size());
         RPObject o2 = new RPObject();
         Tool.setName(o2, "Test2");
         o2.put(Entity.ZONE_ID, UUID.randomUUID().toString());
-        assertEquals(1, ((ISimpleRPZone) world.getDefaultZone())
-                .getZoneContents().size());
+        assertEquals(1, world.getDefaultZone().size());
         world.add(o2);
-        assertEquals(2, ((ISimpleRPZone) world.getDefaultZone())
-                .getZoneContents().size());
+        assertEquals(2, world.getDefaultZone().size());
+    }
+
+    @Test
+    public void testChangingZone() {
+        TestPlayer p1 = getTestPlayer("Player 1");
+        NPC npc = new NPC(new RPObject(), "NPC");
+        String name = "Test";
+        world.add(npc);
+        assertTrue(world.getDefaultZone().has(p1.getID()));
+        assertTrue(world.getDefaultZone().has(npc.getID()));
+        //Create new zone to move to
+        world.addZone(name);
+        IRPZone zone = world.getZone(name);
+        //Move player
+        world.changeZone(zone.getID(), p1);
+        //Left lobby
+        assertFalse(world.getDefaultZone().has(p1.getID()));
+        assertTrue(world.getDefaultZone().has(npc.getID()));
+        //Moved to new zone
+        assertTrue(zone.has(p1.getID()));
+        assertFalse(zone.has(npc.getID()));
+        //Move NPC
+        world.changeZone(zone.getID(), npc);
+        //Left lobby
+        assertFalse(world.getDefaultZone().has(p1.getID()));
+        assertFalse(world.getDefaultZone().has(npc.getID()));
+        //Moved to new zone
+        assertTrue(zone.has(p1.getID()));
+        assertTrue(zone.has(npc.getID()));
     }
 }

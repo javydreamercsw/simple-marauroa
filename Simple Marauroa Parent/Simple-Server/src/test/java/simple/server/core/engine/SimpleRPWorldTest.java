@@ -77,20 +77,26 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
                 .lookup(IRPWorld.class);
         StringBuilder result = instance.listZones(separator);
         System.out.println(result.toString());
-        assertTrue(result.length() == 0);
+        int initial = result.length();
+        assertTrue(initial > 0);
+        assertFalse(result.toString().contains(separator));
         String name1 = UUID.randomUUID().toString();
         String name2 = UUID.randomUUID().toString();
+        System.out.println(name1 + ": " + name1.length());
+        System.out.println(name2 + ": " + name2.length());
         instance.addZone(name1);
         result = instance.listZones(separator);
         System.out.println(result.toString());
         assertTrue(result.length() > 0);
-        assertFalse(result.toString().contains(separator));
+        assertTrue(result.toString().contains(separator));
         assertTrue(result.toString().contains(name1));
         assertFalse(result.toString().contains(name2));
         instance.addZone(name2);
         result = instance.listZones(separator);
         System.out.println(result.toString());
-        assertTrue(result.length() > 0);
+        assertEquals(initial + name1.length() + name2.length()
+                + separator.length() * (instance.getZones().size() - 1)/*separators*/,
+                result.length());
         assertTrue(result.toString().contains(separator));
         assertTrue(result.toString().contains(name1));
         assertTrue(result.toString().contains(name2));
