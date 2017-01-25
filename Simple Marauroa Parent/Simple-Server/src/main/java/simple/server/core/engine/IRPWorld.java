@@ -20,7 +20,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @param zone zone to add
      */
-    void addZone(IRPZone zone);
+    void addRPZone(IRPZone zone);
 
     /**
      * Remove zone from world (use with caution). Make sure to move all players
