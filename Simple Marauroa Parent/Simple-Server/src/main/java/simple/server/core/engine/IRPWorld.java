@@ -50,7 +50,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @return Removed zone
      * @throws java.lang.Exception
      */
-    IRPZone removeRPZone(IRPZone.ID zoneid) throws java.lang.Exception;
+    IRPZone removeRPZone(IRPZone.ID zoneid) throws Exception;
 
     /**
      * Add RPZone
