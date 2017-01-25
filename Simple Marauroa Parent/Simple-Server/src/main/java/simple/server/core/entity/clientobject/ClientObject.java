@@ -265,7 +265,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         int hash = 3;
         hash = 31 * hash + this.adminLevel;
         hash = 31 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
-        hash = 31 * hash + (this.getID() != null ? this.getID().hashCode() : 0);
+        hash = 31 * hash + (this.has(Entity.ID) ? this.getID().hashCode() : 0);
         return hash;
     }
 }
