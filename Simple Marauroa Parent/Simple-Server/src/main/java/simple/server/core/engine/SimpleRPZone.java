@@ -254,22 +254,20 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
 
     @Override
     public void showZone() {
-        if (LOG.isLoggable(Level.FINE)) {
-            System.out.println("Zone " + getName() + " contents:");
-            System.out.println("Players: "
-                    + (getPlayers().isEmpty() ? "Empty" : ""));
-            LOG.log(Level.INFO, "Players: {0}",
-                    (getPlayers().isEmpty() ? "Empty" : ""));
-            getPlayers().stream().forEach((co) -> {
-                System.out.println(co.toString());
-            });
-            System.out.println("NPC's: " + (getNPCS().isEmpty()
-                    ? "Empty" : ""));
-            objects.entrySet().stream().forEach((co) -> {
-                System.out.println(co.toString());
-            });
-            System.out.println("-------------------------------------------------");
-        }
+        System.out.println("Zone " + getName() + " contents:");
+        System.out.println("Players: "
+                + (getPlayers().isEmpty() ? "Empty" : ""));
+        LOG.log(Level.INFO, "Players: {0}",
+                (getPlayers().isEmpty() ? "Empty" : ""));
+        getPlayers().stream().forEach((co) -> {
+            System.out.println(co.toString());
+        });
+        System.out.println("NPC's: " + (getNPCS().isEmpty()
+                ? "Empty" : ""));
+        getNPCS().stream().forEach((co) -> {
+            System.out.println(co.toString());
+        });
+        System.out.println("-------------------------------------------------");
     }
 
     @Override
