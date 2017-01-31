@@ -40,7 +40,7 @@ public class SimpleZoneTest extends AbstractSystemTest {
         assertEquals(1, d.getNPCS().size());
         //Create a new zone
         String zoneName = UUID.randomUUID().toString();
-        world.addZone(zoneName);
+        world.addRPZone(zoneName);
         ISimpleRPZone zone = (ISimpleRPZone) world.getZone(zoneName);
         assertEquals(0, zone.getPlayers().size());
         assertEquals(0, zone.getNPCS().size());
@@ -103,7 +103,7 @@ public class SimpleZoneTest extends AbstractSystemTest {
         assertTrue(world.getDefaultZone().has(p1.getID()));
         assertTrue(world.getDefaultZone().has(npc.getID()));
         //Create new zone to move to
-        world.addZone(name);
+        world.addRPZone(name);
         IRPZone zone = world.getZone(name);
         //Move player
         world.changeZone(zone.getID(), p1);

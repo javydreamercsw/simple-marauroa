@@ -206,7 +206,7 @@ public abstract class AbstractSystemTest {
     }
 
     public IRPZone createZone(String test) {
-        WORLD.addZone(test);
+        WORLD.addRPZone(test);
         return WORLD.getZone(test);
     }
 

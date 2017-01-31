@@ -370,7 +370,7 @@ class SimpleServerCLI extends Thread {
             if (world.hasRPZone(zone.trim())) {
                 LOG.log(Level.INFO, "Zone: {0} already exists!", zone);
             } else {
-                world.addZone(zone.trim());
+                world.addRPZone(zone.trim());
                 LOG.log(Level.INFO, "Zone: {0} succesfully created!", zone);
             }
         }

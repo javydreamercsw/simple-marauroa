@@ -57,7 +57,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @param name zone to add
      */
-    void addZone(String name);
+    void addRPZone(String name);
 
     /**
      * Add RPZone
@@ -65,7 +65,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param name zone to add
      * @param description zone description
      */
-    void addZone(String name, String description);
+    void addRPZone(String name, String description);
 
     /**
      * Apply event to target
