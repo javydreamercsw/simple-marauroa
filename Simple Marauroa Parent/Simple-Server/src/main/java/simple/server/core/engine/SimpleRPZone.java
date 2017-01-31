@@ -257,8 +257,6 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         System.out.println("Zone " + getName() + " contents:");
         System.out.println("Players: "
                 + (getPlayers().isEmpty() ? "Empty" : ""));
-        LOG.log(Level.INFO, "Players: {0}",
-                (getPlayers().isEmpty() ? "Empty" : ""));
         getPlayers().stream().forEach((co) -> {
             System.out.println(co.toString());
         });
