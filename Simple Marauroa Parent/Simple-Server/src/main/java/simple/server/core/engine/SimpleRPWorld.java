@@ -50,6 +50,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     private static final Map<String, Map<String, List<RPEventListener>>> MONITORS
             = new HashMap<>();
 
+    //Used by reflection from Marauroa's code. Do not remove!
     public static SimpleRPWorld get() {
         return (SimpleRPWorld) Lookup.getDefault().lookup(IRPWorld.class);
     }
@@ -117,12 +118,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public void addZone(String name) {
-        addZone(name, "");
+    public void addRPZone(String name) {
+        addRPZone(name, "");
     }
 
     @Override
-    public void addZone(String name, String description) {
+    public void addRPZone(String name, String description) {
         if (getZone(name) == null) {
             SimpleRPZone zone = new SimpleRPZone(name);
             if (!description.isEmpty()) {
@@ -361,7 +362,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                             String id = defaultZone.getID().getID();
                             removeRPZone(defaultZone.getID());
                             //Recreate it in our system
-                            addZone(id);
+                            addRPZone(id);
                             IRPZone zone = getZone(id);
                             setDefaultZone(zone);
                         } catch (Exception ex) {
