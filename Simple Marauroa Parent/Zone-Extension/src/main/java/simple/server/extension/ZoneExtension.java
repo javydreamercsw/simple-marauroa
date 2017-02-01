@@ -134,7 +134,7 @@ public class ZoneExtension extends SimpleServerExtension
                 }
             }
             LOG.fine("Adding zone to the world...");
-            world.addZone(zone);
+            world.addRPZone(zone);
             LOG.fine("Scheduling moving player to created zone...");
             Lookup.getDefault().lookup(ITurnNotifier.class).notifyInTurns(10,
                     new DelayedAction(new AbstractAction() {
