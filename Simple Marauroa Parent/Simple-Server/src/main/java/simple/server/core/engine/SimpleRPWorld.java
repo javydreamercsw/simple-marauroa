@@ -572,5 +572,7 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                         });
             }
         }
+        //Everyone is notified about the event, now discard them to avoid duplication.
+        object.clearEvents();
     }
 }
