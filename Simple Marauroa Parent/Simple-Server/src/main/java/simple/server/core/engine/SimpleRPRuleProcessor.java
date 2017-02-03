@@ -214,15 +214,15 @@ public class SimpleRPRuleProcessor extends RPRuleProcessorImpl
      * @return The player, or null if no player with the given name is currently
      * online.
      */
-    public RPEntityInterface getPlayer(String name) {
-        RPEntityInterface player = null;
+    public RPObject getPlayer(String name) {
+        RPObject player = null;
         for (IRPZone zone : Lookup.getDefault()
                 .lookup(IRPWorld.class).getZones()) {
             if (zone instanceof ISimpleRPZone) {
                 ISimpleRPZone sz = (ISimpleRPZone) zone;
                 for (RPEntityInterface o : sz.getPlayers()) {
                     if (o.getName().equals(name)) {
-                        player = o;
+                        player = (RPObject) o;
                         break;
                     }
                 }

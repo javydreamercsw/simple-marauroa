@@ -543,8 +543,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
     }
 
     @Override
-    public RPEntityInterface getPlayer(String name) {
-        return ((SimpleRPRuleProcessor) Lookup.getDefault()
+    public RPObject getPlayer(String name) {
+        return (RPObject) ((SimpleRPRuleProcessor) Lookup.getDefault()
                 .lookup(IRPRuleProcessor.class))
                 .getPlayer(name);
     }
@@ -574,5 +574,19 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
         }
         //Everyone is notified about the event, now discard them to avoid duplication.
         object.clearEvents();
+    }
+
+    @Override
+    public RPObject getNPC(String name) {
+        RPObject result = null;
+        for (IRPZone zone : getZones()) {
+            SimpleRPZone z = (SimpleRPZone) zone;
+            RPObject npc = z.getNPC(name);
+            if (npc != null) {
+                result = npc;
+                break;
+            }
+        }
+        return result;
     }
 }
