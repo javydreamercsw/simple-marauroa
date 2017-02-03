@@ -6,7 +6,6 @@ import java.util.List;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
-import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.entity.api.RPEventListener;
 
 /**
@@ -341,5 +340,13 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param name Name of the player.
      * @return Player or null if not found.
      */
-    public RPEntityInterface getPlayer(String name);
+    public RPObject getPlayer(String name);
+
+    /**
+     * Get a player from the world.
+     *
+     * @param name Name of the player.
+     * @return Player or null if not found.
+     */
+    public RPObject getNPC(String name);
 }
