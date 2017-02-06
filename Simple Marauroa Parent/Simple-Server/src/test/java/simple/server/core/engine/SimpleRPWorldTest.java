@@ -6,8 +6,10 @@ import marauroa.common.game.RPObject;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openide.util.Lookup;
+import simple.common.SizeLimitedArray;
 import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
 import simple.test.AbstractSystemTest;
 import simple.test.TestPlayer;
@@ -247,11 +249,15 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         public TextEventListener() {
         }
         private int count = 0;
+        private final SizeLimitedArray<String> queue = new SizeLimitedArray<>();
 
         @Override
         public void onRPEvent(TextEvent event) {
-            System.out.println(event);
-            count++;
+            if (!queue.contains(event.get(SimpleRPEvent.EVENT_ID))) {
+                queue.add(event.get(SimpleRPEvent.EVENT_ID));
+                System.out.println(event);
+                count++;
+            }
         }
 
         /**
