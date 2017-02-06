@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.CRC;
 import marauroa.common.Configuration;
+import marauroa.common.game.Perception;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPObjectInvalidException;
 import marauroa.common.net.message.TransferContent;
@@ -278,5 +279,13 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
     @Override
     public Collection<RPObject> getZoneContents() {
         return objects.values();
+    }
+
+    @Override
+    public Perception getPerception(RPObject player, byte type) {
+        Perception p = super.getPerception(player, type);
+        //Everyone is notified about the event, now discard them to avoid duplication.
+        player.clearEvents();
+        return p;
     }
 }

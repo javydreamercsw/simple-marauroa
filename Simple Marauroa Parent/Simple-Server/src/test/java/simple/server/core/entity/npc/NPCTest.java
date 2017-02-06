@@ -10,11 +10,13 @@ import marauroa.common.game.RPObject;
 import org.junit.Test;
 import org.openide.util.Lookup;
 import simple.common.NotificationType;
+import simple.common.SizeLimitedArray;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.entity.npc.action.NPCAction;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
 import simple.test.AbstractSystemTest;
 
@@ -107,17 +109,21 @@ public class NPCTest extends AbstractSystemTest {
 
         public RPEventListenerImpl() {
         }
+        private final SizeLimitedArray<String> queue = new SizeLimitedArray<>();
         private int count = 0;
 
         @Override
         public void onRPEvent(RPEvent event) {
-            LOG.info(event.toString());
-            if (event instanceof TextEvent) {
+            if (!queue.contains(event.get(SimpleRPEvent.EVENT_ID))) {
+                queue.add(event.get(SimpleRPEvent.EVENT_ID));
+                LOG.info(event.toString());
+                if (event instanceof TextEvent) {
 
-            } else if (event instanceof PrivateTextEvent) {
+                } else if (event instanceof PrivateTextEvent) {
 
+                }
+                count++;
             }
-            count++;
         }
 
         public int getCount() {
