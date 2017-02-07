@@ -67,6 +67,7 @@ public class DimensionExtension extends SimpleServerExtension {
         }
     }
 
+    @Override
     public String getName() {
         return "Dimension Extension";
     }
