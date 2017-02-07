@@ -20,7 +20,8 @@ public class CardCellRenderer extends JLabel implements ListCellRenderer {
     private Font uhOhFont;
 
     @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList list, Object value,
+            int index, boolean isSelected, boolean cellHasFocus) {
         if (isSelected) {
             setBackground(list.getSelectionBackground());
             setForeground(list.getSelectionForeground());
@@ -29,17 +30,22 @@ public class CardCellRenderer extends JLabel implements ListCellRenderer {
             setForeground(list.getForeground());
         }
         IMarauroaCard card = (IMarauroaCard) value;
-        
+
         setIcon(card.getImages().get(0));
         if (getIcon() != null) {
             if (index != list.getModel().getSize() - 1) {
-                setIcon(new ImageIcon(createImage(new FilteredImageSource(((ImageIcon) getIcon()).getImage().getSource(),
-                        new CropImageFilter(0, 0, getIcon().getIconWidth(), 20)))));
+                setIcon(new ImageIcon(createImage(
+                        new FilteredImageSource(((ImageIcon) getIcon())
+                                .getImage().getSource(),
+                                new CropImageFilter(0, 0, getIcon().getIconWidth(),
+                                        20)))));
             }
             setFont(list.getFont());
         } else {
             setUhOhText(MessageFormat.format(
-                    ResourceBundle.getBundle("simple/marauroa/client/extension/cardgame/Bundle").getString("no.image.available"), new Object[]{String.valueOf(card.toString())}),
+                    ResourceBundle.getBundle("simple/marauroa/client/extension/"
+                            + "cardgame/Bundle").getString("no.image.available"),
+                    new Object[]{String.valueOf(card.toString())}),
                     list.getFont());
         }
         return this;

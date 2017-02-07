@@ -19,10 +19,10 @@ public class CardGameExtension extends SimpleServerExtension {
      *
      */
     public static final String DECKS = "decks",
-    /**
-     * Page collection
-     */
-    COLLECTION = "page_collection";
+            /**
+             * Page collection
+             */
+            COLLECTION = "page_collection";
 
     @Override
     public void modifyClientObjectDefinition(RPClass player) {
@@ -33,7 +33,8 @@ public class CardGameExtension extends SimpleServerExtension {
     }
 
     @Override
-    public void clientObjectUpdate(ClientObjectInterface client) throws SimpleException {
+    public void clientObjectUpdate(ClientObjectInterface client)
+            throws SimpleException {
         if (client instanceof RPObject) {
             RPObject rpObject = (RPObject) client;
             if (!rpObject.hasSlot(DECKS)) {
@@ -43,7 +44,8 @@ public class CardGameExtension extends SimpleServerExtension {
                 rpObject.addSlot(COLLECTION);
             }
         } else {
-            throw new SimpleException("Client object not an instance of RPObject! (" + client + ")");
+            throw new SimpleException("Client object not an instance of R"
+                    + "PObject! (" + client + ")");
         }
     }
 
