@@ -59,12 +59,13 @@ public class PublicChatAction implements ActionProvider {
             try {
                 String text = action.get(TEXT);
                 LOG.log(Level.FINE, "Processing text event: {0}", text);
+                TextEvent event = new TextEvent(text, Tool.extractName(rpo));
                 IRPZone zone = Lookup.getDefault().lookup(IRPWorld.class)
                         .getZone(rpo.get(Entity.ZONE_ID));
                 if (zone instanceof ISimpleRPZone) {
                     ISimpleRPZone sz = (ISimpleRPZone) zone;
                     Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                            sz, new TextEvent(text, Tool.extractName(rpo)));
+                            sz, event);
                 }
                 if ("true".equals(Configuration.getConfiguration()
                         .get("log_chat", "false"))) {

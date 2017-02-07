@@ -13,9 +13,12 @@ import marauroa.common.game.Perception;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPObjectInvalidException;
 import marauroa.common.net.message.TransferContent;
+import marauroa.server.game.container.PlayerEntry;
+import marauroa.server.game.container.PlayerEntryContainer;
 import marauroa.server.game.rp.MarauroaRPZone;
 import org.openide.util.Lookup;
 import simple.common.NotificationType;
+import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
 import simple.server.core.event.PrivateTextEvent;
@@ -286,6 +289,18 @@ public class SimpleRPZone extends MarauroaRPZone implements ISimpleRPZone {
         Perception p = super.getPerception(player, type);
         //Everyone is notified about the event, now discard them to avoid duplication.
         player.clearEvents();
+        PlayerEntryContainer container
+                = PlayerEntryContainer.getContainer();
+        if (player.has(Entity.CLIENT_ID)) {
+            PlayerEntry entry
+                    = container.get(player.getInt(Entity.CLIENT_ID));
+            if (entry != null && entry.object != null) {
+                entry.object.clearEvents();
+            } else {
+                LOG.log(Level.WARNING,
+                        "Invalid Player Entry: {0}", entry);
+            }
+        }
         return p;
     }
 }

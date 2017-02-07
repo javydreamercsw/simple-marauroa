@@ -17,6 +17,8 @@ import marauroa.common.game.IRPZone;
 import marauroa.common.game.IRPZone.ID;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
+import marauroa.server.game.container.PlayerEntry;
+import marauroa.server.game.container.PlayerEntryContainer;
 import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.rp.IRPRuleProcessor;
@@ -163,6 +165,22 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 }
             }
         }
+        //Update the players
+        PlayerEntryContainer container
+                = PlayerEntryContainer.getContainer();
+        Iterator<PlayerEntry> it = container.iterator();
+        while (it.hasNext()) {
+            PlayerEntry entry = it.next();
+            if (entry.object.has(Entity.NAME)
+                    && Tool.extractName(entry.object).equals(target)) {
+                LOG.log(Level.FINE, "Applying event {0} to:\n {1}",
+                        new Object[]{event, entry.object});
+                entry.object.addEvent(event);
+                Lookup.getDefault().lookup(IRPWorld.class).modify(entry.object);
+                result = true;
+                break;
+            }
+        }
         if (!result) {
             LOG.log(Level.FINE, "Unable to find player:{0}!", target);
         }
@@ -181,12 +199,12 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
 
     @Override
     public boolean applyPublicEvent(ISimpleRPZone zone, RPEvent event, int delay) {
-        ArrayList<IRPZone.ID> availableZones = new ArrayList<>();
+        ArrayList<String> availableZones = new ArrayList<>();
         if (zone != null) {
-            availableZones.add(zone.getID());
+            availableZones.add(zone.getID().getID());
         } else {
             getZones().forEach((z) -> {
-                availableZones.add(z.getID());
+                availableZones.add(z.getID().getID());
             });
         }
         getZones().forEach((z) -> {
@@ -205,6 +223,19 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
                 }
             }
         });
+        //Update the players
+        PlayerEntryContainer container
+                = PlayerEntryContainer.getContainer();
+        Iterator<PlayerEntry> it = container.iterator();
+        while (it.hasNext()) {
+            PlayerEntry entry = it.next();
+            if (availableZones.contains(entry.object.get(Entity.ZONE_ID))) {
+                LOG.log(Level.FINE, "Applying event {0} to:\n {1}",
+                        new Object[]{event, entry.object});
+                entry.object.addEvent(event);
+                Lookup.getDefault().lookup(IRPWorld.class).modify(entry.object);
+            }
+        }
         return true;
     }
 
