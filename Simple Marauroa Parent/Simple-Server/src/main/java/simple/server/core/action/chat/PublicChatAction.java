@@ -1,6 +1,7 @@
 package simple.server.core.action.chat;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
@@ -40,6 +41,18 @@ public class PublicChatAction implements ActionProvider {
             RPEntityInterface player = new RPEntity(rpo);
             LoginListener ll = Lookup.getDefault().lookup(LoginListener.class);
             if (ll != null && ll.checkIsGaggedAndInformPlayer(player)) {
+                long millis = ll.getTimeRemaining(player);
+                String remindier = String.format("%02d:%02d:%02d",
+                        TimeUnit.MILLISECONDS.toHours(millis),
+                        TimeUnit.MILLISECONDS.toMinutes(millis)
+                        - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS
+                                .toHours(millis)), // The change is in this line
+                        TimeUnit.MILLISECONDS.toSeconds(millis)
+                        - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
+                                .toMinutes(millis)));
+                rpo.addEvent(new TextEvent("You are gagged for "
+                        + remindier,
+                        Tool.extractName(rpo)));
                 return;
             }
         }
