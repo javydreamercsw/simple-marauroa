@@ -45,11 +45,9 @@ public class PublicChatAction implements ActionProvider {
                 String remindier = String.format("%02d:%02d:%02d",
                         TimeUnit.MILLISECONDS.toHours(millis),
                         TimeUnit.MILLISECONDS.toMinutes(millis)
-                        - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS
-                                .toHours(millis)), // The change is in this line
+                        % TimeUnit.HOURS.toMinutes(1),
                         TimeUnit.MILLISECONDS.toSeconds(millis)
-                        - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
-                                .toMinutes(millis)));
+                        % TimeUnit.MINUTES.toSeconds(1));
                 rpo.addEvent(new TextEvent("You are gagged for "
                         + remindier,
                         Tool.extractName(rpo)));
