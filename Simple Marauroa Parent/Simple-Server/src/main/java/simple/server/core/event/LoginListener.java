@@ -16,7 +16,7 @@ import simple.server.core.entity.RPEntityInterface;
 public interface LoginListener {
 
     /**
-     * Is called when the turn number is reached.
+     * Is called when the player logs in.
      *
      * @param player the player who has logged in
      */
