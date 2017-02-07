@@ -51,6 +51,7 @@ public class PublicChatAction implements ActionProvider {
                 rpo.addEvent(new TextEvent("You are gagged for "
                         + remindier,
                         Tool.extractName(rpo)));
+                Lookup.getDefault().lookup(IRPWorld.class).modify(rpo);
                 return;
             }
         }
