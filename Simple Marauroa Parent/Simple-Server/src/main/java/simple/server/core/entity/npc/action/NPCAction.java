@@ -1,8 +1,8 @@
 package simple.server.core.entity.npc.action;
 
-import simple.server.core.entity.npc.NPC;
 import java.util.List;
 import marauroa.common.game.RPEvent;
+import simple.server.core.entity.npc.NPC;
 
 /**
  * This represents an action a NPC responds to.

@@ -67,6 +67,7 @@ public class RPCard extends RPEntity implements ICard {
      *
      * @param class0
      */
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public RPCard(Class class0) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);

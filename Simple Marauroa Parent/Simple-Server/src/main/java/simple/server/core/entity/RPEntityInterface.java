@@ -1,7 +1,6 @@
 package simple.server.core.entity;
 
 import marauroa.common.game.RPEvent;
-import simple.common.Constants;
 import simple.common.NotificationType;
 import simple.server.core.engine.ISimpleRPZone;
 
@@ -9,7 +8,7 @@ import simple.server.core.engine.ISimpleRPZone;
  *
  * @author Javier A. Ortiz Bultron <javier.ortiz.78@gmail.com>
  */
-public interface RPEntityInterface extends Constants {
+public interface RPEntityInterface {
 
     /**
      * Called when this object is added to a zone.
@@ -57,16 +56,6 @@ public interface RPEntityInterface extends Constants {
      * @return title
      */
     public String getTitle();
-
-    /**
-     * @param adminLevel the adminLevel to set
-     */
-    void setAdminLevel(int adminLevel);
-
-    /**
-     * @return the adminLevel
-     */
-    int getAdminLevel();
 
     /**
      * Sends a message that only this player can read.
@@ -127,17 +116,6 @@ public interface RPEntityInterface extends Constants {
     public void destroy();
 
     /**
-     * Check if another player should be notified that this player is away. This
-     * assumes the player has already been checked for away. Players will be
-     * reminded once an hour.
-     *
-     * @param name The name of the other player.
-     *
-     * @return <code>true</code> if the player should be notified.
-     */
-    boolean isAwayNotifyNeeded(String name);
-
-    /**
      * Is the client disconnected?
      *
      * @return true if disconnected
@@ -152,42 +130,9 @@ public interface RPEntityInterface extends Constants {
     boolean isInvisibleToCreatures();
 
     /**
-     * Notifies this player that the given player has logged out.
-     *
-     * @param who The name of the player who has logged out.
-     */
-    void notifyOffline(String who);
-
-    /**
-     * Notifies this player that the given player has logged in.
-     *
-     * @param who The name of the player who has logged in.
-     */
-    void notifyOnline(String who);
-
-    /**
-     * Clear out all recorded away responses.
-     */
-    void resetAwayReplies();
-
-    /**
-     * Set the away message.
-     *
-     * @param message An away message, or <code>null</code>.
-     */
-    void setAwayMessage(final String message);
-
-    /**
      * @param disconnected the disconnected to set
      */
     void setDisconnected(boolean disconnected);
-
-    /**
-     * Set the grumpy message.
-     *
-     * @param message A grumpy message, or <code>null</code>.
-     */
-    void setGrumpyMessage(final String message);
 
     /**
      * Set whether this player is invisible to creatures.
@@ -216,44 +161,6 @@ public interface RPEntityInterface extends Constants {
      * @param lastPrivateChatterName
      */
     void setLastPrivateChatter(String lastPrivateChatterName);
-
-    /**
-     * Add a player ignore entry.
-     *
-     * @param name The player name.
-     * @param duration The ignore duration (in minutes), or <code>0</code> for
-     * infinite.
-     * @param reply The reply.
-     *
-     * @return <code>true</code> if value changed, <code>false</code> if there
-     * was a problem.
-     */
-    boolean addIgnore(String name, int duration, String reply);
-
-    /**
-     * Get the away message.
-     *
-     * @return The away message, or <code>null</code> if unset.
-     */
-    String getAwayMessage();
-
-    /**
-     * Get the grumpy message.
-     *
-     * @return The grumpy message, or <code>null</code> if unset.
-     */
-    String getGrumpyMessage();
-
-    /**
-     * Determine if a player is on the ignore list and return their reply
-     * message.
-     *
-     * @param name The player name.
-     *
-     * @return The custom reply message (including an empty string), or
-     * <code>null</code> if not ignoring.
-     */
-    String getIgnore(String name);
 
     /**
      * Get a keyed string value on a named slot.

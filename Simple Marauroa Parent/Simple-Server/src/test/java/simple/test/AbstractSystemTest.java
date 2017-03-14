@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPObject;
 import org.junit.After;
-import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.openide.util.Lookup;
@@ -32,13 +32,14 @@ import simple.server.application.db.IDatabase;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.SimpleRPWorld;
 import simple.server.core.entity.RPEntity;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.entity.clientobject.ClientObject;
 import simple.server.core.tool.Tool;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
+ * @author Javier A. Ortiz BultrÃ³n javier.ortiz.78@gmail.com
  */
 public abstract class AbstractSystemTest {
 
@@ -50,18 +51,12 @@ public abstract class AbstractSystemTest {
 
     @BeforeClass
     public static void setup() throws Exception {
-        try {
-            if (!DB.isInitialized()) {
-                LOG.log(Level.INFO, "Initializing test database environment...");
-                checkINIFile();
-                DB.initialize();
-            }
-            WORLD.onInit();
+        if (!DB.isInitialized()) {
+            LOG.log(Level.INFO, "Initializing test database environment...");
+            checkINIFile();
+            DB.initialize();
         }
-        catch (SQLException ex) {
-            LOG.log(Level.SEVERE, null, ex);
-            fail();
-        }
+        WORLD.onInit();
     }
 
     private static void checkINIFile() {
@@ -72,7 +67,7 @@ public abstract class AbstractSystemTest {
                 INI.deleteOnExit();
                 List<String> lines = Arrays.asList(
                         "database_implementation=simple.server.application.db.SimpleDatabase",
-                        "factory_implementation=simple.server.core.engine.SimpleRPObjectFactory",
+                        "factory_implementation=marauroa.server.game.rp.RPObjectFactory",
                         "world=simple.server.core.engine.SimpleRPWorld",
                         "ruleprocessor=simple.server.core.engine.SimpleRPRuleProcessor",
                         "client_object=simple.server.core.entity.clientobject.ClientObject",
@@ -103,8 +98,7 @@ public abstract class AbstractSystemTest {
                         "server_welcome = Welcome to the Unit Tests!");
                 Path file = Paths.get(INI.getAbsolutePath());
                 Files.write(file, lines, Charset.forName("UTF-8"));
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
@@ -138,8 +132,7 @@ public abstract class AbstractSystemTest {
             WORLD.emptyZone(zone);
             try {
                 WORLD.removeRPZone(zone.getID());
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         }
@@ -157,16 +150,13 @@ public abstract class AbstractSystemTest {
                 input = new FileInputStream(INI);
                 // load a properties file
                 prop.load(input);
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.SEVERE, null, ex);
-            }
-            finally {
+            } finally {
                 if (input != null) {
                     try {
                         input.close();
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         LOG.log(Level.SEVERE, null, e);
                     }
                 }
@@ -198,12 +188,11 @@ public abstract class AbstractSystemTest {
                                 prop.getProperty("jdbc_class"));
                         break;
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
-        }
-        catch (ClassNotFoundException | SQLException | IOException ex) {
+            WORLD.onInit();
+        } catch (ClassNotFoundException | SQLException | IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
@@ -217,17 +206,31 @@ public abstract class AbstractSystemTest {
     }
 
     public IRPZone createZone(String test) {
-        WORLD.addZone(test);
+        WORLD.addRPZone(test);
         return WORLD.getZone(test);
     }
 
+    public static TestPlayer getTestPlayer(String name, boolean add) {
+        return getTestPlayer(name, null, add);
+    }
+
     public static TestPlayer getTestPlayer(String name) {
+        return getTestPlayer(name, null);
+    }
+
+    public static TestPlayer getTestPlayer(String name,
+            Map<String, RPEventListener> listeners) {
+        return getTestPlayer(name, listeners, true);
+    }
+
+    public static TestPlayer getTestPlayer(String name,
+            Map<String, RPEventListener> listeners, boolean add) {
         System.out.println("Setting up test player " + name);
         RPObject obj = new RPObject();
-        obj.setRPClass("test player");
+        obj.setRPClass(TestPlayer.DEFAULT_RP_CLASSNAME);
         obj.put(ClientObject.KEY, "AbCdEfG");
         obj.put(RPEntity.NAME, name);
-        TestPlayer player = new TestPlayer(obj);
+        TestPlayer player = new TestPlayer(obj, listeners, add);
         System.out.println("Done!");
         return player;
     }

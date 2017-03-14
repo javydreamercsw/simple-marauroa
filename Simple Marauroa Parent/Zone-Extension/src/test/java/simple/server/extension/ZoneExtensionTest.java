@@ -1,8 +1,7 @@
 package simple.server.extension;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -14,13 +13,13 @@ import marauroa.common.game.RPObject;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openide.util.Lookup;
+import simple.common.SizeLimitedArray;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.entity.api.RPEventListener;
-import simple.server.core.event.ITurnNotifier;
 import simple.server.core.event.PrivateTextEvent;
-import simple.server.core.event.TurnListener;
+import simple.server.core.event.SimpleRPEvent;
 import simple.test.AbstractSystemTest;
 import simple.test.TestPlayer;
 
@@ -32,6 +31,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
 
     private static final Logger LOG
             = Logger.getLogger(ZoneExtensionTest.class.getName());
+    private final IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
 
     /**
      * Test of onRPObjectAddToZone method, of class ZoneExtension.
@@ -39,21 +39,11 @@ public class ZoneExtensionTest extends AbstractSystemTest {
     @Test
     public void testOnRPObjectAddToZone() {
         System.out.println("onRPObjectAddToZone");
-        int initial = getDelayedActions();
-        new TestPlayer(new RPObject());
-        assertEquals(initial + 3, getDelayedActions());
-    }
-
-    private int getDelayedActions() {
-        int result = 0;
-        for (Entry<Integer, Set<TurnListener>> entry
-                : Lookup.getDefault().lookup(ITurnNotifier.class)
-                        .getEventListForDebugging().entrySet()) {
-            LOG.log(Level.INFO, "{0}:{1}",
-                    new Object[]{entry.getKey(), entry.getValue().size()});
-            result += entry.getValue().size();
-        }
-        return result;
+        RPEventListenerImpl listener = new RPEventListenerImpl();
+        HashMap<String, RPEventListener> listeners = new HashMap<>();
+        listeners.put(ZoneEvent.RPCLASS_NAME, listener);
+        getTestPlayer(UUID.randomUUID().toString(), listeners);
+        assertEquals(2, listener.getCount());
     }
 
     /**
@@ -65,7 +55,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         TestPlayer player = new TestPlayer(new RPObject());
         RPAction action = new RPAction();
         RPEventListenerImpl listener = new RPEventListenerImpl();
-        player.registerListener(ZoneEvent.RPCLASS_NAME,
+        world.registerMonitor(player, ZoneEvent.RPCLASS_NAME,
                 listener);
         ZoneExtension instance = new ZoneExtension();
         action.put(ZoneExtension.OPERATION, ZoneEvent.LISTPLAYERS);
@@ -94,7 +84,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
             action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
             ZoneExtension instance = new ZoneExtension();
             //Create room
-            player.registerListener(ZoneEvent.RPCLASS_NAME,
+            world.registerMonitor(player, ZoneEvent.RPCLASS_NAME,
                     listener);
             instance.onAction(player, action);
             assertEquals(0, Lookup.getDefault().lookup(IRPWorld.class)
@@ -127,7 +117,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         TestPlayer player = new TestPlayer(new RPObject());
         RPAction action = new RPAction();
         RPEventListenerImpl listener = new RPEventListenerImpl();
-        player.registerListener(ZoneEvent.RPCLASS_NAME,
+        world.registerMonitor(player, ZoneEvent.RPCLASS_NAME,
                 listener);
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
         action.put(ZoneExtension.OPERATION, ZoneEvent.LISTZONES);
@@ -160,7 +150,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         TestPlayer player = new TestPlayer(new RPObject());
         RPAction action = new RPAction();
         RPEventListenerImpl listener = new RPEventListenerImpl();
-        player.registerListener(PrivateTextEvent.RPCLASS_NAME,
+        world.registerMonitor(player, PrivateTextEvent.RPCLASS_NAME,
                 listener);
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
         String room = UUID.randomUUID().toString();
@@ -229,7 +219,7 @@ public class ZoneExtensionTest extends AbstractSystemTest {
         TestPlayer player = new TestPlayer(new RPObject());
         RPAction action = new RPAction();
         RPEventListenerImpl listener = new RPEventListenerImpl();
-        player.registerListener(PrivateTextEvent.RPCLASS_NAME,
+        world.registerMonitor(player, PrivateTextEvent.RPCLASS_NAME,
                 listener);
         action.put(WellKnownActionConstant.TYPE, ZoneEvent.RPCLASS_NAME);
         action.put(ZoneExtension.OPERATION, ZoneEvent.ADD);
@@ -265,39 +255,44 @@ public class ZoneExtensionTest extends AbstractSystemTest {
                 .getZone(room)).isLocked());
         assertTrue(((ISimpleRPZone) Lookup.getDefault().lookup(IRPWorld.class)
                 .getZone(room)).isPassword(pw));
-        assertEquals(3, listener.getCount());
+        assertEquals(4, listener.getCount());
     }
 
     private class RPEventListenerImpl implements RPEventListener {
 
         private final Logger LOG
                 = Logger.getLogger(RPEventListenerImpl.class.getSimpleName());
+        private final SizeLimitedArray<String> queue = new SizeLimitedArray<>();
 
         public RPEventListenerImpl() {
         }
         private int count = 0;
 
+        @Override
         public void onRPEvent(RPEvent event) {
-            LOG.info(event.toString());
-            if (event instanceof ZoneEvent) {
-                switch (event.getInt(ZoneEvent.ACTION)) {
-                    case ZoneEvent.LISTZONES:
-                        List<IRPZone> zones
-                                = Lookup.getDefault().lookup(IRPWorld.class)
-                                        .getZones();
-                        for (IRPZone zone : zones) {
-                            LOG.info(zone.getID().getID());
-                        }
-                        assertTrue(
-                                new StringTokenizer(event.get(ZoneEvent.FIELD),
-                                        event.get(ZoneExtension.SEPARATOR))
-                                        .countTokens() <= zones.size());
-                        break;
-                    case ZoneEvent.ADD:
-                        break;
+            if (!queue.contains(event.get(SimpleRPEvent.EVENT_ID))) {
+                queue.add(event.get(SimpleRPEvent.EVENT_ID));
+                LOG.info(event.toString());
+                if (event instanceof ZoneEvent) {
+                    switch (event.getInt(ZoneEvent.ACTION)) {
+                        case ZoneEvent.LISTZONES:
+                            List<IRPZone> zones
+                                    = Lookup.getDefault().lookup(IRPWorld.class)
+                                            .getZones();
+                            zones.forEach((zone) -> {
+                                LOG.info(zone.getID().getID());
+                            });
+                            assertTrue(
+                                    new StringTokenizer(event.get(ZoneEvent.FIELD),
+                                            event.get(ZoneExtension.SEPARATOR))
+                                            .countTokens() <= zones.size());
+                            break;
+                        case ZoneEvent.ADD:
+                            break;
+                    }
                 }
+                count++;
             }
-            count++;
         }
 
         public int getCount() {

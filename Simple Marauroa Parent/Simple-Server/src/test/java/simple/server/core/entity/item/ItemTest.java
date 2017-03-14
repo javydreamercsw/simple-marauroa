@@ -8,7 +8,7 @@ import simple.test.AbstractSystemTest;
 
 /**
  *
- * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
+ * @author Javier A. Ortiz BultrÃ³n javier.ortiz.78@gmail.com
  */
 public class ItemTest extends AbstractSystemTest {
 

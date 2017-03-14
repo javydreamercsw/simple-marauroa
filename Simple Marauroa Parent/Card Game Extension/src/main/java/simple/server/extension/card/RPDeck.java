@@ -60,12 +60,13 @@ public class RPDeck extends RPEntity implements IDeck {
      * For randomization purposes
      */
     protected Random rand = new Random();
-    private static final Logger LOG =
-            Logger.getLogger(RPDeck.class.getSimpleName());
+    private static final Logger LOG
+            = Logger.getLogger(RPDeck.class.getSimpleName());
 
     public RPDeck() {
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public RPDeck(final String name) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
@@ -73,18 +74,19 @@ public class RPDeck extends RPEntity implements IDeck {
         update();
     }
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public RPDeck(final String name, final List<RPCard> cards,
             final List<RPCard> hand) {
         setRPClass(CLASS_NAME);
         put("type", CLASS_NAME);
         put("name", name);
         update();
-        for (RPCard card : hand) {
+        hand.forEach((card) -> {
             addToHand(card);
-        }
-        for (RPCard card : cards) {
+        });
+        cards.forEach((card) -> {
             addToDeck(card);
-        }
+        });
     }
 
     @Override
@@ -117,17 +119,22 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     private void increaseRecord(final String type) {
-        if (type.equals(LOSES)) {
-            put(RECORD, type,
-                    String.valueOf(getLoses() + 1));
-        } else if (type.equals(WINS)) {
-            put(RECORD, type,
-                    String.valueOf(getWins() + 1));
-        } else if (type.equals(DRAWS)) {
-            put(RECORD, type,
-                    String.valueOf(getDraws() + 1));
-        } else {
-            throw new RuntimeException("Tried to add an invalid record attribute: " + type);
+        switch (type) {
+            case LOSES:
+                put(RECORD, type,
+                        String.valueOf(getLoses() + 1));
+                break;
+            case WINS:
+                put(RECORD, type,
+                        String.valueOf(getWins() + 1));
+                break;
+            case DRAWS:
+                put(RECORD, type,
+                        String.valueOf(getDraws() + 1));
+                break;
+            default:
+                throw new RuntimeException("Tried to add an invalid "
+                        + "record attribute: " + type);
         }
     }
 
@@ -230,24 +237,27 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     public List<ICard> getHand() {
-        ArrayList<ICard> cards = new ArrayList<ICard>();
-        for (Iterator<RPObject> it = getSlot(RPDeck.HAND).iterator(); it.hasNext();) {
+        ArrayList<ICard> cards = new ArrayList<>();
+        for (Iterator<RPObject> it = getSlot(RPDeck.HAND).iterator();
+                it.hasNext();) {
             cards.add((RPCard) it.next());
         }
         return cards;
     }
 
     protected List<ICard> getDeck() {
-        ArrayList<ICard> cards = new ArrayList<ICard>();
-        for (Iterator<RPObject> it = getSlot(RPDeck.PAGES).iterator(); it.hasNext();) {
+        ArrayList<ICard> cards = new ArrayList<>();
+        for (Iterator<RPObject> it = getSlot(RPDeck.PAGES).iterator();
+                it.hasNext();) {
             cards.add((RPCard) it.next());
         }
         return cards;
     }
 
     protected List<ICard> getDiscardPile() {
-        ArrayList<ICard> cards = new ArrayList<ICard>();
-        for (Iterator<RPObject> it = getSlot(RPDeck.DISCARD_PILE).iterator(); it.hasNext();) {
+        ArrayList<ICard> cards = new ArrayList<>();
+        for (Iterator<RPObject> it = getSlot(RPDeck.DISCARD_PILE).iterator();
+                it.hasNext();) {
             cards.add((RPCard) it.next());
         }
         return cards;
@@ -255,25 +265,25 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public List<ICard> getCards() {
-        ArrayList<ICard> cards = new ArrayList<ICard>();
+        ArrayList<ICard> cards = new ArrayList<>();
         cards.addAll(getDeck());
         return cards;
     }
 
     @Override
     public List<ICard> getUsedCards() {
-        ArrayList<ICard> cards = new ArrayList<ICard>();
+        ArrayList<ICard> cards = new ArrayList<>();
         cards.addAll(getDiscardPile());
         return cards;
     }
 
     @Override
-    public List<ICard> ditch(final String slot, 
-    final Class<? extends ICardType> type, final boolean random, 
-    final int amount) {
-        ArrayList<ICard> ditched = new ArrayList<ICard>();
+    public List<ICard> ditch(final String slot,
+            final Class<? extends ICardType> type, final boolean random,
+            final int amount) {
+        ArrayList<ICard> ditched = new ArrayList<>();
         if (random) {
-            ArrayList<Integer> indices = new ArrayList<Integer>();
+            ArrayList<Integer> indices = new ArrayList<>();
             //Build a list of indices of this type
             int index = 0;
             for (final Iterator it = getSlot(slot).iterator(); it.hasNext();) {
@@ -343,8 +353,9 @@ public class RPDeck extends RPEntity implements IDeck {
     }
 
     @Override
-    public List<ICard> ditch(final String slot, final int amount, final boolean random) {
-        ArrayList<ICard> ditched = new ArrayList<ICard>();
+    public List<ICard> ditch(final String slot, final int amount,
+            final boolean random) {
+        ArrayList<ICard> ditched = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             ditched.add(ditch(slot, random));
         }
@@ -367,11 +378,13 @@ public class RPDeck extends RPEntity implements IDeck {
     public ICard ditch(final String slot, final boolean random) {
         RPCard ditched = null;
         if (slot.equals(PAGES) || slot.equals(HAND)) {
-            int index_to_ditch = (random ? rand.nextInt(getSlot(slot).size()) : 0), i = 0;
+            int index_to_ditch
+                    = (random ? rand.nextInt(getSlot(slot).size()) : 0), i = 0;
             if (index_to_ditch == 0) {
                 ditched = (RPCard) getSlot(slot).getFirst();
             } else {
-                for (Iterator<RPObject> it = getSlot(slot).iterator(); it.hasNext();) {
+                for (Iterator<RPObject> it = getSlot(slot).iterator();
+                        it.hasNext();) {
                     RPCard card = (RPCard) it.next();
                     if (i == index_to_ditch) {
                         ditched = card;
@@ -389,7 +402,7 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public List<ICard> ditch(final String slot, final int amount) {
-        ArrayList<ICard> ditched = new ArrayList<ICard>();
+        ArrayList<ICard> ditched = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             ditched.add(ditch(slot));
         }
@@ -405,7 +418,8 @@ public class RPDeck extends RPEntity implements IDeck {
     public ICard draw(final Class<? extends ICardType> type) {
         for (Iterator<RPObject> it = getSlot(PAGES).iterator(); it.hasNext();) {
             RPCard card = (RPCard) it.next();
-            if (card.getClass().isInstance(type) || type.isAssignableFrom(card.getClass())) {
+            if (card.getClass().isInstance(type)
+                    || type.isAssignableFrom(card.getClass())) {
                 getSlot(PAGES).remove(card.getID());
                 addToHand(card);
                 return card;
@@ -461,7 +475,7 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public List<ICard> draw(final int amount, final boolean random) {
-        ArrayList<ICard> drawn = new ArrayList<ICard>();
+        ArrayList<ICard> drawn = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             drawn.add(draw(random));
         }
@@ -470,7 +484,7 @@ public class RPDeck extends RPEntity implements IDeck {
 
     @Override
     public List<ICard> draw(final int amount) {
-        ArrayList<ICard> drawn = new ArrayList<ICard>();
+        ArrayList<ICard> drawn = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             drawn.add(draw());
         }
@@ -482,9 +496,9 @@ public class RPDeck extends RPEntity implements IDeck {
         List<ICard> deckCards = getDeck();
         java.util.Collections.shuffle(deckCards);
         getSlot(PAGES).clear();
-        for (ICard card : deckCards) {
+        deckCards.forEach((card) -> {
             getSlot(PAGES).add((RPCard) card);
-        }
+        });
     }
 
     @Override
@@ -516,9 +530,9 @@ public class RPDeck extends RPEntity implements IDeck {
             java.util.Collections.sort(handCards, comp);
         }
         getSlot(HAND).clear();
-        for (ICard card : handCards) {
+        handCards.forEach((card) -> {
             getSlot(HAND).add((RPCard) card);
-        }
+        });
     }
 
     @Override

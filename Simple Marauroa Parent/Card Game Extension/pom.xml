@@ -4,10 +4,9 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.07-SNAPSHOT</version>
+        <version>0.03.00-SNAPSHOT</version>
     </parent>
     <artifactId>Card-Game-Extension</artifactId>
-    <version>0.02.07-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Card Game Extension</name>
@@ -38,12 +37,16 @@
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa-Simple-Server</artifactId>
-            <version>0.02.07-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Card-Game-Interface</artifactId>
-            <version>0.02.07-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>

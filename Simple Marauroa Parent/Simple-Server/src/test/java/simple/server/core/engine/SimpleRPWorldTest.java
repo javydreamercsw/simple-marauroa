@@ -6,9 +6,10 @@ import marauroa.common.game.RPObject;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openide.util.Lookup;
+import simple.common.SizeLimitedArray;
 import simple.server.core.entity.api.RPEventListener;
-import simple.server.core.entity.npc.NPC;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
 import simple.test.AbstractSystemTest;
 import simple.test.TestPlayer;
@@ -29,7 +30,7 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
                 .lookup(IRPWorld.class);
         String name = UUID.randomUUID().toString();
         assertFalse(instance.hasRPZone(name));
-        instance.addZone(name);
+        instance.addRPZone(name);
         instance.setDefaultZone(instance.getZone(name));
         assertEquals(name, instance.getDefaultZone().getID().getID());
     }
@@ -53,7 +54,7 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         SimpleRPWorld instance = (SimpleRPWorld) Lookup.getDefault()
                 .lookup(IRPWorld.class);
         TestPlayer player = new TestPlayer(new RPObject());
-        instance.addZone(name);
+        instance.addRPZone(name);
         instance.changeZone(name, player);//Move it to new zone
         instance.deleteIfEmpty(name);
         assertTrue(instance.hasRPZone(name));
@@ -78,20 +79,26 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
                 .lookup(IRPWorld.class);
         StringBuilder result = instance.listZones(separator);
         System.out.println(result.toString());
-        assertTrue(result.length() == 0);
+        int initial = result.length();
+        assertTrue(initial > 0);
+        assertFalse(result.toString().contains(separator));
         String name1 = UUID.randomUUID().toString();
         String name2 = UUID.randomUUID().toString();
-        instance.addZone(name1);
+        System.out.println(name1 + ": " + name1.length());
+        System.out.println(name2 + ": " + name2.length());
+        instance.addRPZone(name1);
         result = instance.listZones(separator);
         System.out.println(result.toString());
         assertTrue(result.length() > 0);
-        assertFalse(result.toString().contains(separator));
+        assertTrue(result.toString().contains(separator));
         assertTrue(result.toString().contains(name1));
         assertFalse(result.toString().contains(name2));
-        instance.addZone(name2);
+        instance.addRPZone(name2);
         result = instance.listZones(separator);
         System.out.println(result.toString());
-        assertTrue(result.length() > 0);
+        assertEquals(initial + name1.length() + name2.length()
+                + separator.length() * (instance.getZones().size() - 1)/*separators*/,
+                result.length());
         assertTrue(result.toString().contains(separator));
         assertTrue(result.toString().contains(name1));
         assertTrue(result.toString().contains(name2));
@@ -116,8 +123,8 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         TestPlayer p2 = new TestPlayer(new RPObject());
         TextEventListener l = new TextEventListener();
         TextEventListener l2 = new TextEventListener();
-        p.registerListener(TextEvent.RPCLASS_NAME, l);
-        p2.registerListener(TextEvent.RPCLASS_NAME, l2);
+        instance.registerMonitor(p, TextEvent.RPCLASS_NAME, l);
+        instance.registerMonitor(p2, TextEvent.RPCLASS_NAME, l2);
         target = p.getName();
         expResult = true;
         result = instance.applyPrivateEvent(target, event, delay);
@@ -140,12 +147,12 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         TestPlayer p2 = new TestPlayer(new RPObject());
         //Move player 2 to a different zone
         String zone = UUID.randomUUID().toString();
-        instance.addZone(zone);
+        instance.addRPZone(zone);
         instance.changeZone(zone, p2);
         TextEventListener l = new TextEventListener();
         TextEventListener l2 = new TextEventListener();
-        p.registerListener(TextEvent.RPCLASS_NAME, l);
-        p2.registerListener(TextEvent.RPCLASS_NAME, l2);
+        instance.registerMonitor(p, TextEvent.RPCLASS_NAME, l);
+        instance.registerMonitor(p2, TextEvent.RPCLASS_NAME, l2);
         boolean expResult = true;
         boolean result = instance.applyPublicEvent(event);
         assertEquals(expResult, result);
@@ -167,12 +174,12 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         TestPlayer p2 = new TestPlayer(new RPObject());
         //Move player 2 to a different zone
         String zone = UUID.randomUUID().toString();
-        instance.addZone(zone);
+        instance.addRPZone(zone);
         instance.changeZone(zone, p2);
         TextEventListener l = new TextEventListener();
         TextEventListener l2 = new TextEventListener();
-        p.registerListener(TextEvent.RPCLASS_NAME, l);
-        p2.registerListener(TextEvent.RPCLASS_NAME, l2);
+        instance.registerMonitor(p, TextEvent.RPCLASS_NAME, l);
+        instance.registerMonitor(p2, TextEvent.RPCLASS_NAME, l2);
         boolean expResult = true;
         boolean result = instance
                 .applyPublicEvent((ISimpleRPZone) instance.getZone(zone), event);
@@ -191,7 +198,7 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         String desc = "new desc";
         SimpleRPWorld instance = (SimpleRPWorld) Lookup.getDefault()
                 .lookup(IRPWorld.class);
-        instance.addZone(zone);
+        instance.addRPZone(zone);
         assertEquals("", ((ISimpleRPZone) instance.getZone(zone)).getDescription());
         instance.updateRPZoneDescription(zone, desc);
         assertEquals(desc, ((ISimpleRPZone) instance.getZone(zone)).getDescription());
@@ -206,9 +213,9 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         String zone = UUID.randomUUID().toString();
         SimpleRPWorld instance = (SimpleRPWorld) Lookup.getDefault()
                 .lookup(IRPWorld.class);
-        instance.addZone(zone);
+        instance.addRPZone(zone);
         TestPlayer p = new TestPlayer(new RPObject());
-        NPC npc = new NPC(new RPObject());
+        RPObject npc = new RPObject();
         instance.add(npc);
         instance.changeZone(zone, p);
         instance.changeZone(zone, npc);
@@ -226,9 +233,9 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         String zone = UUID.randomUUID().toString();
         SimpleRPWorld instance = (SimpleRPWorld) Lookup.getDefault()
                 .lookup(IRPWorld.class);
-        instance.addZone(zone);
+        instance.addRPZone(zone);
         TestPlayer p = new TestPlayer(new RPObject());
-        NPC npc = new NPC(new RPObject());
+        RPObject npc = new RPObject();
         instance.add(npc);
         instance.changeZone(zone, p);
         instance.changeZone(zone, npc);
@@ -242,11 +249,15 @@ public class SimpleRPWorldTest extends AbstractSystemTest {
         public TextEventListener() {
         }
         private int count = 0;
+        private final SizeLimitedArray<String> queue = new SizeLimitedArray<>();
 
         @Override
         public void onRPEvent(TextEvent event) {
-            System.out.println(event);
-            count++;
+            if (!queue.contains(event.get(SimpleRPEvent.EVENT_ID))) {
+                queue.add(event.get(SimpleRPEvent.EVENT_ID));
+                System.out.println(event);
+                count++;
+            }
         }
 
         /**

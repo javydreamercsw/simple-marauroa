@@ -2,13 +2,8 @@
 image: javydreamercsw/maven-git-hg
 
 pipelines:
-  compile:
+  default:
     - step:
         script:
           - cd 'Simple Marauroa Parent'
-          - mvn clean install
-  test:
-    - step:
-        script:
-          - cd 'Simple Marauroa Parent'
-          - mvn test
+          - mvn clean install test

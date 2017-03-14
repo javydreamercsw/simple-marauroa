@@ -12,7 +12,7 @@ import simple.server.extension.SimpleServerExtension;
 /**
  * Mock extension
  *
- * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
+ * @author Javier A. Ortiz BultrÃ³n javier.ortiz.78@gmail.com
  */
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class TestExtension extends SimpleServerExtension {

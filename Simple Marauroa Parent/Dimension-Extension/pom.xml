@@ -4,7 +4,7 @@
     <parent>
         <groupId>net.sourceforge.javydreamercsw</groupId>
         <artifactId>Simple-Marauroa</artifactId>
-        <version>0.02.07-SNAPSHOT</version>
+        <version>0.03.00-SNAPSHOT</version>
     </parent>
 
     <artifactId>Dimension-Extension</artifactId>
@@ -29,4 +29,8 @@
             <type>test-jar</type>
         </dependency>
     </dependencies>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>

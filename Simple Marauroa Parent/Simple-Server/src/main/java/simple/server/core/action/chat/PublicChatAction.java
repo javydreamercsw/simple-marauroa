@@ -1,6 +1,7 @@
 package simple.server.core.action.chat;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.Configuration;
@@ -38,8 +39,19 @@ public class PublicChatAction implements ActionProvider {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo.getRPClass().subclassOf(RPEntity.DEFAULT_RPCLASS)) {
             RPEntityInterface player = new RPEntity(rpo);
-            if (Lookup.getDefault().lookup(LoginListener.class).
-                    checkIsGaggedAndInformPlayer(player)) {
+            LoginListener ll = Lookup.getDefault().lookup(LoginListener.class);
+            if (ll != null && ll.checkIsGaggedAndInformPlayer(player)) {
+                long millis = ll.getTimeRemaining(player);
+                String remindier = String.format("%02d:%02d:%02d",
+                        TimeUnit.MILLISECONDS.toHours(millis),
+                        TimeUnit.MILLISECONDS.toMinutes(millis)
+                        % TimeUnit.HOURS.toMinutes(1),
+                        TimeUnit.MILLISECONDS.toSeconds(millis)
+                        % TimeUnit.MINUTES.toSeconds(1));
+                rpo.addEvent(new TextEvent("You are gagged for "
+                        + remindier,
+                        Tool.extractName(rpo)));
+                Lookup.getDefault().lookup(IRPWorld.class).modify(rpo);
                 return;
             }
         }
@@ -47,19 +59,19 @@ public class PublicChatAction implements ActionProvider {
             try {
                 String text = action.get(TEXT);
                 LOG.log(Level.FINE, "Processing text event: {0}", text);
+                TextEvent event = new TextEvent(text, Tool.extractName(rpo));
                 IRPZone zone = Lookup.getDefault().lookup(IRPWorld.class)
                         .getZone(rpo.get(Entity.ZONE_ID));
                 if (zone instanceof ISimpleRPZone) {
                     ISimpleRPZone sz = (ISimpleRPZone) zone;
                     Lookup.getDefault().lookup(IRPWorld.class).applyPublicEvent(
-                            sz, new TextEvent(text, Tool.extractName(rpo)));
+                            sz, event);
                 }
                 if ("true".equals(Configuration.getConfiguration()
                         .get("log_chat", "false"))) {
                     LOG.info(text);
                 }
-            }
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 LOG.log(Level.WARNING, ex.toString(), ex);
             }
         } else {

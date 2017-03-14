@@ -6,9 +6,7 @@ import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.NotificationType;
-import static simple.server.core.action.WellKnownActionConstant.FROM;
-import static simple.server.core.action.WellKnownActionConstant.TEXT;
-import static simple.server.core.action.WellKnownActionConstant.TIME;
+import static simple.server.core.action.WellKnownActionConstant.*;
 import simple.server.core.event.api.IRPEvent;
 
 /**
@@ -21,6 +19,10 @@ public class TextEvent extends SimpleRPEvent {
 
     public static final String RPCLASS_NAME = "text_event";
     public static final String TEXT_TYPE = "texttype";
+
+    public TextEvent(String name) {
+        super(name);
+    }
 
     /**
      * Creates the rpclass.

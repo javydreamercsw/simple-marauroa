@@ -1,17 +1,17 @@
 package simple.server.core.entity.npc;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.RPObject;
 import org.openide.util.Lookup;
 import simple.server.core.entity.npc.action.NPCAction;
-import simple.server.core.entity.api.MonitoreableEntity;
 
 /**
  * NPC's that talk with players.
  *
  * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
  */
-public abstract class SpeakerNPC extends NPC implements MonitoreableEntity {
+public abstract class SpeakerNPC extends NPC {
 
     private static final Logger LOG
             = Logger.getLogger(SpeakerNPC.class.getSimpleName());
@@ -27,9 +27,10 @@ public abstract class SpeakerNPC extends NPC implements MonitoreableEntity {
 
     private void loadDefaultActions() {
         //Load the default actions
-        for (NPCAction a : Lookup.getDefault().lookupAll(NPCAction.class)) {
+        Lookup.getDefault().lookupAll(NPCAction.class).forEach((a) -> {
+            LOG.log(Level.FINE, "Loading action: {0}", a.getDescription());
             context.add(a);
-        }
+        });
         //Subclasses should add actions on creation.
         loadCustomActions();
     }

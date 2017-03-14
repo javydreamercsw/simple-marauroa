@@ -1,7 +1,7 @@
 package simple.server.core.entity;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -9,18 +9,20 @@ import marauroa.common.Configuration;
 import marauroa.common.game.Definition;
 import marauroa.common.game.Definition.Type;
 import marauroa.common.game.RPClass;
+import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
 import marauroa.common.game.RPSlot;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import simple.common.Grammar;
 import simple.common.NotificationType;
-import simple.server.core.action.WellKnownActionConstant;
+import simple.common.SizeLimitedArray;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
 import simple.server.core.engine.SimpleRPZone;
-import simple.server.core.entity.clientobject.ClientObject;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.core.event.PrivateTextEvent;
+import simple.server.core.event.SimpleRPEvent;
 import simple.server.core.event.TextEvent;
 import simple.server.extension.MarauroaServerExtension;
 
@@ -34,15 +36,8 @@ public class Entity extends RPObject implements RPEntityInterface {
     public static final String MY_CLASS = "entity";
     protected String RPCLASS_NAME = MY_CLASS;
     public static final String NAME = "name", DESC = "description",
-            DB_ID = "#db_id", ZONE_ID = "zoneid", ID = "id";
-    /**
-     * The administration level attribute name.
-     */
-    protected static final String ATTR_ADMINLEVEL = "adminlevel";
-    /**
-     * The away message attribute name.
-     */
-    protected static final String ATTR_AWAY = "away";
+            DB_ID = "#db_id", ZONE_ID = "zoneid", ID = "id",
+            CLIENT_ID = "#clientid";
     /**
      * The ghost mode attribute name.
      */
@@ -52,9 +47,9 @@ public class Entity extends RPObject implements RPEntityInterface {
      */
     protected static final String ATTR_INVISIBLE = "invisible";
     /**
-     * The grumpy attribute name.
+     * Entity type
      */
-    protected static final String ATTR_GRUMPY = "grumpy";
+    protected static final String TYPE = "type";
     /**
      * The logger.
      */
@@ -62,12 +57,9 @@ public class Entity extends RPObject implements RPEntityInterface {
             = Logger.getLogger(Entity.class.getSimpleName());
     private ISimpleRPZone zone = null;
     private boolean disconnected;
-    private int adminLevel;
-    /**
-     * A list of away replies sent to players.
-     */
-    protected HashMap<String, Long> awayReplies;
+    private final IRPWorld world = Lookup.getDefault().lookup(IRPWorld.class);
     private String lastPrivateChatterName;
+    private final SizeLimitedArray queue = new SizeLimitedArray();
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public Entity(RPObject object) {
@@ -76,6 +68,17 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     @SuppressWarnings("OverridableMethodCallInConstructor")
+    public Entity(RPObject object, Map<String, RPEventListener> listeners) {
+        super(object);
+        update();
+        if (listeners != null) {
+            listeners.entrySet().forEach((entry) -> {
+                world.registerMonitor(getName(), entry.getKey(),
+                        entry.getValue());
+            });
+        }
+    }
+
     public Entity() {
     }
 
@@ -84,7 +87,7 @@ public class Entity extends RPObject implements RPEntityInterface {
         if (!RPClass.hasRPClass(MY_CLASS)) {
             RPClass entity = new RPClass(MY_CLASS);
             entity.addAttribute(NAME, Type.LONG_STRING);
-            entity.addAttribute(WellKnownActionConstant.TYPE, Type.STRING);
+            entity.addAttribute(TYPE, Type.STRING);
 
             // Some things may have a textual description
             entity.addAttribute(DESC, Type.LONG_STRING,
@@ -145,8 +148,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             result = Grammar.article_noun(get("class"), definite);
         } else {
             String ret = "something indescribably strange";
-            if (has(WellKnownActionConstant.TYPE)) {
-                ret += " of type " + get(WellKnownActionConstant.TYPE);
+            if (has(TYPE)) {
+                ret += " of type " + get(TYPE);
             }
             if (has("id")) {
                 ret += " with id " + get("id");
@@ -216,8 +219,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             result = get("subclass").replace('_', ' ');
         } else if (has("class")) {
             result = get("class").replace('_', ' ');
-        } else if (has(WellKnownActionConstant.TYPE)) {
-            result = get(WellKnownActionConstant.TYPE).replace('_', ' ');
+        } else if (has(TYPE)) {
+            result = get(TYPE).replace('_', ' ');
         } else {
             result = null;
         }
@@ -339,22 +342,6 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     /**
-     * @return the adminLevel
-     */
-    @Override
-    public int getAdminLevel() {
-        return adminLevel;
-    }
-
-    /**
-     * @param adminLevel the adminLevel to set
-     */
-    @Override
-    public void setAdminLevel(int adminLevel) {
-        this.adminLevel = adminLevel;
-    }
-
-    /**
      * Get a keyed string value on a named slot.
      *
      * @param name The slot name.
@@ -463,9 +450,8 @@ public class Entity extends RPObject implements RPEntityInterface {
             addEvent(new TextEvent(text,
                     Configuration.getConfiguration().get("system_account_name")));
             notifyWorldAboutChanges();
-        }
-        catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ClientObject.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -494,21 +480,6 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     /**
-     * Set the grumpy message.
-     *
-     * @param message A grumpy message, or <code>null</code>.
-     */
-    @Override
-    public void setGrumpyMessage(final String message) {
-        if (message != null) {
-            put(ATTR_GRUMPY, message);
-        } else if (has(ATTR_GRUMPY)) {
-            remove(ATTR_GRUMPY);
-        }
-
-    }
-
-    /**
      * Set whether this player is invisible to creatures.
      *
      * @param invisible <code>true</code> if invisible.
@@ -523,77 +494,6 @@ public class Entity extends RPObject implements RPEntityInterface {
     }
 
     /**
-     * Get the away message.
-     *
-     * @return The away message, or <code>null</code> if unset.
-     */
-    @Override
-    public String getAwayMessage() {
-        return has(ATTR_AWAY) ? get(ATTR_AWAY) : null;
-    }
-
-    /**
-     * Get the grumpy message.
-     *
-     * @return The grumpy message, or <code>null</code> if unset.
-     */
-    @Override
-    public String getGrumpyMessage() {
-        return has(ATTR_GRUMPY) ? get(ATTR_GRUMPY) : null;
-    }
-
-    /**
-     * Set the away message.
-     *
-     * @param message An away message, or <code>null</code>.
-     */
-    @Override
-    public void setAwayMessage(final String message) {
-        if (message != null) {
-            put(ATTR_AWAY, message);
-        } else if (has(ATTR_AWAY)) {
-            remove(ATTR_AWAY);
-        }
-
-        resetAwayReplies();
-    }
-
-    /**
-     * Check if another player should be notified that this player is away. This
-     * assumes the player has already been checked for away. Players will be
-     * reminded once an hour.
-     *
-     * @param name The name of the other player.
-     *
-     * @return <code>true</code> if the player should be notified.
-     */
-    @Override
-    public boolean isAwayNotifyNeeded(String name) {
-        long now = System.currentTimeMillis();
-        Long lObj = awayReplies.get(name);
-
-        if (lObj != null) {
-            /*
-             * Only notify once an hour
-             */
-            if ((now - lObj) < (1000L * 60L * 60L)) {
-                return false;
-            }
-        }
-
-        awayReplies.put(name, now);
-        return true;
-    }
-
-    /**
-     * Clear out all recorded away responses.
-     */
-    @Override
-    public void resetAwayReplies() {
-        awayReplies.clear();
-    }
-
-    /**
      * Sets the name of the last player who privately talked to this player
      * using the /tell command. It needs to be stored non-persistently so that
      * /answer can be used.
@@ -603,53 +503,6 @@ public class Entity extends RPObject implements RPEntityInterface {
     @Override
     public void setLastPrivateChatter(String lastPrivateChatterName) {
         this.lastPrivateChatterName = lastPrivateChatterName;
-    }
-
-    /**
-     * Determine if a player is on the ignore list and return their reply
-     * message.
-     *
-     * @param name The player name.
-     *
-     * @return The custom reply message (including an empty string), or
-     * <code>null</code> if not ignoring.
-     */
-    @Override
-    public String getIgnore(String name) {
-        String info = getKeyedSlot("!ignore", "_" + name);
-        int i;
-        long expiration;
-
-        if (info == null) {
-            /*
-             * Special "catch all" fallback
-             */
-            info = getKeyedSlot("!ignore", "_*");
-            if (info == null) {
-                return null;
-            }
-        }
-        i = info.indexOf(';');
-        if (i == -1) {
-            /*
-             * Do default
-             */
-            return "";
-        }
-
-        /*
-         * Has expiration?
-         */
-        if (i != 0) {
-            expiration = Long.parseLong(info.substring(0, i));
-
-            if (System.currentTimeMillis() >= expiration) {
-                setKeyedSlot("!ignore", "_" + name, null);
-                return null;
-            }
-        }
-
-        return info.substring(i + 1);
     }
 
     /**
@@ -669,70 +522,21 @@ public class Entity extends RPObject implements RPEntityInterface {
         return disconnected;
     }
 
-    /**
-     * Notifies this player that the given player has logged in.
-     *
-     * @param who The name of the player who has logged in.
-     */
     @Override
-    public void notifyOnline(String who) {
-        String playerOnline = "_" + who;
-
-        boolean found = false;
-        RPSlot slot = getSlot("!buddy");
-        if (slot != null && slot.size() > 0) {
-            RPObject buddies = slot.iterator().next();
-            for (String name : buddies) {
-                if (playerOnline.equals(name)) {
-                    buddies.put(playerOnline, 1);
-                    notifyWorldAboutChanges();
-                    found = true;
-                    break;
-                }
+    public void addEvent(RPEvent event) {
+        //Avoid duplicates
+        if (!proccessedEvent(event)) {
+            if (event.has(SimpleRPEvent.EVENT_ID)) {
+                //Add it to the queue
+                queue.add(event.get(SimpleRPEvent.EVENT_ID));
             }
-        }
-        if (found) {
-            if (has("online")) {
-                put("online", get("online") + "," + who);
-            } else {
-                put("online", who);
-            }
+            //Add the event
+            super.addEvent(event);
         }
     }
 
-    /**
-     * Notifies this player that the given player has logged out.
-     *
-     * @param who The name of the player who has logged out.
-     */
-    @Override
-    public void notifyOffline(String who) {
-        String playerOffline = "_" + who;
-
-        boolean found = false;
-        RPSlot slot = getSlot("!buddy");
-        if (slot != null && slot.size() > 0) {
-            RPObject buddies = slot.iterator().next();
-            for (String name : buddies) {
-                if (playerOffline.equals(name)) {
-                    buddies.put(playerOffline, 0);
-                    notifyWorldAboutChanges();
-                    found = true;
-                    break;
-                }
-            }
-        }
-        if (found) {
-            if (has("offline")) {
-                put("offline", get("offline") + "," + who);
-            } else {
-                put("offline", who);
-            }
-        }
-    }
-
-    @Override
-    public boolean addIgnore(String name, int duration, String reply) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean proccessedEvent(RPEvent event) {
+        return event.has(SimpleRPEvent.EVENT_ID) // if it doesn't have an id
+                && queue.contains(event.get(SimpleRPEvent.EVENT_ID));//or is not in the queue
     }
 }

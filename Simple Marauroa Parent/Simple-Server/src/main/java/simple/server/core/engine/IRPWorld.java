@@ -6,8 +6,7 @@ import java.util.List;
 import marauroa.common.game.IRPZone;
 import marauroa.common.game.RPEvent;
 import marauroa.common.game.RPObject;
-import simple.server.core.entity.RPEntityInterface;
-import simple.server.core.entity.api.RPObjectMonitor;
+import simple.server.core.entity.api.RPEventListener;
 
 /**
  *
@@ -20,7 +19,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      *
      * @param zone zone to add
      */
-    void addZone(IRPZone zone);
+    void addRPZone(IRPZone zone);
 
     /**
      * Remove zone from world (use with caution). Make sure to move all players
@@ -50,14 +49,14 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @return Removed zone
      * @throws java.lang.Exception
      */
-    IRPZone removeRPZone(IRPZone.ID zoneid) throws java.lang.Exception;
+    IRPZone removeRPZone(IRPZone.ID zoneid) throws Exception;
 
     /**
      * Add RPZone
      *
      * @param name zone to add
      */
-    void addZone(String name);
+    void addRPZone(String name);
 
     /**
      * Add RPZone
@@ -65,7 +64,7 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param name zone to add
      * @param description zone description
      */
-    void addZone(String name, String description);
+    void addRPZone(String name, String description);
 
     /**
      * Apply event to target
@@ -253,17 +252,41 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * Register RPObject monitors.
      *
      * @param target Entity name to monitor
-     * @param monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
      */
-    public void registerMonitor(String target, RPObjectMonitor monitor);
+    public void registerMonitor(String target, String eventClassName,
+            RPEventListener listener);
 
     /**
      * Register RPObject monitors.
      *
      * @param target Entity name to monitor
-     * @param monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
      */
-    public void unregisterMonitor(String target, RPObjectMonitor monitor);
+    public void registerMonitor(RPObject target, String eventClassName,
+            RPEventListener listener);
+
+    /**
+     * Register RPObject monitors.
+     *
+     * @param target Entity name to monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
+     */
+    public void unregisterMonitor(String target, String eventClassName,
+            RPEventListener listener);
+
+    /**
+     * Register RPObject monitors.
+     *
+     * @param target Entity name to monitor
+     * @param eventClassName Event name to listen to
+     * @param listener Listener
+     */
+    public void unregisterMonitor(RPObject target, String eventClassName,
+            RPEventListener listener);
 
     /**
      * Get ID of object by name.
@@ -317,5 +340,13 @@ public interface IRPWorld extends Iterable<IRPZone> {
      * @param name Name of the player.
      * @return Player or null if not found.
      */
-    public RPEntityInterface getPlayer(String name);
+    public RPObject getPlayer(String name);
+
+    /**
+     * Get a player from the world.
+     *
+     * @param name Name of the player.
+     * @return Player or null if not found.
+     */
+    public RPObject getNPC(String name);
 }

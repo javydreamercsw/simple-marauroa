@@ -48,8 +48,7 @@ class SimpleServerCLI extends Thread {
                 processInput(line.trim());
                 line = input.readLine();
             }
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             LOG.log(Level.SEVERE, null, ex);
         }
     }
@@ -84,8 +83,7 @@ class SimpleServerCLI extends Thread {
                                     break;
                             }
                         }
-                    }
-                    catch (IOException ex) {
+                    } catch (IOException ex) {
                         LOG.log(Level.SEVERE, null, ex);
                     }
                     break;
@@ -226,6 +224,7 @@ class SimpleServerCLI extends Thread {
                     try {
                         Configuration conf = Configuration.getConfiguration();
                         Properties p = conf.getAsProperties();
+                        StringBuilder sb = new StringBuilder();
                         p.entrySet().stream().filter((entry)
                                 -> (!entry.getKey().equals("e")
                                 && !entry.getKey().equals("d")
@@ -234,12 +233,11 @@ class SimpleServerCLI extends Thread {
                                 && !entry.getKey().toString()
                                         .contains("password")))
                                 .forEachOrdered((entry) -> {
-                                    LOG.log(Level.INFO, "{0}: {1}",
-                                            new Object[]{entry.getKey(),
-                                                entry.getValue()});
+                                    sb.append(entry.getKey()).append(": ")
+                                            .append(entry.getValue()).append('\n');
                                 }); //Make sure not to disclose security info.
-                    }
-                    catch (IOException ex) {
+                        LOG.log(Level.INFO, sb.toString());
+                    } catch (IOException ex) {
                         LOG.log(Level.SEVERE, null, ex);
                     }
                     break;
@@ -293,8 +291,7 @@ class SimpleServerCLI extends Thread {
                             "Account: {0} succesfully created!",
                             username);
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 LOG.log(Level.SEVERE,
                         "Error creating account: "
                         + username, ex);
@@ -335,8 +332,7 @@ class SimpleServerCLI extends Thread {
                             "Account: {0} doesn't exist!",
                             username);
                 }
-            }
-            catch (SQLException ex) {
+            } catch (SQLException ex) {
                 LOG.log(Level.SEVERE,
                         "Error deleting account: "
                         + username, ex);
@@ -355,8 +351,7 @@ class SimpleServerCLI extends Thread {
                 try {
                     world.removeRPZone(zone.trim());
                     LOG.log(Level.INFO, "Zone: {0} succesfully deleted!", zone);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     LOG.log(Level.SEVERE, "Unable to delete zone!", ex);
                 }
             } else {
@@ -375,7 +370,7 @@ class SimpleServerCLI extends Thread {
             if (world.hasRPZone(zone.trim())) {
                 LOG.log(Level.INFO, "Zone: {0} already exists!", zone);
             } else {
-                world.addZone(zone.trim());
+                world.addRPZone(zone.trim());
                 LOG.log(Level.INFO, "Zone: {0} succesfully created!", zone);
             }
         }

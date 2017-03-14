@@ -36,8 +36,8 @@ public class PrivateChatAction implements ActionProvider {
     public void onAction(RPObject rpo, RPAction action) {
         if (rpo instanceof ClientObjectInterface) {
             ClientObjectInterface player = (ClientObjectInterface) rpo;
-            if (Lookup.getDefault().lookup(LoginListener.class)
-                    .checkIsGaggedAndInformPlayer(player)) {
+            LoginListener ll = Lookup.getDefault().lookup(LoginListener.class);
+            if (ll != null && ll.checkIsGaggedAndInformPlayer(player)) {
                 return;
             }
             if (action.has(TEXT) && action.has(TARGET)) {

@@ -3,10 +3,10 @@ package simple.client.event;
 import marauroa.common.game.RPEvent;
 import simple.client.ChatScreenInterface;
 import simple.client.SimpleClient;
+import simple.client.event.listener.ClientRPEventListener;
 import simple.common.NotificationType;
 import simple.server.core.event.PrivateTextEvent;
 import simple.server.core.event.TextEvent;
-import simple.client.event.listener.ClientRPEventListener;
 
 /**
  *
@@ -27,14 +27,15 @@ public class ChatListener implements ClientRPEventListener {
                 screen = SimpleClient.get().getInterface();
                 break;
             default:
-
         }
-        if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
-            screen.addLine(from == null ? "" : from, text == null ? ""
-                    : text, NotificationType.PRIVMSG);
-        } else if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
-            screen.addLine(from == null ? "" : from, text == null ? ""
-                    : text, NotificationType.NORMAL);
+        if (screen != null) {
+            if (event.getName().equals(PrivateTextEvent.RPCLASS_NAME)) {
+                screen.addLine(from == null ? "" : from, text == null ? ""
+                        : text, NotificationType.PRIVMSG);
+            } else if (event.getName().equals(TextEvent.RPCLASS_NAME)) {
+                screen.addLine(from == null ? "" : from, text == null ? ""
+                        : text, NotificationType.NORMAL);
+            }
         }
     }
 }

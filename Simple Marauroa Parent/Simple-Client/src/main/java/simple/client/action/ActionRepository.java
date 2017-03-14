@@ -40,9 +40,9 @@ public class ActionRepository {
      * @param detailed Additional details of the command usage
      */
     public static void getHelpMessages(boolean detailed) {
-        for (SlashAction action : ACTIONS.values()) {
+        ACTIONS.values().forEach((action) -> {
             action.usage(detailed);
-        }
+        });
     }
 
     /**

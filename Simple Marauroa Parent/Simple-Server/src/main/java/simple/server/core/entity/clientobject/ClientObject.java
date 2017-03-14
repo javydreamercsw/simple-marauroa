@@ -1,27 +1,26 @@
 package simple.server.core.entity.clientobject;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import marauroa.common.game.*;
 import marauroa.common.game.Definition.Type;
-import marauroa.server.game.rp.IRPRuleProcessor;
 import org.openide.util.Lookup;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.util.lookup.ServiceProviders;
-import simple.common.FeatureList;
 import simple.common.SimpleException;
 import simple.common.game.ClientObjectInterface;
 import simple.server.core.action.WellKnownActionConstant;
 import simple.server.core.engine.IRPWorld;
 import simple.server.core.engine.ISimpleRPZone;
-import simple.server.core.engine.SimpleRPRuleProcessor;
 import simple.server.core.engine.SimpleRPZone;
 import simple.server.core.engine.rp.SimpleRPAction;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.ExtensibleRPClass;
 import simple.server.core.entity.RPEntity;
 import simple.server.core.entity.RPEntityInterface;
+import simple.server.core.entity.api.RPEventListener;
 import simple.server.extension.MarauroaServerExtension;
 
 /**
@@ -44,10 +43,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      */
     private static final long serialVersionUID = -3451819589645530092L;
     /**
-     * A list of enabled client features.
-     */
-    protected FeatureList features;
-    /**
      * A list of away replies sent to players.
      */
     protected HashMap<String, Long> awayReplies;
@@ -60,6 +55,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
      *
      * @param object
      */
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     public ClientObject(RPObject object) {
         super(object);
         RPCLASS_NAME = DEFAULT_RP_CLASSNAME;
@@ -67,6 +63,10 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
         put(WellKnownActionConstant.TYPE, RPCLASS_NAME);
         awayReplies = new HashMap<>();
         addEmptySlots("!visited");
+    }
+
+    public ClientObject(RPObject object, Map<String, RPEventListener> listeners) {
+        super(object, listeners);
     }
 
     @Override
@@ -81,8 +81,7 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
                 }).forEachOrdered((extension) -> {
             try {
                 extension.clientObjectUpdate(this);
-            }
-            catch (SimpleException ex) {
+            } catch (SimpleException ex) {
                 LOG.log(Level.SEVERE, null, ex);
             }
         });
@@ -132,32 +131,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     public ClientObjectInterface create(RPObject object) {
 
         ClientObject player = new ClientObject(object);
-
-        //TODO: Move this to an extension
-        if (player.has(ATTR_AWAY)) {
-            player.remove(ATTR_AWAY);
-        }
-        // remove grumpy on login to give postman a chance to deliver messages
-        // (and in the hope that player is receptive now)
-        if (player.has(ATTR_GRUMPY)) {
-            player.remove(ATTR_GRUMPY);
-        }
-
-        if (player.hasSlot("!buddy") && player.getSlot("!buddy").size() > 0) {
-            RPObject buddies = player.getSlot("!buddy").iterator().next();
-            for (String buddyName : buddies) {
-                if (buddyName.charAt(0) == '_') {
-                    ClientObject buddy
-                            = (ClientObject) ((SimpleRPRuleProcessor) Lookup.getDefault().lookup(IRPRuleProcessor.class)).getPlayer(
-                                    buddyName.substring(1));
-                    if ((buddy != null) && !buddy.isGhost()) {
-                        buddies.put(buddyName, 1);
-                    } else {
-                        buddies.put(buddyName, 0);
-                    }
-                }
-            }
-        }
         return player;
     }
 
@@ -176,29 +149,12 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
             player.addAttribute("grumpy", Type.LONG_STRING,
                     Definition.VOLATILE);
 
-            //TODO: move to an extension
-            // Use this for admin menus and usage.
-            player.addAttribute("admin", Type.FLAG);
-            player.addAttribute("adminlevel", Type.INT);
-
             player.addAttribute("invisible", Type.FLAG, Definition.HIDDEN);
-            //User with Monitor permissions
-            player.addAttribute("monitor", Type.FLAG);
 
             //TODO: move to an extension
             player.addAttribute("ghostmode", Type.FLAG);
 
             player.addAttribute("release", Type.STRING, Definition.PRIVATE);
-
-            //TODO: move to an extension
-            // We use this for the buddy system
-            player.addRPSlot("!buddy", 1, Definition.PRIVATE);
-            player.addRPSlot("!ignore", 1, Definition.HIDDEN);
-
-            player.addAttribute("online", Type.LONG_STRING,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
-            player.addAttribute("offline", Type.LONG_STRING,
-                    (byte) (Definition.PRIVATE | Definition.VOLATILE));
 
             player.addRPSlot("!visited", 1, Definition.HIDDEN);
 
@@ -257,34 +213,6 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     }
 
     /**
-     * Add a player ignore entry.
-     *
-     * @param name The player name.
-     * @param duration The ignore duration (in minutes), or <code>0</code> for
-     * infinite.
-     * @param reply The reply.
-     *
-     * @return <code>true</code> if value changed, <code>false</code> if there
-     * was a problem.
-     */
-    @Override
-    public boolean addIgnore(String name, int duration, String reply) {
-        StringBuilder sbuf = new StringBuilder();
-
-        if (duration != 0) {
-            sbuf.append(System.currentTimeMillis() + (duration * 60000L));
-        }
-
-        sbuf.append(';');
-
-        if (reply != null) {
-            sbuf.append(reply);
-        }
-
-        return setKeyedSlot("!ignore", "_" + name, sbuf.toString());
-    }
-
-    /**
      * Called when this object is added to a zone.
      *
      * @param zone The zone this was added to.
@@ -335,10 +263,9 @@ public class ClientObject extends RPEntity implements ClientObjectInterface,
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 31 * hash + (this.features != null ? this.features.hashCode() : 0);
         hash = 31 * hash + this.adminLevel;
         hash = 31 * hash + (this.getName() != null ? this.getName().hashCode() : 0);
-        hash = 31 * hash + (this.getID() != null ? this.getID().hashCode() : 0);
+        hash = 31 * hash + (this.has(Entity.ID) ? this.getID().hashCode() : 0);
         return hash;
     }
 }

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import marauroa.common.Log4J;
-import marauroa.common.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import marauroa.common.game.RPEvent;
 
 /**
@@ -19,7 +19,7 @@ import marauroa.common.game.RPEvent;
 public final class ClientRPEventNotifier {
 
     private static final Logger LOG
-            = Log4J.getLogger(ClientRPEventNotifier.class);
+            = Logger.getLogger(ClientRPEventNotifier.class.getSimpleName());
     /**
      * The Singleton instance.
      */
@@ -28,7 +28,7 @@ public final class ClientRPEventNotifier {
      * This HashMap maps each RPEvent to the set of all event listeners waiting
      * for this RPEvent. RPEvents with no listener shouldn't be registered here.
      */
-    private HashMap<String, Set<ClientRPEventListener>> register = new HashMap<>();
+    private final HashMap<String, Set<ClientRPEventListener>> register = new HashMap<>();
     /**
      * Used for multi-threading synchronization.
      */
@@ -56,8 +56,9 @@ public final class ClientRPEventNotifier {
      */
     public void notifyAtEvent(Class<? extends RPEvent> event,
             ClientRPEventListener eventListener) {
-        LOG.info("Notify when " + event.getClass().getSimpleName()
-                + "(" + event.getName() + ")" + " is detected to " + eventListener);
+        LOG.log(Level.FINE, "Notify when {0}({1}) is detected to {2}",
+                new Object[]{event.getClass().getSimpleName(), event.getName(),
+                    eventListener});
 
         synchronized (sync) {
             try {
@@ -71,7 +72,7 @@ public final class ClientRPEventNotifier {
                 // add it to the list
                 set.add(eventListener);
             } catch (InstantiationException | IllegalAccessException ex) {
-                LOG.error(null, ex);
+                LOG.log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -84,39 +85,39 @@ public final class ClientRPEventNotifier {
      */
     public HashMap<RPEvent, Boolean> logic(List<RPEvent> events) {
         HashMap<RPEvent, Boolean> result = new HashMap<>();
-        for (RPEvent event : events) {
+        events.forEach((event) -> {
             Set<ClientRPEventListener> set = register.get(event.getName());
 
-            if (LOG.isDebugEnabled()) {
+            if (LOG.isLoggable(Level.FINE)) {
                 StringBuilder os = new StringBuilder();
                 os.append("event: ").append(event.getName()).append(", ");
                 os.append("event contents: ").append(event).append(", ");
                 os.append("registered listeners: ").append(set == null ? 0 : set.size());
-                LOG.info(os);
+                LOG.info(os.toString());
                 System.out.println(os.toString());
             }
 
             if (set != null) {
                 result.put(event, true);
-                for (ClientRPEventListener currentEvent : set) {
-                    ClientRPEventListener eventListener = currentEvent;
+                set.stream().map((currentEvent)
+                        -> currentEvent).forEachOrdered((eventListener) -> {
                     try {
-                        if (LOG.isDebugEnabled()) {
-                            LOG.debug(eventListener);
+                        if (LOG.isLoggable(Level.FINE)) {
+                            LOG.fine(eventListener.toString());
                         }
                         try {
                             eventListener.onRPEventReceived(event);
                         } catch (Exception ex) {
-                            LOG.fatal(null, ex);
+                            LOG.log(Level.SEVERE, null, ex);
                         }
                     } catch (RuntimeException e) {
-                        LOG.error(e, e);
+                        LOG.log(Level.SEVERE, null, e);
                     }
-                }
+                });
             } else {
                 result.put(event, false);
             }
-        }
+        });
         return result;
     }
 }

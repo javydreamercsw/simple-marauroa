@@ -9,12 +9,12 @@ import java.util.ListIterator;
 /**
  *
  * @author Javier A. Ortiz Bultrón javier.ortiz.78@gmail.com
- * @param <E> Type of array.
+ * @param <T> Type of array.
  */
-public class SizeLimitedArray<E> implements java.util.List<E> {
+public class SizeLimitedArray<T> implements java.util.List<T> {
 
     private static final int DEFAULT_SIZE_LIMIT = 10;
-    private ArrayList<E> myList;
+    private ArrayList<T> myList;
     private int maxSize;
 
     public SizeLimitedArray() {
@@ -27,7 +27,7 @@ public class SizeLimitedArray<E> implements java.util.List<E> {
     }
 
     @Override
-    public boolean add(E objectToAdd) {
+    public boolean add(T objectToAdd) {
         if (myList.size() > maxSize) {
             throw new IllegalStateException("The array is full");
         }
@@ -61,7 +61,7 @@ public class SizeLimitedArray<E> implements java.util.List<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public Iterator<T> iterator() {
         return myList.iterator();
     }
 
@@ -86,7 +86,7 @@ public class SizeLimitedArray<E> implements java.util.List<E> {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(int index, Collection<? extends T> c) {
         return myList.addAll(index, c);
     }
 
@@ -106,17 +106,17 @@ public class SizeLimitedArray<E> implements java.util.List<E> {
     }
 
     @Override
-    public E get(int index) {
+    public T get(int index) {
         return myList.get(index);
     }
 
     @Override
-    public E set(int index, E element) {
+    public T set(int index, T element) {
         return myList.set(index, element);
     }
 
     @Override
-    public void add(int index, E element) {
+    public void add(int index, T element) {
         if (myList.size() == maxSize) {
             myList.remove(0);
         }
@@ -124,7 +124,7 @@ public class SizeLimitedArray<E> implements java.util.List<E> {
     }
 
     @Override
-    public E remove(int index) {
+    public T remove(int index) {
         return myList.remove(index);
     }
 
@@ -139,17 +139,17 @@ public class SizeLimitedArray<E> implements java.util.List<E> {
     }
 
     @Override
-    public ListIterator<E> listIterator() {
+    public ListIterator<T> listIterator() {
         return myList.listIterator();
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
+    public ListIterator<T> listIterator(int index) {
         return myList.listIterator(index);
     }
 
     @Override
-    public List<E> subList(int fromIndex, int toIndex) {
+    public List<T> subList(int fromIndex, int toIndex) {
         return myList.subList(fromIndex, toIndex);
     }
 }

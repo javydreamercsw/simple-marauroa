@@ -1,21 +1,7 @@
-syntax: glob
-**/build/*
-**/dist/*
-**/private/*
-**/*.db
-*server_stats.xml
-D20 Extension/*
-*.orig
-**/pmd.xml
-Simple-Client/log/*
-lib/marauroa.jar
-Marauroa Monitor Extension/*cobertura*
-**/target/*
-**/keystore
-**/nbactions-release-sign-artifacts.xml
-\.orig\..*$
-\.orig$
-\.chg\..*$
-\.rej$
-\.conflict\~$
-Simple Marauroa Parent/D20-Extension/nbactions-JDice.xml
+^Simple Marauroa Parent/Simple-Server/server\.ini$
+^Simple Marauroa Parent/Simple-Server/server\.properties$
+^Simple Marauroa Parent/Simple-Server/server_stats\.xml$
+^Simple Marauroa Parent/Simple-Server/data$
+^Simple Marauroa Parent/Simple-Server/log$
+
+^Simple Marauroa Parent/Card Game Interface DataBase Implementation/data$

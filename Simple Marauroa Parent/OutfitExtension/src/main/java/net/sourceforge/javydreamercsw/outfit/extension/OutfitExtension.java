@@ -15,7 +15,8 @@ import simple.server.extension.SimpleServerExtension;
 @ServiceProvider(service = MarauroaServerExtension.class)
 public class OutfitExtension extends SimpleServerExtension {
 
-    public static final String OUTFIT = "outfit", ORIGINAL_OUTFIT = "outfit_org";
+    public static final String OUTFIT = "outfit",
+            ORIGINAL_OUTFIT = "original_outfit";
 
     @Override
     public String getName() {
