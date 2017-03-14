@@ -1,5 +1,7 @@
 # README #
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf8735baa170454a9007936c60a5d1d4)](https://www.codacy.com/app/javydreamercsw/simple-marauroa?utm_source=github.com&utm_medium=referral&utm_content=javydreamercsw/simple-marauroa&utm_campaign=badger)
+
 Simple Marauroa is a configurable server based on Marauroa. It provides a basic functionality for chat and exposes methods and interfaces in order to expand it as needed.
 
 ### What is this repository for? ###
