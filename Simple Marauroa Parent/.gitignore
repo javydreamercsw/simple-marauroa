@@ -1,1 +1,4 @@
 *.editable.lst
+**/target/*
+**/log/*
+**/data/*
