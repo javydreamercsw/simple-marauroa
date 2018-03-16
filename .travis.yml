@@ -1,6 +1,6 @@
 language: java
 mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
-
+before_script: cd "Simple Marauroa Parent"
 jdk:
   - oraclejdk8
   - oraclejdk7
