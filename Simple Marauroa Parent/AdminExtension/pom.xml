@@ -8,6 +8,7 @@
     </parent>
     <artifactId>AdminExtension</artifactId>
     <packaging>jar</packaging>
+    <name>Admin Extension</name>
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.javydreamercsw</groupId>
@@ -33,6 +34,13 @@
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
             <version>${netbeans.version}</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${unit.test.version}</version>
+            <scope>test</scope>
             <type>jar</type>
         </dependency>
     </dependencies>
