@@ -64,7 +64,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <netbeans.version>RELEASE80</netbeans.version>
         <marauroa.version>3.9.6-SNAPSHOT</marauroa.version>
-        <h2.version>1.4.196</h2.version>
+        <h2.version>1.4.197</h2.version>
         <unit.test.version>4.12</unit.test.version>
     </properties>
     <modules>
@@ -81,6 +81,7 @@
         <module>D20-Extension</module>
         <module>AdminExtension</module>
         <module>BuddyExtension</module>
+        <module>../marauroa</module>
     </modules>
     <build>
         <pluginManagement>
