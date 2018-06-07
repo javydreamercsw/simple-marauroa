@@ -5,6 +5,7 @@
 package com.reflexit.magiccards.core.storage.database;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -80,10 +81,7 @@ public class CardHasCardAttributePK implements Serializable {
         if (this.cardCardTypeId != other.cardCardTypeId) {
             return false;
         }
-        if (this.cardAttributeId != other.cardAttributeId) {
-            return false;
-        }
-        return true;
+      return this.cardAttributeId == other.cardAttributeId;
     }
 
     @Override
