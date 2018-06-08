@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.openide.util.Lookup;
+import org.openide.util.lookup.ServiceProvider;
+
 import marauroa.common.Configuration;
 import marauroa.common.crypto.Hash;
 import marauroa.common.game.Definition;
@@ -23,8 +27,6 @@ import marauroa.server.game.db.AccountDAO;
 import marauroa.server.game.db.DAORegister;
 import marauroa.server.game.rp.IRPRuleProcessor;
 import marauroa.server.game.rp.RPWorld;
-import org.openide.util.Lookup;
-import org.openide.util.lookup.ServiceProvider;
 import simple.server.core.action.ActionProvider;
 import simple.server.core.entity.Entity;
 import simple.server.core.entity.RPEntityInterface;
@@ -208,7 +210,8 @@ public class SimpleRPWorld extends RPWorld implements IRPWorld {
             });
         }
         getZones().forEach((z) -> {
-            if (availableZones.contains(z.getID())) {
+          if (availableZones.contains(z.getID().getID()))
+          {
                 Iterator<RPObject> iterator = z.iterator();
                 while (iterator.hasNext()) {
                     RPObject obj = iterator.next();
