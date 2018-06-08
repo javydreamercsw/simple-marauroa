@@ -15,6 +15,4 @@ before_script: cd "Simple Marauroa Parent"
 
 jdk:
   - oraclejdk8
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
+  - openjdk8
