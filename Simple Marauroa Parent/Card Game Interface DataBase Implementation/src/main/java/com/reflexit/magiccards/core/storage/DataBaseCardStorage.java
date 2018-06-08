@@ -293,11 +293,11 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     CardType card_type;
     if (!cardTypeExists(type))
     {
-    CardTypeJpaController cardTypeController
+      CardTypeJpaController cardTypeController
               = new CardTypeJpaController(getEntityManagerFactory());
       card_type = new CardType(type);
-    cardTypeController.create(card_type);
-    LOG.log(Level.FINE,
+      cardTypeController.create(card_type);
+      LOG.log(Level.FINE,
               "Created card type: {0} on the database!", type);
     }
     else
@@ -657,6 +657,15 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
                 attr, card.getName()
               });
       return chca;
+    }
+    catch (IllegalStateException ex)
+    {
+      if (emf.isOpen())
+      {
+        LOG.log(Level.SEVERE, null, ex);
+        throw new DBException(ex.toString());
+      }
+      return null;
     }
     catch (Exception ex)
     {
@@ -1137,7 +1146,10 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     }
     catch (DBException ex)
     {
-      LOG.log(Level.SEVERE, null, ex);
+      if (emf.isOpen())
+      {
+        LOG.log(Level.SEVERE, null, ex);
+      }
     }
     return cards;
   }
