@@ -9,6 +9,7 @@ git:
 # use sed to replace the SSH URL with the public URL, then init and update submodules
 before_install:
   - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule sync
   - git submodule update --init --recursive
   
 before_script: cd "Simple Marauroa Parent"
