@@ -1,19 +1,7 @@
 package com.reflexit.magiccards.core.model;
 
-import com.reflexit.magiccards.core.cache.ICardCache;
-import com.reflexit.magiccards.core.model.storage.db.DBException;
-import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
-import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
-import java.awt.Graphics;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.HeadlessException;
-import java.awt.Image;
-import java.awt.Transparency;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.PixelGrabber;
+import java.awt.*;
+import java.awt.image.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,8 +9,15 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
+
+import javax.swing.*;
+
 import org.openide.util.Lookup;
+
+import com.reflexit.magiccards.core.cache.ICardCache;
+import com.reflexit.magiccards.core.model.storage.db.DBException;
+import com.reflexit.magiccards.core.model.storage.db.DataBaseStateListener;
+import com.reflexit.magiccards.core.model.storage.db.IDataBaseCardStorage;
 
 /**
  *
@@ -31,10 +26,10 @@ import org.openide.util.Lookup;
 public abstract class DefaultCardGame implements ICardGame,
         DataBaseStateListener {
 
-    protected static final List<String> attribs = new ArrayList<String>();
-    protected static final ArrayList<String> collectionTypes
+    protected static final List<String> ATTRIBUTES = new ArrayList<String>();
+    protected static final ArrayList<String> COLLECTION_TYPES
             = new ArrayList<String>();
-    protected static final HashMap<String, String> collections
+    protected static final HashMap<String, String> COLLECTIONS
             = new HashMap<String, String>();
     private static final Logger LOG
             = Logger.getLogger(DefaultCardGame.class.getName());
@@ -50,23 +45,23 @@ public abstract class DefaultCardGame implements ICardGame,
     public void initialized() {
         HashMap parameters = new HashMap();
         try {
-            synchronized (attribs) {
+            synchronized (ATTRIBUTES) {
                 //Create game attributes
-                for (String attr : attribs) {
+                for (String attr : ATTRIBUTES) {
                     Lookup.getDefault().lookup(IDataBaseCardStorage.class)
                             .createAttributes(attr);
                 }
             }
             //Create default collection types
-            synchronized (collectionTypes) {
-                for (String type : collectionTypes) {
+            synchronized (COLLECTION_TYPES) {
+                for (String type : COLLECTION_TYPES) {
                     Lookup.getDefault().lookup(IDataBaseCardStorage.class)
                             .createCardCollectionType(type);
                 }
             }
             //Create default Collections
-            synchronized (collections) {
-                for (Entry<String, String> entry : collections.entrySet()) {
+            synchronized (COLLECTIONS) {
+                for (Entry<String, String> entry : COLLECTIONS.entrySet()) {
                     parameters.put("name", entry.getKey());
                     ICardCollectionType type
                             = (ICardCollectionType) Lookup.getDefault()
@@ -267,5 +262,14 @@ public abstract class DefaultCardGame implements ICardGame,
         // Get the image's color model
         ColorModel cm = pg.getColorModel();
         return cm == null ? false : cm.hasAlpha();
-    }
+  }
+
+  @Override
+  public IGame getDBGame() throws DBException
+  {
+    HashMap parameters = new HashMap();
+    parameters.put("name", getName());
+    return (IGame) Lookup.getDefault().lookup(IDataBaseCardStorage.class)
+            .namedQuery("Game.findByName", parameters).get(0);
+  }
 }
