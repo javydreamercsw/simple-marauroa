@@ -265,7 +265,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public void createAttributes(String type) throws DBException
+  public synchronized void createAttributes(String type) throws DBException
   {
     //Add Attributes
     CardAttributeJpaController caController
@@ -393,7 +393,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  protected boolean doAddCard(T card, ICardSet set)
+  protected synchronized boolean doAddCard(T card, ICardSet set)
   {
     if (card instanceof Card)
     {
@@ -512,7 +512,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public boolean cardTypeExists(String name)
+  public synchronized boolean cardTypeExists(String name)
   {
     try
     {
@@ -528,7 +528,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     return false;
   }
 
-  public ICard updateCard(ICardType type, String name, byte[] text, ICardSet set)
+  public synchronized ICard updateCard(ICardType type, String name,
+          byte[] text, ICardSet set)
           throws DBException
   {
     try
@@ -567,7 +568,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public CardSet getCardSet(String name)
+  public synchronized CardSet getCardSet(String name)
   {
     try
     {
@@ -587,7 +588,8 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public ICard createCard(ICardType type, String name, byte[] text, ICardSet set)
+  public synchronized ICard createCard(ICardType type, String name,
+          byte[] text, ICardSet set)
           throws DBException
   {
     try
@@ -675,7 +677,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public ICardSet createCardSet(IGame game, String name, String abbreviation,
+  public synchronized ICardSet createCardSet(IGame game, String name, String abbreviation,
           Date released) throws DBException
   {
     try
@@ -749,7 +751,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public String printCardsInSet(ICardSet cs)
+  public synchronized String printCardsInSet(ICardSet cs)
   {
     StringBuilder sb = new StringBuilder();
     sb.append("Game: ").append(
@@ -764,7 +766,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public ICardCollectionType createCardCollectionType(String name)
+  public synchronized ICardCollectionType createCardCollectionType(String name)
           throws DBException
   {
     CardCollectionTypeJpaController controller
@@ -793,7 +795,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public ICardCollection createCardCollection(ICardCollectionType type,
+  public synchronized ICardCollection createCardCollection(ICardCollectionType type,
           String name) throws DBException
   {
     try
@@ -906,7 +908,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public ICardCollection removeCardsFromCollection(
+  public synchronized ICardCollection removeCardsFromCollection(
           Map<ICard, Integer> cards, ICardCollection collection)
           throws DBException
   {
@@ -977,7 +979,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public String printCardsCollection(ICardCollection cc)
+  public synchronized String printCardsCollection(ICardCollection cc)
   {
     StringBuilder sb = new StringBuilder();
     sb.append(((CardCollection) cc).getCardCollectionType().getName())
@@ -994,7 +996,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public ICardAttribute getCardAttribute(String attr) throws DBException
+  public synchronized ICardAttribute getCardAttribute(String attr) throws DBException
   {
     Map parameters = new HashMap();
     parameters.put("name", attr);
@@ -1050,7 +1052,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public Map<String, String> getAttributesForCard(ICard card)
+  public synchronized Map<String, String> getAttributesForCard(ICard card)
   {
     HashMap<String, String> attributes = new HashMap<String, String>();
     for (CardHasCardAttribute attr : ((Card) card).getCardHasCardAttributeList())
@@ -1061,7 +1063,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public String getCardAttribute(ICard card, String name)
+  public synchronized String getCardAttribute(ICard card, String name)
   {
     try
     {
@@ -1092,7 +1094,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public IGame createGame(String name)
+  public synchronized IGame createGame(String name)
   {
     Game game = null;
     GameJpaController controller
@@ -1114,7 +1116,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public Map<String, String> getAttributesForCard(String name)
+  public synchronized Map<String, String> getAttributesForCard(String name)
           throws DBException
   {
     HashMap parameters = new HashMap();
@@ -1124,7 +1126,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public List<ICard> getCardsForSet(ICardSet set)
+  public synchronized List<ICard> getCardsForSet(ICardSet set)
   {
     ArrayList<ICard> cards = new ArrayList<ICard>();
     try
@@ -1155,7 +1157,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public List<IGame> getGames()
+  public synchronized List<IGame> getGames()
   {
     ArrayList<IGame> games = new ArrayList<IGame>();
     try
@@ -1177,7 +1179,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public List<ICardSet> getSetsForGame(IGame game)
+  public synchronized List<ICardSet> getSetsForGame(IGame game)
   {
     ArrayList<ICardSet> sets = new ArrayList<ICardSet>();
     try
@@ -1201,7 +1203,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public List<ICard> getCardsForGame(IGame game)
+  public synchronized List<ICard> getCardsForGame(IGame game)
   {
     ArrayList<ICard> cards = new ArrayList<ICard>();
     for (ICardSet set : getSetsForGame(game))
@@ -1249,7 +1251,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public boolean setHasCard(ICardSet set, ICard card)
+  public synchronized boolean setHasCard(ICardSet set, ICard card)
   {
     try
     {
@@ -1282,7 +1284,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
   }
 
   @Override
-  public boolean gameExists(String name)
+  public synchronized boolean gameExists(String name)
   {
     try
     {
@@ -1344,7 +1346,7 @@ public class DataBaseCardStorage<T> extends AbstractStorage<T>
     return result;
   }
 
-  public ICard getCard(String name, ICardSet set)
+  public synchronized ICard getCard(String name, ICardSet set)
   {
     ICard card = null;
     if (cardExists(name, set))
