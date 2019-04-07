@@ -1,14 +1,17 @@
 package com.reflexit.magiccards.core;
 
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.reflexit.magiccards.core.cache.ICardCache;
 import com.reflexit.magiccards.core.model.ICardAttributeFormatter;
 import com.reflexit.magiccards.core.model.ICardGame;
 import com.reflexit.magiccards.core.model.ICardSet;
+import com.reflexit.magiccards.core.model.IGame;
 import com.reflexit.magiccards.core.model.IGameCellRendererImageFactory;
 import com.reflexit.magiccards.core.model.IGameDataManager;
-import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
+import com.reflexit.magiccards.core.model.storage.db.DBException;
 
 /**
  *
@@ -59,4 +62,9 @@ public class DummyGame implements ICardGame {
     public String getName() {
         return "Test Game";
     }
+
+  public IGame getDBGame() throws DBException
+  {
+    return null;
+  }
 }
