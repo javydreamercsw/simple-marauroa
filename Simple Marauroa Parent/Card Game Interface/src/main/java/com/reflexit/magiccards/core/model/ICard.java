@@ -29,7 +29,7 @@ public interface ICard extends Comparable, Lookup.Provider {
      *
      * @return card ID
      */
-    public int getCardId();
+    public String getCardId();
 
     /**
      * Get card's set
