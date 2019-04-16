@@ -1,11 +1,13 @@
 package com.reflexit.magiccards.core.cache;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+import org.openide.util.Lookup;
+
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardField;
 import com.reflexit.magiccards.core.model.ICardType;
-import org.junit.*;
-import static org.junit.Assert.assertEquals;
-import org.openide.util.Lookup;
 
 /**
  *
@@ -34,8 +36,8 @@ public class CacheDataTest {
             }
 
             @Override
-            public int getCardId() {
-                return 1;
+            public String getCardId() {
+                return "1";
             }
 
             @Override

@@ -1,10 +1,23 @@
 package com.reflexit.magiccards.core.model.storage;
 
-import com.reflexit.magiccards.core.model.*;
-import com.reflexit.magiccards.core.model.Editions.Edition;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.reflexit.magiccards.core.model.CardGroup;
+import com.reflexit.magiccards.core.model.Editions;
+import com.reflexit.magiccards.core.model.Editions.Edition;
+import com.reflexit.magiccards.core.model.ICard;
+import com.reflexit.magiccards.core.model.ICardCountable;
+import com.reflexit.magiccards.core.model.ICardField;
+import com.reflexit.magiccards.core.model.ICardFilter;
 
 /**
  * Class that implements IFilteredCardStore, it is only contains filtered
@@ -214,13 +227,15 @@ public abstract class AbstractFilteredCardStore<T> implements IFilteredCardStore
                 } else {
                     Edition oldE = Editions.getInstance().getEditionByName(old.getSetName());
                     Edition newE = Editions.getInstance().getEditionByName(card.getSetName());
-                    if (oldE != null && newE != null && oldE.getReleaseDate() != null && newE.getReleaseDate() != null) {
+                    if (oldE != null && newE != null 
+                            && oldE.getReleaseDate() != null 
+                            && newE.getReleaseDate() != null) {
                         if (oldE.getReleaseDate().before(newE.getReleaseDate())) {
                             unique.put(card.getName(), card);
                         }
                         continue;
                     }
-                    if (old.getCardId() < card.getCardId()) {
+                    if (old.getCardId().hashCode() < card.getCardId().hashCode()) {
                         unique.put(card.getName(), card);
                     }
                 }

@@ -1,9 +1,10 @@
 package com.reflexit.magiccards.core;
 
+import org.openide.util.Lookup;
+
 import com.reflexit.magiccards.core.model.ICard;
 import com.reflexit.magiccards.core.model.ICardField;
 import com.reflexit.magiccards.core.model.ICardType;
-import org.openide.util.Lookup;
 
 /**
  *
@@ -25,7 +26,7 @@ public class DummyCard implements ICard {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public int getCardId() {
+    public String getCardId() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -2,7 +2,6 @@ package com.reflexit.magiccards.core.model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 
 /**
  * Comparator for Cards.
@@ -32,8 +31,8 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
                     return d;
                 }
             }
-            if (d == 0 && c1.getCardId() != 0) {
-                d = dir * (c1.getCardId() - c2.getCardId());
+            if (d == 0 && c1.getCardId().hashCode() != 0) {
+                d = dir * (c1.getCardId().hashCode() - c2.getCardId().hashCode());
             }
         }
         if (d != 0) {
@@ -72,16 +71,15 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
      * @return true if found
      */
     public boolean hasSortField(final ICardField sortField) {
-        if (size() == 0) {
+        if (isEmpty()) {
             return false;
         }
-        for (Iterator<ICardComparator> iterator = iterator();
-                iterator.hasNext();) {
-            ICardComparator comp = iterator.next();
-            if (sortField.equals(comp.getField())) {
-                return true;
-            }
+      for (ICardComparator comp : this)
+      {
+        if (sortField.equals(comp.getField())) {
+          return true;
         }
+      }
         return false;
     }
 
@@ -92,16 +90,15 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
      * @return true if ascending
      */
     public boolean isAscending(final ICardField sortField) {
-        if (size() == 0) {
+        if (isEmpty()) {
             return true;
         }
-        for (Iterator<ICardComparator> iterator = iterator();
-                iterator.hasNext();) {
-            ICardComparator comp = iterator.next();
-            if (sortField.equals(comp.getField())) {
-                return comp.isAccending();
-            }
+      for (ICardComparator comp : this)
+      {
+        if (sortField.equals(comp.getField())) {
+          return comp.isAccending();
         }
+      }
         return false; // default to false
     }
 
@@ -111,7 +108,7 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
      * @return true if ascending
      */
     public boolean isAccending() {
-        if (size() == 0) {
+        if (isEmpty()) {
             return true;
         }
         ICardComparator elem = peek();
@@ -119,7 +116,7 @@ public abstract class AbstractSortOrder extends ArrayList<ICardComparator>
     }
 
     public boolean isTop(ICardField sortField) {
-        if (size() == 0) {
+        if (isEmpty()) {
             return false;
         }
         ICardComparator elem = peek();

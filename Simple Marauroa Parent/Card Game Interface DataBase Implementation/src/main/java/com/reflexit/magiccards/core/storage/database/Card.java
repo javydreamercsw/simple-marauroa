@@ -4,12 +4,25 @@
  */
 package com.reflexit.magiccards.core.storage.database;
 
-import com.reflexit.magiccards.core.model.CardImpl;
 import java.util.List;
-import java.util.logging.Logger;
-import javax.persistence.*;
+
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
+import com.reflexit.magiccards.core.model.CardImpl;
 
 /**
  *
@@ -37,13 +50,17 @@ public class Card extends CardImpl {
     private String name;
     @ManyToMany(mappedBy = "cardList")
     private List<CardSet> cardSetList;
-    @JoinColumn(name = "card_type_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "card_type_id", referencedColumnName = "id", 
+            nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CardType cardType;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "card")
     private List<CardCollectionHasCard> cardCollectionHasCardList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "card")
     private List<CardHasCardAttribute> cardHasCardAttributeList;
+    @Basic(optional = false)
+    @Column(name = "cardId", nullable = false, length = 255)
+    private String id;
 
     public Card() {
     }
@@ -130,17 +147,14 @@ public class Card extends CardImpl {
             return false;
         }
         Card other = (Card) object;
-        if ((this.cardPK == null && other.cardPK != null) || (this.cardPK != null && !this.cardPK.equals(other.cardPK))) {
-            return false;
-        }
-        return true;
+        return !((this.cardPK == null && other.cardPK != null) 
+                || (this.cardPK != null && !this.cardPK.equals(other.cardPK)));
     }
 
     @Override
     public String toString() {
         return "dreamer.card.game.storage.database.persistence.Card[ cardPK=" + cardPK + " ]";
     }
-    private static final Logger LOG = Logger.getLogger(Card.class.getName());
 
     public byte[] getText() {
         return text;
@@ -151,12 +165,28 @@ public class Card extends CardImpl {
     }
 
     @Override
-    public int getCardId() {
-        return getCardPK().getId();
+    public String getCardId() {
+        return getId();
     }
 
     @Override
     public int compareTo(Object o) {
         return equals(o) ? 0 : -1;
     }
+
+  /**
+   * @return the id
+   */
+  public String getId()
+  {
+    return id;
+  }
+
+  /**
+   * @param id the id to set
+   */
+  public void setId(String id)
+  {
+    this.id = id;
+  }
 }
