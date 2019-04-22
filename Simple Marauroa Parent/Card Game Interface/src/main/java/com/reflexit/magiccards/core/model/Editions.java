@@ -2,7 +2,13 @@ package com.reflexit.magiccards.core.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Locale;
+import java.util.Set;
 import java.util.logging.Logger;
 
 public final class Editions implements ISearchableProperty {
@@ -112,6 +118,10 @@ public final class Editions implements ISearchableProperty {
         }
 
         public void setReleaseDate(Date time) {
+            if (release == null)
+            {
+              release = new Date();
+            }
             release.setTime(time.getTime());
         }
 
