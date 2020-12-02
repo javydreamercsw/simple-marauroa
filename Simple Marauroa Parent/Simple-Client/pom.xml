@@ -14,7 +14,6 @@
             <groupId>net.sourceforge.javydreamercsw</groupId>
             <artifactId>Marauroa</artifactId>
             <version>${marauroa.version}</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
