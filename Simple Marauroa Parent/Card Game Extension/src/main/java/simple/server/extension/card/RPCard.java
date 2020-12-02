@@ -158,8 +158,8 @@ public class RPCard extends RPEntity implements ICard {
     }
 
     @Override
-    public int getCardId() {
-        return getInt(CARD_ID);
+    public String getCardId() {
+        return get(CARD_ID);
     }
 
     @Override

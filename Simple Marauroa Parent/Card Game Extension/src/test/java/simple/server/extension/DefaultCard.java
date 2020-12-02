@@ -70,7 +70,7 @@ public class DefaultCard extends RPCard implements IMarauroaCard, DefaultType {
     }
 
     @Override
-    public int getCardId() {
+    public String getCardId() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
